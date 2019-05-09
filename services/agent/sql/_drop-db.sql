@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS cstar_db;
+DROP USER IF EXISTS cstar_user;

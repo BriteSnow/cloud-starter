@@ -1,0 +1,91 @@
+
+/**
+	Patterns from Google material: https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-elevation-android
+
+	- 1: Switch
+  - 2: Card, raised button, quick entry / search bar
+  - 3: Refresh indicator, quick entry / search bar (scrolled state)
+  - 4: App bar
+  - 6: Floating action button (FAB) (rest), Snackbar
+  - 8: Bottom nav bar, Menu, Card (when picked up), Raised button (pressed state) {
+  - 9: Sub menu (+1dp for each sub menu)
+	- 12: Foloaction acount button (FAB - pressed)
+  - 16: Nav drawer, Right drawer, Modal button Sheet
+  - 24: Dialog, Picker
+*/
+/* --------- SectionName --------- */
+
+@define-mixin elev-anim{
+	transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@define-mixin elev-none{
+	box-shadow: none;
+}
+
+@define-mixin elev-1{
+	box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+		0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+		0px 1px 3px 0px rgba(0, 0, 0, 0.12);	
+}
+
+@define-mixin elev-2{
+	box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+		0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+		0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+@define-mixin elev-3{
+	box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2),
+		0px 3px 4px 0px rgba(0, 0, 0, 0.14),
+		0px 1px 8px 0px rgba(0, 0, 0, 0.12);
+}
+
+@define-mixin elev-4{
+	box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+		0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+		0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+@define-mixin elev-6{
+	box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+		0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+		0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+}
+
+@define-mixin elev-8{
+	box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+		0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+		0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+@define-mixin elev-9{
+	box-shadow: 0px 5px 6px -3px rgba(0, 0, 0, 0.2),
+		0px 9px 12px 1px rgba(0, 0, 0, 0.14),
+		0px 3px 16px 2px rgba(0, 0, 0, 0.12);
+}
+
+@define-mixin elev-10{
+	box-shadow: 0px 6px 6px -3px rgba(0, 0, 0, 0.2),
+		0px 10px 14px 1px rgba(0, 0, 0, 0.14),
+		0px 4px 18px 3px rgba(0, 0, 0, 0.12);
+}
+
+@define-mixin elev-12{
+	box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2),
+		0px 12px 17px 2px rgba(0, 0, 0, 0.14),
+		0px 5px 22px 4px rgba(0, 0, 0, 0.12);
+}
+
+@define-mixin elev-16{
+	box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2),
+		0px 16px 24px 2px rgba(0, 0, 0, 0.14),
+		0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+}
+
+@define-mixin elev-24{
+	box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+		0px 24px 38px 3px rgba(0, 0, 0, 0.14),
+		0px 9px 46px 8px rgba(0, 0, 0, 0.12);	
+}
+/* --------- /SectionName --------- */

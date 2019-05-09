@@ -1,0 +1,33 @@
+@import "../pcss/mixins-all.pcss";
+
+.options{
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: max-content;
+	min-height: auto;
+	align-items: center;
+
+	& > div {
+		@mixin typo-body1{};
+		height: 1rem;
+		cursor: pointer;
+		color: var(--txt-L3);
+		padding: 0 1rem;
+		border-right: solid 1px var(--bdr-L4);
+
+		&.sel{
+			color: var(--txt-L0);
+			font-weight: 600;
+		}
+	}
+
+	& > div:first-of-type{
+		padding-left: 0;
+	}
+
+	& > div:last-of-type{
+		border-right: none;
+	}
+
+
+}

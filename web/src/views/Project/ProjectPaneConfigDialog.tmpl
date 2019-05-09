@@ -1,0 +1,18 @@
+<script id="ProjectPaneConfigDialog-content" type="text/html">
+
+	<div class="field">
+		<label>Name</label>
+		<input class="dx" type="text" name="name" value="{{name}}">
+	</div>
+	<div class="label-list">
+		<ul>
+				{{#each labels}}
+					<li data-entity="Label" data-entity-id="{{id}}">
+						{{{check sel}}}
+						<span class='lbl' style="background: #{{color}}">{{name}}<span>
+					</li>
+				{{/each}}
+			</ul>			
+	</div>
+
+</script>

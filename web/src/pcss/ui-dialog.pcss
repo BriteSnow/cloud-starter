@@ -1,0 +1,40 @@
+@import "mixins-all.pcss";
+
+.dialog{
+	@mixin elev-12{};
+	background: #fff;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+
+	/* Note: not sure why we need outline on this element, but if not, we have a blue box on click */
+	outline: none; 
+
+	& > header{
+		@mixin typo-h4{};
+		padding: 1rem;
+		display: grid;
+		grid-template-columns: 1fr 1rem;
+		border-bottom: solid 1px var(--bdr-lightest);
+	}
+
+	& > section.content{
+		padding: 1rem;
+	}
+
+	& > footer{
+		padding: 1rem 0 1rem 1rem;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		& > .message {
+			flex: 1;
+			font-size: .8rem;
+			color: var(--txt-alert);
+			display: flex;
+			align-items: center;
+		}
+		& > *{
+			margin-right: 1rem;
+		}
+	}
+}

@@ -1,0 +1,48 @@
+system: cstar
+baseBlockDir: services/ # used as the base dir .dir (as '${baseDir}/${blockName}/'')
+k8sDir: k8s/
+
+#-# {{assignJsonValue 'dropVersion' 'package.json' 'dropVersion'}}
+
+realms:
+  _common:  
+    yamlDir: gke/ # Those are the google kubernetes engine yaml files. Might be the same for aws EKS (when it is released)
+    webExternalPort: 8080
+
+  dev:
+    context: docker-for-desktop
+    yamlDir: dev/ # for dev, we override the yamlDir
+    imageTag: {{@root.dropVersion}}
+
+blocks:
+  - db
+  - queue
+  - agent
+  - name: web
+    dir: web/
+    baseDistDir: services/web-server/web-folder
+    webBundles:
+      - name: lib
+        entries: ./src/lib-bundle.js
+        dist: ./js/lib-bundle.js
+      - name: app
+        entries: ./src/**/*.ts
+        dist: ./js/app-bundle.js
+        rollupOptions:
+          globals:
+            d3: window.d3
+            mvdom: window.mvdom
+            handlebars: window.Handlebars        
+      - name: css
+        entries: ./src/**/*.pcss
+        dist: ./css/all-bundle.css
+      - name: tmpl
+        entries: ./src/**/*.tmpl
+        dist: ./js/templates.js
+  - name: web-server
+    dbuildDependencies: web # build dependency for when running dbuild (no effect on build).
+
+version: 
+  files:
+    - services/common/src/config.ts
+    - services/db/info.yaml

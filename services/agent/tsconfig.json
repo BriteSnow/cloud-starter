@@ -1,0 +1,52 @@
+{
+	"compilerOptions": {
+		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
+		"target": "esNext",
+
+		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
+		"module": "commonjs",
+		
+		// same as with browser, need to use 3rd party modules
+		"moduleResolution": "node",
+
+		// strict is the best way to extract the most value from TypeScript
+		"strict": true,
+
+		// all can be ts
+		"allowJs": false,
+		"checkJs": false,
+
+		"sourceMap": false,  // we do not need the sourcemap for server
+
+		"outDir": "dist/",  /* Redirect output structure to the directory. */
+
+		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
+		"paths": {
+			"common/*": ["../../common/src/*"],
+			"shared/*": ["../../../shared/src/*"]
+		}, 
+
+		"experimentalDecorators": true,
+		
+		// allow to import moment like: import moment from "moment"
+		"allowSyntheticDefaultImports": true
+	},
+
+	// Note: common and shared will be pulled as needed
+	"include": [
+		"./src/**/*.ts", // we take all of the server code
+		// Note: shared/ and commont/ts will be compiled as imported by the service .ts code (~ tree shaking)
+		//       However, setup-module-aliases needs to be used (require) in entry file, and therefore explicitly inluded. 
+		"../common/src/setup-module-aliases.ts",
+		// trick to make sure the full dist/ structured is created (can be removed if project import some shared libs) 		
+		"../../shared/src/entities.ts" 		
+	],
+
+	// Excluding 
+	"exclude": [
+		"node_modules",
+		"queue",
+		"client", // we exclude the client code
+		".rpt2_cache" // this folder will be created by the rollup-typescript2, so, need to exlude it, can become confusing.
+	]
+}

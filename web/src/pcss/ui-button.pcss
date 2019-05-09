@@ -1,0 +1,138 @@
+@import "mixins-all.pcss";
+
+button {
+	outline-style: none;
+}
+
+button, a.button{
+
+	/* Button Colors */
+	--btn-color-bkg-hover: rgba(98, 0, 238, .1);
+	--btn-color: rgb(98, 0, 238);
+	--btn-color-focus: rgba(98, 0, 238, .8);
+	--btn-color-active: rgba(98, 0, 238, .2);
+	--btn-color-active-dark: rgba(98, 0, 238, .6);
+	--btn-color-outline: #ddd;
+	--btn-color-disabled-light: #fafafa;
+	--btn-color-disabled: #aaa;
+	--btn-color-disabled-dark: #999;	
+	/* /Button Colors */
+
+	display: inline-flex;
+	
+	align-items: center;
+	padding: 0 1rem;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+	background: none;
+	color: var(--btn-color);
+
+
+	@mixin typo-button{};
+	
+	
+	/*#region    Icon */
+	i{
+		fill: var(--btn-color);
+		margin-right: .75rem;
+	}
+
+
+	&.medium, &.high {
+		i{
+			fill: white;
+		}
+	}
+
+	/*#endregion Icon */
+
+	/*#region    Common Button States */
+	&:hover:not(:disabled):not(.disabled){
+		background: var(--btn-color-bkg-hover);
+	}
+	
+	&:active:not(:disabled):not(.disabled){
+		background: var(--btn-color-active);
+		box-shadow: none;
+	}	
+	/*#endregion Common Button States */
+
+	/* Note: 'a' tag doe snot have a disabled attribute/pseudo, so fall back on classes */
+	&:disabled, &.disabled{
+		color: var(--btn-color-disabled);
+		cursor: default;
+	}
+
+	/*#region    Button Types */
+
+	&.medium, &.high{
+		background: var(--btn-color);
+		color: white;
+
+		&:disabled, &.disabled{
+			background: var(--btn-color-disabled-light);
+			color: var(--btn-color-disabled);
+		}
+
+		&:hover:not(:disabled):not(.disabled){
+			background: var(--btn-color-focus);
+		}
+
+		&:active:not(:disabled):not(.disabled){
+			background: var(--btn-color-active-dark);
+		}
+	}
+
+	&.high{
+		@mixin elev-1{};
+		&:disabled, &.disabled{
+			@mixin elev-none{};
+		}
+	}
+
+	&.outlined{
+		@mixin elev-none{};
+		background: none;
+		color: var(--btn-color);
+		border: solid 1px var(--btn-color-outline);
+
+		&:disabled, &.disabled{
+			color: var(--btn-color-disabled);
+		}		
+	}		
+	/*#endregion Button Types */
+
+}
+
+button.main-button{
+	@mixin elev-4{};
+	background: var(--clr-prime);
+	color: white;
+	width: 5rem;
+	height: 5rem;
+	border-radius: 5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	justify-items: center;
+
+	i{
+		margin: 0;
+		fill: white;
+		width: 2.5rem;
+		height: 2.5rem;
+	}
+	
+	&:hover:not(:disabled):not(.disabled){
+		background: var(--clr-prime);
+		@mixin elev-8{};
+	}
+	&:active:not(:disabled):not(.disabled){
+		@mixin elev-1{};
+		background: var(--clr-prime);
+		color: red;
+	} 
+	
+
+}

@@ -1,0 +1,29 @@
+/* @import "mixins-all.pcss"; */
+
+.menu{
+	position: absolute;
+	@mixin elev-4{};
+	background: #fff;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+
+	& > * {
+		padding: 1rem;
+		cursor: pointer;
+		color: var(--txt);
+
+		&:first-child{
+			border-radius: 4px 4px 0 0;
+		}
+
+		&:last-child{
+			border-radius: 0 0 4px 4px;
+		}
+
+		&:hover{
+			background: var(--highlight);
+		}
+
+	}
+}

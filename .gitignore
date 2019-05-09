@@ -1,0 +1,44 @@
+# Ignore mac info files
+.DS_Store
+
+# Ignore .vscode
+# For this project, we actually allow .vscode files to be added to show the best practices.
+#.vscode/
+
+# ignore node things
+node_modules/
+npm-debug.log
+
+# Ignore gke-prod (for prod)
+k8s/gke-prod
+
+# Ignore the seed for the github client/secret (each developer needs to set it from team private repo)
+services/agent/sql/03_seed-github-key.sql
+
+# Ignore package-lock.json 
+# (this is debatable, but package-lock.json could pause more issues than anything else in certain scenarios)
+package-lock.json
+
+# rollup typescript error
+.rpt2_cache/
+
+# prevent all root folders and filenames starting with "~". By convension, they are local folders only
+# used for personal notes, data store, output dir, ...
+~*
+
+# prevent compiled css and js files
+services/web-server/web-folder/js/*.js
+services/web-server/web-folder/css/*.css
+services/web-server/web-folder/test/*.js
+services/web-server/web-folder/test/*.css
+
+# ignore the dev-test.ts files, they are for personal development
+test-dev.ts
+
+# prevent the .map
+*.map
+
+
+
+# We ignore all dist folder
+dist/

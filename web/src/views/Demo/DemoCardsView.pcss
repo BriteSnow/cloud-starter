@@ -1,0 +1,18 @@
+.DemoCardsView{
+	flex: 1;
+	padding: 2rem;
+	display: grid;
+	
+	/* border: solid 2px green; */
+	grid-template-rows: repeat(auto-fit, 24rem);
+	grid-template-columns: repeat(auto-fit, 20rem);
+	grid-gap: 2em;
+	grid-auto-flow: row dense;
+	.card.wide{
+		grid-column: auto / span 2;
+	}
+
+	.card.tall{
+		grid-row: auto / span 2;
+	}	
+}

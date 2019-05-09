@@ -1,0 +1,25 @@
+@import "mixins-all.pcss";
+
+
+ul, li{
+	margin: 0;
+	padding: 0;
+}
+
+ul{
+	li, a{
+		@mixin typo-label{};
+		line-height: 1.4;
+		padding: 1rem .5rem;
+	}
+	li{
+		list-style: none;
+	}
+
+	a{
+		cursor: pointer;
+		&:hover{
+			background: var(--bkg-sel);
+		}
+	}
+}

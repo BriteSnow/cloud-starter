@@ -1,0 +1,26 @@
+@import './mixins-all.pcss';
+
+.screen{
+	display: grid; 
+	grid-auto-flow: column;
+	grid-template-rows: 1rem 3rem 1rem 1fr;
+	padding: 1rem;
+	
+	& > header{
+		grid-row: 2;
+		display: grid;
+		align-items: center;
+
+		h1{
+			@mixin typo-h2{};
+		}
+
+		.tab-bar{
+			padding-left: 3rem;
+		}
+	}
+
+	& > section {
+		grid-row: 4;
+	}
+}

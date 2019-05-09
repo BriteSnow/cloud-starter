@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: cstar-gh-syncer
+  name: cstar-gh-syncer-dep
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: cstar-gh-syncer
+  template:
+    metadata:
+      labels:
+        run: cstar-gh-syncer
+    spec:
+      volumes:
+        # Those volumes are for development, it allow REPL dev from local build
+        - name: cstar-gh-syncer-src
+          hostPath:
+            path: {{projectDir}}services/gh-syncer/src
+            type: Directory
+        - name: cstar-gh-syncer-dist
+          hostPath:
+            path: {{projectDir}}services/gh-syncer/dist
+            type: Directory
+      containers:
+      - image: localhost:5000/cstar-gh-syncer:{{imageTag}}
+        name: cstar-gh-syncer-ctn
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: cstar-config
+        volumeMounts:
+          - mountPath: /service/src
+            name: cstar-gh-syncer-src
+          - mountPath: /service/dist
+            name: cstar-gh-syncer-dist            
+      restartPolicy: Always

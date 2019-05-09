@@ -1,0 +1,17 @@
+
+.tab-bar{
+	border-bottom: solid 1px #ddd;
+	display: flex; 
+	flex-direction: row;
+
+	& > * {
+		display: block;
+		padding: 1rem 2rem;
+		color: var(--txt);
+
+		&.sel{
+			color: var(--clr-scnd);
+			border-bottom: solid 2px var(--clr-scnd);
+		}
+	}
+}

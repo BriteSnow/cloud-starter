@@ -1,0 +1,2 @@
+# IMPORTANT: Do not change appVersion value manually, change it in the package.json and do a "npm run version"
+appVersion: "DROP-001-SNAPSHOT"

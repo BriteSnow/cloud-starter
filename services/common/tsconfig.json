@@ -1,0 +1,46 @@
+/**
+ *   This is the tsconfig.json for the common files. 
+ *   This is for vscode as those files will be compiled from services/.... (and will use the tsconfig of the service)
+ */
+
+{
+	"compilerOptions": {
+		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
+		"target": "esNext",
+
+		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
+		"module": "commonjs",
+		
+		// This is important to support 3rd party modules that are still in a node.js/commonjs way
+		"moduleResolution": "node", 
+		
+
+		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
+		"strict": true, 
+
+		// all can be .ts
+		"allowJs": false,
+		"checkJs": false,
+
+		"sourceMap": true,  // for debug
+
+		"outDir": "./~out/", /* Redirect output structure to the directory. */
+
+		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
+		"paths": {
+			"shared/*": ["../../../shared/src/*"]
+		},
+
+
+		"experimentalDecorators": true,
+		
+		// allow to import moment like: import moment from "moment"
+		"allowSyntheticDefaultImports": true
+	
+	},
+
+	// We want more control about which code we will compile and exclude
+	"include": [
+		"./src/**/*.ts"
+	]
+}

@@ -1,0 +1,2 @@
+--require dist/services/common/ts/setup-module-aliases.js
+dist/services/gh-syncer/test/test-*.js

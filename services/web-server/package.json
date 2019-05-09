@@ -1,0 +1,41 @@
+{
+  "name": "web-server",
+  "version": "1.0.0",
+  "description": "Cloud Starter main web-server (API and serving html/js/css)",
+  "main": "dist/start.js",
+  "scripts": {
+    "start": "node dist/services/web-server/src/start",
+    "dstart": "node --inspect dist/services/web-server/src/start",
+    "dtest": "node --inspect-brk --inspect ./node_modules/.bin/mocha  --opts mocha.opts ",
+    "test": "./node_modules/.bin/mocha --opts mocha.opts"
+  },
+  "repository": {
+    "type": "git",
+    "url": ".."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/bigquery": "^3.0.0",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/express": "^4.16.1",
+    "@types/mocha": "^5.2.6",
+    "@types/module-alias": "^2.0.0",
+    "@types/useragent": "^2.1.1",
+    "axios": "^0.18.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4",
+    "fs-extra-plus": "^0.5.3",
+    "knex": "^0.16.5",
+    "mocha": "^6.1.4",
+    "module-alias": "^2.2.0",
+    "moment": "^2.24.0",
+    "node-simple-timer": "^0.1.1",
+    "pg": "^7.10.0",
+    "redis": "^2.8.0",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5",
+    "useragent": "^2.3.0"
+  }
+}

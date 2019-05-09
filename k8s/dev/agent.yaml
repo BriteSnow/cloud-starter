@@ -1,0 +1,40 @@
+# Note: here we do not need a k8s service since this service does not have any web/socket API (it connects to redis, but nobody connects to it)
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: cstar-agent
+  name: cstar-agent-dep
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: cstar-agent
+  template:
+    metadata:
+      labels:
+        run: cstar-agent
+    spec:
+      volumes:
+        - name: cstar-agent-src
+          hostPath:
+            path: {{projectDir}}services/agent/src
+            type: Directory
+        - name: bcrm-agent-sql
+          hostPath:
+            path: {{projectDir}}services/agent/sql
+            type: Directory
+      containers:
+      - image: localhost:5000/cstar-agent:{{imageTag}}
+        name: cstar-agent-ctn
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: cstar-config
+        volumeMounts:
+          - mountPath: /service/src
+            name: cstar-agent-src
+          - mountPath: /service/sql
+            name: bcrm-agent-sql
+      restartPolicy: Always

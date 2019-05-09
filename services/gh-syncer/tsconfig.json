@@ -1,0 +1,56 @@
+/**
+ *   This is the tsconfig.json for the devopos scripts, not for the UI or any other services. 
+ */
+
+ {
+	"compilerOptions": {
+		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
+		"target": "esNext",
+
+		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
+		"module": "commonjs",
+		
+		// This is important to support 3rd party modules that are still in a node.js/commonjs way
+		"moduleResolution": "node", 
+		
+
+		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
+		"strict": true, 
+
+		// all can be .ts
+		"allowJs": false,
+		"checkJs": false,
+
+		"sourceMap": true,  // for debug
+
+		"outDir": "./dist", /* Redirect output structure to the directory. */
+
+		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
+		"paths": {
+			"common/*": ["../../common/src/*"], 
+			"shared/*": ["../../../shared/src/*"], 
+			"postgres-array": ["../../common/src/others"] // until postgres-array get typed
+		},
+
+
+		"experimentalDecorators": true,
+		
+		// allow to import moment like: import moment from "moment"
+		"allowSyntheticDefaultImports": true
+	
+	},
+
+	// We want more control about which code we will compile and exclude
+	"include": [
+		"./src/**/*.ts",
+		"./test/**/*.ts", 
+		// Note: shared/ and commont/ts will be compiled as imported by the service .ts code (~ tree shaking)
+		//       However, setup-module-aliases needs to be used (require) in entry file, and therefore explicitly inluded. 
+		"../common/src/setup-module-aliases.ts", 
+		"../../shared/src/entities.ts" // trick to make sure the full dist/ structured is created (can be removed if project import some shared libs)
+	],
+
+	"exclude": [
+		"node_modules"
+	]
+}
