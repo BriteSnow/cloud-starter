@@ -3,14 +3,15 @@ import { getKnex } from './da/db';
 // IMPORTANT: Do not change this appVersion value manually, change it in the package.json and do a "npm run version"
 const staticConfigurations: any = {
 	dataPath: "/service/data",
-	appVersion: "DROP-001-SNAPSHOT",
-	dbHost: "cstar-db-srv"
+	appVersion: "DROP-001-SNAPSHOT"
 }
 
 
 // Type was can be typed by config name (if not, the getConfig return type will be any, thanks to the conditional typing below)
 interface Configs {
 	github: { client_id: string, client_secret: string };
+	db: { database: string, user: string, password: string, host: string };
+	bigquery: { client_email: string, project_id: string, private_key: string }
 }
 
 /**
@@ -21,10 +22,8 @@ interface Configs {
 export async function getConfig<T extends keyof Configs | string>(name: T): Promise<T extends keyof Configs ? Configs[T] : any>;
 export async function getConfig(name: string): Promise<any> {
 	let data: any | undefined;
-
-	// first we try to get it from the environment
-	// TODO: needs to make sure that works (and remove comments when it does)
-	data = process.env[name];
+	// first, try to get it from the environment
+	data = getEnv(name);
 
 	// if not found, try the static value
 	if (data == null) {
@@ -48,5 +47,24 @@ export async function getConfig(name: string): Promise<any> {
 
 
 
+function getEnv(name: string): string | object | undefined {
+	const env = process.env;
+	let val = env[name];
 
+	if (!val) {
+		const obj: any = {};
+		let has = false;
+		const prefix = name + '-';
+		for (const envName of Object.keys(env)) {
+			if (envName.startsWith(prefix)) {
+				has = true;
+				const propName = envName.substring(prefix.length);
+				obj[propName] = env[envName];
+			}
+		}
+		val = (has) ? obj : undefined;
+	}
+
+	return val;
+}
 

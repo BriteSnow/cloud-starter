@@ -1,7 +1,8 @@
-import { projectDao, Project } from 'common/da/daos';
+import { projectDao } from 'common/da/daos';
 import { initSuite } from './t-utils'
 import * as assert from 'assert';
 import { saveProle } from 'common/role-manager';
+import { Project } from 'shared/entities';
 
 
 describe("test-access-project", async function () {

@@ -1,7 +1,8 @@
-import { userDao, User } from 'common/da/daos';
+import { userDao } from 'common/da/daos';
 import { newContext } from 'common/context';
 import * as assert from 'assert';
 import { initSuite } from './t-utils';
+import { User } from 'shared/entities';
 
 describe('test-access-basic', async function () {
 

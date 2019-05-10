@@ -1,7 +1,8 @@
+import * as knexClient from 'knex';
 import { types } from 'pg';
 import { parse as pgArrayParse } from 'postgres-array';
-import { dbConfig } from './db-config';
-import * as knexClient from 'knex';
+import { getConfig } from '../config';
+export { QueryInterface } from 'knex';
 
 
 // 20: int8
@@ -16,20 +17,12 @@ types.setTypeParser(1016, function (val: string) {
 	return pgArrayParse(val, parseInt);
 });
 
-// const host = 'localhost';
-const dbOpts = {
-	database: dbConfig.database,
-	user: dbConfig.user,
-	password: dbConfig.password,
-	host: dbConfig.host
-};
-
-
 let _knex: knexClient | undefined;
 
 export async function getKnex() {
 
 	if (!_knex) {
+		const dbOpts = await getConfig('db');
 		try {
 			_knex = await knexClient({
 				client: 'pg',

@@ -9,7 +9,7 @@
 			"type": "node",
 			"request": "attach",
 			"address": "127.0.0.1",
-			"port": 9229,
+			"port": 9228,
 			"localRoot": "${workspaceFolder}/services/web-server/dist/",
 			"remoteRoot": "/service/dist/"
 		},

@@ -7,12 +7,11 @@ import { extname, resolve } from 'path';
 import { router as routerAPI } from './web/router-api';
 import { router as routerAuth } from './web/router-auth';
 import { router as routerCrud } from './web/router-crud';
-import { router as routerCrudTicket } from './web/router-crud-ticket';
-import { router as routerGithubApi } from './web/router-github-api';
-import { router as routerGithubOauth } from './web/router-github-oauth';
+import { getSysContext } from 'common/context';
+import { userDao } from 'common/da/daos';
 
 
-console.log('... start');
+console.log('... start2');
 
 main();
 
@@ -28,21 +27,14 @@ async function main() {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
 
-	// mount the github oauth router
-	app.use(routerGithubOauth.expressRouter);
-
 	// mount the auth router
 	app.use(routerAuth.expressRouter);
 
-	// mount github APIs
-	app.use('/api/', routerGithubApi.expressRouter);
+	// // mount the API router
+	// app.use('/api/', routerAPI.expressRouter);
 
-	// mount the API router
-	app.use('/api/', routerAPI.expressRouter);
+	// app.use('/api/', routerCrud.expressRouter);
 
-	app.use('/api/', routerCrudTicket.expressRouter);
-
-	app.use('/api/', routerCrud.expressRouter);
 
 
 	// Forwarding all non extension request to the index.html (since we use full URL path for states)

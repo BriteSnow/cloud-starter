@@ -52,7 +52,6 @@ _router.use(async function (req: Request, res: Response, next: NextFunction) {
 
 	// for now, if no extension, then assume it is an API, so, authenticate
 	if (!extname(req.path) && !req.path.endsWith('/')) {
-
 		try {
 			const user = await authRequest(req);
 			req.context = await newContext(user);
@@ -91,10 +90,8 @@ _router.get('/api/user-context', async function (req, res, next) {
 /** Authenticate a request and return userId or null if it did not pass */
 async function authRequest(req: Request): Promise<User> {
 	const sysCtx = await getSysContext();
-
 	const cookieUserId: number | undefined = (req.cookies.userId) ? parseInt(req.cookies.userId) : undefined;
 	const cookieAuthToken: string | undefined = req.cookies.authToken;
-
 	if (cookieUserId == null || cookieUserId === NaN || cookieAuthToken == null) {
 		throw new Error('No authentication in request');
 	} else {

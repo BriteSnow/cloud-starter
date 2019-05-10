@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cstar-config
-data:
-  dbName: cstar_db
-  dbUser: cstar_user
-  dbPassword: welcome

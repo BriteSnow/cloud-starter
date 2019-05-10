@@ -1,17 +1,17 @@
 import { BaseView, BaseViewClass, addHubEvents, RouteInfo } from 'views/base';
 import { display, first, all } from 'mvdom';
-import { DemoTypoView, DemoCardsView, DemoButtonsView, DemoDialogsView, DemoControlsView } from 'views/Demo/DemoViews';
+import { UITypoView, UICardsView, UIButtonsView, UIDialogsView, UIControlsView } from 'views/UI/UIViews';
 import { pathAt } from 'ts/route';
 
 
 const defaultPath = 'typo';
 
 const pathToView: { [name: string]: BaseViewClass } = {
-	'typo': DemoTypoView,
-	'cards': DemoCardsView,
-	'buttons': DemoButtonsView,
-	'dialogs': DemoDialogsView,
-	'controls': DemoControlsView
+	'typo': UITypoView,
+	'cards': UICardsView,
+	'buttons': UIButtonsView,
+	'dialogs': UIDialogsView,
+	'controls': UIControlsView
 };
 
 export class DemoMainView extends BaseView {
