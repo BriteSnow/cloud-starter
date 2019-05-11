@@ -32,7 +32,7 @@
     "module-alias": "^2.2.0",
     "moment": "^2.24.0",
     "node-simple-timer": "^0.1.1",
-    "pg": "^7.10.0",
+    "pg": "^7.11.0",
     "redis": "^2.8.0",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5",

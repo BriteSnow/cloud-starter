@@ -14,7 +14,7 @@ const pathToView: { [name: string]: BaseViewClass } = {
 	'controls': UIControlsView
 };
 
-export class DemoMainView extends BaseView {
+export class UIMainView extends BaseView {
 
 	protected get main() { return first(this.el, 'section.content')! }
 
