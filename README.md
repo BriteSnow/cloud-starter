@@ -1,16 +1,19 @@
 (All code & content are [MIT](https://opensource.org/licenses/MIT) licensed.)
 
-**cloud-starter** is a simple but scalable code base (e.g., *blueprint*) to build "big" cloud application based on bus driven multi-service and modern web user interface. 
+**cloud-starter** is a blueprint code starter for building modern and scalable multi-service based cloud application. 
 
 **NOTE:** The architecture principle and much of the sample codes have been proven and used for real production system, however, the documentation is still in progress. 
 
 ## Approach
 
-- **Kubernetes**: Kubernetes is a transformative technology for building cloud application and this architecture fully leverage Kubernetes (and docker) for REPL development as well as deployment. Does require Docker for Desktop with Kubernetes enabled. 
+- **Kubernetes**: Kubernetes is a transformative technology for building cloud application and this architecture adopt a Kubernetes development centric approach which allows to maximize normalization between all of the runtime environments, such as development, test, stages, and production. 
 
-- **node.js** / **TypeScript**: The JavaScript platform has come a very long way since . Between Google dedication prowess with V8 javascript runtime, node.js fully async runtime model, npm, combined with a modern and powerful structural typing system (TypeScript), the Node/TS
+- **Node.js / TypeScript**: Between Google dedication to make V8 tue best in class javascript runtime for backend services, the ecosystem maturity (i.e., libaries volume and quality), and TypeScript/VSCode high productivity values, the Node.js/Typescript has graduated to be a high productivity and performance environment for building robust and scalable backend services. Consequently, to avoid uncessary environment proliferation, with all of the complexity that comes with it, **Node.js with TypeScript** is the **main language** of choice for most if not all backend and frontend services.
+    > Note: **[Rust](https://rust-lang.org/)** will be used for micro-services that are better implemented in a GC less runtime, and **Python** for the **Deep Learning** scripting language. 
 
 - **Event-based architecture**: Thanks to Kubernetes and docker, multi-service architectures (e.g., microservice architecture) have never been as simple, and this allows to start a new project with highly scalable architecture from the get-go, and that it with a message bus (.e.g., redis power in this case). While message base architecture is not designed to replace SOA architecture entirely, it does make the system much more reliable and extensible by offloading the "main-to-many" service internal dependencies. 
+
+See [Architecture](doc/arch.md) for more information on the architecture and technology stack.
 
 ## Key Structure
 

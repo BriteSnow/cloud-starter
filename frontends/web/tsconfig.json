@@ -20,7 +20,7 @@
 		"outDir": "./~out/", /* Redirect output structure to the directory. */
 
 		// We point the root dir to the parent to include eventual ../common/ (and we will exclude other .ts dirs, like eventual server/)
-		"rootDir": "../",
+		"rootDir": "../../",
 
 
 		// This is important to support 3rd party modules that are still in a node.js/commonjs way
@@ -29,7 +29,7 @@
 		// This allow to have relative path in the import, rather than "import ... "../../ts/ajax" we can do "ts/ajax"
 		"baseUrl": "./src/",
 		"paths": {
-			"shared/*": ["../../shared/src/*"]
+			"shared/*": ["../../../shared/src/*"]
 		},
 		// allow to import moment like: import moment from "moment"
 		"allowSyntheticDefaultImports": true

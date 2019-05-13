@@ -19,7 +19,7 @@ blocks:
   - queue
   - agent
   - name: web
-    dir: web/
+    dir: frontends/web/
     baseDistDir: services/web-server/web-folder
     webBundles:
       - name: lib
