@@ -6,7 +6,7 @@ import { QueryBuilder } from 'knex';
 import { nowTimestamp } from '../utils';
 
 interface CustomQuery {
-	custom?: (q: QueryInterface) => void;
+	custom?: (q: QueryBuilder<any, any>) => void;
 }
 
 // Note: for now, the knex can take a generic I for where value
@@ -164,7 +164,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		return r;
 	}
 
-	async updateBulk(ctx: Context, fn: (k: QueryInterface) => void, data: Partial<E>) {
+	async updateBulk(ctx: Context, fn: (k: QueryBuilder<any, any>) => void, data: Partial<E>) {
 		const k = await getKnex();
 		const q = k(this.tableName).update(data);
 
@@ -205,7 +205,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		return k(this.tableName).delete().where(this.getWhereIdObject(id));
 	}
 
-	protected completeQueryBuildWithQueryOptions(ctx: Context, q: QueryBuilder, queryOptions?: Q & CustomQuery) {
+	protected completeQueryBuildWithQueryOptions(ctx: Context, q: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
 		if (queryOptions) {
 			if (queryOptions.matching) {
 				q = q.where(queryOptions.matching);
