@@ -1,37 +1,24 @@
-## Add github client/secret sql file
-
-- Go to https://github.com/settings/developers
-- Create a new application with call by url `http://localhost:8080/gh-callback`
-- Create file `services/agent/sql/03_seed-github-key.sql` (it will be ran by `npm run recreateDb`)
-
-```sql
-insert into config (name, data) values ('github', 
-	'{"client_id":"_github client_id_", 
-	"client_secret": "_github client_secret_"}');
-```
-
 ## Build
 
 ```sh
 # build all of the services / docker images
-npm run dbuild
+npm run vdev dbuild
 
 # build one service
-npm run dbuild web-server
+npm run vdev dbuild web-server
 
 # build more than one
-npm run dbuild web-server,agent
+npm run vdev dbuild web-server,agent
 ```
 
 ## Install, recreateDb
 
 ```sh
 # install all kubernetes pods and start them
-npm run kcreate
+npm run vdev kcreate
 
 # install the DB by going throw the agent service
 npm run recreateDb
-
 ```
 
 - Go to http://localhost:8080/ you should see the login / register page. 
