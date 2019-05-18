@@ -1,37 +1,65 @@
 import { BaseView, addDomEvents } from '../base';
 import { first, empty, append, frag, remove, pull, trigger } from 'mvdom';
 import { render } from 'ts/render';
+import { draggable } from 'mvdom-xp';
+import { style } from 'mvdom-xp';
 
 export interface FooterConfig {
 	/** Either true/false or the label to be displayed in the button (default false, default label "OK") */
 	ok?: boolean | string;
 	/** Either true/false or the label to be display on the cancel (default false, default label "CANCEL") */
 	cancel?: boolean | string;
+
+	/** The left button (default false) */
+	extra?: boolean | string;
 }
 
 const defaultFooter: FooterConfig = {
 	ok: true,
-	cancel: true
+	cancel: true,
+	extra: false
 }
 
 export type DialogBaseOpts = {
 	cssExtra?: string;
+	style?: Partial<CSSStyleDeclaration>;
 }
 
 export class DialogBase extends BaseView {
 	opts: DialogBaseOpts;
+	private _title?: string;
+	private _content?: HTMLElement | DocumentFragment;
 
 	constructor(opts?: DialogBaseOpts) {
 		super();
 		this.opts = opts || {};
 	}
 
+	get header() { return first(this.el, '.dialog > header')! };
+
 	set title(title: string) {
-		first(this.el, '.dialog > header > .title')!.innerText = title;
+		const titleEl = first(this.el, '.dialog > header > .title');
+		console.log(`>>> ${title}`, titleEl)
+		if (titleEl) {
+			titleEl.innerText = title;
+			this._title = undefined; // clear the temp
+		}
+		// if not el yet, then, store it in temp
+		else {
+			this._title = title;
+		}
+
 	}
 
 	set content(content: HTMLElement | DocumentFragment) {
-		append(first(this.el, '.dialog > section.content')!, content, 'empty');
+		const contentEl = first(this.el, '.dialog > section.dialog-content');
+		if (contentEl) {
+			append(contentEl, content, 'empty');
+			this._content = undefined;
+		} else {
+			this._content = content;
+		}
+
 	}
 
 	set footer(footer: HTMLElement | DocumentFragment | FooterConfig | boolean) {
@@ -39,12 +67,9 @@ export class DialogBase extends BaseView {
 		empty(footerEl);
 
 		// if the the footer is set to true, then, we 
-		if (typeof footer === 'boolean') {
-			if (footer) {
-				footer = defaultFooter;
-			} else {
-				return; // we do nothing if false
-			}
+		if (footer === false) {
+			footerEl.style.display = 'none';
+			return; // we do nothing if false			
 		}
 
 		if (footer instanceof HTMLElement || footer instanceof DocumentFragment) {
@@ -53,19 +78,25 @@ export class DialogBase extends BaseView {
 		// if it is an object, assume a FooterConfig
 		else if (typeof footer === 'object') {
 			const html = [];
+			if (footer.extra) {
+				const label = (typeof footer.extra === 'string') ? footer.extra : "delete";
+				html.push(`<button class="do-extra">${label}</button>`);
+				html.push(`<div class="spacer"></div>`);
+			}
+
 			if (footer.cancel) {
 				const label = (typeof footer.cancel === 'string') ? footer.cancel : "Cancel";
 				html.push(`<button class="do-cancel">${label}</button>`);
 			}
 			if (footer.ok) {
 				const label = (typeof footer.ok === 'string') ? footer.ok : "OK";
-				html.push(`<button class="medium do-ok">${label}</button>`);
+				html.push(`<button class="do-ok medium">${label}</button>`);
 			}
 			const htmlStr = html.join('\n');
 			const f = frag(htmlStr);
 			footerEl.appendChild(f);
 		}
-
+		footerEl.style.display = null;
 		footerEl.classList.remove('hide');
 	}
 
@@ -79,29 +110,60 @@ export class DialogBase extends BaseView {
 			this.doOk();
 		},
 
+		'click; .do-extra': () => {
+			this.doExtra();
+		},
+
 		// this the close icon on the top right
 		'click; .do-close': () => {
 			this.doCancel();
 		}
+
+
 	});
 	//#endregion ---------- /Dom Events ---------- 
 
 	//#region    ---------- Controller Methods ---------- 
 	create() {
 
-
 		// here we do not call super.create, because no matter what the class, we want use the BaseDialog.tmpl
 		let frag = render('DialogBase');
+		const el = frag.firstElementChild! as HTMLElement;
+		const dialogEl = first(el, '.dialog')!;
 
 		// frag.firstElementChild!.classList.add('base-dialog');
-
-		if (this.opts && this.opts.cssExtra) {
-			frag.firstElementChild!.classList.add(this.opts.cssExtra);
+		if (this.opts) {
+			if (this.opts.cssExtra) {
+				dialogEl.classList.add(this.opts.cssExtra);
+			}
+			if (this.opts.style) {
+				style(dialogEl, this.opts.style);
+			}
 		}
 
 		const name = this.name.indexOf("$") > -1 ? this.name.slice(0, this.name.indexOf("$")) : this.name;
-		frag.firstElementChild!.classList.add(name);
+
+		el.classList.add(name);
+
 		return frag;
+	}
+
+	init() {
+		// if we have some temp _title or _content, set it. 
+		if (this._title) {
+			this.title = this._title;
+		}
+		if (this._content) {
+			this.content = this._content;
+		}
+	}
+
+	postDisplay() {
+		draggable(this.el, '.dialog > header', {
+			onStart: (evt) => {
+				console.log(`start dragging dialog`);
+			}
+		});
 	}
 	//#endregion ---------- /Controller Methods ---------- 
 
@@ -114,7 +176,12 @@ export class DialogBase extends BaseView {
 	// by default, get the data, trigger the 'ok' event with the data in the event.details, and close
 	protected async doOk() {
 		const detail = pull(this.el);
-		trigger(this.el, 'OK', { cancelable: true, detail });
+		trigger(this.el, 'OK');
+		this.doClose();
+	}
+
+	protected async doExtra() {
+		trigger(this.el, 'EXTRA');
 		this.doClose();
 	}
 

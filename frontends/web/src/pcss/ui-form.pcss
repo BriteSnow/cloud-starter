@@ -1,20 +1,60 @@
 
-.field {
-	height: 2.5rem;
-	display: grid;
-	grid-template-columns: auto 1fr;
+input{
+	border: none;
+	font-size: 1rem;
+	&::-webkit-input-placeholder{
+		color: var(--txt-low);
+	}
+	&:focus{
+		outline: none;
+	}
+}
+
+field {
 	align-content: center;
 	margin-bottom: 1rem;
+	border-bottom: solid 1px var(--bdr);
+	position: relative;
+	height: 3rem;
+	padding-left: 1rem;
+	display: grid;
+	grid-template-rows: 1rem 1fr;
+
 	& > label {
+		grid-row: 1;
+		grid-column: 1;
 		@mixin typo-label{};
-		margin-right: 1rem;
+		display: flex;
+		z-index: 0;
+		align-items: flex-start;
+		display: flex;
+		align-self: center;
+		font-size: .75rem;
 	}
 
-	& > input, & > textarea, & > .ctrl  { 
-		background: #fff;
-		@mixin typo-body1{};
-		border-radius: 5px;
-		border: solid 1px var(--bdr-light);
-		padding-left: .5rem;
+	& > input{
+		grid-row: 2;
+		grid-column: 1;
+		z-index: 10;
+		background: none;
 	}
+
+
+	&.empty{
+		& > label{
+			grid-row: 2;
+			font-size: .875rem;
+		}
+	}
+	
+	&.focus{
+		border-bottom: solid 1px var(--bdr-prime);
+		& > label {
+			grid-row: 1;
+			font-size: .75rem;
+		}
+	}
+
+
+
 }

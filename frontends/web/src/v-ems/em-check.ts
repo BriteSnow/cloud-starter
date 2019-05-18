@@ -1,6 +1,6 @@
 import * as Handlebars from "handlebars";
+import { frag, on, trigger } from "mvdom";
 import { htmlIco } from "ts/utils";
-import { on, frag, empty, append, trigger } from "mvdom";
 
 const defaultVal = 'off';
 
