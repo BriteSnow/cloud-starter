@@ -1,4 +1,8 @@
-// This still use the "./lib" module to load the required library, making "./lib" the single point for external libraries.
+// source: https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/base.ts
+
+/// This module define the BaseView mvdom View implementation that should be used for all Application Views. 
+/// It also define couple of helper types, functions, and routing base logic. 
+
 import { ExtendedDOMEventListener, View } from "mvdom";
 import { render } from "ts/render";
 import { pathAt, RouteInfo } from "ts/route";
@@ -13,16 +17,23 @@ export type HubBindings = { [selector: string]: (data?: any, info?: any) => void
 export type BaseViewClass = { new(): BaseView; }
 
 export class BaseView implements View {
-	// FIXME: right now to support 2.7.x strictier class properties definition, we initialize the view.id and view.name with empty string
-	//        and later, when MVDOM will define them correctly, we will remove this initialization. 
 
-	/** Unique id of the view. Used in namespace binding and such.  */
+	/** 
+	 * Unique id of the view. Used in namespace binding and such. 
+	 * This is set by mvdom.display, before create.
+	 **/
 	id!: number;
 
-	/** The view name or "class name". */
+	/** 
+	 * The view name or "class name". 
+	 * This is set by mvdom.display, before create.
+	 **/
 	name!: string;
 
-	/** The htmlElement created "definite assignment assertion" as we know it will be defined after create */
+	/** 
+	 * The htmlElement created "definite assignment assertion" as we know it will be defined after create.
+	 * This is set by mvdom.display, after the create.
+	 */
 	el!: HTMLElement; // 
 
 	data?: any; // optional data to be used while create

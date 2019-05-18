@@ -1,0 +1,45 @@
+
+c-input{
+	margin-bottom: 1rem;
+	border-bottom: solid 1px var(--bdr);
+	position: relative;
+	height: 3rem;
+	padding-left: 1rem;
+	display: grid;
+	grid-template-rows: 1rem 1fr;
+
+	& > label {
+		grid-row: 1;
+		grid-column: 1;
+		@mixin typo-label{};
+		display: flex;
+		z-index: 0;
+		align-items: flex-start;
+		display: flex;
+		align-self: center;
+		font-size: .75rem;
+	}
+
+	& > input{
+		grid-row: 2;
+		grid-column: 1;
+		z-index: 10;
+		background: none;
+	}
+
+
+	&.empty{
+		& > label{
+			grid-row: 2;
+			font-size: .875rem;
+		}
+	}
+	
+	&.focus{
+		border-bottom: solid 1px var(--bdr-prime);
+		& > label {
+			grid-row: 1;
+			font-size: .75rem;
+		}
+	}
+}

@@ -3,7 +3,7 @@ import { display, frag } from "mvdom";
 import { DialogBase } from "views/Dialog/DialogBase";
 
 
-export class UIDialogsView extends BaseView {
+export class SpecDialogsView extends BaseView {
 
 	events = addDomEvents(this.events, {
 
@@ -11,7 +11,7 @@ export class UIDialogsView extends BaseView {
 			console.log('show dialog 2');
 			const dialog = new DialogBase();
 			dialog.title = 'Dialog 2';
-			dialog.content = frag('<div>Dialog 2 Content</div');
+			dialog.content = frag('<div>Dialog 2 Content</div>');
 			await display(dialog, 'body');
 		}
 

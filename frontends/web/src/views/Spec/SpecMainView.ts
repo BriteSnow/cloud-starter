@@ -1,20 +1,20 @@
 import { BaseView, BaseViewClass, addHubEvents, RouteInfo } from 'views/base';
 import { display, first, all } from 'mvdom';
-import { UITypoView, UICardsView, UIButtonsView, UIDialogsView, UIControlsView } from 'views/UI/UIViews';
+import { SpecTypoView, SpecCardsView, SpecButtonsView, SpecDialogsView, SpecControlsView } from 'views/Spec/SpecViews';
 import { pathAt } from 'ts/route';
 
 
 const defaultPath = 'typo';
 
 const pathToView: { [name: string]: BaseViewClass } = {
-	'typo': UITypoView,
-	'cards': UICardsView,
-	'buttons': UIButtonsView,
-	'dialogs': UIDialogsView,
-	'controls': UIControlsView
+	'typo': SpecTypoView,
+	'cards': SpecCardsView,
+	'buttons': SpecButtonsView,
+	'dialogs': SpecDialogsView,
+	'controls': SpecControlsView
 };
 
-export class UIMainView extends BaseView {
+export class SpecMainView extends BaseView {
 
 	protected get main() { return first(this.el, 'section.content')! }
 
@@ -38,7 +38,7 @@ export class UIMainView extends BaseView {
 			display(new subViewClass, this.main, 'empty');
 
 			// update the tab
-			const href = `/_ui/${newPath}`;
+			const href = `/_spec/${newPath}`;
 			for (const tab of all(this.el, '.tab-bar a')) {
 				const tabHref = tab.getAttribute('href');
 				if (tab.classList.contains('sel') && tabHref !== href) {

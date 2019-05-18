@@ -3,7 +3,7 @@ import { BaseView, BaseViewClass, addHubEvents, addDomEvents } from './base';
 import { display, closest, first, all, empty, hub, push } from 'mvdom';
 import { HomeView } from './HomeView';
 import { NavView } from './NavView';
-import { UIMainView } from './UI/UIMainView';
+import { SpecMainView } from './Spec/SpecMainView';
 import { logoff, UserContext } from 'ts/user-ctx';
 
 
@@ -11,7 +11,7 @@ const defaultPath = "";
 
 let pathToView: { [name: string]: BaseViewClass } = {
 	"": HomeView,
-	"_ui": UIMainView,
+	"_spec": SpecMainView,
 };
 
 export class MainView extends BaseView {

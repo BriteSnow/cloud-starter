@@ -29,6 +29,7 @@ export class DialogBase extends BaseView {
 	opts: DialogBaseOpts;
 	private _title?: string;
 	private _content?: HTMLElement | DocumentFragment;
+	private _footer?: HTMLElement | DocumentFragment | FooterConfig | boolean;
 
 	constructor(opts?: DialogBaseOpts) {
 		super();
@@ -39,10 +40,8 @@ export class DialogBase extends BaseView {
 
 	set title(title: string) {
 		const titleEl = first(this.el, '.dialog > header > .title');
-		console.log(`>>> ${title}`, titleEl)
 		if (titleEl) {
 			titleEl.innerText = title;
-			this._title = undefined; // clear the temp
 		}
 		// if not el yet, then, store it in temp
 		else {
@@ -55,7 +54,6 @@ export class DialogBase extends BaseView {
 		const contentEl = first(this.el, '.dialog > section.dialog-content');
 		if (contentEl) {
 			append(contentEl, content, 'empty');
-			this._content = undefined;
 		} else {
 			this._content = content;
 		}
@@ -64,6 +62,12 @@ export class DialogBase extends BaseView {
 
 	set footer(footer: HTMLElement | DocumentFragment | FooterConfig | boolean) {
 		const footerEl = first(this.el, '.dialog > footer')!;
+		// if we do not ahve a footer element yet, we store it in temp, and return
+		// It will be set later by init
+		if (!footerEl) {
+			this._footer = footer;
+			return;
+		}
 		empty(footerEl);
 
 		// if the the footer is set to true, then, we 
@@ -152,9 +156,15 @@ export class DialogBase extends BaseView {
 		// if we have some temp _title or _content, set it. 
 		if (this._title) {
 			this.title = this._title;
+			this._title = undefined;
 		}
 		if (this._content) {
 			this.content = this._content;
+			this._content = undefined;
+		}
+		if (this._footer) {
+			this.footer = this._footer;
+			this._footer = undefined;
 		}
 	}
 
