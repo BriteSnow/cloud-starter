@@ -4,6 +4,8 @@
 
 **NOTE:** The architecture principle and much of the sample codes have been proven and used for real production system, however, the documentation is still in progress. 
 
+Key Documents: [Architecture](doc/arch.md) | [UI Development](doc/ui.md)
+
 ## Approach
 
 - **Kubernetes end-to-end approach**: Kubernetes is a transformative technology for building cloud application and this architecture adopt a **Kubernetes development centric approac**h which allows to maximize normalization between all of the runtime environments, such as development, test, stages, and production. 
