@@ -1,5 +1,5 @@
 # Note: here we do not need a k8s service since this service does not have any web/socket API (it connects to redis, but nobody connects to it)
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:

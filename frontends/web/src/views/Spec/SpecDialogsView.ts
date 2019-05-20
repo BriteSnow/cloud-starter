@@ -8,7 +8,6 @@ export class SpecDialogsView extends BaseView {
 	events = addDomEvents(this.events, {
 
 		'click; .show-dialog2': async (evt) => {
-			console.log('show dialog 2');
 			const dialog = new DialogBase();
 			dialog.title = 'Dialog 2';
 			dialog.content = frag('<div>Dialog 2 Content</div>');
