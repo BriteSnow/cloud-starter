@@ -25,8 +25,9 @@ class InputElement extends HTMLElement {
 }
 
 customElements.define("c-input", InputElement);
-//#endregion ---------- /c-input ----------
 
+
+//#endregion ---------- /c-input ----------
 /// Delegate bindings to add the necessary behavior for the HTMLInputElement contained in the custom InputElement (c-input) element.
 ///   Note: Doing those bindings once for all instance reduces the number of binding necesary, 
 ///         but technically, those binding could be done in the c-input element as well, as in other web components in this project. 
