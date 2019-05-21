@@ -14,10 +14,10 @@
     "gtx": "^0.6.1",
     "handlebars": "^4.1.2",
     "hbsp": "^0.3.0",
-    "knex": "^0.17.0-next2",
+    "knex": "^0.17.0-next4",
     "mocha": "^6.1.4",
     "moment": "^2.24.0",
-    "mvdom": "^0.7.2",
+    "mvdom": "^0.7.4",
     "mvdom-xp": "0.0.1",
     "node-simple-timer": "^0.1.1",
     "p-spawn": "^0.4.1",
@@ -51,5 +51,6 @@
   "engines": {
     "node": ">=10.15.0"
   },
-  "author": "BriteSnow"
+  "author": "BriteSnow",
+  "license": "MIT"
 }

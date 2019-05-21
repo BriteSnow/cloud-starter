@@ -1,13 +1,13 @@
 import { attr, htmlIco } from "ts/utils";
 import { on } from "mvdom";
+import { BaseHTMLElement } from "./c-base";
 
-class CheckElement extends HTMLElement {
+class CheckElement extends BaseHTMLElement {
 
-	get value(): 'true' | 'false' {
-		const checkOn = this.classList.contains('on');
-		return (checkOn) ? 'true' : 'false';
-	}
+	//#region    ---------- Component States ---------- 
+	get name() { return attr(this, 'name') };
 
+	get value() { return (this.classList.contains('on')) ? 'true' : 'false'; }
 	set value(v: 'true' | 'false') {
 		if (v === 'true') {
 			this.classList.add('on');
@@ -19,9 +19,11 @@ class CheckElement extends HTMLElement {
 			this.innerHTML = htmlIco('check-off');
 		}
 	}
+	//#endregion ---------- /Component States ---------- 
 
-	constructor() {
-		super();
+
+	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
+	init() {
 		const [label, value] = attr(this, ['label', 'value']);
 		const val = (value === 'true') ? 'true' : 'false';
 		this.value = val;
@@ -33,10 +35,10 @@ class CheckElement extends HTMLElement {
 			this.value = newVal;
 		});
 	}
+
 }
 
 customElements.define("c-check", CheckElement);
 
 
-
-
+// TODO: needs to impement the mvdom dx puller/pusher

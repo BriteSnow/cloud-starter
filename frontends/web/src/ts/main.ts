@@ -1,9 +1,10 @@
-import { on, display, first, trigger } from 'mvdom';
-import { initRoute } from './route';
-import { MainView } from 'views/MainView';
+import { display, first, on, trigger } from 'mvdom';
 import { ajaxGet } from 'ts/ajax';
-import { LoginView } from 'views/LoginView';
 import { getUserContext } from 'ts/user-ctx';
+import { LoginView } from 'views/LoginView';
+import { MainView } from 'views/MainView';
+import { initRoute } from './route';
+
 
 
 // --------- Load Resources --------- //

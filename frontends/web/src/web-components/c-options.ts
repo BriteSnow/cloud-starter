@@ -1,15 +1,14 @@
 import * as Handlebars from "handlebars";
 import { closest, on, all } from "mvdom";
 import { attr } from "ts/utils";
+import { BaseHTMLElement } from "./c-base";
 
-class OptionsElement extends HTMLElement {
+class OptionsElement extends BaseHTMLElement {
 
-	get value(): string | null {
-		return this.getAttribute('value');
-	}
 
+	//#region    ---------- Component States ---------- 
+	get value(): string | null { return this.getAttribute('value'); }
 	set value(v: string | null) {
-
 		attr(this, 'value', v);
 
 		const t = attr(this, 'value');
@@ -25,10 +24,10 @@ class OptionsElement extends HTMLElement {
 			}
 		}
 	}
+	//#endregion ---------- /Component States ---------- 
 
-	constructor() {
-		super();
-
+	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
+	init() {
 		const [values, value] = attr(this, ['values', 'value']);
 
 		let html = '';
@@ -47,6 +46,10 @@ class OptionsElement extends HTMLElement {
 			this.value = val;
 		});
 	}
+
+
 }
 
 customElements.define("c-options", OptionsElement);
+
+// TODO: needs to impement the mvdom dx puller/pusher
