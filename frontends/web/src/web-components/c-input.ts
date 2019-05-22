@@ -7,15 +7,18 @@ import { BaseFieldElement } from "./c-base";
  * c-input custom element encapsulate a label/input field group ()`c-input > label, input`) structure. 
  * component styles are global but scoped via css naming (see c-input.pcss). 
  * 
+ * Usage: `<c-input name="fieldNameA" value="value A"></c-input>`
+ * See:  SpecControlsView.tmpl, SpecControlsView.ts
+ * 
  * Component Attributes: 
  *   - name: (optional) see BaseFieldElement.
  *   - value: (optional) the eventual value initilized value. See BaseFieldElement.
  * 
  * Component States: 
+ *   - name: (optional) managed by BaseFieldElement. Read only (for now) the c-input 'name' attribute
  *   - empty: if this input has a value or not, stored as the css `.empty` when empty. 
  *   - value: which is stored in the internal input.value. 
  *       > Note that c-input 'value' attribute is ONLY used to initialize the value as with other html input elements.
- *   - name: which is a read only (for now) the c-input 'name' attribute
  * 
  * Note 1: To minimize state management and out of sync bug with DOM bugs, the values of those states
  *         are stored in the related principal element properties. .empty is the element class !'on', 
@@ -26,8 +29,6 @@ import { BaseFieldElement } from "./c-base";
  *         is the default behavior of my native HTML element (inputs)
  *
  */
-
-//#region    ---------- c-input ----------
 
 export class InputElement extends BaseFieldElement {
 	static get observedAttributes() { return ['value']; }
@@ -108,5 +109,3 @@ export class InputElement extends BaseFieldElement {
 }
 
 customElements.define("c-input", InputElement);
-
-//#endregion ---------- /c-input ----------

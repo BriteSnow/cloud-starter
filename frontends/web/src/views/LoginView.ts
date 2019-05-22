@@ -96,7 +96,7 @@ export class LoginView extends BaseView {
 	//#endregion ---------- /View Lifecycle ---------- 
 
 	private async doLogin() {
-		const data = pull(this.fieldset, 'input');
+		const data = pull(this.fieldset);
 		console.log('>>> doLogin', data);
 		try {
 			const result = await login(data.username, data.pwd);
@@ -114,7 +114,7 @@ export class LoginView extends BaseView {
 	}
 
 	private async doRegister() {
-		const data = pull(this.fieldset, 'input');
+		const data = pull(this.fieldset);
 
 		try {
 			const result = await ajaxPost('/api/register', data);

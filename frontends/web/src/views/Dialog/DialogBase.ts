@@ -4,26 +4,6 @@ import { render } from 'ts/render';
 import { draggable } from 'mvdom-xp';
 import { style } from 'mvdom-xp';
 
-export interface FooterConfig {
-	/** Either true/false or the label to be displayed in the button (default false, default label "OK") */
-	ok?: boolean | string;
-	/** Either true/false or the label to be display on the cancel (default false, default label "CANCEL") */
-	cancel?: boolean | string;
-
-	/** The left button (default false) */
-	extra?: boolean | string;
-}
-
-const defaultFooter: FooterConfig = {
-	ok: true,
-	cancel: true,
-	extra: false
-}
-
-export type DialogBaseOpts = {
-	cssExtra?: string;
-	style?: Partial<CSSStyleDeclaration>;
-}
 
 export class DialogBase extends BaseView {
 	opts: DialogBaseOpts;
@@ -49,6 +29,8 @@ export class DialogBase extends BaseView {
 		}
 
 	}
+
+	get content() { return first(this.el, '.dialog > section.dialog-content')! }
 
 	set content(content: HTMLElement | DocumentFragment) {
 		const contentEl = first(this.el, '.dialog > section.dialog-content');
@@ -198,4 +180,26 @@ export class DialogBase extends BaseView {
 	doClose() {
 		remove(this.el);
 	}
+}
+
+
+export interface FooterConfig {
+	/** Either true/false or the label to be displayed in the button (default false, default label "OK") */
+	ok?: boolean | string;
+	/** Either true/false or the label to be display on the cancel (default false, default label "CANCEL") */
+	cancel?: boolean | string;
+
+	/** The left button (default false) */
+	extra?: boolean | string;
+}
+
+const defaultFooter: FooterConfig = {
+	ok: true,
+	cancel: true,
+	extra: false
+}
+
+export type DialogBaseOpts = {
+	cssExtra?: string;
+	style?: Partial<CSSStyleDeclaration>;
 }

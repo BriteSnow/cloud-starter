@@ -1,11 +1,15 @@
 import { on } from "mvdom";
-import { attr, htmlIco } from "ts/utils";
+import { attr } from "ts/utils";
 import { BaseFieldElement } from "./c-base";
+import { htmlSvgSymbol } from "./c-ico-symbol";
 
 
 /**
  * c-check custom element encapsulate a checkbox true/false component with NO label concept.
  *
+ * Usage: `<c-check name="fieldA" checked></c-input>`
+ * See:  SpecControlsView.tmpl, SpecControlsView.ts
+ * 
  * Component Attributes:
  *   - name: (optional) see BaseFieldElement.
  *   - value: (optional) See BaseFieldElement.
@@ -28,10 +32,10 @@ class CheckElement extends BaseFieldElement {
 
 		if (v) {
 			this.classList.add('checked')
-			this.innerHTML = htmlIco('check-on');
+			this.innerHTML = htmlSvgSymbol('ico-check-on');
 		} else {
 			this.classList.remove('checked')
-			this.innerHTML = htmlIco('check-off');
+			this.innerHTML = htmlSvgSymbol('ico-check-off');
 		}
 
 		// Best Practce: Trigger the change event in the state setter like this.

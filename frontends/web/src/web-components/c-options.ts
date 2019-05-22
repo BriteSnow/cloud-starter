@@ -2,12 +2,13 @@ import { all, on, first } from "mvdom";
 import { attr } from "ts/utils";
 import { BaseHTMLElement, BaseFieldElement } from "./c-base";
 
-
-
 /**
  * c-options custom element encapsulate a label/input field group ()`c-input > label, input`) structure.
  * component styles are global but scoped via css naming (see c-input.pcss).
  *
+ * Usage: `<c-options name="state" values="1:Open, 0:Close, 2 : Both" value="0"></c-options>`
+ * See:  SpecControlsView.tmpl, SpecControlsView.ts
+ * 
  * Component Attributes:
  *   - name: (optional) See BaseFieldElement.
  *   - value: (optional) See BaseFieldElement. String matching the "value" part of value
@@ -21,7 +22,6 @@ import { BaseHTMLElement, BaseFieldElement } from "./c-base";
  */
 
 class OptionsElement extends BaseFieldElement {
-
 
 	//#region    ---------- Component States ---------- 
 	get value(): string | null {
@@ -79,5 +79,3 @@ class OptionsElement extends BaseFieldElement {
 }
 
 customElements.define("c-options", OptionsElement);
-
-// TODO: needs to impement the mvdom dx puller/pusher

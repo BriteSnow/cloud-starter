@@ -115,23 +115,6 @@ export function getLuma(c: string) {
 }
 //#endregion ---------- /color ---------- 
 
-//#region    ---------- HTML parts ---------- 
-
-export function htmlIco(name: string, css = '') {
-	name = 'ico-' + name;
-	let html = `<i class="${name} ${css}">`;
-	html += htmlSymbol(name);
-	html += '</i>';
-	return html;
-}
-export function htmlSymbol(name: string) {
-	var html = ['<svg class="symbol ' + name + '">'];
-	html.push('<use xlink:href="#' + name + '"></use>');
-	html.push('</svg>');
-	return html.join('\n');
-}
-//#endregion ---------- /HTML parts ----------
-
 
 //#region    ---------- attr ---------- 
 // conditional typing
