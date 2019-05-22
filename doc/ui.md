@@ -37,17 +37,18 @@ All Web UI applications source code are structure the following way:
 
 
 
-### Web Component (without _shadowDOM_)
+### Web Components
 
 With the deprecation of IE11 and move from Edge to Google Chrome, Native **WebComponents**, without heavy frameworks (e.g., Angular, React), are now a reality, and can be added to rich **DOM Centric** application development.
 
-The trick, as with many technology/standard, is to know what is partical to use, and what is too dogmatic and add more complexity than value. 
 
-- **YES: Custom Elements** is very robust should be used to efficiently componentized the application custom elements.
+- **Custom Elements** is simple and very robust browser support to efficiently componentized the application custom elements. A good 
 
-- **NOT YET: shadownDom** unfortunately _shadowDOM_ comes with great limitations and performance impact, specifically about its lack of support for global CSS sharing among components. The `::shadow` CSS Style piercing has been deprecated with no replacement, while inlining CSS Style in each custom component is a theoritical options, the performance cost as well as the complexity added for bigger app is not worthwhile the componentization protection it brings.  
+- **shadownDom** (not yet) unfortunately _shadowDOM_ styling opacity model adds quite a bit of complexity to application styling, especially for those that want to use great tooling like postCSS. For now, we will start developing the component without _shadowDOM_ first, but we will be following the best practices so that we can adopt it once we have integrated postCSS into our dev cycle (probably with .cpcss, which will be component css pute in the templates.js and can be retrieves by appTemplates.css.templateName).
 
-- **Good News:** **Custom Elements without shadowDOM** (e.g., with direct children) brings most of the customization needed, with with the same best practices used in View styling, most of the drawbacks that _shadowDOM_ tries to aleviate are not really issue. 
+- **Templates** This is another thing that can be useful, althought, HTML Template are not as expressive as handlebars. For now, we will either use inline **string litterals** or use the handlebars. Also, Web Components are for atomic components, and will be mostly ts/css, as the the templating needs are more on the view.  
+
+
 
 See [frontends/web/src/web-components](../frontends/web/src/web-components/c-options.ts)
 

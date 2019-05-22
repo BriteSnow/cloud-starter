@@ -10,6 +10,7 @@
 		margin-left: -200px;
 		display: grid;
 		grid-template-rows: 8rem auto 4rem;
+
 		header{
 			display: flex;
 			align-items: center;
@@ -24,16 +25,12 @@
 			background: var(--bkg-prime);
 			display: grid;
 			padding: 3rem 4rem 1rem 4rem;
-			grid-template-rows: 2rem;
-			grid-gap: 2rem;
+			grid-auto-rows: auto;
+			grid-gap: 1rem;
+			/* min-height: 20rem; */
 
-			.field{
-				display: flex;
-				input{
-					/* flex: 1; */
-					display: block;
-					width: 100%;
-				}
+			c-input{
+				--bkg: white;
 			}
 			button.do{
 				justify-self: center;

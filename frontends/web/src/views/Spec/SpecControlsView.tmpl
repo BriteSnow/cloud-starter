@@ -1,30 +1,31 @@
 <div class="SpecControlsView">
 
-	<div class="card wide">
+	<div class="card wide spec-form">
 		<header>
-			<h2>Inputs</h2>
-
+			<h2>Form</h2>
 		</header>
-		<section>
 
-			<c-input class='dx' label="Field A" name="fieldA" value="Value A"></c-input>
-			<c-input class='dx' label="Field B" name="fieldB"></c-input>
-			<c-check value="true"></c-check>
+		<section>
+			<c-input label="Field A" name="fieldA" value="value A"></c-input>
+			<c-input label="Field B" name="fieldB"></c-input>
+			<c-check name="fieldC"></c-check>
+			<c-check name="fieldD" value="value D" checked></c-check>
 		</section>
-		<footer><button class="do-push-data">push</button></footer>
+		<footer><button class="do-push">push</button></footer>
 	</div>
 
-	<div class="card wide">
+	<div class="card wide spec-options">
 		<header>
 			<h2>Other Controls</h2>
 		</header>
 		<section>
-		
 			<section>
 				<h3>Options</h3>
-				<c-options values="Open:1,Close:0,Both:2" value="0"></c-options>
+				<c-options name="state" values="1:Open, 0:Close, 2 : Both" value="0"></c-options>
 			</section>
+			
 		</section>
+		<footer><button class="do-push">push</button></footer>			
 	</div>
 	
 </div>

@@ -49,12 +49,12 @@ export class LoginView extends BaseView {
 		// Click on the do button
 		'click; button.do': async (evt) => {
 			const mode = this.mode;
-			if (mode === 'login') {
+			if (mode == 'login') {
 				this.doLogin();
-			} if (mode === 'register') {
+			} else if (mode == 'register') {
 				this.doRegister();
 			} else {
-				console.log(`ERROR - NOP - Mode ${mode} unknown. Ignoring`);
+				console.log(`ERROR - NOP - Mode '${mode}' unknown. Ignoring`);
 			}
 
 		},
@@ -90,20 +90,14 @@ export class LoginView extends BaseView {
 
 	//#region    ---------- View Lifecycle ---------- 
 	async postDisplay() {
-		const r = await ajaxGet('/gh-auth-href');
-		if (r.success) {
-			const href = r.data;
-			this.ghLink.setAttribute('href', href);
-		} else {
-			// TODO: need to handle when no client_id
-		}
-
+		this.mode = this.mode;
+		console.log('>>>', this.mode);
 	}
 	//#endregion ---------- /View Lifecycle ---------- 
 
 	private async doLogin() {
 		const data = pull(this.fieldset, 'input');
-
+		console.log('>>> doLogin', data);
 		try {
 			const result = await login(data.username, data.pwd);
 			if (result.success) {

@@ -1,22 +1,72 @@
-import { attr, htmlIco } from "ts/utils";
 import { on } from "mvdom";
-import { BaseHTMLElement } from "./c-base";
+import { attr, htmlIco } from "ts/utils";
+import { BaseFieldElement } from "./c-base";
 
-class CheckElement extends BaseHTMLElement {
+
+/**
+ * c-check custom element encapsulate a checkbox true/false component with NO label concept.
+ *
+ * Component Attributes:
+ *   - name: (optional) see BaseFieldElement.
+ *   - value: (optional) See BaseFieldElement.
+ *   
+ * Component States:
+ *   - name: which is a read only (for now) the c-input 'name' attribute
+ *   - checked: boolean, itinialized with 'checked' attribute, store as `c-check.on` css class.
+ *   - value: can be set to true/false for setting checked, 
+ *            or match attribute 'value' (if match true otherwise false), 
+ *            returns false if check is off, or true or 'value' attribute value if checked === true
+ * 
+ */
+
+class CheckElement extends BaseFieldElement {
 
 	//#region    ---------- Component States ---------- 
-	get name() { return attr(this, 'name') };
+	get checked() { return this.classList.contains('checked') };
+	set checked(v: boolean) {
+		const old = this.checked;
 
-	get value() { return (this.classList.contains('on')) ? 'true' : 'false'; }
-	set value(v: 'true' | 'false') {
-		if (v === 'true') {
-			this.classList.add('on');
-			this.setAttribute('value', 'true');
+		if (v) {
+			this.classList.add('checked')
 			this.innerHTML = htmlIco('check-on');
 		} else {
-			this.classList.remove('on');
-			this.setAttribute('value', 'false');
+			this.classList.remove('checked')
 			this.innerHTML = htmlIco('check-off');
+		}
+
+		// Best Practce: Trigger the change event in the state setter like this.
+		// Note: check if initialized, to avoid trigger data change on initialization
+		if (v !== old) {
+			this.triggerChange();
+		}
+	};
+
+	get value() {
+		const attrValue = attr(this, 'value');
+		const checked = this.checked;
+		// if we have a attribute value return it 
+		if (attrValue) {
+			return (checked) ? attrValue : false; // could have return undefined rather than false, but decide to always return a value.
+		}
+		else {
+			return checked;
+		}
+	}
+	set value(v: any) {
+		// if it is a boolean, then, just pass the value
+		if (typeof v === 'boolean') {
+			this.checked = v;
+		}
+		// otherwise, we assume we have attr
+		else {
+			const attrValue = attr(this, 'value');
+			if (attrValue) {
+				this.checked = (attrValue === v);
+			}
+			// Should not be in this state, we log for the component user to fix issue.
+			else {
+				console.log(`Warning - c-check - Tries to set a non boolean value '${v}' to checkElement.value which do not have a attribute value to match with. Skipping. `);
+			}
 		}
 	}
 	//#endregion ---------- /Component States ---------- 
@@ -24,21 +74,19 @@ class CheckElement extends BaseHTMLElement {
 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
-		const [label, value] = attr(this, ['label', 'value']);
-		const val = (value === 'true') ? 'true' : 'false';
-		this.value = val;
+		super.init(); // just call it for BaseFieldElement sub classes.
 
+		// Note: the HTML content is built on set checked, since it change totally the content. 
+
+		//// Set states
+		this.checked = this.hasAttribute('checked');
+
+		//// Bind internal component events
 		on(this, 'click', (evt) => {
-			// we get and toggle the value
-			const newVal = (this.value === 'true') ? 'false' : 'true';
-			// we set the new value
-			this.value = newVal;
+			this.checked = !this.checked;
 		});
 	}
 
 }
 
 customElements.define("c-check", CheckElement);
-
-
-// TODO: needs to impement the mvdom dx puller/pusher

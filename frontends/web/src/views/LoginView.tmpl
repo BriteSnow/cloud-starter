@@ -1,27 +1,18 @@
 <div class="LoginView login-mode">
 	<div class="dialog">
 		<header>CLOUD-STARTER</header>
-		<header class="for-register">Register</header>
 		<section class="content">
 
-			<c-input 
-			<div class="field">
-				<input name="username" type="text" placeholder="username"/>
-			</div>
-			<div class="field">
-					<input name='pwd' type="password" placeholder="password" />
-			</div>
-			<div class="field for-register">
-					<input name='repeat-pwd' type="password" placeholder="repeat password" />
-			</div>
-
+			<c-input name="username" label="Username"></c-input>
+			<c-input name="pwd" label="Password"></c-input>
+			<c-input name="repeat-pwd" label="Repeat Password" class="for-register"></c-input>
+			<div></div>
 			<button class="do high">Login</button>
 		</section>
 		<footer>
 			<div class="message"></div>
-			<a class="high to-register for-login" href="">Register</a>
-			
-			<a class="high to-register for-register" href="">Login</a>
+			<a class="high to-register for-login">Register</a>
+			<a class="high to-login for-register">Login</a>
 			<span class="line"></span>
 			<a class="high to-github" href="">GITHUB</a>
 		</footer>
