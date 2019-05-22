@@ -13,6 +13,7 @@ import { BaseFieldElement } from "./c-base";
  * Component Attributes: 
  *   - name: (optional) see BaseFieldElement.
  *   - value: (optional) the eventual value initilized value. See BaseFieldElement.
+ *   - password: (optional) if hasAttribute('password') this field password. 
  * 
  * Component States: 
  *   - name: (optional) managed by BaseFieldElement. Read only (for now) the c-input 'name' attribute
@@ -73,12 +74,14 @@ export class InputElement extends BaseFieldElement {
 
 		let [label, value] = attr(this, ['label', 'value']);
 
+		const type = this.hasAttribute('password') ? 'password' : 'text';
+
 		//// Build the component HTML
 		label = (label) ? label : "";
 		const valueAttr = (value) ? `value="${value}"` : '';
 		// create the DOM
 		this.innerHTML = `<label>${label}</label>
-		<input type="text" ${valueAttr}>`;
+		<input type="${type}" ${valueAttr}>`;
 
 		//// Set the states
 		if (!value) {
