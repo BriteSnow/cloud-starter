@@ -4,40 +4,61 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import { extname, resolve } from 'path';
-import { router as routerAPI } from './web/router-api';
+import { router as routerHelloAPI } from './web/router-hello-api';
 import { router as routerAuth } from './web/router-auth';
-import { router as routerCrud } from './web/router-crud';
-import { getSysContext } from 'common/context';
-import { userDao } from 'common/da/daos';
+import { dseGenerics } from './web/dse-generics';
+import { AppError } from 'common/error';
 
+const PORT = 8080;
 
-console.log('... start2');
+console.log('... start web-server');
 
 main();
 
 async function main() {
 	const app = express();
 
-	// Adding the static middleware at the beginning means it wins out over any routes present
-	// (but only interferes if the file exists)
+	// will be used for the static file fall back (APIs will take precedence) 
 	const webDir = 'web-folder/'
 
+	//// set express processing middlewares
+	app.set('trust proxy', true); // to have the x-forwarded-for, https://expressjs.com/en/guide/behind-proxies.html
 	app.use(cookieParser());
-
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
 
-	// mount the auth router
+
+	//// First handler doing https redirect in  when in a prox env (production)
+	// Note: will not impact localhost development
+	app.use(async function (req, res, next) {
+		// HTTPS Redirect: if we have a forwarded protocol HTTPS (from load balancer, make sure it is https)
+		const fwdProtocol = req.header('x-forwarded-proto');
+		if (fwdProtocol && fwdProtocol === 'http') {
+			const httpsUrl = 'https://' + req.hostname + req.originalUrl;
+			res.redirect(301, httpsUrl); // temporary to allow changing later, but could be set to 301 to make it permanent. 
+			return;
+		}
+		next();
+	});
+
+
+	//// Mount authentication hook, login, register APIs. 
 	app.use(routerAuth.expressRouter);
 
-	// // mount the API router
-	// app.use('/api/', routerAPI.expressRouter);
-
-	// app.use('/api/', routerCrud.expressRouter);
-
+	//// Mount hello world demo api
+	// Note: to remove once understood.
+	app.use('/api/', routerHelloAPI.expressRouter);
 
 
-	// Forwarding all non extension request to the index.html (since we use full URL path for states)
+	//// Mount DSE (Data Service Endpoint) Web APIs
+	// generic dse as fall back. 
+	// Note: Once the application mature, this might be removed all together if all exposed API you be explicit.
+	app.use('/api/', dseGenerics.expressRouter);
+
+
+	//// Mount all app uris to same index.html
+	// Note: Path with not extension and not yet bound to API are assumed to be app state, and load the same index.html application
+	//       This allows the user to hit reload anytime and get the same application.
 	app.use((req, res, next: NextFunction) => {
 		// Assumption: if we are here, all API handlers took the request, and we just have a page render or static file (with extension)
 		if (!extname(req.path)) {
@@ -47,22 +68,39 @@ async function main() {
 		}
 	});
 
-	// fall back on the static
+
+	//// Fall back on the static for path with extensions
+	// This allows to have static files if they have not be bound above (images, .svg, .css, .js, ...)
 	app.use(express.static(webDir));
 
-
-	// error handling, must be last. 
+	//// error handling, must be last. 
 	app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
 		let error: any;
-		if (err.message != null) {
-			error = err.message;
+		let err_msg: string | undefined;
+
+		if (err instanceof AppError) {
+			error = { code: err.code, message: err.message }
+			err_msg = err.message;
+		} else if (err instanceof Error) {
+			error = { message: err.message }
+			err_msg = err.message;
+		} else if (typeof err === 'string') {
+			error = { message: err };
+			err_msg = err;
 		} else {
 			error = err;
+			err_msg = '' + err;
 		}
+
 		res.status(500).json({ error });
+
+		// TODO: add log
 	});
 
-	app.listen(8080);
+
+	// start the server
+	app.listen(PORT);
+	console.log(`... listening at ${PORT}`);
 }
 
 

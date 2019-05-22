@@ -3,6 +3,7 @@ import { Timer } from 'node-simple-timer';
 import * as moment from 'moment';
 
 
+//#region    ---------- time utils ---------- 
 // returns a now formatted for database
 export function nowTimestamp() {
 	return moment().utc().toISOString();
@@ -14,6 +15,13 @@ export async function wait(ms: number) {
 	})
 }
 
+export function timer() {
+	return new Timer(true);
+}
+//#endregion ---------- /time utils ---------- 
+
+
+//#region    ---------- string utils ---------- 
 export function randomString(length?: number) {
 	length = length || 6;
 	var arr = [];
@@ -24,9 +32,6 @@ export function randomString(length?: number) {
 	return arr.join("");
 }
 
-export function timer() {
-	return new Timer(true);
-}
 
 export function padZero(num: number, n: number) {
 	const numLength = ('' + num).length;
@@ -46,3 +51,4 @@ export function formatSize(sizeInBytes: number, formatter?: string) {
 	value = value.replace("{n}", byteUnits[i]);
 	return value;
 }
+//#endregion ---------- /string utils ----------

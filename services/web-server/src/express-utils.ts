@@ -1,9 +1,19 @@
 import { Request, Response, NextFunction, Router, RequestHandler } from 'express';
+import { ApiResponse } from 'shared/api-types';
 
 export { Request } from 'express';
 
-//// Simplified Router with full async / catch support, and will stream back return value by default
 
+export function success<T = any>(data: T): ApiResponse<T> {
+	return { success: true, data };
+}
+
+
+
+//#region    ---------- srouter express async friendly router wrapper ---------- 
+
+/// Simplified Router with full async / catch support, and will stream back return value by default. 
+/// Also, can throw exception in handlers, and it will get handled correctly. 
 
 export function srouter() {
 	return new SRouter();
@@ -83,3 +93,4 @@ function requestHandlerWrapper(requestHandler: RequestHandler): RequestHandler {
 	}
 
 }
+//#endregion ---------- /srouter express async friendly router wrapper ----------

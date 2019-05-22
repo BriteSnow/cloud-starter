@@ -1,10 +1,20 @@
+<script id="HomeView" type="text/html">
 <div class="HomeView screen">
 	<header><h1>PROJECTS</h1></header>
 	<section>
-		<div class='card project-add'>
+		<div class="card project-add">
 			<c-symbol>ico-add</c-symbol>
 			<h3>Add New Project</h3>
-		</div>	
+		</div>
 	</section>
 
 </div>
+</script>
+
+<script id="HomeView-project-cards" type="text/html">
+	{{#each projects}}
+	<div class="card project">
+		<header><h2>{{name}}</h2></header>
+	</div>	
+	{{/each}}
+</script>

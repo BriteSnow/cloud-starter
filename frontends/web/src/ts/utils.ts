@@ -119,12 +119,32 @@ export function getLuma(c: string) {
 //#region    ---------- attr ---------- 
 // conditional typing
 //   - if we have no val, then, return void, it's a set val function.
-//   - if it is a get, and name is string, return single value, otherwise, return array of values
-export function attr<N extends string[] | string, V extends string | null>(el: HTMLElement, names: N, val?: V):
+//   - else if v & els is HTMLElement, return single value N is string, otherwise, return array of values if N is string[]
+//   - else, v & els is HTMLElement[], and return (string | null)[][] (even if N is string, return array of array avoid user mistakes)
+export function attr<E extends HTMLElement, N extends string[] | string, V extends string | null>(els: E, names: N, val?: V):
 	V extends void ? void :
-	N extends string ? (string | null) : (string | null)[];
+	E extends HTMLElement ? N extends string ? (string | null) : (string | null)[] :
+	(string | null)[][]; // in this last row E is HTMLElement[] and will alreasy return [elements][attributes]
 
-export function attr(el: HTMLElement, names: string[] | string, val?: string | null): (string | null)[] | (string | null) | void {
+export function attr(els: HTMLElement | HTMLElement[], names: string[] | string, val?: string | null): (string | null)[][] | (string | null)[] | (string | null) | void {
+	// if the el is an array
+	if (els instanceof Array) {
+		// make sure that names is always array in this case so that we return [][] (to avoid user missstakes)
+		names = (names instanceof Array) ? names : [names];
+		if (val !== undefined) {
+			return els.map((el) => { return _attrEl(el, names, val) as (string | null)[] });
+		} else {
+			els.forEach((el) => { _attrEl(el, names, val) });
+			return;
+		}
+	} else {
+		return _attrEl(els, names, val);
+	}
+
+}
+
+// attr on a single element
+function _attrEl(el: HTMLElement, names: string[] | string, val?: string | null): (string | null)[] | (string | null) | void {
 	if (names instanceof Array) {
 		// if we have a val, we set the value
 		if (val !== undefined) {
