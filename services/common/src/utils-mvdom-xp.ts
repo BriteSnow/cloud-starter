@@ -1,4 +1,6 @@
 // <origin src="https://raw.githubusercontent.com/mvdom/mvdom-xp/master/src/utils.ts" />
+
+
 type NumType = number | null;
 type StringType = (string | null | undefined)
 
@@ -47,3 +49,4 @@ function _asNum(str: string | null | undefined): number | null {
 	const num = Number(str);
 	return isNaN(num) ? null : num; // return null if NaN per function contract
 }
+//#endregion ---------- /attrAsNum ----------

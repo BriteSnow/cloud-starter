@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/commmon/src/da/dao-base.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/da/dao-base.ts" />
 
 import { QueryBuilder } from 'knex';
 import { QueryOptions, StampedEntity } from 'shared/entities';
