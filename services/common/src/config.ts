@@ -11,7 +11,8 @@ const staticConfigurations: any = {
 interface Configs {
 	github: { client_id: string, client_secret: string };
 	db: { database: string, user: string, password: string, host: string };
-	bigquery: { client_email: string, project_id: string, private_key: string }
+	bigquery: { client_email: string, project_id: string, private_key: string };
+	google_oauth: { client_id: string, client_secret: string, redirect_url: string }
 }
 
 /**
@@ -49,22 +50,25 @@ export async function getConfig(name: string): Promise<any> {
 
 function getEnv(name: string): string | object | undefined {
 	const env = process.env;
+	// first try to get the value from the name
 	let val = env[name];
 
-	if (!val) {
-		const obj: any = {};
-		let has = false;
-		const prefix = name + '-';
-		for (const envName of Object.keys(env)) {
-			if (envName.startsWith(prefix)) {
-				has = true;
-				const propName = envName.substring(prefix.length);
-				obj[propName] = env[envName];
-			}
-		}
-		val = (has) ? obj : undefined;
+	// if found, we return the value
+	if (val) {
+		return val;
 	}
 
-	return val;
+	// if not found, we try to see if it is prefix with the '-' pattern
+	const obj: any = {};
+	let has = false;
+	const prefix = name + '-';
+	for (const envName of Object.keys(env)) {
+		if (envName.startsWith(prefix)) {
+			has = true;
+			const propName = envName.substring(prefix.length);
+			obj[propName] = env[envName];
+		}
+	}
+	return (has) ? obj : undefined;
 }
 

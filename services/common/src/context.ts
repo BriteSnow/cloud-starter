@@ -37,7 +37,6 @@ export interface Context {
 	readonly userType: string;
 	readonly username: string | null;
 	readonly user: Partial<User>;
-	getAccessToken(): Promise<string | null>;
 	hasProjectPrivilege(projectId: number, privilege: string): Promise<boolean>;
 	readonly perfContext: PerfContext;
 }
@@ -68,28 +67,6 @@ class ContextImpl implements Context {
 	}
 
 
-	private _accessToken: string | null | undefined = undefined;
-	/**
-	 * On demand github accessToken property get. Tries to get it only once (since a context is per request)
-	 * - undefined means did not try to get it yet. 
-	 * - null means that we tried and nothing was found, so, we can run null later
-	 * - any value means we found it. 
-	 */
-	public async getAccessToken(): Promise<string | null> {
-
-		// if null, attempt to find it
-		if (this._accessToken === undefined) {
-			const oauth = await oauthDao.first(this, { userId: this.userId });
-			if (oauth != null && oauth.token != null) {
-				this._accessToken = oauth.token;
-			} else {
-				this._accessToken = null;
-			}
-		};
-
-		return this._accessToken;
-	}
-
 	public async hasProjectPrivilege(projectId: number, privilege: string) {
 
 		// first, get the privileges for this user on this project (from context cache)
@@ -116,4 +93,4 @@ class ContextImpl implements Context {
 	}
 
 }
-//#endregion ---------- /Private Implementations ---------- 
+//#endregion ---------- /Private Implementations ----------

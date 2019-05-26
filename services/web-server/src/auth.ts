@@ -1,26 +1,40 @@
 import * as crypto from 'crypto';
 import { Response } from 'express';
+import { AppError } from 'common/error';
 
 
-export const cookieNameUserId = 'userId';
-export const cookieNameAuthToken = 'authToken';
+export const COOKIE_USERID = 'userId';
+export const COOKIE_OAUTHID = 'oauthId';
+export const COOKIE_AUTHTOKEN = 'authToken';
 
+export class AuthFailError extends AppError { }
 
-export async function setAuth(res: Response, data: { username: string, userId: number, pwd: string }) {
-	const { username, userId, pwd } = data;
+export async function setAuth(res: Response, data: { username: string, id: number, key: string, oauthId?: number }) {
+	const { username, id: userId, key, oauthId } = data;
 
-	const authToken = await createAuthToken(userId, username, pwd)
+	const authToken = await createAuthToken(userId, username, key)
 
 	const oneWeek = 7 * 24 * 3600 * 1000;
-	res.cookie(cookieNameUserId, `${userId}`, { maxAge: oneWeek });
-	res.cookie(cookieNameAuthToken, authToken);
+	res.cookie(COOKIE_USERID, `${userId}`, { maxAge: oneWeek });
+	if (oauthId != null) {
+		res.cookie(COOKIE_OAUTHID, `${oauthId}`, { maxAge: oneWeek });
+	}
+	res.cookie(COOKIE_AUTHTOKEN, authToken);
+}
+
+// remove all of the auth cookies
+export function clearAuth(res: Response) {
+	res.clearCookie(COOKIE_USERID);
+	res.clearCookie(COOKIE_OAUTHID);
+	res.clearCookie(COOKIE_AUTHTOKEN);
 }
 
 /** Retun a one way hash authToken that can be sent to the client for future auth */
-export async function createAuthToken(userId: number, username: string, pwd: string): Promise<string> {
-	const pepper = ' -- yeah sure';
+export async function createAuthToken(userId: number, username: string, key: string): Promise<string> {
+	const pepper = ' -- pepper is healthier';
 	const secret = 'cloud-rocks';
-	const val = username + ' -- ' + pwd + pepper;
+	const val = username + ' -- ' + key + pepper;
 	const hash = crypto.createHmac('sha256', secret).update(val).digest('hex');
+	// console.log(`\n--- create token for ${username}\n  key: ${key}\n  token: ${hash}`);
 	return hash;
 }

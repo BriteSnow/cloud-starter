@@ -16,11 +16,21 @@ CREATE TABLE "user" (
 );
 ALTER SEQUENCE user_id_seq RESTART WITH 1000;
 
+
+CREATE TYPE oauth_type AS ENUM ('google');
 CREATE TABLE oauth (
   id bigserial PRIMARY KEY,
+  type oauth_type NOT NULL DEFAULT 'google',
+  cid bigint, 
+  ctime timestamp with time zone,
+  mid bigint, 
+  mtime timestamp with time zone,    
   "userId" bigint NOT NULL,
-  username varchar(64),
-  token varchar(128),
+  oauth_id varchar(128), 
+  oauth_name varchar(64),
+  oauth_username varchar(64),
+  oauth_token varchar(256),
+  oauth_picture varchar(128),
   FOREIGN KEY ("userId") REFERENCES "user" (id) on delete cascade
 );
 ALTER SEQUENCE oauth_id_seq RESTART WITH 1000;

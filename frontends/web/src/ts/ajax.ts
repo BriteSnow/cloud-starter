@@ -29,6 +29,20 @@ export function ajaxPatch(path: string, data?: any) {
 	return _ajax('PATCH', path, data, null);
 }
 
+// extract the data from result and if success returns it or not throw error.
+// TODO: add conditional typing to not include null if nullOnFail is false
+export function getData<T = unknown>(result: { success: boolean, data: T }, nullOnFail = false): T | null {
+	if (!result || !result.success) {
+		if (nullOnFail) {
+			return null;
+		} else {
+			throw result;
+		}
+
+	} else {
+		return result.data;
+	}
+}
 
 var defaultOpts = {
 	contentType: "application/json"

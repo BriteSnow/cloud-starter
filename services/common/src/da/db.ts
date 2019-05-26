@@ -1,20 +1,20 @@
 import * as knexClient from 'knex';
 import { types } from 'pg';
-import { parse as pgArrayParse } from 'postgres-array';
 import { getConfig } from '../config';
 export { QueryInterface } from 'knex';
 
 
 // 20: int8
 types.setTypeParser(20, function (val: string) {
-	return parseInt(val); // for now, int, until TS 3.1 supports BigInt
+	return parseInt(val); // TODO: need to make it bigInt
 	//return val;
 });
 
 // 1016: _int8 (i.e., int8[])
 // val is of format string like: '{123,1234}'
 types.setTypeParser(1016, function (val: string) {
-	return pgArrayParse(val, parseInt);
+	return types.arrayParser.create(val, parseInt); // TODO: needs to make it big int
+	//return pgArrayParse(val, parseInt);
 });
 
 let _knex: knexClient | undefined;

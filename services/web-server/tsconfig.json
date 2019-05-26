@@ -28,8 +28,8 @@
 		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
 		"paths": {
 			"common/*": ["../../common/src/*"], 
-			"shared/*": ["../../../shared/src/*"], 
-			"postgres-array": ["../../common/src/others"] // until postgres-array get typed
+			"shared/*": ["../../../shared/src/*"]
+			//		"postgres-array": ["../../common/src/others"] // DEPRECATED, use pg types.arrayParser
 		},
 
 

@@ -1,5 +1,5 @@
 import { hub, on } from 'mvdom';
-import { asNum } from "./utils";
+import { asNum } from 'shared/utils';
 
 // Global routeHub to trigger the events
 const routeHub = hub("routeHub");
@@ -131,3 +131,5 @@ function buildRouteInfo(): RouteInfo {
 	return new RouteInfo({ paths, hash, params });
 }
 // --------- /utilities --------- //
+
+// <sf-slot name="route-end-slot" />

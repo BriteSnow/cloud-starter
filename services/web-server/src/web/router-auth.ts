@@ -1,18 +1,17 @@
-import { srouter } from '../express-utils';
-import { Request, Response, NextFunction } from 'express';
 import { getSysContext, newContext } from 'common/context';
+import { oauthDao, userDao } from 'common/da/daos';
+import { AppError } from 'common/error';
+import { NextFunction, Request, Response } from 'express';
 import { extname } from 'path';
-import { userDao } from 'common/da/daos';
-import { User } from 'shared/entities';
-import { cookieNameUserId, cookieNameAuthToken, setAuth, createAuthToken } from '../auth';
-import * as crypto from 'crypto';
+import { asNum } from 'shared/utils';
+import { AuthFailError, clearAuth, COOKIE_AUTHTOKEN, COOKIE_OAUTHID, COOKIE_USERID, createAuthToken, setAuth } from '../auth';
+import { srouter } from '../express-utils';
 
 
 const _router = srouter();
 
 _router.post('/api/logoff', async function (req, res, next) {
-	res.clearCookie(cookieNameUserId);
-	res.clearCookie(cookieNameAuthToken);
+	clearAuth(res);
 	return { success: true };
 });
 
@@ -27,7 +26,7 @@ _router.get('/api/login', async function (req, res, next) {
 		const userId = userInfo.id;
 		const username = userInfo.username;
 		const pwd = userInfo.pwd!;
-		await setAuth(res, { username, userId, pwd });
+		await setAuth(res, { username, id: userId, key: pwd });
 		return { success: true, username, userId };
 	} else {
 		return { success: false, uname, message: `Wrong credential for user ${uname}` };
@@ -60,6 +59,9 @@ _router.use(async function (req: Request, res: Response, next: NextFunction) {
 		} catch (ex) {
 			// '/api/user-context' when no user is not an error, just returns success false
 			if (req.path === '/api/user-context') {
+				if (ex instanceof AuthFailError) {
+					clearAuth(res);
+				}
 				res.json({ success: false });
 				return;
 			}
@@ -88,24 +90,53 @@ _router.get('/api/user-context', async function (req, res, next) {
 
 //#region    ---------- Utils ---------- 
 /** Authenticate a request and return userId or null if it did not pass */
-async function authRequest(req: Request): Promise<User> {
+async function authRequest(req: Request): Promise<{ id: number, username: string }> {
 	const sysCtx = await getSysContext();
-	const cookieUserId: number | undefined = (req.cookies.userId) ? parseInt(req.cookies.userId) : undefined;
-	const cookieAuthToken: string | undefined = req.cookies.authToken;
-	if (cookieUserId == null || cookieUserId === NaN || cookieAuthToken == null) {
-		throw new Error('No authentication in request');
+	const cookieUserId = asNum(req.cookies[COOKIE_USERID]);
+	const cookieOAuthId = asNum(req.cookies[COOKIE_OAUTHID]);
+	const cookieAuthToken = req.cookies[COOKIE_AUTHTOKEN];
+
+	if (cookieUserId == null || cookieAuthToken == null) {
+		throw new AuthFailError('No authentication in request');
 	} else {
 		try {
-			const user = await userDao.get(sysCtx, cookieUserId);
-			const authToken = await createAuthToken(user.id, user.username, user.pwd!);
+			let userId = cookieUserId;
+
+			//// get the key/username from the oauth or user table
+			let key, username;
+			// get the key/username info from the oauth table for this user
+			if (cookieOAuthId) {
+				const oauth = await oauthDao.get(sysCtx, cookieOAuthId);
+				if (oauth == null) {
+					throw new AuthFailError(`OAuth [${cookieOAuthId}] not found.`)
+				}
+				if (oauth.userId !== userId) {
+					throw new AuthFailError(`OAuth [${cookieOAuthId}] does not match the user in the cookie [${userId}]`);
+				}
+				// username/key will be from the oauth information
+				username = oauth.oauth_username;
+				key = oauth.oauth_token;
+			}
+			// otherwise, get it from the user table
+			else {
+				const user = await userDao.get(sysCtx, cookieUserId);
+				username = user.username;
+				key = user.pwd;
+			}
+
+			//// check and create the authToken from the username/key
+			if (username == null || key == null) {
+				throw new AuthFailError('username or key was not defined, cannnot authenticate');
+			}
+			const authToken = await createAuthToken(userId, username, key);
+
 			if (cookieAuthToken === authToken) {
-				delete user.pwd;
-				return user;
+				return { id: userId, username };
 			} else {
-				throw new Error('Wrong authentication in request');
+				throw new AuthFailError('Wrong authentication in request');
 			}
 		} catch (ex) {
-			throw new Error('Invalid authentication');
+			throw ex;
 		}
 
 	}
@@ -116,6 +147,4 @@ async function authRequest(req: Request): Promise<User> {
 //#endregion ---------- /Utils ---------- 
 
 
-
-
-export const router = _router;
+export const routerAuth = _router;

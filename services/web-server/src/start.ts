@@ -1,13 +1,16 @@
 require('../../common/src/setup-module-aliases');
+
 import * as bodyParser from 'body-parser';
+import { AppError } from 'common/error';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import { extname, resolve } from 'path';
-import { router as routerHelloAPI } from './web/router-hello-api';
-import { router as routerAuth } from './web/router-auth';
 import { dseGenerics } from './web/dse-generics';
-import { AppError } from 'common/error';
+import { routerAuth } from './web/router-auth';
+import { routerGoogleOAuth } from './web/router-google-oauth';
+import { routerHelloAPI } from './web/router-hello-api';
+import { AuthFailError, clearAuth } from './auth';
 
 const PORT = 8080;
 
@@ -41,9 +44,10 @@ async function main() {
 		next();
 	});
 
-
+	app.use(routerGoogleOAuth.expressRouter);
 	//// Mount authentication hook, login, register APIs. 
 	app.use(routerAuth.expressRouter);
+
 
 	//// Mount hello world demo api
 	// Note: to remove once understood.
@@ -76,23 +80,21 @@ async function main() {
 	//// error handling, must be last. 
 	app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
 		let error: any;
-		let err_msg: string | undefined;
 
-		if (err instanceof AppError) {
+		if (err instanceof AuthFailError) {
+			clearAuth(res);
 			error = { code: err.code, message: err.message }
-			err_msg = err.message;
+		} else if (err instanceof AppError) {
+			error = { code: err.code, message: err.message }
 		} else if (err instanceof Error) {
 			error = { message: err.message }
-			err_msg = err.message;
 		} else if (typeof err === 'string') {
 			error = { message: err };
-			err_msg = err;
 		} else {
 			error = err;
-			err_msg = '' + err;
 		}
 
-		res.status(500).json({ error });
+		res.status(500).json({ success: false, error });
 
 		// TODO: add log
 	});

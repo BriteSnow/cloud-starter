@@ -26,15 +26,17 @@ spec:
             path: {{projectDir}}services/agent/sql
             type: Directory
       containers:
-      - image: localhost:5000/cstar-agent:{{imageTag}}
-        name: cstar-agent-ctn
-        imagePullPolicy: Always
-        envFrom:
-        - configMapRef:
-            name: cstar-config
-        volumeMounts:
-          - mountPath: /service/src
-            name: cstar-agent-src
-          - mountPath: /service/sql
-            name: bcrm-agent-sql
+        - image: localhost:5000/cstar-agent:{{imageTag}}
+          name: cstar-agent-ctn
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: cstar-config
+            - secretRef:
+                name: cstar-secret
+          volumeMounts:
+            - mountPath: /service/src
+              name: cstar-agent-src
+            - mountPath: /service/sql
+              name: bcrm-agent-sql
       restartPolicy: Always

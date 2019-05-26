@@ -1,7 +1,8 @@
 import { BaseView, addDomEvents } from 'views/base';
 import { first, pull } from 'mvdom';
-import { login } from 'ts/user-ctx';
+import { login, getGoogleOAuthUrl } from 'ts/user-ctx';
 import { ajaxPost, ajaxGet } from 'ts/ajax';
+import { style } from 'mvdom-xp';
 
 type Mode = 'login' | 'register';
 
@@ -10,7 +11,7 @@ export class LoginView extends BaseView {
 	//// some dom element that will be used in this component view
 	private get fieldset() { return first(this.el, 'section.content')! };
 	private get footerMessage() { return first(this.el, 'footer .message')! };
-	private get ghLink() { return first(this.el, 'a.to-github')! };
+	private get googleLink() { return first(this.el, 'a.google-oauth')! };
 
 	//// the mode getter and setter which is DOM/Class backed, but exposed a simple object property
 	private get mode(): Mode {
@@ -91,7 +92,16 @@ export class LoginView extends BaseView {
 	//#region    ---------- View Lifecycle ---------- 
 	async postDisplay() {
 		this.mode = this.mode;
-		console.log('>>>', this.mode);
+
+		// make the google link look disabled
+		style(this.googleLink, { opacity: '0.5' });
+		const oauthUrl = await getGoogleOAuthUrl();
+		if (oauthUrl) {
+			this.googleLink.setAttribute('href', oauthUrl);
+			// remove opacity to be full
+			style(this.googleLink, { opacity: null });
+		}
+		console.log('>>>', this.mode, oauthUrl);
 	}
 	//#endregion ---------- /View Lifecycle ---------- 
 

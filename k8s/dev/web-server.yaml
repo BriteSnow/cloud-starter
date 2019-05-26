@@ -30,17 +30,19 @@ spec:
             path: {{projectDir}}services/web-server/dist
             type: Directory
       containers:
-      - image: localhost:5000/cstar-web-server:{{imageTag}}
-        name: cstar-web-server-ctn
-        imagePullPolicy: Always
-        envFrom:
-        - configMapRef:
-            name: cstar-config
-        volumeMounts:
-          - mountPath: /service/web-folder
-            name: cstar-web-server-web-folder
-          - mountPath: /service/src
-            name: cstar-web-server-src
-          - mountPath: /service/dist
-            name: cstar-web-server-dist            
+        - image: localhost:5000/cstar-web-server:{{imageTag}}
+          name: cstar-web-server-ctn
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: cstar-config
+            - secretRef:
+                name: cstar-secret
+          volumeMounts:
+            - mountPath: /service/web-folder
+              name: cstar-web-server-web-folder
+            - mountPath: /service/src
+              name: cstar-web-server-src
+            - mountPath: /service/dist
+              name: cstar-web-server-dist
       restartPolicy: Always

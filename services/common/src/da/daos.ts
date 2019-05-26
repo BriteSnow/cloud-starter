@@ -2,13 +2,14 @@ import { OAuth } from 'shared/entities';
 import { BaseDao } from './dao-base';
 import { ProjectDao } from './dao-project';
 import { UserDao } from './dao-user';
+import { OAuthDao } from './dao-oauth';
 
 
 export const userDao = new UserDao();
 
 export const projectDao = new ProjectDao();
 
-export const oauthDao = new BaseDao<OAuth, number>('oauth', false);
+export const oauthDao = new OAuthDao();
 
 /** Dao Registory per entity type name. 
  * Today used by the dse-generic.ts 

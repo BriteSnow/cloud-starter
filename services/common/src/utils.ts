@@ -22,6 +22,8 @@ export function timer() {
 
 
 //#region    ---------- string utils ---------- 
+// cheap random string generator
+// TODO: needs to upate this one
 export function randomString(length?: number) {
 	length = length || 6;
 	var arr = [];

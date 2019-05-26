@@ -29,10 +29,14 @@ export interface User extends StampedEntity {
 	pwd?: string;
 }
 
-export interface OAuth { // OAuth does ot need to be stamped
+export interface OAuth extends StampedEntity {
 	id: number;
 	userId: number;
-	token?: string;
+	oauth_token: string;
+	oauth_id?: string;
+	oauth_username?: string;
+	oauth_name?: string;
+	oauth_picture?: string;
 }
 
 export interface Project extends StampedEntity {
