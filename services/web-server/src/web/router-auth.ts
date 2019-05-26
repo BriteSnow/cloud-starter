@@ -1,9 +1,8 @@
 import { getSysContext, newContext } from 'common/context';
 import { oauthDao, userDao } from 'common/da/daos';
-import { AppError } from 'common/error';
 import { NextFunction, Request, Response } from 'express';
+import { asNum } from 'common/utils';
 import { extname } from 'path';
-import { asNum } from 'shared/utils';
 import { AuthFailError, clearAuth, COOKIE_AUTHTOKEN, COOKIE_OAUTHID, COOKIE_USERID, createAuthToken, setAuth } from '../auth';
 import { srouter } from '../express-utils';
 
@@ -92,8 +91,8 @@ _router.get('/api/user-context', async function (req, res, next) {
 /** Authenticate a request and return userId or null if it did not pass */
 async function authRequest(req: Request): Promise<{ id: number, username: string }> {
 	const sysCtx = await getSysContext();
-	const cookieUserId = asNum(req.cookies[COOKIE_USERID]);
-	const cookieOAuthId = asNum(req.cookies[COOKIE_OAUTHID]);
+	const cookieUserId = asNum(req.cookies[COOKIE_USERID] as string | null);
+	const cookieOAuthId = asNum(req.cookies[COOKIE_OAUTHID] as string | null);
 	const cookieAuthToken = req.cookies[COOKIE_AUTHTOKEN];
 
 	if (cookieUserId == null || cookieAuthToken == null) {
@@ -136,7 +135,13 @@ async function authRequest(req: Request): Promise<{ id: number, username: string
 				throw new AuthFailError('Wrong authentication in request');
 			}
 		} catch (ex) {
-			throw ex;
+			if (ex instanceof AuthFailError) {
+				throw ex;
+			}
+			else {
+				throw new AuthFailError(ex.message);
+			}
+
 		}
 
 	}

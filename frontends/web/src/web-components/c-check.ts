@@ -1,8 +1,10 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-check.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { on } from "mvdom";
-import { attr } from "ts/utils";
+import { attr } from "mvdom-xp";
 import { BaseFieldElement } from "./c-base";
 import { htmlSvgSymbol } from "./c-ico-symbol";
-
 
 /**
  * c-check custom element encapsulate a checkbox true/false component with NO label concept.

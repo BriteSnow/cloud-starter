@@ -1,9 +1,11 @@
-import { getKnex, QueryInterface } from './db';
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/commmon/src/da/dao-base.ts" />
+
+import { QueryBuilder } from 'knex';
+import { QueryOptions, StampedEntity } from 'shared/entities';
 import { Context } from '../context';
 import { Monitor } from '../perf';
-import { QueryOptions, StampedEntity } from 'shared/entities';
-import { QueryBuilder } from 'knex';
 import { nowTimestamp } from '../utils';
+import { getKnex } from './db';
 
 interface CustomQuery {
 	custom?: (q: QueryBuilder<any, any>) => void;

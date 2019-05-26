@@ -1,6 +1,6 @@
-import { all, on, first } from "mvdom";
-import { attr } from "ts/utils";
-import { BaseHTMLElement, BaseFieldElement } from "./c-base";
+import { all, first, on } from "mvdom";
+import { attr } from "mvdom-xp";
+import { BaseFieldElement } from "./c-base";
 
 /**
  * c-options custom element encapsulate a label/input field group ()`c-input > label, input`) structure.

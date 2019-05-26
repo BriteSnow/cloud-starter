@@ -18,7 +18,7 @@
     "mocha": "^6.1.4",
     "moment": "^2.24.0",
     "mvdom": "^0.7.4",
-    "mvdom-xp": "^0.1.0",
+    "mvdom-xp": "^0.1.2",
     "node-simple-timer": "^0.1.1",
     "p-spawn": "^0.4.1",
     "pg": "^7.11.0",

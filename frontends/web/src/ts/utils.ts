@@ -1,5 +1,5 @@
 import { closest } from "mvdom";
-import { attrAsNum } from "mvdom-xp";
+import { asNum, attr } from "mvdom-xp";
 
 
 export function guard<U>(val: U | null | undefined, message: string): U {
@@ -41,14 +41,14 @@ the reference of the entitye {id, type, el}
 													and .el the dom element that contain those attributes
 */
 export function entityRef(el: HTMLElement | EventTarget | null, type?: string) {
-	var selector = (type != null) ? ("[data-entity='" + type + "']") : "[data-entity]";
+	const selector = (type != null) ? ("[data-entity='" + type + "']") : "[data-entity]";
 
-	var entityEl = closest(<HTMLElement>el, selector);
+	const entityEl = closest(<HTMLElement>el, selector);
 	if (entityEl) {
-		var entity: { [name: string]: any } = {};
+		const entity: { [name: string]: any } = {};
 		entity.el = entityEl;
 		entity.type = entityEl.getAttribute("data-entity");
-		entity.id = attrAsNum(entityEl, 'data-entity-id');
+		entity.id = asNum(attr(entityEl, 'data-entity-id'));
 		return entity;
 	}
 	return null;
@@ -56,9 +56,9 @@ export function entityRef(el: HTMLElement | EventTarget | null, type?: string) {
 
 export function randomString(length?: number) {
 	length = length || 6;
-	var arr = [];
-	var base = Math.pow(10, length);
-	for (var i = 0; i < length; i++) {
+	const arr = [];
+	const base = Math.pow(10, length);
+	for (let i = 0; i < length; i++) {
 		arr.push(parseInt((Math.random() * 10).toString()));
 	}
 	return arr.join("");

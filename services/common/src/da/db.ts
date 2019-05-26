@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/commmon/src/da/db.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import * as knexClient from 'knex';
 import { types } from 'pg';
 import { getConfig } from '../config';

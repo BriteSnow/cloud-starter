@@ -1,9 +1,8 @@
-/// source: ....
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-base.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { puller, pusher, trigger } from "mvdom";
-import { attr } from "ts/utils";
-
-
+import { attr } from "mvdom-xp";
 
 /**
  * BaseHTMLElement that all custom elements from this application should inherit from. 

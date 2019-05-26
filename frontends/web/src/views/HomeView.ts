@@ -5,8 +5,6 @@ import { ProjectAddDialog } from './Project/ProjectAddDialog';
 import { all } from 'mvdom';
 import { render } from 'ts/render';
 
-
-
 export class HomeView extends BaseView {
 
 	//// Key Elements
@@ -43,7 +41,9 @@ export class HomeView extends BaseView {
 		// Note: for now not optimized. 
 		all(this.content, '.card.project').forEach(cardEl => cardEl.remove());
 		const projects = await projectDco.list();
-		const projectsFrag = render('HomeView-project-cards', { projects });
-		this.content.appendChild(projectsFrag);
+		if (projects.length > 0) {
+			const projectsFrag = render('HomeView-project-cards', { projects });
+			this.content.appendChild(projectsFrag);
+		}
 	}
 }

@@ -1,5 +1,8 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-input.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { first, on } from "mvdom";
-import { attr } from "ts/utils";
+import { attr } from "mvdom-xp";
 import { BaseFieldElement } from "./c-base";
 
 

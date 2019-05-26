@@ -29,7 +29,6 @@
 		"paths": {
 			"common/*": ["../../common/src/*"], 
 			"shared/*": ["../../../shared/src/*"]
-			//		"postgres-array": ["../../common/src/others"] // DEPRECATED, use pg types.arrayParser
 		},
 
 

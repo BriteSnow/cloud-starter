@@ -2,6 +2,7 @@
 import { Timer } from 'node-simple-timer';
 import * as moment from 'moment';
 
+export { asNum } from './utils-mvdom-xp';
 
 //#region    ---------- time utils ---------- 
 // returns a now formatted for database
