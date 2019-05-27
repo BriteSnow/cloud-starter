@@ -1,5 +1,5 @@
 // <origin src="https://raw.githubusercontent.com/mvdom/mvdom-xp/master/src/utils.ts" />
-// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 
 type NumType = number | null;
 type StringType = (string | null | undefined)
