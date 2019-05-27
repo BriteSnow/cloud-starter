@@ -1,4 +1,4 @@
-FROM redis:4-alpine
+FROM redis:5-alpine
 
 EXPOSE 6379
 ENTRYPOINT ["docker-entrypoint.sh"]
