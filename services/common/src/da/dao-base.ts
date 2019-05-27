@@ -7,7 +7,7 @@ import { Monitor } from '../perf';
 import { nowTimestamp } from '../utils';
 import { getKnex } from './db';
 
-interface CustomQuery {
+export interface CustomQuery {
 	custom?: (q: QueryBuilder<any, any>) => void;
 }
 
@@ -29,7 +29,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	/**
 	 * Convenient methods to process a list of object to this entity. 
 	 * 
-	 * MUST NOT BE OVERRIDEN, override processEntity instead
+	 * MUST NOT BE OVERRIDEN, override processEntity instead.
 	 * 
 	 * @param objects 
 	 */
@@ -105,13 +105,17 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	@Monitor()
 	async first(ctx: Context, data: Partial<E>): Promise<E | null> {
 		const k = await getKnex();
-		const r = await k(this.tableName).where(data).limit(1);
+		const q = k(this.tableName);
+		const options = { matching: data, limit: 1 } as (QueryOptions<E> & Q); // needs typing int
+		this.completeQueryBuildWithQueryOptions(ctx, q, options);
+		const entities = (await q.then()) as any[];
+
 		// TODO: probably need to limit 1
 		// TODO: should probably use the defaultOrderBy
-		if (r.length === 0) {
+		if (entities.length === 0) {
 			return null;
 		}
-		return this.processEntity(r[0]);
+		return this.processEntity(entities[0]);
 	}
 
 	@Monitor()

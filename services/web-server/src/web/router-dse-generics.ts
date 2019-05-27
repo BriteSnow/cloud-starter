@@ -79,4 +79,4 @@ _router.delete('/dse/:type/:id', async function (req, res, next) {
 });
 
 
-export const dseGenerics = _router;
+export const routerDseGenerics = _router;

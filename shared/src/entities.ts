@@ -3,6 +3,7 @@ export interface QueryOptions<E> {
 	matching?: Partial<E>;
 	ids?: number[];
 	orderBy?: string;
+	limit?: number;
 }
 
 
@@ -26,7 +27,6 @@ export interface User extends StampedEntity {
 	id: number;
 	type: 'sys' | 'admin' | 'user';
 	username: string;
-	pwd?: string;
 }
 
 export interface OAuth extends StampedEntity {

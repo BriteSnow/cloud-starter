@@ -6,10 +6,12 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import { extname, resolve } from 'path';
-import { dseGenerics } from './web/dse-generics';
-import { routerAuth } from './web/router-auth';
-import { routerGoogleOAuth } from './web/router-google-oauth';
-import { routerHelloAPI } from './web/router-hello-api';
+import { routerDseGenerics } from './web/router-dse-generics';
+import { routerAuthGoogleOAuth } from './web/router-auth-google-oauth';
+import { routerAuthLoginAndRegister } from './web/router-auth-login-register';
+import { routerAuthRequest } from './web/router-auth-request';
+import { routerAuthUserContext } from './web/router-auth-user-context';
+import { routerApiHello } from './web/router-api-hello';
 import { AuthFailError, clearAuth } from './auth';
 
 const PORT = 8080;
@@ -44,20 +46,26 @@ async function main() {
 		next();
 	});
 
-	app.use(routerGoogleOAuth.expressRouter);
-	//// Mount authentication hook, login, register APIs. 
-	app.use(routerAuth.expressRouter);
+	//// Mount the login/register/oauth routers
+	app.use(routerAuthGoogleOAuth.expressRouter);
+	app.use(routerAuthLoginAndRegister.expressRouter);
+
+	//// Mount the authRequest router (will set the req.context)
+	app.use(routerAuthRequest.expressRouter);
+
+	//// Mount the /api/user-context/ API (special API that does not throw exception if not authenticated)
+	app.use(routerAuthUserContext.expressRouter);
 
 
 	//// Mount hello world demo api
 	// Note: to remove once understood.
-	app.use('/api/', routerHelloAPI.expressRouter);
+	app.use('/api/', routerApiHello.expressRouter);
 
 
 	//// Mount DSE (Data Service Endpoint) Web APIs
 	// generic dse as fall back. 
 	// Note: Once the application mature, this might be removed all together if all exposed API you be explicit.
-	app.use('/api/', dseGenerics.expressRouter);
+	app.use('/api/', routerDseGenerics.expressRouter);
 
 
 	//// Mount all app uris to same index.html

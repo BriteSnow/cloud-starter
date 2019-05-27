@@ -24,4 +24,4 @@ _router.get('/hello', async function (req, res) {
 });
 
 
-export const routerHelloAPI = _router;
+export const routerApiHello = _router;

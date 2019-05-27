@@ -1,7 +1,8 @@
 
 # Web UI Architecture & Patterns
+_[back](README.md)_
 
-![](images/cs-ui-component-model.png)
+![](images/ui-component-model.png)
 
 ### DOM Centric Approach
 
