@@ -1,6 +1,9 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/password.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import * as crypto from 'crypto';
 
+// TODO: change for each app.
 const SALT = "qRkVBkLwJWy2fAmXNCVDDJxxR3tuNMJiKXvcTGJQGeszN";
 
 export function encryptPwd(pwd: string) {

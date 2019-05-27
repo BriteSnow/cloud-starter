@@ -1,10 +1,13 @@
-import { BaseDao, CustomQuery } from "./dao-base";
-import { User, QueryOptions } from "shared/entities";
-import { Context } from "../context";
-import { AccessRequires } from "./access";
-import { getKnex } from "./db";
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/da/dao-user.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { QueryBuilder } from "knex";
+import { QueryOptions, User } from "shared/entities";
+import { Context } from "../context";
 import { AppError } from "../error";
+import { AccessRequires } from "./access";
+import { BaseDao, CustomQuery } from "./dao-base";
+import { getKnex } from "./db";
 
 interface UseCredential {
 	id: number;

@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/da/dao-oauth.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { BaseDao } from './dao-base';
 import { OAuth } from 'shared/entities';
 import { Context } from '../context';
@@ -11,7 +14,6 @@ export class OAuthDao extends BaseDao<OAuth, number>{
 	async getForUserId(ctx: Context, userId: number) {
 		return super.first(ctx, { userId });
 	}
-
 
 	//#region    ---------- BaseDao Overrides ---------- 
 

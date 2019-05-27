@@ -1,10 +1,11 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/da/dao-base.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { QueryBuilder } from 'knex';
 import { QueryOptions, StampedEntity } from 'shared/entities';
 import { Context } from '../context';
 import { Monitor } from '../perf';
-import { nowTimestamp } from '../utils';
+import { nowTimestamp } from '../utils-cloud-starter';
 import { getKnex } from './db';
 
 export interface CustomQuery {

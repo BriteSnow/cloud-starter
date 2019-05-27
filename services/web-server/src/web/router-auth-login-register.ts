@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/router-auth-login-register.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { getSysContext } from 'common/context';
 import { userDao } from 'common/da/daos';
 import { checkPwd, encryptPwd } from 'common/password';

@@ -1,8 +1,7 @@
-import { OAuth } from 'shared/entities';
 import { BaseDao } from './dao-base';
+import { OAuthDao } from './dao-oauth';
 import { ProjectDao } from './dao-project';
 import { UserDao } from './dao-user';
-import { OAuthDao } from './dao-oauth';
 
 
 export const userDao = new UserDao();

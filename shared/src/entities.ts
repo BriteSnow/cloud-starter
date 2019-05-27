@@ -1,25 +1,7 @@
 
-export interface QueryOptions<E> {
-	matching?: Partial<E>;
-	ids?: number[];
-	orderBy?: string;
-	limit?: number;
-}
+import { StampedEntity } from './entities-base';
 
-
-//#region    ---------- BaseEntities ---------- 
-export interface StampedEntity {
-	cid?: number,
-	ctime?: string,
-	mid?: number,
-	mtime?: string
-}
-
-interface ProjectBasedEntity extends StampedEntity {
-	projectId: number;
-}
-//#endregion ---------- /BaseEntities ---------- 
-
+export * from './entities-base';
 
 //#region    ---------- Entity Types ---------- 
 

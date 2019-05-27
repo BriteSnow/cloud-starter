@@ -1,3 +1,5 @@
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { BaseDao } from './dao-base';
 import { Context, getSysContext } from '../context';
 import { newTopFinder } from '../top-decorator';
@@ -108,4 +110,4 @@ export function AccessRequires(privilege: string[] | string) {
 	}
 
 }
-//#endregion ---------- /Decorator ---------- 
+//#endregion ---------- /Decorator ----------

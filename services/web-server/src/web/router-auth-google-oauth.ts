@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/router-auth-google-oauth.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { getConfig } from 'common/config';
 import { getSysContext } from 'common/context';
 import { oauthDao, userDao } from 'common/da/daos';
@@ -34,29 +37,27 @@ _router.get('/google_oauth_url', async function (req, res, next) {
 _router.get('/goauth-redirect', async function (req, res, next) {
 	const code = req.query.code;
 
-	//// get the access token/credentials from cod
+	//// Get OAuth User Information
 	const oauthClient = await getOAuth2Client();
 	// Should not happen since this comes after we get the oauth_url
 	if (oauthClient === null) {
 		throw new AppError(ErrorCode.NO_GOOGLE_BACKEND_CREDENTIALS);
 	}
-
 	// This will provide an object with the access_token and refresh_token.
 	// Save these somewhere safe so they can be used at a later time.
 	const { tokens } = await oauthClient.getToken(code)
-
+	// 
 	oauthClient.setCredentials(tokens);
-
-
-	//// get user info with 
+	// get user info with 
 	const info = await google.oauth2({ version: 'v2', auth: oauthClient }).userinfo.get();
 
+	//// if we have oauth user data, we proceed to authentication (and registration if needed)
 	if (info && info.data && info.data.email && tokens.access_token) {
 		// For this app, the oauth user email is the username (logic can change depending on app requirements)
 		const oauth_username = info.data.email;
 		const oauth_token = tokens.access_token;
 
-		//// get/create user
+		//// get eventual user
 		const sysCtx = await getSysContext();
 		let user = await userDao.getUserByUserName(sysCtx, oauth_username);
 

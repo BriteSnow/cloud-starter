@@ -1,3 +1,5 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/router-dse-generics.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { srouter } from '../express-utils';
 import { daoByEntity } from 'common/da/daos';

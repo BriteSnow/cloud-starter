@@ -4,7 +4,7 @@ import { srouter } from '../express-utils';
 
 const _router = srouter();
 
-_router.get('/api/user-context', async function (req, res, next) {
+_router.get('/user-context', async function (req, res, next) {
 	const sysCtx = await getSysContext();
 
 	try {
@@ -18,4 +18,4 @@ _router.get('/api/user-context', async function (req, res, next) {
 });
 
 
-export const routerAuthUserContext = _router;
+export const routerApiUserContext = _router;

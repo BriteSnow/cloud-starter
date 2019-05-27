@@ -1,9 +1,9 @@
-
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/top-decorator.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 export function newTopFinder() {
 	return new TopFinder();
 }
-
 
 type c = Function;
 
@@ -43,7 +43,5 @@ class TopFinder {
 				return (topTargetClass === targetClass);
 			}
 		}
-
-
 	}
 }

@@ -1,6 +1,5 @@
 import { projectDao } from 'common/da/daos';
-
-import { wait } from 'common/utils';
+import { wait } from 'common/utils-cloud-starter';
 import * as assert from 'assert';
 import { initSuite } from './t-utils';
 import { Project } from 'shared/entities';

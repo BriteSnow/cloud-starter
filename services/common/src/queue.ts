@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/queue.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { promisify } from 'util';
 import redis = require('redis');
 import { RedisClient } from 'redis';
@@ -89,4 +92,4 @@ export async function getRedisClient(host?: string): Promise<any> {
 
 	return _predisClient;
 }
-//#endregion ---------- /Redis Client Promise Wrapper ---------- 
+//#endregion ---------- /Redis Client Promise Wrapper ----------

@@ -1,6 +1,6 @@
-import { PerfContext } from './perf';
 import { User } from 'shared/entities';
-import { oauthDao, userDao } from './da/daos';
+import { userDao } from './da/daos';
+import { PerfContext } from './perf';
 import { getProjectPrivileges } from './role-manager';
 
 // temporary hardcoded (should go to DB with roles)

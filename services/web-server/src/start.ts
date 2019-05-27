@@ -10,7 +10,7 @@ import { routerDseGenerics } from './web/router-dse-generics';
 import { routerAuthGoogleOAuth } from './web/router-auth-google-oauth';
 import { routerAuthLoginAndRegister } from './web/router-auth-login-register';
 import { routerAuthRequest } from './web/router-auth-request';
-import { routerAuthUserContext } from './web/router-auth-user-context';
+import { routerApiUserContext } from './web/router-api-user-context';
 import { routerApiHello } from './web/router-api-hello';
 import { AuthFailError, clearAuth } from './auth';
 
@@ -54,7 +54,7 @@ async function main() {
 	app.use(routerAuthRequest.expressRouter);
 
 	//// Mount the /api/user-context/ API (special API that does not throw exception if not authenticated)
-	app.use(routerAuthUserContext.expressRouter);
+	app.use('/api/', routerApiUserContext.expressRouter);
 
 
 	//// Mount hello world demo api

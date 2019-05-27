@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/perf.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { Context } from './context';
 import { Timer } from 'node-simple-timer';
 
@@ -114,4 +117,4 @@ export function Monitor() {
 	}
 
 }
-//#endregion ---------- /Decorator ---------- 
+//#endregion ---------- /Decorator ----------
