@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { QueryBuilder } from 'knex';
-import { QueryOptions, StampedEntity, Filters, Filter, extractOpVal } from 'shared/entities';
+import { Filter, OpVal, QueryOptions, StampedEntity, Val } from 'shared/entities';
 import { Context } from '../context';
 import { Monitor } from '../perf';
 import { nowTimestamp } from '../utils-cloud-starter';
@@ -213,16 +213,41 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		return this.processEntities(entities);
 	}
 
+	/**
+	 * Remove one or more entities from one or more id
+	 */
 	@Monitor()
-	async remove(ctx: Context, id: I) {
+	async remove(ctx: Context, ids: I | I[]) {
 		const k = await getKnex();
-		return k(this.tableName).delete().where(this.getWhereIdObject(id));
+
+		// if we have a bulk ids, try to do the whereIn (for non-compound for now)
+		if (ids instanceof Array) {
+
+			//// if single id properties, we can do whereIn
+			if (typeof this.idNames === 'string') {
+				return k(this.tableName).delete().whereIn(this.idNames, ids);
+			}
+			//// if not a compound id, need to do it one by one for now. 
+			else {
+				let deleteCount = 0;
+				for (const id of ids) {
+					deleteCount += await k(this.tableName).delete().where(this.getWhereIdObject(id));
+				}
+				return deleteCount;
+			}
+
+		}
+		// otherwise, if single id, so ssingle delete
+		else {
+			return k(this.tableName).delete().where(this.getWhereIdObject(ids));
+		}
 	}
 
 	protected completeQueryBuildWithQueryOptions(ctx: Context, q: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
 		if (queryOptions) {
 			if (queryOptions.matching) {
-				q = q.where(queryOptions.matching);
+				// q = q.where(queryOptions.matching);
+				completeQueryFilter(q, queryOptions.matching)
 			}
 
 			if (queryOptions.custom) {
@@ -242,6 +267,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 				const filters = queryOptions.filters;
 				if (filters instanceof Array) {
 					for (const filter of filters) {
+						// TOTEST: need to unit test
 						q.orWhere(function () {
 							completeQueryFilter(q, filter);
 						});
@@ -303,7 +329,7 @@ function completeQueryFilter(q: QueryBuilder<any, any>, filter: Filter) {
 
 		// value to match
 		const value = filter[column];
-		const opVal = extractOpVal(value);
+		const opVal = ensureOpVal(value);
 
 		// first handle the new case. 
 		if (opVal.val === null) {
@@ -321,3 +347,16 @@ function completeQueryFilter(q: QueryBuilder<any, any>, filter: Filter) {
 }
 
 
+export function ensureOpVal(value: Val | OpVal): OpVal {
+	// if val is null, then, the = null
+	if (value === null) {
+		return { op: '=', val: null };
+	}
+	// For now check type with the '.op'
+	// Note: needs some type hints
+	if ((<any>value).op) {
+		return value as OpVal;
+	} else {
+		return { op: '=', val: value as Val };
+	}
+}

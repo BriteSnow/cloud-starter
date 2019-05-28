@@ -91,7 +91,7 @@ async function run(debug = false, serviceName: string, testGrep: string, podName
 		await spawn('kubectl', args, { ignoreFail: true });
 	}
 
-	const args = ['run', 'kexec', serviceName];
+	const args = ['run', 'vdev', 'kexec', serviceName];
 	args.push('--', 'npm', 'run');
 
 	if (debug) {

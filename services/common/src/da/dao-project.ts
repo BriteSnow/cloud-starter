@@ -42,8 +42,8 @@ export class ProjectDao extends BaseDao<Project, number> {
 	}
 
 	@AccessRequires(['#sys', '#admin', 'project-remove'])
-	async remove(ctx: Context, id: number) {
-		return super.remove(ctx, id);
+	async remove(ctx: Context, ids: number | number[]) {
+		return super.remove(ctx, ids);
 	}
 	//#endregion ---------- /BaseDao Overrides ---------- 
 }

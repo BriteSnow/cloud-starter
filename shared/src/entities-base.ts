@@ -11,24 +11,10 @@
  * 
  **/
 export type Op = '=' | '!=' | '<' | '<=' | '>' | '>=' | 'like' | 'ilike' | string; // add string to make sure we do not limit to known ones.
-export type Val = string | number | boolean | null;
+export type Val = string | number | boolean | null | any; // for now need to add the 'any' as in the 'maching' case we do not control the E type
 export type OpVal = { op: Op, val: Val };
 export interface Filter {
 	[name: string]: Val | OpVal;
-}
-
-export function extractOpVal(value: Val | OpVal): OpVal {
-	// if val is null, then, the = null
-	if (value === null) {
-		return { op: '=', val: null };
-	}
-	// For now check type with the '.op'
-	// Note: needs some type hints
-	if ((<any>value).op) {
-		return value as OpVal;
-	} else {
-		return { op: '=', val: value as Val };
-	}
 }
 
 /**
@@ -37,7 +23,10 @@ export function extractOpVal(value: Val | OpVal): OpVal {
 export type Filters = Filter | Filter[];
 
 export interface QueryOptions<E> {
-	matching?: Partial<E>;
+	// matching is a filter constraints to the property name/type of the Entity
+	matching?: {
+		[C in keyof E]?: E[C] | { op: Op, val: E[C] };
+	};
 	ids?: number[];
 	orderBy?: string;
 	limit?: number;
