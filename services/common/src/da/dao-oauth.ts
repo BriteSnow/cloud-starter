@@ -8,7 +8,7 @@ import { AccessRequires } from './access';
 
 export class OAuthDao extends BaseDao<OAuth, number>{
 	constructor() {
-		super('oauth', true);
+		super({ table: 'oauth', stamped: true });
 	}
 
 	async getForUserId(ctx: Context, userId: number) {

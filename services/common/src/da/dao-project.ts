@@ -6,7 +6,7 @@ import { saveProle } from '../role-manager';
 import { getKnex } from './db';
 
 export class ProjectDao extends BaseDao<Project, number> {
-	constructor() { super('project', true) }
+	constructor() { super({ table: 'project', stamped: true }) }
 
 
 	@AccessRequires(['#sys'])

@@ -12,6 +12,13 @@ export interface CustomQuery {
 	custom?: (q: QueryBuilder<any, any>) => void;
 }
 
+export interface BaseDaoOptions {
+	table: string;
+	stamped: boolean;
+	idNames?: string | string[];
+	defaultOrderBy?: string | null;
+}
+
 // Note: for now, the knex can take a generic I for where value
 // @annoC
 export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
@@ -20,11 +27,11 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	readonly stamped: boolean;
 	readonly defaultOrderBy: string | null;
 
-	constructor(tableName: string, stamped: boolean, idNames: string | string[] = 'id', defaultOrderBy: string | null = '!id') {
-		this.tableName = tableName;
-		this.idNames = idNames;
-		this.stamped = stamped;
-		this.defaultOrderBy = defaultOrderBy;
+	constructor(opts: BaseDaoOptions) {
+		this.tableName = opts.table;
+		this.stamped = opts.stamped;
+		this.idNames = (opts.idNames) ? opts.idNames : 'id';
+		this.defaultOrderBy = (opts.defaultOrderBy) ? opts.defaultOrderBy : null;
 	}
 
 	/**

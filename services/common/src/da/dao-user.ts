@@ -18,7 +18,7 @@ interface UseCredential {
 
 export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	constructor() {
-		super('user', true);
+		super({ table: 'user', stamped: true });
 	}
 
 	/** 
