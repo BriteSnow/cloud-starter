@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { QueryBuilder } from 'knex';
-import { QueryOptions, StampedEntity } from 'shared/entities';
+import { QueryOptions, StampedEntity, Filters, Filter, extractOpVal } from 'shared/entities';
 import { Context } from '../context';
 import { Monitor } from '../perf';
 import { nowTimestamp } from '../utils-cloud-starter';
@@ -229,8 +229,30 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 				queryOptions.custom(q);
 			}
 
-			let orderBy = (queryOptions.orderBy !== undefined) ? queryOptions.orderBy : this.orderBy;
+			if (queryOptions.limit != null) {
+				q.limit(queryOptions.limit);
+			}
 
+			if (queryOptions.offset != null) {
+				q.offset(queryOptions.offset);
+			}
+
+			//// add the filters
+			if (queryOptions.filters) {
+				const filters = queryOptions.filters;
+				if (filters instanceof Array) {
+					for (const filter of filters) {
+						q.orWhere(function () {
+							completeQueryFilter(q, filter);
+						});
+					}
+				} else {
+					completeQueryFilter(q, filters);
+				}
+			}
+
+			//// add the orderBy
+			let orderBy = (queryOptions.orderBy !== undefined) ? queryOptions.orderBy : this.orderBy;
 			if (orderBy) {
 				let asc = true;
 				if (orderBy.startsWith('!')) {
@@ -274,3 +296,28 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 
 	}
 }
+
+function completeQueryFilter(q: QueryBuilder<any, any>, filter: Filter) {
+	// key can be 'firstName' or 'age;>'
+	for (const column in filter) {
+
+		// value to match
+		const value = filter[column];
+		const opVal = extractOpVal(value);
+
+		// first handle the new case. 
+		if (opVal.val === null) {
+			if (opVal.op === '=') {
+				q.whereNull(column);
+			} else if (opVal.op === '!=') {
+				q.whereNotNull(column);
+			}
+		}
+		// handle the case value is define
+		else if (value != null) {
+			q.andWhere(column, opVal.op, opVal.val);
+		}
+	}
+}
+
+
