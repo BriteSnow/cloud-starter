@@ -16,7 +16,7 @@ export interface BaseDaoOptions {
 	table: string;
 	stamped: boolean;
 	idNames?: string | string[];
-	defaultOrderBy?: string | null;
+	orderBy?: string | null;
 }
 
 // Note: for now, the knex can take a generic I for where value
@@ -25,13 +25,13 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	readonly tableName: string;
 	readonly idNames: string | string[];
 	readonly stamped: boolean;
-	readonly defaultOrderBy: string | null;
+	readonly orderBy: string | null;
 
 	constructor(opts: BaseDaoOptions) {
 		this.tableName = opts.table;
 		this.stamped = opts.stamped;
 		this.idNames = (opts.idNames) ? opts.idNames : 'id';
-		this.defaultOrderBy = (opts.defaultOrderBy) ? opts.defaultOrderBy : null;
+		this.orderBy = (opts.orderBy) ? opts.orderBy : null;
 	}
 
 	/**
@@ -229,7 +229,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 				queryOptions.custom(q);
 			}
 
-			let orderBy = (queryOptions.orderBy !== undefined) ? queryOptions.orderBy : this.defaultOrderBy;
+			let orderBy = (queryOptions.orderBy !== undefined) ? queryOptions.orderBy : this.orderBy;
 
 			if (orderBy) {
 				let asc = true;
