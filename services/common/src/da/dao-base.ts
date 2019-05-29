@@ -16,7 +16,10 @@ export interface BaseDaoOptions {
 	table: string;
 	stamped: boolean;
 	idNames?: string | string[];
+	/** set the default orderBy. '!' prefix make it DESC. .e.g., 'odr' or '!age' */
 	orderBy?: string | null;
+	/** Fix the column names for this DAO (get, first, list will filter through those)  */
+	columns?: string[];
 }
 
 // Note: for now, the knex can take a generic I for where value
@@ -24,14 +27,18 @@ export interface BaseDaoOptions {
 export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	readonly tableName: string;
 	readonly idNames: string | string[];
-	readonly stamped: boolean;
-	readonly orderBy: string | null;
+	protected readonly stamped: boolean;
+	protected readonly orderBy: string | null;
+	protected readonly columns?: string[];
 
 	constructor(opts: BaseDaoOptions) {
 		this.tableName = opts.table;
 		this.stamped = opts.stamped;
 		this.idNames = (opts.idNames) ? opts.idNames : 'id';
 		this.orderBy = (opts.orderBy) ? opts.orderBy : null;
+		if (opts.columns) {
+			this.columns = opts.columns;
+		}
 	}
 
 	/**
@@ -59,7 +66,9 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	async get(ctx: Context, id: I): Promise<E> {
 		const k = await getKnex();
 		let q = k(this.tableName);
-
+		if (this.columns) {
+			q.columns(this.columns);
+		}
 		const r = await q.where(this.getWhereIdObject(id));
 
 		if (r.length === 0) {
@@ -115,7 +124,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		const k = await getKnex();
 		const q = k(this.tableName);
 		const options = { matching: data, limit: 1 } as (QueryOptions<E> & Q); // needs typing int
-		this.completeQueryBuildWithQueryOptions(ctx, q, options);
+		this.completeQueryBuilder(ctx, q, options);
 		const entities = (await q.then()) as any[];
 
 		// TODO: probably need to limit 1
@@ -208,7 +217,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	async list(ctx: Context, queryOptions?: Q & CustomQuery): Promise<E[]> {
 		const k = await getKnex();
 		let q = k(this.tableName);
-		this.completeQueryBuildWithQueryOptions(ctx, q, queryOptions);
+		this.completeQueryBuilder(ctx, q, queryOptions);
 		const entities = (await q.then()) as any[]; // TODO: need to check if this is the common way
 		return this.processEntities(entities);
 	}
@@ -243,10 +252,15 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		}
 	}
 
-	protected completeQueryBuildWithQueryOptions(ctx: Context, q: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
+	protected completeQueryBuilder(ctx: Context, q: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
+		// if this dao has a fixed column. 
+		if (this.columns) {
+			q.columns(this.columns);
+		}
+
 		if (queryOptions) {
+
 			if (queryOptions.matching) {
-				// q = q.where(queryOptions.matching);
 				completeQueryFilter(q, queryOptions.matching)
 			}
 
@@ -291,7 +305,6 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		}
 
 	}
-
 
 	private getWhereIdObject(id: any) {
 		// otherwise, build the object with all of the appropriate id

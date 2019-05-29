@@ -16,9 +16,11 @@ interface UseCredential {
 	key: string;
 }
 
+const USER_COLUMNS = ['id', 'username', 'type', 'cid', 'ctime', 'mid', 'mtime'];
+
 export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	constructor() {
-		super({ table: 'user', stamped: true });
+		super({ table: 'user', stamped: true, columns: USER_COLUMNS });
 	}
 
 	/** 
@@ -55,7 +57,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	}
 
 	@AccessRequires(['#sys', '#admin'])
-	async remove(ctx: Context, id: number) {
+	async remove(ctx: Context, id: number | number[]) {
 		return super.remove(ctx, id);
 	}
 
@@ -82,14 +84,5 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		}
 		return user;
 	}
-
-	/**
-	 * This override make the user's columns explicit for all bse
-	 */
-	protected completeQueryBuildWithQueryOptions(ctx: Context, q: QueryBuilder<any, any>, queryOptions?: QueryOptions<User> & CustomQuery) {
-		q.columns(['id', 'username', 'type', 'cid', 'ctime', 'mid', 'mtime']);
-		return super.completeQueryBuildWithQueryOptions(ctx, q, queryOptions);
-	}
-
 	//#endregion ---------- /Query Override ---------- 
 }
