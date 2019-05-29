@@ -3,27 +3,33 @@
 
 /**
  * 
- * A filter is a name: Val or OpVal map that set conditions that needs to be all met (AND)
- * All name:value in a Filter need to be met. For example
+ * A QueryFilter is a filter use to customize the query of particular Query. 
+ * 
+ * It has the format of `{[columnName: string]: {op: string, val: any}}` and each property are executed as a AND of each other.
+ * The OpVal can be simplified with string, in this case, it will default to op = '='. 
+ * 
+ * Examples
  *  - `{"projectId": 123}` will select entities with projectId == 123 (default operation is =)
  *  - `{"stage": {op: '>', 1}}` will select entity with stage > 1
  *  - `{"stage;>": 1, "projectId": 123}`: will select entities from projectId 123 AND stage > 1
  * 
  **/
-export type Op = '=' | '!=' | '<' | '<=' | '>' | '>=' | 'like' | 'ilike' | string; // add string to make sure we do not limit to known ones.
-export type Val = string | number | boolean | null | any; // for now need to add the 'any' as in the 'maching' case we do not control the E type
-export type OpVal = { op: Op, val: Val };
-export interface Filter {
+export interface QueryFilter {
 	[name: string]: Val | OpVal;
 }
+
+export type OpVal = { op: Op, val: Val };
+export type Op = '=' | '!=' | '<' | '<=' | '>' | '>=' | 'like' | 'ilike' | string; // add string to make sure we do not limit to known ones.
+export type Val = string | number | boolean | null | any; // for now need to add the 'any' as in the 'maching' case we do not control the E type
+
 
 /**
  * Filters is one or more Filter object. Each filter object is executed with a OR.
  */
-export type Filters = Filter | Filter[];
+export type QueryFilters = QueryFilter | QueryFilter[];
 
 export interface QueryOptions<E> {
-	// matching is a filter constraints to the property name/type of the Entity
+	// matching is a QueryFilter constrained to the property name / value-type of the Entity
 	matching?: {
 		[C in keyof E]?: E[C] | { op: Op, val: E[C] };
 	};
@@ -31,7 +37,7 @@ export interface QueryOptions<E> {
 	orderBy?: string;
 	limit?: number;
 	offset?: number;
-	filters?: Filters;
+	filters?: QueryFilters;
 }
 
 export interface StampedEntity {

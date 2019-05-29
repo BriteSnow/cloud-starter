@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { QueryBuilder } from 'knex';
-import { Filter, OpVal, QueryOptions, StampedEntity, Val } from 'shared/entities';
+import { QueryFilter, OpVal, QueryOptions, StampedEntity, Val } from 'shared/entities';
 import { Context } from '../context';
 import { Monitor } from '../perf';
 import { nowTimestamp } from '../utils-cloud-starter';
@@ -336,7 +336,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 }
 
-function completeQueryFilter(q: QueryBuilder<any, any>, filter: Filter) {
+function completeQueryFilter(q: QueryBuilder<any, any>, filter: QueryFilter) {
 	// key can be 'firstName' or 'age;>'
 	for (const column in filter) {
 
