@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/bigquery": "^4.0.0",
+    "@google-cloud/bigquery": "^4.1.0",
     "@types/cookie-parser": "^1.4.1",
     "@types/express": "^4.16.1",
     "@types/mocha": "^5.2.6",
@@ -28,7 +28,7 @@
     "express": "^4.17.1",
     "fs-extra-plus": "^0.5.6",
     "googleapis": "^40.0.0",
-    "knex": "^0.17.0-next6",
+    "knex": "^0.17.0",
     "mocha": "^6.1.4",
     "module-alias": "^2.2.0",
     "moment": "^2.24.0",
@@ -36,7 +36,7 @@
     "pg": "^7.11.0",
     "redis": "^2.8.0",
     "ts-node": "^8.2.0",
-    "typescript": "^3.4.5",
+    "typescript": "^3.5.1",
     "useragent": "^2.3.0"
   }
 }
