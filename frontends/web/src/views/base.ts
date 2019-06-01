@@ -54,7 +54,9 @@ export class BaseView implements View {
 
 
 	create(): DocumentFragment | HTMLElement {
-		return render(this.name!, this.data);
+		const fragment = render(this.name!, this.data);
+		// NOTE: fragment might have a comment, so, we take the firstElement, which is the MVDOM View best pratice.
+		return fragment.firstElementChild! as HTMLElement;
 	}
 
 	// current path

@@ -1,22 +1,20 @@
-import { BaseView, BaseViewClass, addHubEvents, RouteInfo } from 'views/base';
-import { display, first, all } from 'mvdom';
-import { SpecTypoView, SpecCardsView, SpecButtonsView, SpecDialogsView, SpecControlsView } from 'views/Spec/SpecViews';
-import { pathAt } from 'ts/route';
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/Spec/SpecMainView.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
+import { all, display, first } from 'mvdom';
+import { addHubEvents, BaseView } from 'views/base';
+import { specViewByPath } from './spec-paths';
+
 
 
 const defaultPath = 'typo';
 
-const pathToView: { [name: string]: BaseViewClass } = {
-	'typo': SpecTypoView,
-	'cards': SpecCardsView,
-	'buttons': SpecButtonsView,
-	'dialogs': SpecDialogsView,
-	'controls': SpecControlsView
-};
-
 export class SpecMainView extends BaseView {
 
+	data = { paths: Object.keys(specViewByPath) };
+
 	protected get main() { return first(this.el, 'section.content')! }
+
 
 	hubEvents = addHubEvents(this.hubEvents, {
 		// 'routeHub' is the hub receiving url changes
@@ -34,7 +32,7 @@ export class SpecMainView extends BaseView {
 		const newPath = this.hasNewPathAt(1, defaultPath);
 		// update this view/content only if the path has changed
 		if (newPath != null) {
-			const subViewClass = pathToView[newPath];
+			const subViewClass = specViewByPath[newPath];
 			display(new subViewClass, this.main, 'empty');
 
 			// update the tab

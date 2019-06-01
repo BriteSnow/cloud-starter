@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/Spec/SpecDialogsView.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { BaseView, addDomEvents } from "views/base";
 import { display, frag } from "mvdom";
 import { DialogBase } from "views/Dialog/DialogBase";
