@@ -1,0 +1,74 @@
+@import "../_pcss/mixins-all.pcss";
+
+c-select{
+	display: block;
+	user-select: none;
+	cursor: pointer;
+	line-height: 1;
+	min-height: 3rem;
+	margin-bottom: 1rem;
+	border-bottom: solid 1px var(--bdr);
+	display: grid;
+  align-items: center; /* vertical center */
+	grid-template-columns: 1fr 2rem;
+	&[disabled]{
+		opacity: .5;
+	}
+	&[readonly]{
+		/* Note: on Chrome, if visibility hidden on c-ico, we get unwanted horizontal scroll bar */
+		c-ico svg{
+			visibility: hidden;
+		}
+		border-bottom: solid 1px var(--bdr-lighter);
+	}
+	div{
+		padding-left: 1rem;
+	}
+	c-ico{
+		width: 1rem;
+	}
+	&.no-value{
+		& > div {
+			color: var(--txt-med);
+		}
+		
+	}
+}
+
+c-select-popup{
+	position: absolute;
+	@mixin elev-6{};
+	width: 8rem;
+	/* height: 10rem; */
+	background: #FFF;
+	
+	li.none{
+		color: red;
+	}
+	ul, li{
+		margin: 0;
+		padding: 0;
+		color: var(--txt);
+	}
+
+	ul{
+		& > li, & > a{
+			cursor: pointer;
+			line-height: 1;
+			padding: 1rem 1rem;
+
+			&.sel{
+				font-weight: 600;
+			}
+			&:hover{
+				background: var(--bkg-lighter);
+			}
+
+		}
+
+		& > li{
+			list-style: none;
+		}
+	}
+
+}

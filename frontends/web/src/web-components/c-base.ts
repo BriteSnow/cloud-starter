@@ -2,10 +2,14 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { puller, pusher, trigger } from "mvdom";
-import { attr } from "mvdom-xp";
+import { attr, css } from "mvdom-xp";
+
+// component unique sequence number to allow to have cheap UID for each component
+let c_seq = 0;
 
 /**
  * BaseHTMLElement that all custom elements from this application should inherit from. 
+ * 
  * 
  * Then, in sub component. 
  * - Implement the `init()` to set the innerHTML or append children element (it will be called only once)
@@ -14,9 +18,16 @@ import { attr } from "mvdom-xp";
  * 
  */
 export abstract class BaseHTMLElement extends HTMLElement {
+	// unique sequenceId number for each instance. 
+	readonly uid: string;
 
 	private _init = false;
 	protected get initialized() { return this._init }
+
+	constructor() {
+		super();
+		this.uid = 'c_uid_' + c_seq++;
+	}
 
 	/** 
 	 * Method to override to create child elements. Will be called only once by the BaseHTMLElement `connectedCallback()` implementation.
@@ -40,6 +51,16 @@ export abstract class BaseHTMLElement extends HTMLElement {
 		}
 	}
 
+	/**
+	 * Empty implementation to allow `super.disconnectedCallback()` best practices on sub classes
+	 */
+	disconnectedCallback() { }
+
+	/**
+	 * Empty implement to allow `super.` best practices on sub classes.
+	 */
+	attributeChangedCallback(attrName: string, oldVal: any, newVal: any) { }
+
 }
 
 
@@ -49,8 +70,29 @@ export abstract class BaseHTMLElement extends HTMLElement {
  * so that by default they pushed/pulled by `mvdom push/pull` system.
  * 
  * Component Attributes:
- *   - name: (optional) if set, it will set this field a mvdom dx component. 
- *   - value: (optional) this is the initial value of the component. Attribute Value will NOT be change with state 'value'.
+ *   - `readonly`: set the component as readonly.
+ *   - `disabled`: set the component as disabled.
+ *   - `name?`: reflective of 'name' property. If absent, `.no-name` css class.
+ *   - `label?`: if absent, this css `.no-label` will be set.
+ *   - `value?`: this is the initial value of the component. TODO: needs to unify when no value (right now .empty for input, .no-value for c-select)
+ *   - `placeholder?`: placeholder text.
+ * 
+ * Component Properties: 
+ *   - `readonly: boolean`: reflective of attribute.
+ * 	 - `disabled: boolean`: reflective of attribute.
+ *   - `noValue: boolean`: reflective of css `no-value`.
+ *   - `name?: string`: reflective of attribute.
+ *   - `placeholder?: string`: 
+ *   - `label?: string`: Manged by subClass.
+ *   - `value?: any`: field value. Managed by subClass. (reflection undefined).
+ *
+ * Component Events:
+ *   - `CHANGE` Sub Class call `triggerChange()` which will trigger a `evt.detail: {name: string, value: string}`.
+ * 
+ * Component CSS: 
+ *  - `.no-value` when the field has no value (for now, managed by sub class)
+ *  - `.no-label` when teh field has no label.
+ *  - `.dx` will be added when field component has a name.
  * 
  * Sub class MUST
  * - Sub classes MUST call `super.init()` in their `init()` implementation.
@@ -58,14 +100,36 @@ export abstract class BaseHTMLElement extends HTMLElement {
  */
 export class BaseFieldElement extends BaseHTMLElement {
 
+	static get observedAttributes(): string[] { return ['disabled', 'readonly', 'placeholder']; }
+
 	//// BaseField states
+	value: any; // needs to be implemented by subclass
+
+	//// Attribute Reflective Properties
+	get readonly(): boolean { return this.hasAttribute('readonly') };
+	set readonly(v: boolean) { attr(this, 'readonly', (v) ? '' : null) };
+
+	get disabled(): boolean { return this.hasAttribute('disabled') };
+	set disabled(v: boolean) { attr(this, 'disabled', (v) ? '' : null) };
+
 	get name() { return attr(this, 'name') };
-	value: any;
+	set name(v: string | null) { attr(this, 'name', v) };
+
+	get placeholder() { return attr(this, 'placeholder') };
+	set placeholder(v: string | null) { attr(this, 'placeholder', v) };
+
+	//// CSS Reflective Properties
+	get noValue() { return this.classList.contains('no-value') };
+	set noValue(v: boolean) { css(this, { 'no-value': v }) };
 
 	init() {
 		super.init(); // best practice, even if it in this case, the parent.init() is blank. 
 
-		const name = attr(this, 'name');
+		const [name, label] = attr(this, ['name', 'label']);
+
+		if (!label) {
+			this.classList.add('no-label');
+		}
 
 		// by default if we have a 'name' attribute we add 
 		//   - The '.dx' to allow seamless mvdom push/pull
@@ -83,7 +147,17 @@ export class BaseFieldElement extends BaseHTMLElement {
 			const name = this.name;
 			trigger(this, "CHANGE", { detail: { name, value } });
 		}
+	}
+	// Called when an observed attribute has been added, removed, updated, or replaced
+	attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
+		super.attributeChangedCallback(attrName, oldVal, newVal); // always
 
+		switch (attrName) {
+			case 'readonly':
+				break;
+			case 'disabled':
+				break;
+		}
 	}
 }
 

@@ -134,7 +134,7 @@ HTMLElement Methods: (see [google doc](https://developers.google.com/web/fundame
   - Note 1: only attributes listed in the observedAttributes property will receive this callback.
   - Note 2: can be called before or after the above callbacks depending on how your custom element is used. 
 - `adoptedCallback()` The custom element has been moved into a new document (e.g. someone called document.adoptNode(el)).
-
+- CSS Pre-styling unregistered elements, `app-drawer:not(:defined)` see [prestyle](https://developers.google.com/web/fundamentals/web-components/customelements#prestyle)
 
 #### HTML Template & Document Fragments & Custom Elements
 

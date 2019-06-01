@@ -1,31 +1,77 @@
 <div class="SpecControlsView">
 
-	<div class="card wide spec-form">
+	<div class="card spec-inputs">
 		<header>
-			<h2>Form</h2>
+			<h2>c-input</h2>
 		</header>
 
 		<section>
-			<c-input label="Field A" name="fieldA" value="value A"></c-input>
-			<c-input label="Field B" name="fieldB"></c-input>
-			<c-check name="fieldC"></c-check>
-			<c-check name="fieldD" value="value D" checked></c-check>
+			<c-input label="(readonly)" name="fieldA" value="value A" readonly ></c-input>
+			<c-input label="(disabled)" name="fieldB" value="value B" disabled></c-input>
+			<c-input label="Normal" name="fieldC" value="value C"></c-input>
+			<c-input label="No value" name="fieldD"></c-input>
+			<c-input name="fieldE" value="no label, with value and placeholder" placeholder="....placeholder..."></c-input>
+			<c-input name="fieldF" placeholder="no label, no value, only placeholder"></c-input>
 		</section>
 		<footer><button class="do-push">push</button></footer>
 	</div>
 
-	<div class="card wide spec-options">
+	<div class="card spec-selects">
+			<header>
+				<h2>c-select</h2>
+			</header>
+			<section>
+				<c-select name="fieldG" value="G" readonly>
+					<option value="one">value one</option>
+					<option value="G">value G (readonly)</option>
+				</c-select>
+	
+				<c-select name="fieldH" disabled>
+						<option>No Value &amp; Disabled</option>
+						<option value="one">value one</option>
+						<option value="H">value H</option>
+				</c-select>
+	
+				<c-select name="fieldI" placeholder="Placeholder with no value and no null option">
+						<option value="one">value one</option>
+						<option value="I">value I</option>
+				</c-select>
+	
+				<c-select name="fieldJ" placeholder="Placeholder with no value but a null option">
+						<option>None</option>
+						<option value="one">value one</option>
+						<option value="J">value J</option>
+				</c-select>
+	
+				<c-select name="fieldK" value="K">Value K (load on demand)</c-select>
+	
+			</section>
+			<footer><button class="do-push">push</button></footer>
+		</div>
+
+	<div class="card spec-checks">
 		<header>
-			<h2>Other Controls</h2>
+			<h2>c-check</h2>
 		</header>
 		<section>
-			<section>
-				<h3>Options</h3>
-				<c-options name="state" values="1:Open, 0:Close, 2 : Both" value="0"></c-options>
-			</section>
+			<c-check name="fieldD" value="value D" checked></c-check>
+			<c-check name="fieldE"></c-check>
+			<c-check name="fieldF" value="value F"></c-check>
+		</section>
+		<footer><button class="do-push">push</button></footer>
+	</div>
+
+
+
+	<div class="card spec-options">
+		<header>
+			<h2>c-options</h2>
+		</header>
+		<section>
+			<c-options name="state" values="1:Open, 0:Close, 2 : Both" value="0"></c-options>
 			
 		</section>
-		<footer><button class="do-push">push</button></footer>			
+		<footer></footer>			
 	</div>
 	
 </div>

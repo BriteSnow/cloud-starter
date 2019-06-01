@@ -32,7 +32,7 @@ c-input{
 		background: none;
 	}
 
-	&.empty{
+	&.no-value:not([placeholder]):not(.focused){
 		& > label{
 			grid-row: 2;
 			font-size: .875rem;
@@ -46,4 +46,11 @@ c-input{
 			font-size: .75rem;
 		}
 	}
+
+	&[disabled]{
+		opacity: .5;
+	}
+	&[readonly]{
+		border-bottom: solid 1px var(--bdr-lighter);
+	}	
 }

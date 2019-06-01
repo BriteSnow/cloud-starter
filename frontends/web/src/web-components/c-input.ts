@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-input.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { first, on } from "mvdom";
-import { attr } from "mvdom-xp";
+import { on } from "mvdom";
+import { attr, elem, css } from "mvdom-xp";
 import { BaseFieldElement } from "./c-base";
 
 
@@ -14,36 +14,33 @@ import { BaseFieldElement } from "./c-base";
  * See:  SpecControlsView.tmpl, SpecControlsView.ts
  * 
  * Component Attributes: 
- *   - name: (optional) see BaseFieldElement.
- *   - value: (optional) the eventual value initilized value. See BaseFieldElement.
- *   - password: (optional) if hasAttribute('password') this field password. 
+ *   - See BaseFieldElement.
+ *   - `password?`: set input as password
  * 
- * Component States: 
- *   - name: (optional) managed by BaseFieldElement. Read only (for now) the c-input 'name' attribute
- *   - empty: if this input has a value or not, stored as the css `.empty` when empty. 
- *   - value: which is stored in the internal input.value. 
- *       > Note that c-input 'value' attribute is ONLY used to initialize the value as with other html input elements.
+ * Component Events: 
+ *   - `CHANGE` see BaseFieldElement.
  * 
- * Note 1: To minimize state management and out of sync bug with DOM bugs, the values of those states
- *         are stored in the related principal element properties. .empty is the element class !'on', 
- *         .value is stored in the input.value element, and name just from the attribute (needs to make it more ready only)
+ * Component Poperties: 
+ *   - See BaseFieldElement.
+ *   - `password: boolean`: reflective of attribute.
  * 
- * Note 2: The best practice is to use component attribute s(name=, value=) only as initializers, 
- *         and changing it after the component get rendered has no effect on the component internal state, which 
- *         is the default behavior of my native HTML element (inputs)
- *
+ * Component CSS:
+ *   - See BaseFieldElement.
+ * 
  */
 
 export class InputElement extends BaseFieldElement {
-	static get observedAttributes() { return ['value']; }
+
+	static get observedAttributes() { return BaseFieldElement.observedAttributes.concat(['password']) }
 
 	//// Component Key Children (on demand for more DOM mutation resiliency)
-	get inputEl() { return first(this, 'input')! as HTMLInputElement };
+	inputEl!: HTMLInputElement;
 
-	//#region    ---------- Component States ---------- 
-	get empty(): boolean { return this.classList.contains('empty') };
-	set empty(b: boolean) { (b) ? this.classList.add('empty') : this.classList.remove('empty') };
+	//// Attribute Reflective Properties
+	get focused(): boolean { return this.classList.contains('focused') };
+	set focused(b: boolean) { css(this, { focused: b }) };
 
+	//// Properties
 	get value() { return this.inputEl.value };
 	set value(val: any) { // today takes any, will get parsed by standard html input element .value
 		const inputEl = this.inputEl;
@@ -58,42 +55,39 @@ export class InputElement extends BaseFieldElement {
 		const newVal = this.value;
 
 		// update the empty state
-		this.empty = !(newVal && newVal.length > 0);
+		this.noValue = (!(newVal && newVal.length > 0));
 
-		// Note that if the UI call this setter, will always be ===
-		//      however, it if is programmatic call, it might be different. 
-		//      so for now, we have to always trigger it. 
-		// TODO: probably need to store the value to a this._prevValue to have correct value
+		// Note: If the UI call this setter, will always be ===
+		//       however, it if is programmatic call, it might be different. so for now, we have to always trigger it. 
 		this.triggerChange();
 	};
-
-	get focused(): boolean { return this.classList.contains('focused') };
-	set focused(b: boolean) { (b) ? this.classList.add('focused') : this.classList.remove('focused') };
-	//#endregion ---------- /Component States ---------- 
 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 		super.init();
-
 		let [label, value] = attr(this, ['label', 'value']);
 
 		const type = this.hasAttribute('password') ? 'password' : 'text';
 
 		//// Build the component HTML
-		label = (label) ? label : "";
-		const valueAttr = (value) ? `value="${value}"` : '';
+		const tmp = document.createDocumentFragment();
 		// create the DOM
-		this.innerHTML = `<label>${label}</label>
-		<input type="${type}" ${valueAttr}>`;
+		if (label) {
+			tmp.appendChild(elem('label')).textContent = label;
+		}
+		this.inputEl = attr(elem('input'), { type, value }) as HTMLInputElement;
+		tmp.appendChild(this.inputEl);
+		// forward the relevant attribute to inputEl
+		const [readonly, disabled, placeholder] = attr(this, ['readonly', 'disabled', 'placeholder']);
+		attr(this.inputEl, { readonly, disabled, placeholder });
+		this.appendChild(tmp);
 
 		//// Set the states
-		if (!value) {
-			this.empty = true;
-		}
+		this.noValue = (!value);
+
 
 		//// Bind internal component events
 		on(this, 'focusin, focusout, change', 'c-input > input', (evt) => {
-			const input = evt.selectTarget as HTMLInputElement;
 			const c_input = this;
 
 			switch (evt.type) {
@@ -109,7 +103,24 @@ export class InputElement extends BaseFieldElement {
 					break;
 			}
 		});
+	}
 
+	attributeChangedCallback(name: string, oldVal: any, newVal: any) {
+		super.attributeChangedCallback(name, oldVal, newVal); // always
+
+		if (this.initialized) {
+			switch (name) {
+				case 'readonly':
+					attr(this.inputEl, { readonly: newVal });
+					break;
+				case 'disabled':
+					attr(this.inputEl, { disabled: newVal });
+					break;
+				case 'placeholder':
+					attr(this.inputEl, { placeholder: newVal });
+					break;
+			}
+		}
 
 	}
 }
