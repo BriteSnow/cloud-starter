@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-options.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { all, first, on } from "mvdom";
 import { attr } from "mvdom-xp";
 import { BaseFieldElement } from "./c-base";
