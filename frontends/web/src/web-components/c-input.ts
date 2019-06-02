@@ -1,7 +1,7 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-input.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { on } from "mvdom";
+import { on, frag } from "mvdom";
 import { attr, elem, css } from "mvdom-xp";
 import { BaseFieldElement } from "./c-base";
 
@@ -34,6 +34,7 @@ export class InputElement extends BaseFieldElement {
 	static get observedAttributes() { return BaseFieldElement.observedAttributes.concat(['password']) }
 
 	//// Component Key Children (on demand for more DOM mutation resiliency)
+	labelEl!: HTMLElement;
 	inputEl!: HTMLInputElement;
 
 	//// Attribute Reflective Properties
@@ -70,21 +71,16 @@ export class InputElement extends BaseFieldElement {
 		const type = this.hasAttribute('password') ? 'password' : 'text';
 
 		//// Build the component HTML
-		const tmp = document.createDocumentFragment();
-		// create the DOM
-		if (label) {
-			tmp.appendChild(elem('label')).textContent = label;
-		}
-		this.inputEl = attr(elem('input'), { type, value }) as HTMLInputElement;
-		tmp.appendChild(this.inputEl);
-		// forward the relevant attribute to inputEl
+		const tmp = frag('<label></label><input>');
+		[this.labelEl, this.inputEl] = [...tmp.children] as any[]; // because heterogeneous assignment (HTMLInputElement)
+		this.labelEl.textContent = label;
+		// get the attribute from this c-input to be copied to the input child
 		const [readonly, disabled, placeholder] = attr(this, ['readonly', 'disabled', 'placeholder']);
-		attr(this.inputEl, { readonly, disabled, placeholder });
-		this.appendChild(tmp);
+		attr(this.inputEl, { type, value, readonly, disabled, placeholder });
+		this.appendChild(tmp); // this will add all of the sibling element of tmp the fastest. 
 
 		//// Set the states
 		this.noValue = (!value);
-
 
 		//// Bind internal component events
 		on(this, 'focusin, focusout, change', 'c-input > input', (evt) => {

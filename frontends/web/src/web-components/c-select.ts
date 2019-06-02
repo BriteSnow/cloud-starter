@@ -33,6 +33,7 @@ import { BaseFieldElement } from "./c-base";
 type Option = { content: string, value: string | null };
 
 class SelectElement extends BaseFieldElement {
+	labelEl: any;
 
 	static get observedAttributes() {
 		return BaseFieldElement.observedAttributes.concat();
@@ -65,7 +66,7 @@ class SelectElement extends BaseFieldElement {
 	init() {
 
 		super.init(); // just call it for BaseFieldElement sub classes.
-		const value = this.value;
+		const [label, value] = attr(this, ['label', 'value']);
 
 		//// create the appropriate this.options list from content HTML
 		const firstElement = this.firstElementChild;
@@ -91,15 +92,15 @@ class SelectElement extends BaseFieldElement {
 			}
 		}
 
-		//// Initialize the content structure (with not data)
-		// first get the eventual 
-		let html = `<div></div><c-ico>chevron-down</c-ico>`;
-		this.innerHTML = html;
-		this.contentEl = this.firstElementChild as HTMLElement;
+		//// Create Content
+		let tmp = frag(`<label></label><div></div><c-ico>chevron-down</c-ico>`);
+		[this.labelEl, this.contentEl] = [...tmp.children] as HTMLElement[];
+		this.labelEl.innerText = label;
+		this.innerHTML = ''; // to remove
+		this.appendChild(tmp);
 
 		//// Refresh the content
 		this.refresh();
-
 
 		//// Bind internal component events
 		on(this, 'click', (evt) => {
