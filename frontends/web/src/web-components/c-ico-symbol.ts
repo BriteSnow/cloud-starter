@@ -18,11 +18,11 @@ export function htmlSvgSymbol(name: string) {
  * 
  * Usage: `<c-ico>user</c-ico>`
  * 
- * Component Attributes: 
+ * Attributes: 
  *   - 'name' Name of the ico, without the 'ico-' prefix ('ico-' prefix will be added). 
  *            if absent, nothing will be displayed. 
  * 
- * Component States: no states at this point. 
+ * Properties: none
  * 
  */
 class IcoElement extends BaseHTMLElement {

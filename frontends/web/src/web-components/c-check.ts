@@ -1,52 +1,50 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-check.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { on } from "mvdom";
-import { attr } from "mvdom-xp";
-import { BaseFieldElement } from "./c-base";
-import { htmlSvgSymbol } from "./c-ico-symbol";
+import { on } from 'mvdom';
+import { attr } from 'mvdom-xp';
+import { BaseFieldElement } from './c-base';
+import { htmlSvgSymbol } from './c-ico-symbol';
 
 /**
  * c-check custom element encapsulate a checkbox true/false component with NO label concept.
  *
  * Usage: `<c-check name="fieldA" checked></c-input>`
- * See:  SpecControlsView.tmpl, SpecControlsView.ts
+ * See:  http://localhost:8080/_spec/controls
  * 
- * Component Attributes:
- *   - name: (optional) see BaseFieldElement.
- *   - value: (optional) See BaseFieldElement.
+ * Attributes:
+ *   - See BaseFieldElement.
+ *   - `value?`: value of the component.
+ *   - `checked?`: checked states of te component.
  *   
- * Component States:
- *   - name: which is a read only (for now) the c-input 'name' attribute
- *   - checked: boolean, itinialized with 'checked' attribute, store as `c-check.on` css class.
+ * Properties:
+ *   - See BaseFieldElement.
+ *   - `value`: If checkbox checked true or 'value' attribute if present, otherwise, if not checked false.
+ *   - `checked: boolean`: reflective of attribute.
  *   - value: can be set to true/false for setting checked, 
  *            or match attribute 'value' (if match true otherwise false), 
  *            returns false if check is off, or true or 'value' attribute value if checked === true
+ * 
+ * CSS:
+ *   - See BaseFieldElement.
+ * 
+ * Content: 
+ *   - none
+ * 
+ * Events:
+ *   - `CHANGE` see BaseFieldElement.
  * 
  */
 
 class CheckElement extends BaseFieldElement {
 
-	//#region    ---------- Component States ---------- 
-	get checked() { return this.classList.contains('checked') };
-	set checked(v: boolean) {
-		const old = this.checked;
+	static get observedAttributes() { return BaseFieldElement.observedAttributes.concat(['checked']) }
 
-		if (v) {
-			this.classList.add('checked')
-			this.innerHTML = htmlSvgSymbol('ico-check-on');
-		} else {
-			this.classList.remove('checked')
-			this.innerHTML = htmlSvgSymbol('ico-check-off');
-		}
+	//// Properties (Attribute Reflective)
+	get checked() { return this.hasAttribute('checked') }
+	set checked(v: boolean) { attr(this, { checked: v }) }
 
-		// Best Practce: Trigger the change event in the state setter like this.
-		// Note: check if initialized, to avoid trigger data change on initialization
-		if (v !== old) {
-			this.triggerChange();
-		}
-	};
-
+	//// Property (Value)
 	get value() {
 		const attrValue = attr(this, 'value');
 		const checked = this.checked;
@@ -75,17 +73,14 @@ class CheckElement extends BaseFieldElement {
 			}
 		}
 	}
-	//#endregion ---------- /Component States ---------- 
 
 
+	//#region    ---------- Component Lifecycle Methods ---------- 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 		super.init(); // just call it for BaseFieldElement sub classes.
 
-		// Note: the HTML content is built on set checked, since it change totally the content. 
-
-		//// Set states
-		this.checked = this.hasAttribute('checked');
+		this.refresh();
 
 		//// Bind internal component events
 		on(this, 'click', (evt) => {
@@ -93,6 +88,30 @@ class CheckElement extends BaseFieldElement {
 		});
 	}
 
+	attributeChangedCallback(name: string, oldVal: any, newVal: any) {
+		super.attributeChangedCallback(name, oldVal, newVal); // always
+
+		if (this.initialized) {
+			switch (name) {
+				case 'checked':
+					if (oldVal !== newVal) {
+						this.refresh();
+						this.triggerChange();
+					}
+					break;
+			}
+		}
+
+	}
+	//#endregion ---------- /Component Lifecycle Methods ---------- 
+
+	refresh() {
+		if (this.checked) {
+			this.innerHTML = htmlSvgSymbol('ico-check-on');
+		} else {
+			this.innerHTML = htmlSvgSymbol('ico-check-off');
+		}
+	}
 }
 
 customElements.define("c-check", CheckElement);

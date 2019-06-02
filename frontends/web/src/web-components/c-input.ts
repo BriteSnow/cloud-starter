@@ -1,9 +1,9 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-input.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { on, frag } from "mvdom";
-import { attr, elem, css } from "mvdom-xp";
-import { BaseFieldElement } from "./c-base";
+import { on, frag } from 'mvdom';
+import { attr, elem, css } from 'mvdom-xp';
+import { BaseFieldElement } from './c-base';
 
 
 /**
@@ -11,21 +11,24 @@ import { BaseFieldElement } from "./c-base";
  * component styles are global but scoped via css naming (see c-input.pcss). 
  * 
  * Usage: `<c-input name="fieldNameA" value="value A"></c-input>`
- * See:  SpecControlsView.tmpl, SpecControlsView.ts
+ * See:  http://localhost:8080/_spec/controls
  * 
- * Component Attributes: 
+ * Attributes: 
  *   - See BaseFieldElement.
  *   - `password?`: set input as password
  * 
- * Component Events: 
- *   - `CHANGE` see BaseFieldElement.
- * 
- * Component Poperties: 
+ * Properties: 
  *   - See BaseFieldElement.
  *   - `password: boolean`: reflective of attribute.
  * 
- * Component CSS:
+ * CSS:
  *   - See BaseFieldElement.
+ * 
+ * Content:
+ *   - none
+ * 
+ * Events:
+ *   - `CHANGE` see BaseFieldElement.
  * 
  */
 
@@ -37,11 +40,11 @@ export class InputElement extends BaseFieldElement {
 	labelEl!: HTMLElement;
 	inputEl!: HTMLInputElement;
 
-	//// Attribute Reflective Properties
+	//// Properties (CSS Reflective)
 	get focused(): boolean { return this.classList.contains('focused') };
 	set focused(b: boolean) { css(this, { focused: b }) };
 
-	//// Properties
+	//// Property (Value)
 	get value() { return this.inputEl.value };
 	set value(val: any) { // today takes any, will get parsed by standard html input element .value
 		const inputEl = this.inputEl;
@@ -58,11 +61,13 @@ export class InputElement extends BaseFieldElement {
 		// update the empty state
 		this.noValue = (!(newVal && newVal.length > 0));
 
-		// Note: If the UI call this setter, will always be ===
+		// Note: If the UI call this setter, will always be input value old/new will be always equals.
 		//       however, it if is programmatic call, it might be different. so for now, we have to always trigger it. 
+		//       TODO: need to find a way to trigger only on change.
 		this.triggerChange();
 	};
 
+	//#region    ---------- Component Lifecycle Methods ---------- 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 		super.init();
@@ -124,6 +129,7 @@ export class InputElement extends BaseFieldElement {
 		}
 
 	}
+	//#region    ---------- /Component Lifecycle Methods ---------- 
 }
 
 customElements.define("c-input", InputElement);

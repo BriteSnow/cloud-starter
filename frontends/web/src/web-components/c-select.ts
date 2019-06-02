@@ -1,33 +1,34 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-select.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { all, first, frag, off, on, trigger } from "mvdom";
-import { attr, style } from "mvdom-xp";
-import { BaseFieldElement } from "./c-base";
+import { all, first, frag, off, on, trigger } from 'mvdom';
+import { attr, style } from 'mvdom-xp';
+import { BaseFieldElement } from './c-base';
 
 /**
  * c-select is a select component.
  *
  * Usage: `<c-select name="fieldA" value="0"><option value="0">Item 0</option></c-select>`
- * See:  SpecControlsView.tmpl, SpecControlsView.ts
+ * See:  http://localhost:8080/_spec/controls
  * 
- * Component Attributes:
+ * Attributes:
  *   - See BaseFieldElement.
  * 
- * Component Properties:
+ * Properties:
+ *   - See BaseFieldElement.
  *   - `options: Option[]` The list of options object for this field. Can be initialized with HTML content or with the DATA API.
  * 
- * Component Content (NOT reflective, just for initialization)
+ * CSS:
+ *   - See BaseFieldElement.
+ * 
+ * Content (NOT reflective, just for initialization)
  *   - List of `<option value="1">Value 1</option>` (value must be unique, one can be non present, which === null)
  *   - or shorthand for one option `<c-select value="1">Value One</c-select>` will create one `<option` with this value/content
  *   - or shorhand for place holder `<c-select>Select User</c-select>` same as `<c-select placeholder="Select User"></c-select>`
  * 
- * Component Events:
+ * Events:
  *   - `CHANGE` see BaseFieldElement.
  *   - `DATA` with `evt.detail: {sendData: (options: Option[]) => void}` that provide a data callback when the component needs the data.
- * 
- * Component CSS: 
- *   - See BaseFieldElement.
  * 
  */
 type Option = { content: string, value: string | null };
@@ -35,17 +36,15 @@ type Option = { content: string, value: string | null };
 class SelectElement extends BaseFieldElement {
 	labelEl: any;
 
-	static get observedAttributes() {
-		return BaseFieldElement.observedAttributes.concat();
-	}
+	static get observedAttributes() { return BaseFieldElement.observedAttributes.concat(); }
 
-	options: Option[] = [];
-
-	// 
+	//// Key Elements
 	contentEl!: HTMLElement;
 
+	//// Properties
+	options: Option[] = [];
 
-	//#region    ---------- Component States ---------- 
+	//// Property (Value)
 	get value() {
 		return this.getAttribute('value');
 	}
@@ -53,7 +52,6 @@ class SelectElement extends BaseFieldElement {
 		attr(this, 'value', v);
 		this.refresh();
 	}
-	//#endregion ---------- /Component States ---------- 
 
 	//#region    ---------- Component Events ----------
 	triggerData(sendData: (options: Option[]) => void) {
@@ -62,6 +60,7 @@ class SelectElement extends BaseFieldElement {
 	//#endregion ---------- /Component Events ---------- 
 
 
+	//#region    ---------- Component Lifecycle Methods ---------- 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 
@@ -129,6 +128,7 @@ class SelectElement extends BaseFieldElement {
 
 		});
 	}
+	//#region    ---------- /Component Lifecycle Methods ---------- 
 
 	refresh() {
 		const val = this.value;
@@ -149,20 +149,23 @@ customElements.define("c-select", SelectElement);
 
 
 //#region    ---------- SelectPopupElement ---------- 
+/**
+ * Component to be used only by the SelectElement (for now).
+ */
 class SelectPopupElement extends BaseFieldElement {
 	_options!: Option[];
 	_select!: SelectElement;
 
+	//// Properties
 	get options() { return this._options };
-
 	set options(val: Option[]) {
-		console.log('>>> SelectPopupElement.options', val);
 		this._options = val;
 		if (this.initialized) {
 			this.render();
 		}
 	}
 
+	//#region    ---------- Component Lifecycle Methods ---------- 
 	init() {
 		super.init();
 
@@ -203,6 +206,15 @@ class SelectPopupElement extends BaseFieldElement {
 
 	}
 
+	// IMPORTANT: unregister parent DOM event bindings in the disconnectedCallback
+	disconnectedCallback() {
+		super.disconnectedCallback(); // ALWAYS
+		off(document, { ns: this.uid });
+	}
+
+	//#region    ---------- /Component Lifecycle Methods ---------- 
+
+
 	render() {
 		const selectVal = this._select.value;
 		let html = `\n<ul>`;
@@ -215,13 +227,6 @@ class SelectPopupElement extends BaseFieldElement {
 		this.innerHTML = html;
 	}
 
-
-
-	// IMPORTANT: unregister parent DOM event bindings in the disconnectedCallback
-	disconnectedCallback() {
-		super.disconnectedCallback(); // ALWAYS
-		off(document, { ns: this.uid });
-	}
 }
 customElements.define("c-select-popup", SelectPopupElement);
 //#endregion ---------- /SelectPopupElement ----------

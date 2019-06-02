@@ -101,13 +101,11 @@ export class LoginView extends BaseView {
 			// remove opacity to be full
 			style(this.googleLink, { opacity: null });
 		}
-		console.log('>>>', this.mode, oauthUrl);
 	}
 	//#endregion ---------- /View Lifecycle ---------- 
 
 	private async doLogin() {
 		const data = pull(this.fieldset);
-		console.log('>>> doLogin', data);
 		try {
 			const result = await login(data.username, data.pwd);
 			if (result.success) {

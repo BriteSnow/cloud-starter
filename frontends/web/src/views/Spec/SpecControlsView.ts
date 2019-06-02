@@ -8,7 +8,7 @@ import { wait } from "shared/utils";
 export class SpecControlsView extends BaseView {
 	events = addDomEvents(this.events, {
 
-		'CHANGE; c-field': async (evt) => {
+		'CHANGE; .c-field': async (evt) => {
 			console.log('.c-field CHANGE evt.detail', evt.detail);
 		},
 

@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-base.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { puller, pusher, trigger } from "mvdom";
-import { attr, css } from "mvdom-xp";
+import { puller, pusher, trigger } from 'mvdom';
+import { attr, css } from 'mvdom-xp';
 
 // component unique sequence number to allow to have cheap UID for each component
 let c_seq = 0;
@@ -10,11 +10,14 @@ let c_seq = 0;
 /**
  * BaseHTMLElement that all custom elements from this application should inherit from. 
  * 
+ * SubClass Usage:
+ *   - `init()` to create/modify the innerHTML/children, bind events. Must call `super.init()`
+ *   - `this.uid` is the unique id for this component instance, so, can use to bind parent element events for later cleanup.
+ *   - `disconnectedCallback()` to unbind any events bound to the parent of the component (document event binding). Must call `super.disconnectedCallback()`
  * 
- * Then, in sub component. 
- * - Implement the `init()` to set the innerHTML or append children element (it will be called only once)
- * - If `connectedCallback()` implemented in sub component, make sure to call `super.connectedCallback()` to have the init logic. 
- * - Never call `init()` from anywhere. Only `BaseHTMLElement.connectedCallback()` implementation should call `init()`
+ * Important: 
+ *   - SubClass should/must override `init()` but never call `init()` from anywhere. Only `BaseHTMLElement.connectedCallback()` implementation should call `init()`
+ *   - All calls to custom element interface `disconnectedCallback()` `connectedCallback()` `attributeChangedCallback()` MUST call their `super...` method.
  * 
  */
 export abstract class BaseHTMLElement extends HTMLElement {
@@ -69,7 +72,7 @@ export abstract class BaseHTMLElement extends HTMLElement {
  * This will also automatically set the component as css class `dx` if it has a name, 
  * so that by default they pushed/pulled by `mvdom push/pull` system.
  * 
- * Component Attributes:
+ * Attributes:
  *   - `readonly`: set the component as readonly.
  *   - `disabled`: set the component as disabled.
  *   - `name?`: reflective of 'name' property. If absent, `.no-name` css class.
@@ -77,35 +80,34 @@ export abstract class BaseHTMLElement extends HTMLElement {
  *   - `value?`: this is the initial value of the component. TODO: needs to unify when no value (right now .empty for input, .no-value for c-select)
  *   - `placeholder?`: placeholder text.
  * 
- * Component Properties: 
+ * Properties: 
  *   - `readonly: boolean`: reflective of attribute.
  * 	 - `disabled: boolean`: reflective of attribute.
  *   - `noValue: boolean`: reflective of css `no-value`.
  *   - `name?: string`: reflective of attribute.
- *   - `placeholder?: string`: 
- *   - `label?: string`: Manged by subClass.
- *   - `value?: any`: field value. Managed by subClass. (reflection undefined).
- *
- * Component Events:
- *   - `CHANGE` Sub Class call `triggerChange()` which will trigger a `evt.detail: {name: string, value: string}`.
+ *   - `placeholder?: string`: reflective of attribute.
+ *   - `label?: string`: Manged by subClass. (reflection up to subclasss).
+ *   - `value?: any`: Managed by subClass. (reflection up to subclasss).
+ *   - `noValue: boolean`: reflective of CSS Attribute.
  * 
- * Component CSS: 
+ * CSS:
  *  - `.no-value` when the field has no value (for now, managed by sub class)
- *  - `.no-label` when teh field has no label.
+ *  - `.no-label` when the field has no label.
  *  - `.dx` will be added when field component has a name.
  * 
- * Sub class MUST
- * - Sub classes MUST call `super.init()` in their `init()` implementation.
+ * Events:
+ *   - `CHANGE` Sub Class call `triggerChange()` which will trigger a `evt.detail: {name: string, value: string}`.
+ * 
+ * Sub class MUST:
+ *   - Sub classes MUST call `super.init()` in their `init()` implementation.
+ *   - Manage value property
  * 
  */
 export class BaseFieldElement extends BaseHTMLElement {
 
 	static get observedAttributes(): string[] { return ['disabled', 'readonly', 'placeholder']; }
 
-	//// BaseField states
-	value: any; // needs to be implemented by subclass
-
-	//// Attribute Reflective Properties
+	//// Properties (Attribute Reflective)
 	get readonly(): boolean { return this.hasAttribute('readonly') };
 	set readonly(v: boolean) { attr(this, 'readonly', (v) ? '' : null) };
 
@@ -118,9 +120,12 @@ export class BaseFieldElement extends BaseHTMLElement {
 	get placeholder() { return attr(this, 'placeholder') };
 	set placeholder(v: string | null) { attr(this, 'placeholder', v) };
 
-	//// CSS Reflective Properties
+	//// Properties (CSS Reflective)
 	get noValue() { return this.classList.contains('no-value') };
 	set noValue(v: boolean) { css(this, { 'no-value': v }) };
+
+	//// Property (Value)
+	value: any; // needs to be implemented by subclass
 
 	init() {
 		super.init(); // best practice, even if it in this case, the parent.init() is blank. 
@@ -148,6 +153,7 @@ export class BaseFieldElement extends BaseHTMLElement {
 			trigger(this, "CHANGE", { detail: { name, value } });
 		}
 	}
+
 	// Called when an observed attribute has been added, removed, updated, or replaced
 	attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
 		super.attributeChangedCallback(attrName, oldVal, newVal); // always

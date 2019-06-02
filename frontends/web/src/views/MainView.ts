@@ -28,7 +28,7 @@ export class MainView extends BaseView {
 	private get nav() { return first(this.el, 'nav')! };
 	protected get main() { return first(this.el, 'main')! };
 	protected get headerAside() { return first(this.el, 'header aside')! }
-	protected get userMenu() { return first(this.el, 'header aside .menu')! };
+	protected get userMenu() { return first(this.el, 'header aside c-menu')! };
 
 	//#region    ---------- View Events ---------- 
 	events = addDomEvents(this.events, {
@@ -40,18 +40,18 @@ export class MainView extends BaseView {
 			// if the menu is showing, we hide it only if the user is not clicking on the aside again 
 			// ('click; aside' will handle the multi click on 'aside')
 			if (this._userMenuShowing && target.closest('aside') !== this.headerAside) {
-				this.userMenu.classList.add("displayNone");
+				this.userMenu.classList.add("display-none");
 				this._userMenuShowing = false;
 			}
 		},
 
 		'click; .toogle-user-menu': async (evt) => {
 			evt!.cancelBubble = true;
-			if (this.userMenu.classList.contains('displayNone')) {
-				this.userMenu.classList.remove('displayNone');
+			if (this.userMenu.classList.contains('display-none')) {
+				this.userMenu.classList.remove('display-none');
 				this._userMenuShowing = true;
 			} else {
-				this.userMenu.classList.add('displayNone');
+				this.userMenu.classList.add('display-none');
 				this._userMenuShowing = false;
 			}
 
