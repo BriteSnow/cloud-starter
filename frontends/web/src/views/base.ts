@@ -1,12 +1,12 @@
-// source: https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/base.ts
-
-/// This module define the BaseView mvdom View implementation that should be used for all Application Views. 
-/// It also define couple of helper types, functions, and routing base logic. 
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/base.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { ExtendedDOMEventListener, View } from "mvdom";
 import { render } from "ts/render";
 import { pathAt, RouteInfo } from "ts/route";
 
+/// This module define the BaseView mvdom View implementation that should be used for all Application Views. 
+/// It also define couple of helper types, functions, and routing base logic. 
 
 export type RouteInfo = RouteInfo;
 

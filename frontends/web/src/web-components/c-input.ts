@@ -103,6 +103,11 @@ export class InputElement extends BaseFieldElement {
 					break;
 			}
 		});
+
+		// TODO: minor bug when user re-click on label when input is empty, it toggle focus off. 
+		on(this, 'click', 'label', (evt) => {
+			this.inputEl.focus();
+		});
 	}
 
 	attributeChangedCallback(name: string, oldVal: any, newVal: any) {
