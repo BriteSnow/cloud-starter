@@ -60,7 +60,8 @@ class SelectElement extends BaseFieldElement {
 	//#endregion ---------- /Component Events ---------- 
 
 
-	//#region    ---------- Component Lifecycle Methods ---------- 
+	//#region    ---------- Lifecycle ---------- 
+
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 
@@ -128,7 +129,7 @@ class SelectElement extends BaseFieldElement {
 
 		});
 	}
-	//#region    ---------- /Component Lifecycle Methods ---------- 
+	//#endregion ---------- /Lifecycle ---------- 
 
 	refresh() {
 		const val = this.value;
@@ -165,7 +166,7 @@ class SelectPopupElement extends BaseFieldElement {
 		}
 	}
 
-	//#region    ---------- Component Lifecycle Methods ---------- 
+	//#region    ---------- Lifecycle ---------- 
 	init() {
 		super.init();
 
@@ -212,7 +213,7 @@ class SelectPopupElement extends BaseFieldElement {
 		off(document, { ns: this.uid });
 	}
 
-	//#region    ---------- /Component Lifecycle Methods ---------- 
+	//#region ---------- /Lifecycle ---------- 
 
 
 	render() {
@@ -229,4 +230,5 @@ class SelectPopupElement extends BaseFieldElement {
 
 }
 customElements.define("c-select-popup", SelectPopupElement);
+
 //#endregion ---------- /SelectPopupElement ----------

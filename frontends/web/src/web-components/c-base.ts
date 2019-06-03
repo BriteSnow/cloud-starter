@@ -73,8 +73,8 @@ export abstract class BaseHTMLElement extends HTMLElement {
  * so that by default they pushed/pulled by `mvdom push/pull` system.
  * 
  * Attributes:
- *   - `readonly`: set the component as readonly.
- *   - `disabled`: set the component as disabled.
+ *   - `readonly?`: set the component as readonly.
+ *   - `disabled?`: set the component as disabled.
  *   - `name?`: reflective of 'name' property. If absent, `.no-name` css class.
  *   - `label?`: if absent, this css `.no-label` will be set.
  *   - `value?`: this is the initial value of the component. TODO: needs to unify when no value (right now .empty for input, .no-value for c-select)
@@ -88,12 +88,15 @@ export abstract class BaseHTMLElement extends HTMLElement {
  *   - `placeholder?: string`: reflective of attribute.
  *   - `label?: string`: Manged by subClass. (reflection up to subclasss).
  *   - `value?: any`: Managed by subClass. (reflection up to subclasss).
- *   - `noValue: boolean`: reflective of CSS Attribute.
+ *   - `noValue: boolean`: reflective of CSS Attribute `.no-label`.
  * 
  * CSS:
  *  - `.no-value` when the field has no value (for now, managed by sub class)
  *  - `.no-label` when the field has no label.
  *  - `.dx` will be added when field component has a name.
+ * 
+ * Content: 
+ *  - (subclass dependent)
  * 
  * Events:
  *   - `CHANGE` Sub Class call `triggerChange()` which will trigger a `evt.detail: {name: string, value: string}`.
@@ -127,6 +130,7 @@ export class BaseFieldElement extends BaseHTMLElement {
 	//// Property (Value)
 	value: any; // needs to be implemented by subclass
 
+	//#region    ---------- Lifecycle ---------- 
 	init() {
 		super.init(); // best practice, even if it in this case, the parent.init() is blank. 
 
@@ -144,16 +148,6 @@ export class BaseFieldElement extends BaseHTMLElement {
 			this.classList.add('dx', 'c-field');
 		}
 	}
-
-	triggerChange() {
-		// Will trigger only if the component has been initialized
-		if (this.initialized) {
-			const value = this.value;
-			const name = this.name;
-			trigger(this, "CHANGE", { detail: { name, value } });
-		}
-	}
-
 	// Called when an observed attribute has been added, removed, updated, or replaced
 	attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
 		super.attributeChangedCallback(attrName, oldVal, newVal); // always
@@ -165,6 +159,18 @@ export class BaseFieldElement extends BaseHTMLElement {
 				break;
 		}
 	}
+	//#endregion ---------- /Lifecycle ---------- 
+
+
+	triggerChange() {
+		// Will trigger only if the component has been initialized
+		if (this.initialized) {
+			const value = this.value;
+			const name = this.name;
+			trigger(this, "CHANGE", { detail: { name, value } });
+		}
+	}
+
 }
 
 //#region    ---------- Register mvdom dx ---------- 

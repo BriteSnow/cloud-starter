@@ -11,10 +11,6 @@ import { BaseHTMLElement } from "./c-base";
  *   - The first level children can be `div` or `a`
  * 
  */
-class MenuElement extends BaseHTMLElement {
+class MenuElement extends BaseHTMLElement { }
 
-	init() {
-		super.init();
-	}
-}
 customElements.define("c-menu", MenuElement);

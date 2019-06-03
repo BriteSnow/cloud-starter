@@ -67,7 +67,7 @@ export class InputElement extends BaseFieldElement {
 		this.triggerChange();
 	};
 
-	//#region    ---------- Component Lifecycle Methods ---------- 
+	//#region    ---------- Lifecycle ---------- 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 		super.init();
@@ -129,7 +129,7 @@ export class InputElement extends BaseFieldElement {
 		}
 
 	}
-	//#region    ---------- /Component Lifecycle Methods ---------- 
+	//#endregion ---------- /Lifecycle ---------- 
 }
 
 customElements.define("c-input", InputElement);

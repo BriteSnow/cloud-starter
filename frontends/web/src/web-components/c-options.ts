@@ -60,7 +60,7 @@ class OptionsElement extends BaseFieldElement {
 		}
 	}
 
-	//#region    ---------- Component Lifecycle Methods ---------- 
+	//#region    ---------- Lifecycle ---------- 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 		super.init();
@@ -88,7 +88,7 @@ class OptionsElement extends BaseFieldElement {
 			this.triggerChange();
 		});
 	}
-	//#region    ---------- /Component Lifecycle Methods ---------- 
+	//#endregion ---------- /Lifecycle ---------- 
 
 }
 

@@ -20,10 +20,7 @@ import { htmlSvgSymbol } from './c-ico-symbol';
  * Properties:
  *   - See BaseFieldElement.
  *   - `value`: If checkbox checked true or 'value' attribute if present, otherwise, if not checked false.
- *   - `checked: boolean`: reflective of attribute.
- *   - value: can be set to true/false for setting checked, 
- *            or match attribute 'value' (if match true otherwise false), 
- *            returns false if check is off, or true or 'value' attribute value if checked === true
+ *   - `checked: boolean`: reflective of Attribute.
  * 
  * CSS:
  *   - See BaseFieldElement.
@@ -75,7 +72,7 @@ class CheckElement extends BaseFieldElement {
 	}
 
 
-	//#region    ---------- Component Lifecycle Methods ---------- 
+	//#region    ---------- Lifecycle ---------- 
 	// Component initialization (will be called once by BaseHTMLElement on first connectedCallback)
 	init() {
 		super.init(); // just call it for BaseFieldElement sub classes.
@@ -103,7 +100,7 @@ class CheckElement extends BaseFieldElement {
 		}
 
 	}
-	//#endregion ---------- /Component Lifecycle Methods ---------- 
+	//#endregion ---------- /Lifecycle ---------- 
 
 	refresh() {
 		if (this.checked) {

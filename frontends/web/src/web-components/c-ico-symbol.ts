@@ -19,14 +19,20 @@ export function htmlSvgSymbol(name: string) {
  * Usage: `<c-ico>user</c-ico>`
  * 
  * Attributes: 
- *   - 'name' Name of the ico, without the 'ico-' prefix ('ico-' prefix will be added). 
- *            if absent, nothing will be displayed. 
+ *   - none
+ * 
+ * Properties: 
+ *   - none
+ * 
+ * Content:
+ *   - icon name with the `ico-` prefix.
  * 
  * Properties: none
  * 
  */
 class IcoElement extends BaseHTMLElement {
 
+	//#region    ---------- Lifecycle ---------- 
 	init() {
 		let name = this.innerText.trim();
 
@@ -36,6 +42,8 @@ class IcoElement extends BaseHTMLElement {
 			this.innerHTML = htmlSvgSymbol(name);
 		}
 	}
+	//#endregion ---------- /Lifecycle ---------- 
+
 }
 customElements.define("c-ico", IcoElement);
 //#endregion ---------- /c-ico ---------- 
@@ -49,14 +57,19 @@ customElements.define("c-ico", IcoElement);
  * 
  * Usage: `<c-symbol>ico-user</c-symbol>`
  * 
- * Component Attributes: 
- *   - 'name' Full name of the svg symbol. 
+ * Attributes: 
+ *   - none
  * 
- * Component States: no states at this point. 
+ * Properties:
+ *   - none
+ * 
+ * Content:
+ *   - symbol name
  * 
  */
 class SymbolElement extends BaseHTMLElement {
 
+	//#region    ---------- Lifecycle ---------- 
 	init() {
 		let name = this.innerText.trim();
 
@@ -65,6 +78,8 @@ class SymbolElement extends BaseHTMLElement {
 			this.innerHTML = htmlSvgSymbol(name);
 		}
 	}
+	//#endregion ---------- /Lifecycle ---------- 
+
 }
 customElements.define("c-symbol", SymbolElement);
 //#endregion ---------- /c-ico ----------

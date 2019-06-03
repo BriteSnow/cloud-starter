@@ -13,6 +13,10 @@ realms:
     context: docker-for-desktop
     yamlDir: dev/ # for dev, we override the yamlDir
     imageTag: {{@root.dropVersion}}
+  
+  aws:
+    profile: default
+    context: 349642121055.dkr.ecr.us-west-2.amazonaws.com
 
 blocks:
   - db
