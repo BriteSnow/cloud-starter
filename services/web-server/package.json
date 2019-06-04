@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/bigquery": "^4.1.0",
+    "@google-cloud/bigquery": "^4.1.1",
     "@types/cookie-parser": "^1.4.1",
     "@types/express": "^4.16.1",
     "@types/mocha": "^5.2.7",
@@ -27,7 +27,7 @@
     "express": "^4.17.1",
     "fs-extra-plus": "^0.5.6",
     "googleapis": "^40.0.0",
-    "knex": "^0.17.1",
+    "knex": "^0.17.3",
     "mocha": "^6.1.4",
     "module-alias": "^2.2.0",
     "moment": "^2.24.0",

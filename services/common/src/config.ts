@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { getKnex } from './da/db';
-import { ConfigType, staticConfigurations } from 'config-type';
+import { ConfigType, staticConfigurations } from './config-type';
 
 
 /**
