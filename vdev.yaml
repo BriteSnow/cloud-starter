@@ -19,6 +19,7 @@ realms:
     context: arn:aws:eks:us-west-2:349642121055:cluster/eks-cluster-01
     registry: 349642121055.dkr.ecr.us-west-2.amazonaws.com/
     imageTag: {{@root.dropVersion}}
+    defaultConfigurations: ['agent', 'db', 'queue', 'web-server']
 
   jc-prod:
     confirmOnDelete: true
