@@ -1,17 +1,12 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/queue.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { getKnex } from './da/db';
+import { ConfigType } from 'config-type';
 
 // IMPORTANT: Do not change this appVersion value manually, change it in the package.json and do a "npm run version"
 const staticConfigurations: any = {
 	appVersion: "DROP-001-SNAPSHOT"
-}
-
-
-// Type was can be typed by config name (if not, the getConfig return type will be any, thanks to the conditional typing below)
-interface Configs {
-	github: { client_id: string, client_secret: string };
-	db: { database: string, user: string, password: string, host: string };
-	bigquery: { client_email: string, project_id: string, private_key: string };
-	google_oauth: { client_id: string, client_secret: string, redirect_url: string }
 }
 
 /**
@@ -19,7 +14,7 @@ interface Configs {
  * 
  */
 // NOTE: Conditional typing is only use as declaration, implementation signature should be conditional less (see:  https://stackoverflow.com/a/52144866/686724)
-export async function getConfig<T extends keyof Configs | string>(name: T): Promise<T extends keyof Configs ? Configs[T] : any>;
+export async function getConfig<T extends keyof ConfigType | string>(name: T): Promise<T extends keyof ConfigType ? ConfigType[T] : any>;
 export async function getConfig(name: string): Promise<any> {
 	let data: any | undefined;
 	// first, try to get it from the environment
