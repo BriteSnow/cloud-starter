@@ -1,0 +1,28 @@
+# Note: here we do not need a k8s service since this service does not have any web/socket API (it connects to redis, but nobody connects to it)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: cstar-agent
+  name: cstar-agent-dep
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: cstar-agent
+  template:
+    metadata:
+      labels:
+        run: cstar-agent
+    spec:
+      containers:
+        - image: {{registry}}cstar-agent:{{imageTag}}
+          name: cstar-agent-ctn
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: cstar-config
+            - secretRef:
+                name: cstar-secret
+      restartPolicy: Always

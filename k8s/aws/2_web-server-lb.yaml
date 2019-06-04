@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: cstar-web-server
+  name: cstar-web-server-srv
+  namespace: default
+spec:
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: ndebug
+    port: 9229
+    protocol: TCP
+    targetPort: 9229
+  selector:
+    run: cstar-web-server
+  type: LoadBalancer

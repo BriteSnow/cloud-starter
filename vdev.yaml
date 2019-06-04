@@ -10,13 +10,20 @@ realms:
     webExternalPort: 8080
 
   dev:
-    context: docker-for-desktop
     yamlDir: dev/ # for dev, we override the yamlDir
+    context: docker-for-desktop
     imageTag: {{@root.dropVersion}}
   
   aws:
-    profile: default
-    context: 349642121055.dkr.ecr.us-west-2.amazonaws.com
+    yamlDir: aws/
+    context: arn:aws:eks:us-west-2:349642121055:cluster/eks-cluster-01
+    registry: 349642121055.dkr.ecr.us-west-2.amazonaws.com/
+    imageTag: {{@root.dropVersion}}
+
+  jc-prod:
+    confirmOnDelete: true
+    context: gke_jc-prod_us-west1-b_jc-sites-cluster-a
+    project: jc-prod
 
 blocks:
   - db

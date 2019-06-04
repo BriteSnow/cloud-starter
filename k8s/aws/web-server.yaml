@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: cstar-web-server
+  name: cstar-web-server-dep
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: cstar-web-server
+  template:
+    metadata:
+      labels:
+        run: cstar-web-server
+    spec:
+      volumes:
+        # Those volumes are for development, it allow REPL dev from local build
+        - name: cstar-web-server-web-folder
+          hostPath:
+            path: {{projectDir}}services/web-server/web-folder
+            type: Directory
+        - name: cstar-web-server-src
+          hostPath:
+            path: {{projectDir}}services/web-server/src
+            type: Directory
+        - name: cstar-web-server-dist
+          hostPath:
+            path: {{projectDir}}services/web-server/dist
+            type: Directory
+      containers:
+        - image: localhost:5000/cstar-web-server:{{imageTag}}
+          name: cstar-web-server-ctn
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: cstar-config
+            - secretRef:
+                name: cstar-secret
+          volumeMounts:
+            - mountPath: /service/web-folder
+              name: cstar-web-server-web-folder
+            - mountPath: /service/src
+              name: cstar-web-server-src
+            - mountPath: /service/dist
+              name: cstar-web-server-dist
+      restartPolicy: Always
