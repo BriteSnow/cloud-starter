@@ -1,4 +1,7 @@
 
+export const staticConfigurations: any = {
+	appVersion: "DROP-001-SNAPSHOT"
+}
 
 // Type was can be typed by config name (if not, the getConfig return type will be any, thanks to the conditional typing below)
 export interface ConfigType {

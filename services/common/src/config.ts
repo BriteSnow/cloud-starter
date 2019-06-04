@@ -2,12 +2,8 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { getKnex } from './da/db';
-import { ConfigType } from 'config-type';
+import { ConfigType, staticConfigurations } from 'config-type';
 
-// IMPORTANT: Do not change this appVersion value manually, change it in the package.json and do a "npm run version"
-const staticConfigurations: any = {
-	appVersion: "DROP-001-SNAPSHOT"
-}
 
 /**
  * Return a configuration from a configuration name. Those configuration could be static, comes from redis, or from DB (and cached).

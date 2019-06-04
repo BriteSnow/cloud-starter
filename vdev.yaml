@@ -55,5 +55,5 @@ blocks:
 
 version: 
   files:
-    - services/common/src/config.ts
+    - services/common/src/config-type.ts
     - services/db/info.yaml
