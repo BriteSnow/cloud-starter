@@ -34,8 +34,8 @@ class IcoElement extends BaseHTMLElement {
 
 	//#region    ---------- Lifecycle ---------- 
 	init() {
-		let name = this.innerText.trim();
-
+		const tc = this.textContent;
+		let name = (tc) ? tc.trim() : null;
 		if (name) {
 			name = 'ico-' + name; // by convention
 			this.classList.add(name);
@@ -71,8 +71,8 @@ class SymbolElement extends BaseHTMLElement {
 
 	//#region    ---------- Lifecycle ---------- 
 	init() {
-		let name = this.innerText.trim();
-
+		let tc = this.textContent;
+		let name = (tc) ? tc.trim() : null;
 		if (name) {
 			this.classList.add(name);
 			this.innerHTML = htmlSvgSymbol(name);

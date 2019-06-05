@@ -21,7 +21,7 @@ export class DialogBase extends BaseView {
 	set title(title: string) {
 		const titleEl = first(this.el, '.dialog > header > .title');
 		if (titleEl) {
-			titleEl.innerText = title;
+			titleEl.textContent = title;
 		}
 		// if not el yet, then, store it in temp
 		else {

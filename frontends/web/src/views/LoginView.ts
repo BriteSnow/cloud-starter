@@ -34,11 +34,11 @@ export class LoginView extends BaseView {
 
 	private set message(txt: string | null) {
 		if (txt != null) {
-			this.footerMessage.innerText = txt;
+			this.footerMessage.textContent = txt;
 			this.el.classList.add('has-message');
 		} else {
 			if (this.el.classList.contains('has-message')) {
-				this.footerMessage.innerText = '';
+				this.footerMessage.textContent = '';
 				this.el.classList.remove('has-message');
 			}
 		}
@@ -129,7 +129,7 @@ export class LoginView extends BaseView {
 
 		} catch (ex) {
 			console.log('error register', ex);
-			this.footerMessage.innerText = ex.error || ex.message;
+			this.footerMessage.textContent = ex.error || ex.message;
 		}
 	}
 

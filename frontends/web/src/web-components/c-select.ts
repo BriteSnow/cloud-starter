@@ -95,7 +95,7 @@ class SelectElement extends BaseFieldElement {
 		//// Create Content
 		let tmp = frag(`<label></label><div></div><c-ico>chevron-down</c-ico>`);
 		[this.labelEl, this.contentEl] = [...tmp.children] as HTMLElement[];
-		this.labelEl.innerText = label;
+		this.labelEl.textContent = label;
 		this.innerHTML = ''; // to remove
 		this.appendChild(tmp);
 
@@ -137,7 +137,7 @@ class SelectElement extends BaseFieldElement {
 		const option = this.options.find(o => (o.value === val));
 
 		if ((option == null || option.value == null) && placeholder != null) {
-			this.contentEl.innerText = placeholder;
+			this.contentEl.textContent = placeholder;
 		} else if (option) {
 			this.contentEl.innerHTML = option.content;
 		}
