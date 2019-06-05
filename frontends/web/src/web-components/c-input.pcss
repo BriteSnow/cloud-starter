@@ -1,4 +1,5 @@
 /* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-input.pcss" /> */
+@import "../_pcss/mixins-all.pcss";
 
 c-input{
 	
@@ -7,38 +8,39 @@ c-input{
 	/* /Component Styling Parameters */
 
 	background: var(--bkg);
-	margin-bottom: 1rem;
 	border-bottom: solid 1px var(--bdr);
 	position: relative;
-	height: 3rem;
-	padding-left: 1rem;
+	min-height: 3.25rem;
 	display: grid;
-	grid-template-rows: 1rem 1fr;
+	grid-template-rows: 1.25rem 1fr;
+	align-items: stretch; 
+
 
 	& > label {
 		grid-row: 1;
 		grid-column: 1;
 		@mixin typo-label{};
 		display: flex;
-		z-index: 0;
-		align-items: flex-start;
-		display: flex;
-		align-self: center;
-		font-size: .75rem;
+		
 	}
 
 	& > input{
 		grid-row: 2;
 		grid-column: 1;
+		padding-left: .5rem;
 		z-index: 10;
 		background: none;
+		@mixin typo-input{};
 	}
 
+	&.no-label{
+		grid-template-rows: 0 2rem; /* TODO: cstar */		
+		min-height: 2rem;  /* TODO: cstar */
+		height: 2rem;
+	}	
+
+	/* empty for now. no value, no place holder, no focused. Used when we want the label over input (but for now, simple, we don't) */
 	&.no-value:not([placeholder]):not(.focused){
-		& > label{
-			grid-row: 2;
-			font-size: .875rem;
-		}
 	}
 	
 	&.focused{
