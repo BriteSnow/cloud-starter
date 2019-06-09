@@ -42,6 +42,8 @@ class OptionsElement extends BaseFieldElement {
 	}
 
 	set value(val: string | null) {
+		// stringify
+		val = (typeof val !== 'string' && val != null) ? '' + val : val;
 		const old = this.value;
 
 		const items = all(this, 'c-options > div');
