@@ -12,7 +12,6 @@ spec:
     targetPort: 5432
   selector:
     run: cstar-db # this will select from the template.spec.metadata.labels (the pod)
-  type: LoadBalancer
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -32,7 +31,7 @@ spec:
         run: cstar-db
     spec:
       containers:
-      - image: localhost:5000/cstar-db:{{imageTag}}
+      - image: {{registry}}cstar-db:{{imageTag}}
         imagePullPolicy: Always
         name: cstar-db-ctn
         ports:
