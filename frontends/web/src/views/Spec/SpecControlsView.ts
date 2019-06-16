@@ -14,11 +14,15 @@ export class SpecControlsView extends BaseView {
 
 		'DATA; c-select[name="fieldK"]': async (evt) => {
 			await wait(1000); // test delay 
-			evt.detail.sendData([
+			const data = [
 				{ value: '0', content: 'value 0' },
 				{ value: 'K', content: 'value K' },
 				{ value: '1', content: 'value 1' }
-			])
+			];
+			for (let i = 2; i < 30; i++) {
+				data.push({ value: `${i}`, content: `value ${i}` });
+			}
+			evt.detail.sendData(data);
 		},
 
 		// test c-inputs
