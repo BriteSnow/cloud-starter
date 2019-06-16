@@ -9,15 +9,15 @@ import { BaseFieldElement } from './c-base';
  * c-options custom element encapsulate a label/input field group ()`c-input > label, input`) structure.
  * component styles are global but scoped via css naming (see c-input.pcss).
  *
- * Usage: `<c-options name="state" values="1:Open, 0:Close, 2 : Both" value="0"></c-options>`
+ * Usage: `<c-options name="state" options="1:Open, 0:Close, 2 : Both" value="0"></c-options>`
  * See:  http://localhost:8080/_spec/controls
  * 
  * Attributes:
  *   - See BaseFieldElement.
  *   - `value?`: See BaseFieldElement. String matching the "value" part of value. TODO: need to make reflective.
- *   - `values`: possible values with format [value: label, value: label] (0: cat, 1: dog). 
+ *   - `options`: possible options with format [value: label, value: label] (0: cat, 1: dog). 
  *             'value' act as a key, can be be any string (value and label will be trimmed)
- *             e.g., values='0: cat, 1: dog, 2: lion'
+ *             e.g., options='0: cat, 1: dog, 2: lion'
  * 
  * Properties:
  *   - See BaseFieldElement.
@@ -67,12 +67,12 @@ class OptionsElement extends BaseFieldElement {
 	init() {
 		super.init();
 
-		const [values, value] = attr(this, ['values', 'value']);
+		const [options, value] = attr(this, ['options', 'value']);
 
 		//// Build the component HTML
 		let html = '';
-		if (values) {
-			for (const line of values.split(',')) {
+		if (options) {
+			for (const line of options.split(',')) {
 				let [val, label] = line.split(':');
 				val = val.trim();
 				label = label.trim();
