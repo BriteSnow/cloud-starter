@@ -2,8 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { on, frag } from 'mvdom';
-import { attr, elem, css } from 'mvdom-xp';
-import { BaseFieldElement } from './c-base';
+import { attr, elem, css, BaseFieldElement } from 'mvdom-xp';
 
 
 /**

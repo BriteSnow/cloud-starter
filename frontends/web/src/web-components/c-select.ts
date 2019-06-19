@@ -2,8 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { all, first, frag, off, on, trigger } from 'mvdom';
-import { attr, style } from 'mvdom-xp';
-import { BaseFieldElement } from './c-base';
+import { attr, style, BaseFieldElement } from 'mvdom-xp';
 
 /**
  * c-select is a select component.

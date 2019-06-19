@@ -2,8 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { on } from 'mvdom';
-import { attr } from 'mvdom-xp';
-import { BaseFieldElement } from './c-base';
+import { attr, BaseFieldElement } from 'mvdom-xp';
 import { htmlSvgSymbol } from './c-ico-symbol';
 
 /**
