@@ -4,16 +4,57 @@ _[back](README.md)_
 
 ![](images/ui-component-model.png)
 
+```html
+<html>
+<head></head>
+<body>
+<v-main>
+  <header><h1>CLOUD-STARTER</h1> <c-user>...</c-user></header>
+  <v-nav>...</v-nav>
+  <main>
+    <v-project>
+      <header>...</header>
+      <section>
+        <h3>Tasks</h3>
+        <t-table>....</t-table>
+      </section>
+    <v-project>
+  </main>
+</v-main>
+</body>
+</html>
+```
 ### DOM Centric Approach
 
 This DOM Centric approach consists of using the DOM as a foundation for a simple, robust, and scalable MVC model.
+Here are some of the "native scale better" approaches: 
 
-Components are split into two categories:
+- Using native Web Component, custom elements, and HTML Element as the component model. 
+- Using the DOM event model for child to parent state communication. 
+- Mastering CSS Grid for layout. (.e.g. no other CSS Layout "framework" needed).
+- Scalable component model best practices allowing to scale Native Web Component to build large and modern applications.
 
-  - **Views** are bigger parts of the UI which encapsulates most of the logic and styling at the functional level. Views have a fully asynchronous lifecycle and are responsible for all of the styling and application behaviors (e.g., create/update/delete data items). Views are managed by a DOM Centric micro-library, [mvdom (15kb min)](https://github.com/mvdom/mvdom), which provides fully asynchronous lifecycle management without any DOM Abstraction, allowing Views to fully leverage the DOM Native eventing system.
-    > Note: At this point, `mvdom` **views** are not Web Component, but this will change soon. They will still have the same interface as today, with the async workflow (except that they will be added to the DOM when they are by the container logic/display). Those **_web components_ views** will not be shadowDOM (since they belong more to the global application scope, for style and event propagation point of view), but will share all of the other characteristics. They will be registered with something like `<v-main-view><v-main-view>`
 
-  - **Elements** (e.g. `<c-input name='fieldA'></c-input>`are smaller element from generic HTML Elements to customElements/WebComponents and are responsible for atomic functionalities, like a field-input, button, table cells, custom check boxes, and controls type of element. Not everything small HTML element structure needs to be a custom component, for example, a nav item in the left NavView, can just be clean/simple html/css inside the NavView. Things are are reused across views might be made as Web Component, if they have some logic. If just about the display, it might be enough to have a clean `_pcss/ui-...pcss` file. 
+From a best practice perspective, we can split the Components into the following different categories:
+
+  - **Component Views** are custom elements, usually with the `<v-...` tag prefix, that encapsulates most of the business logic of a part of the UI system. Their responsibilities are as follow: 
+    - Manage Routing of its direct subviews.
+    - There are the ONLY component types that should be able to get/set backend data (via DCOs)
+    - get/set data to their Component Elements.
+    - LISTEN to the Component Element events to update backend data and subviews. 
+    - Examples: 
+      - `MainView` The very top view of the application usually managing routing and other app-wide event/behavior, and initialize the nav view, and the header and top right user display information. 
+      - `NavView` Is responsible of displaying and iter
+    > Note: The current cloud-starter code still use the `mvdom` **views** for those components, but `mvdom` direction is to fully embrace Web Component (e.g., customElements) as the component model, using the `mvdom-xp` BaseHTMLElement base class (which will eventually get merged into `mvdom`). 
+
+  - **Component Elements** (e.g. `<c-input name='fieldA'></c-input>`are UI component that can be used in view or composed with other component elements. Their responsibilities are as follow: 
+    - Exposed clear and typescript typed external interface (typically via properties setter/getter) to parent element to set and get component data. 
+    - Trigger custom events based user Interaction for parent components (not necessarely direct parent) to react. 
+    - MUST NOT access any backend data (.e.g., no call to DCOs), and rather expect the data to be set by a view, or call a `DATA` event with a `.detail{ sendData: (data) => void}` to request data. 
+    - Data format should be from the component purpose and not backend data specific.
+
+  - **HTML Elements** are just raw html elements, such as `<header>` `<section>` `<a>` ... but where custom behavior are not necessary but are still part of the parent component structure for display and user interaction. 
+    > Note: It is important to not over componentize all HTML element, as over componentization is as bad as under componentization. 
 
 
 ### Code Structure
