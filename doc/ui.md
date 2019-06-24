@@ -8,11 +8,11 @@ _[back](README.md)_
 <html>
 <head></head>
 <body>
-<v-main>
+<v-main> <!-- MainView creates children below on init() and put <v-project... based on routing -->
   <header><h1>CLOUD-STARTER</h1> <c-user>...</c-user></header>
   <v-nav>...</v-nav>
   <main>
-    <v-project>
+    <v-project> <!-- ProjectView will create its children below on init() -->
       <header>...</header>
       <section>
         <h3>Tasks</h3>
@@ -27,13 +27,13 @@ _[back](README.md)_
 ### DOM Centric Approach
 
 This DOM Centric approach consists of using the DOM as a foundation for a simple, robust, and scalable MVC model.
-Here are some of the "native scale better" approaches: 
+Here are some of the guidelines: 
 
-- Using native Web Component, custom elements, and HTML Element as the component model. 
-- Using the DOM event model for child to parent state communication. 
-- Mastering CSS Grid for layout. (.e.g. no other CSS Layout "framework" needed).
-- Scalable component model best practices allowing to scale Native Web Component to build large and modern applications.
-
+- Using native Web Component, custom elements, and HTML Element as the component model (i.e., no virtual dom or high-abstraction frameworks). 
+- Using the DOM event model for child to parent state communication, and Web Component properties setter/getters for parent to component children communications.
+- Reflect custom component properties to css and attributes for simple and flexible css styling.
+- Master CSS Grid for layout. (e.g., no CSS Layout "framework" needed, CSS Grid is where it is at).
+- Follow custom component best practices (see below) for building reusable and performant web components.
 
 From a best practice perspective, we can split the Components into the following different categories:
 
@@ -101,7 +101,7 @@ See [frontends/web/src/web-components c-input example](../frontends/web/src/web-
 
 For the application development, all custom components will extend at least `BaseHTMLElement` which provided normalized methods and properties (coming soon) to express the component behavior without re-implementing underlying custom elements lifecycle and its intricacies. 
 
-- `src/web-components/c-base.ts` contains the base class that custom component should inherit from.
+- `mvdom-xp` contains the base class that custom component should inherit from.
 
   - `BaseHTMLElement` provide a basic class for all Sub Classes to inherit from. 
     - Sub Classes implement `init()` to create the innerHTML or appendChild, to set states, and to bind events. It is garanteed to be called only once. 
