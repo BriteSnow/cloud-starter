@@ -1,4 +1,4 @@
-import { BaseDialogView } from 'views/dialog/d-base-dialog';
+import { BaseDialog } from 'views/dialog/d-base-dialog';
 import { frag, pull, trigger } from 'mvdom';
 import { onEvent, customElement } from 'mvdom-xp';
 import { Project } from 'shared/entities';
@@ -6,7 +6,7 @@ import { Project } from 'shared/entities';
 
 
 @customElement('d-add-project')
-class AddProjectDialog extends BaseDialogView {
+class AddProjectDialog extends BaseDialog {
 
 	//#region    ---------- Element Events ---------- 
 	@onEvent('OK')

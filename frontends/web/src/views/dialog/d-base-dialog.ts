@@ -1,6 +1,5 @@
-import { BaseViewElement } from 'views/v-base';
-import { first, append, frag, trigger, pull, ExtendedEvent } from 'mvdom';
-import { onEvent } from 'mvdom-xp';
+import { append, first, frag, trigger } from 'mvdom';
+import { BaseHTMLElement, onEvent } from 'mvdom-xp';
 
 export interface FooterConfig {
 	/** Either true/false or the label to be displayed in the button (default false, default label "OK") */
@@ -23,7 +22,7 @@ const defaultFooter: FooterConfig = {
 	extra: false
 }
 
-export class BaseDialogView extends BaseViewElement {
+export class BaseDialog extends BaseHTMLElement {
 	private _opts?: DialogBaseOpts;
 
 	//// Key Elements

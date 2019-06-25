@@ -7,11 +7,6 @@ import { projectDco } from 'ts/dcos';
 @customElement('v-projects')
 export class ProjectsView extends BaseViewElement {
 
-	//// Data Setters
-	set projects(projects: Project[]) {
-		this.refresh(projects);
-	}
-
 	//#region    ---------- Element & Hub Events ---------- 
 	@onEvent('click', '.project-add')
 	clickAddProject() {
@@ -29,10 +24,17 @@ export class ProjectsView extends BaseViewElement {
 	}
 	//#endregion ---------- /Element & Hub Events ---------- 
 
+
 	async init() {
 		super.init();
-		const projects = await projectDco.list();
-		this.refresh(projects);
+
+		// BEST-PRATICE: init() should always attempt to draw the empty state without async when possible
+		//               Here we do this with `this.refresh([])` which will 
+		this.refresh([]); // this will execute in sync as it will not do any server request
+
+		// Now that this element has rendered its empty state, call this.refresh() will will initiate
+		// an async data fetching and therefore will execute later.
+		this.refresh();
 	}
 
 	async refresh(projects?: Project[]) {
