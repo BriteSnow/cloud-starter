@@ -8,7 +8,6 @@ class BaseSpecView extends BaseHTMLElement {
 	// By default, the spec views will render their inner content 
 	// with the template named after their tagName
 	init() {
-		console.log('>>>>', this.tagName);
 		super.init();
 		this.innerHTML = '';
 		this.appendChild(render(this.tagName.toLowerCase()));
