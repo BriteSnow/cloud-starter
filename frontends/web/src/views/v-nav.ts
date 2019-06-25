@@ -40,8 +40,6 @@ export class NavView extends BaseViewElement {
 
 }
 
-
-
 //// HTML
 function _render() {
 	return `	<a href="/">

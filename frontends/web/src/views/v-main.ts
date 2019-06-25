@@ -15,15 +15,18 @@ export class MainView extends BaseViewElement {
 	private _userMenuShowing = false;
 	private _userContext?: UserContext;
 
-	//// View key elements
+	//// Key elements
 	private get mainEl() { return first(this, 'main')! };
 	private get headerAsideEl() { return first(this, 'header aside')! }
 	private get userMenuEl() { return first(this, 'header aside c-menu')! };
 
+	//#region    ---------- Data Setters ---------- 
 	set userContext(v: UserContext) {
 		this._userContext = v;
 		push(this.headerAsideEl, { name: this._userContext.name });
 	}
+	//#endregion ---------- /Data Setters ---------- 
+
 
 	//#region    ---------- Element & Hub Events ---------- 
 	// TODO: this should be fixed with the when moved to a c-menu-popup
