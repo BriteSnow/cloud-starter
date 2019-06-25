@@ -1,4 +1,4 @@
-import { BaseView, addDomEvents } from 'views/base';
+import { BaseView, addDomEvents } from 'zold-views/base';
 import { first, pull } from 'mvdom';
 import { login, getGoogleOAuthUrl } from 'ts/user-ctx';
 import { ajaxPost, ajaxGet } from 'ts/ajax';

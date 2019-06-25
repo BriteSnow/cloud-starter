@@ -1,9 +1,9 @@
 import { display, first, on, trigger } from 'mvdom';
 import { ajaxGet } from 'ts/ajax';
 import { getUserContext } from 'ts/user-ctx';
-import { LoginView } from 'views/LoginView';
-import { MainView } from 'views/MainView';
+import { LoginView } from 'zold-views/LoginView';
 import { initRoute } from './route';
+import { MainView } from 'views/v-main';
 
 
 
@@ -42,12 +42,16 @@ on(document, 'APP_LOADED', async function () {
 	if (!uc) {
 		display(new LoginView(), 'body', 'empty');
 	} else {
-		// then add this new MainView
-		display(new MainView(uc), first('body')!).then(function () {
-			// initialize the route, which will trigger a "CHANGE" on the routeHub hub. 
-			// Note: we do that once the MainView has been added to the DOM so that it can react accordingly
-			initRoute();
-		});
+		document.body.innerHTML = '<v-main></v-main>';
+		const mainView = first(document.body) as MainView;
+		mainView.userContext = uc;
+
+		// // then add this new MainView
+		// display(new MainView(uc), first('body')!).then(function () {
+		// 	// initialize the route, which will trigger a "CHANGE" on the routeHub hub. 
+		// 	// Note: we do that once the MainView has been added to the DOM so that it can react accordingly
+		// 	initRoute();
+		// });
 	}
 
 });

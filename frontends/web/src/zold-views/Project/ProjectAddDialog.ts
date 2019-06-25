@@ -1,8 +1,8 @@
-import { DialogBase } from "views/Dialog/DialogBase";
+import { DialogBase } from "zold-views/Dialog/DialogBase";
 import { render } from "ts/render";
 import { Project } from "shared/entities";
 import { on } from "cluster";
-import { addDomEvents } from "views/base";
+import { addDomEvents } from "zold-views/base";
 import { pull } from "mvdom";
 
 type AddListener = ((project: Partial<Project>) => void);

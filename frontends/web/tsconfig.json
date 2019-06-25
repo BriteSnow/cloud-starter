@@ -34,6 +34,9 @@
 		"paths": {
 			"shared/*": ["../../../shared/src/*"]
 		},
+
+		"experimentalDecorators": true,
+		
 		// allow to import moment like: import moment from "moment"
 		"allowSyntheticDefaultImports": true
 	},

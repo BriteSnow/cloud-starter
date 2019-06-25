@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { all, display, first } from 'mvdom';
-import { addHubEvents, BaseView } from 'views/base';
+import { addHubEvents, BaseView } from 'zold-views/base';
 import { specViewByPath } from './spec-paths';
 
 
@@ -14,7 +14,6 @@ export class SpecMainView extends BaseView {
 	data = { paths: Object.keys(specViewByPath) };
 
 	protected get main() { return first(this.el, 'section.content')! }
-
 
 	hubEvents = addHubEvents(this.hubEvents, {
 		// 'routeHub' is the hub receiving url changes
