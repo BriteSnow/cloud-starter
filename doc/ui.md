@@ -115,4 +115,4 @@ For the application development, all custom components will extend at least `Bas
 
 _more best practices coming soon_
 
-See [Web Components Spec Summary](web-components)
+See [Web Components Spec Summary](web-components.md)
