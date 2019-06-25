@@ -1,8 +1,6 @@
 import { BaseHTMLElement, customElement } from 'mvdom-xp';
 import { render } from 'ts/render';
 
-
-
 class BaseSpecView extends BaseHTMLElement {
 
 	// By default, the spec views will render their inner content 
@@ -28,3 +26,4 @@ class SpecCardsView extends BaseSpecView { }
 
 @customElement('spec-buttons')
 class SpecButtonsView extends BaseSpecView { }
+

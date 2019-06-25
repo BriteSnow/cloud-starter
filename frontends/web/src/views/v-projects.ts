@@ -31,13 +31,10 @@ export class ProjectsView extends BaseViewElement {
 	}
 	//#endregion ---------- /Element & Hub Events ---------- 
 
-	init() {
+	async init() {
 		super.init();
-		requestAnimationFrame(async () => {
-			this._projects = await projectDco.list();
-			this.refresh();
-		})
-
+		this._projects = await projectDco.list();
+		this.refresh();
 	}
 
 	refresh() {
