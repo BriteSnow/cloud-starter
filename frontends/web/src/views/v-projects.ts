@@ -6,12 +6,10 @@ import { projectDco } from 'ts/dcos';
 
 @customElement('v-projects')
 export class ProjectsView extends BaseViewElement {
-	private _projects: Project[] = [];
 
 	//// Data Setters
 	set projects(projects: Project[]) {
-		this._projects = projects;
-		this.refresh();
+		this.refresh(projects);
 	}
 
 	//#region    ---------- Element & Hub Events ---------- 
@@ -26,19 +24,23 @@ export class ProjectsView extends BaseViewElement {
 
 	@onHub('dcoHub', 'Project', 'create, update')
 	async onProjectChange() {
-		this._projects = await projectDco.list();
-		this.refresh();
+		const projects = await projectDco.list();
+		this.refresh(projects);
 	}
 	//#endregion ---------- /Element & Hub Events ---------- 
 
 	async init() {
 		super.init();
-		this._projects = await projectDco.list();
-		this.refresh();
+		const projects = await projectDco.list();
+		this.refresh(projects);
 	}
 
-	refresh() {
-		this.innerHTML = _render(this._projects);
+	async refresh(projects?: Project[]) {
+		// if no projects, then, fetch the new list
+		if (projects == null) {
+			projects = await projectDco.list();
+		}
+		this.innerHTML = _render(projects);
 	}
 }
 
