@@ -27,15 +27,17 @@ _[back](README.md)_
 ## DOM Centric Approach
 
 This DOM Centric approach consists of using the DOM as a foundation for a simple, robust, and scalable MVC model.
-Here are some of the guidelines: 
 
-- Using native Web Component, custom elements, and HTML Element as the component model (i.e., no virtual dom or high-abstraction frameworks). 
-- Using the DOM event model for child-to-parent state communication, and Web Component properties setter/getters for parent-to-children communications.
-- Reflect custom component properties to CSS and attributes for simple and flexible css styling.
-- Master CSS Grid for layout. (e.g., no CSS Layout "framework" needed, CSS Grid is where it is at).
+Here are some of the concepts: 
+
+- Native Web Component (.e.g., mostly custom elements) and HTML Element as the component model (i.e., no virtual dom or high-abstraction frameworks). 
+- DOM event model (including custom events) for child-to-parent communication. 
+- Web Component properties setter/getters for parent-to-children communications.
+- Web Component properties reflected as attributes or css class names for UI state.
+- CSS Grid, with Flex box when needed, for layout (e.g., no CSS Layout "framework" needed, CSS Grid is where it is at).
 - Follow custom component best practices (see below) for building reusable and performant web components.
 
-> Note: In this documentation, Web Component terminology will refer to custom Elements used in the context of a component model, regardless if they are using or not shadowDOM. Some literature defines Web Component as customElement + shadowDOM + template, but from a component model point of view, shadowDOM is just an implementation detail to turn up component opacity, which might or might not be appropriate for given component type (.e.g., Views).
+> Note: In this documentation, Web Component terminology will refer to custom Elements used in the context of a component model, regardless if they are using or not shadowDOM. Some literature defines Web Component as customElement + shadowDOM + html template (with slots), but from a component model point of view, shadowDOM is just an implementation detail to turn up component opacity, which might or might not be appropriate for given component type (.e.g., Views).
 
 ## Component Model
 
@@ -92,14 +94,152 @@ The MVDOM best practices for component communication use those three schemes:
 
 - **child-to-parents**  (and grand parents) communication is done via  **custom DOM events** (e.g., `FORM_SUBMIT`)
 
-- **app-to-components** communication, beyond the traditional parent to child or child to parents, used the MVDOM pub/sub library, via the HUB API. For example, if a View or even Component element wants to listen to a data change, it can by having method such as: 
+- **app-to-components** communication, beyond the traditional parent to child or child to parents, used the MVDOM pub/sub library, via the HUB API. For example, if a View or even Component element wants to listen to a data change, it can by having method such as:
+
 ```ts
 @onHub('dcoHub','Project', 'create, update')
 projectChange(data: ...) { ...}
 ```
 
+### Best practices
 
-## Code Structure
+For the application development, all custom components will extend at least `BaseHTMLElement` which provided normalized methods and properties (coming soon) to express the component behavior without re-implementing underlying custom elements lifecycle and its intricacies. 
+
+- `mvdom-xp` contains the base class that custom component should inherit from.
+
+  - `BaseHTMLElement` provides a basic class for all Sub Classes to inherit from. 
+    - Sub Classes implement `init()` to create the innerHTML or appendChild, to set states, and to bind events. It is garanteed to be called only once. 
+    - Always called `super.init()` at the beginning of the `init()` SubClass implementation. 
+    - Not need to worry about `connectedCallback()` (if called, make sure to call `super.connectedCallback()`)
+
+  - `BaseFieldElement` inherit _BaseHTMLElement_ and provide the basic logic for **field based** Custom Component that have name / value, such as input, checkbox, options, ...
+    - Sub Classes needs to manage their `.value` state, and call `this.triggerChange()`, implemented by _BaseFieldElement_, to trigger the DOM `CHANGE` event on the component with `{detail:{name,value}}`. Do not trigger this event manually as _BaseFieldElement_ has some guard for it, just call `this.triggerChange()`.
+    - `BaseFieldElement.init` will add the needed `mvdom dx` css class and pusher/puller if the component tag as `.name` and event a generic pusher/puller for all field based custom components. See [SpecControlsView](../frontends/web/src/views/Spec/SpecViews.ts)
+
+#### Anatomy of a Simple Web Component
+
+> Note: Comments starting with `//>` are notes and destitned to be removed from normal code. Other comments are best practices lines. 
+
+```ts
+@customElement('v-my') // use the ts decorator to define the element, just on top of the class definition
+MyView extends BaseHTMLElement{
+
+  //// Key Elements
+  //> Here we defined the key children elements getters from this web components. They are read only, and use document query 
+  //> for resiliency (this way, if the HTML change, still work). We start with the code `//// Key Elements` code block comments.  
+  get headerEl() { return first(this, 'header')!} //> Here we can make `!` as we know that after init() it they will always exists.
+  get contentEl() { return first(this, 'content')!} //> By convention, all elements property getters should end with `El` 
+
+  //// Data Setters
+  //> Now we define the "data setters" of the component, in this components, we willl have two, but usually one is the prefered way
+  set title(v: string) { this.headerEl.textContent = v} //> Note that here we do NOT keep the data, which is the best practice if we do not need to return it. 
+  set content(v: string) { this.contentEl.textContent = v} //> Same pattern here. Obviously, we could have taken some HTML or element. 
+  //> It's usually a good practice to avoid to have multiple data getters, but some component might have one data getter, 
+  //> such as the BaseFieldElement, which has .value, and also .name (which is more a read only and a reflection of the name attribute)
+
+  //// State Getters/Setters
+  //> Here we put the component state getters/setters, that usually reflect their states in the corresponding component css class names
+  //> or attribute (see BaseFieldElement)
+  get highlighted() { return this.classList.contains('highlighted')}
+  set highlighted(v: boolean) { css(this, {highlighted: v})} //> Here just use the css(el, obj) convenient css setter for v is a boolean and set or remove the key as class name
+
+  //#region    ---------- Element Events ---------- 
+  //> In this section put all of the @onEvent bindings, which is event bound to the `this` element.
+  @onEvent('click', 'header')
+  headerClicked(evt: MouseEvent & SelectTarget){
+    console.log('header was clicked', evt.selectTarget);
+  }
+  //#endregion ---------- /Element Events ---------- 
+
+  //#region    ---------- Doc/Win Events ---------- 
+  //> Put here any events bound with `@onDoc` and `@onWin`
+  //> Note: Try to avoid those as much as possible, but sometime, we have to have those to trap keyboards that are not linked to an input element, 
+  //>       or window resize for examples. 
+  //#endregion ---------- /Doc/Win Events ---------- 
+
+  //#region    ---------- Hub Events ---------- 
+  @onHub('dcoHub', 'Project', 'create')
+  projectCreated(data: Project, info: {topic: string, label: string}){
+    console.log(data, info.topic, info.label); // [object object] Project create
+  }
+  //#endregion ---------- /Hub Events ---------- 
+
+  //> `init()`will be called ONCE just after the constructor (in the connectedCallback lifecycle)
+  //> Create the HTML structure or content of the html element, can use `this.innerHTML` or `this.appendChild(fragment)`
+  //> It's a good pratice to always create at least the bare HTML structure of the component in init() so that we can have 
+  //> always existing key elements getter
+  init(){ 
+    super.init(); // here by convention, call super.init()
+    this.innerHTML = _render(); 
+  }
+
+  //> This method, if defined, will be called just before the first paint, but after the code after the instantiation is called. 
+  //> This is usefull for components that expect the JS to set some more data that should be combined to do a full rendering. 
+  //> IMPORTANT: as with init, any async calls (promise, callback, await) will be called after the first paint. 
+  preDisplay(){
+  }
+
+  //> postDisplay() is also available, and will be called on the next frame, but not really used in most of the component. 
+
+  //> This is NOT a BaseHTMLElement lifecyle, but a good pratice, and should have the logic to re-render or just update
+  //> content on property or event change
+  refresh(){
+  }
+}
+
+//// HTML
+
+//> here start with `_` because not the global render(), but just a string rendering.
+//> Since it is using just JS templating, those function can get some parameters as well. 
+//> The recommendation is to have the parameters optional, so that in any case, the base HTML can be rendered even if data not present. 
+//> And then, it can 
+_render(){
+  return `<header></header>
+  <section> 
+  </section>
+  `
+}
+```
+
+#### Parent to Child communication.
+
+The best practice is the following: 
+
+- On the child side, ass a 
+Done via properties on the child (could be only the setter. For Example
+
+With the component 
+
+```ts
+
+type MyComponentOptions = {...}
+class MyComponent extends HTMLElement{
+
+  set options( opts: MyComponentOptions) => {
+    // do something with opts. 
+    // do not store on this... if it is not really necessary.
+  }
+}
+customElements.define('my-component', MyComponent)
+```
+
+```ts
+
+const myComponentEl = document.createElement('my-component');
+// Here the element is correctly created, but MyComponent class not instantiated yet. 
+
+myComponentEl.options = ...; // <-- NOT FAIL but NOT RIGHT. It will set to the htmlElement object, which does not have teh setter defined. 
+
+const myComponentObj = document.body.appendChild(myComponentEl);
+// At this point, myComponentObj has been instantiated, and 
+// connectedCallback() has been called (and therefore init() for BaseHTMLElement)
+
+myComponentObj.options = ...; // <-- Correct assignment to the MyComponent object.
+
+```
+
+
+### Code Structure
 
 All Web UI applications source code is structured the following way: 
 
@@ -115,47 +255,16 @@ All Web UI applications source code is structured the following way:
 
   - **`src/ts/*.ts`** All of the main/base TypeScript files for the application level logic and cross view utilities (e.g., `main.ts` to start the app, `ajax.ts` for ajax wrapper, etc...)
 
-  - **`src/views/**/*.[ts/pcss/tmpl]`** All of the views asset. By convention, each views have a `ViewName.ts` (logic/controller, always start with a `div.ViewName`), `ViewName.pcss` (style, scoped from `.ViewName`), and `ViewName.tmpl` (handlebars templates, prefixed with `ViewName-...` when multiple templates fror same view needed). 
-    - Most views are organized in one level directory structure based on their names. 
-    - View are names from generic-to-specific taxonomy to make the prefix match the folders and to be able to navigate code more effective. For example, `ProjectAddDialog.*` will be used over _AddProjectDialog.*_, which will usually be under a `src/views/Project/` folder.
-
-  - **`src/web-components/*.[ts/pcss]`** All of the CustomElements/WebComponent (minus _shadowDOM_)
-
-
-
-### Web Components
-
-With the deprecation of IE11 and Edge move to Google Chrome, Native **WebComponents**, without heavy frameworks (e.g., Angular, React), are now a reality, and can be added to rich **DOM Centric** application development.
-
-
-- **Custom Elements** have simple and very robust browser support to efficiently componentized the application custom elements.
-
-- **shadowDom** (not yet) unfortunately _shadowDOM_ styling opacity model adds quite a bit of complexity to application styling, especially for those that want to use great tooling like postCSS. For now, we will start developing the component without _shadowDOM_ first, but we will be following the best practices so that we can adopt it once we have integrated postCSS into our dev cycle (probably with .cpcss, which will be component css put in the templates.js and can be retrieved by appTemplates.css.templateName).
-
-- **Templates** This is another thing that can be useful, although HTML Templates are not as expressive as handlebars. For now, we will either use inline **string literals** or use the handlebars. Also, Web Components are for atomic components and will be mostly ts/CSS, as the templating needs are more on the view.  
-
+  - **`src/views/**/*.[ts/pcss/tmpl]`** All of the views asset, typsically starting by `v-view-name.ts` and . 
+    - ALL file name are LOWERCASE, and split with `-` character, typcially starting with `v-` such as `v-view-name.ts`.
+    - Typically a matching name file for postCss is created such as `v-view-name.pcss`
+    - When templates for the component is relatively big, we can can put it in another file `v-view-name.tmpl` which will be accessbile as handlebars template (accessible with `render('v-view-name', data)`. 
 
 
 See [frontends/web/src/web-components c-input example](../frontends/web/src/web-components/c-input.ts)
 
 
-#### Best practices
+## See Also
 
-For the application development, all custom components will extend at least `BaseHTMLElement` which provided normalized methods and properties (coming soon) to express the component behavior without re-implementing underlying custom elements lifecycle and its intricacies. 
-
-- `mvdom-xp` contains the base class that custom component should inherit from.
-
-  - `BaseHTMLElement` provides a basic class for all Sub Classes to inherit from. 
-    - Sub Classes implement `init()` to create the innerHTML or appendChild, to set states, and to bind events. It is garanteed to be called only once. 
-    - Always called `super.init()` at the beginning of the `init()` SubClass implementation. 
-    - Not need to worry about `connectedCallback()` (if called, make sure to call `super.connectedCallback()`)
-
-  - `BaseFieldElement` inherit _BaseHTMLElement_ and provide the basic logic for **field based** Custom Component that have name / value, such as input, checkbox, options, ...
-    - Sub Classes needs to manage their `.value` state, and call `this.triggerChange()`, implemented by _BaseFieldElement_, to trigger the DOM `CHANGE` event on the component with `{detail:{name,value}}`. Do not trigger this event manually as _BaseFieldElement_ has some guard for it, just call `this.triggerChange()`.
-    - `BaseFieldElement.init` will add the needed `mvdom dx` css class and pusher/puller if the component tag as `.name` and event a generic pusher/puller for all field based custom components. See [SpecControlsView](../frontends/web/src/views/Spec/SpecViews.ts)
-
-
-
-_more best practices coming soon_
 
 See [Web Components Spec Summary](web-components.md)
