@@ -1,8 +1,6 @@
-import { display, first, on, trigger } from 'mvdom';
+import { first, on, trigger } from 'mvdom';
 import { ajaxGet } from 'ts/ajax';
 import { getUserContext } from 'ts/user-ctx';
-import { LoginView } from 'zold-views/LoginView';
-import { initRoute } from './route';
 import { MainView } from 'views/v-main';
 
 
