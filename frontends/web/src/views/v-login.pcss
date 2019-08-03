@@ -1,0 +1,72 @@
+
+
+v-login{
+	flex: 1;
+	
+	.dialog{
+		position: absolute;
+		width: 500px;
+		top: 300px;
+		left: 50%;
+		margin-left: -200px;
+		display: grid;
+		grid-template-rows: 8rem auto 4rem;
+
+		header{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: var(--bkg-lighter);
+			color: var(--txt);
+			font-size: 2rem;
+			font-weight: 100;
+		}
+
+		.content{
+			background: var(--bkg-prime);
+			display: grid;
+			padding: 3rem 4rem 1rem 4rem;
+			grid-auto-rows: auto;
+			grid-gap: 1rem;
+			/* min-height: 20rem; */
+
+			c-input{
+				--bkg: white;
+			}
+			button.do{
+				justify-self: center;
+				background: #fff;
+				color: var(--txt);
+			}
+		}
+
+		footer{
+			background: var(--bkg-prime);
+			.line{
+				width: 1px;
+				background: #fff;
+				height: 1.5rem;
+			}
+		}
+
+	}
+
+	&.has-message {
+		.message{
+			background: rgba(255,255,255,.7);
+			padding: 0 1rem;
+			
+		}
+	}
+	&.login-mode{
+		.dialog .for-register{
+			display: none;
+		}
+	}
+
+	&.register-mode{
+		.dialog .for-login{
+			display: none;
+		}
+	}	
+}

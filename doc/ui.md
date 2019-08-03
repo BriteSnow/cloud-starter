@@ -164,6 +164,7 @@ MyView extends BaseHTMLElement{
   }
   //#endregion ---------- /Hub Events ---------- 
 
+  //#region    ---------- Lifecycle ---------- 
   //> `init()`will be called ONCE just after the constructor (in the connectedCallback lifecycle)
   //> Create the HTML structure or content of the html element, can use `this.innerHTML` or `this.appendChild(fragment)`
   //> It's a good pratice to always create at least the bare HTML structure of the component in init() so that we can have 
@@ -180,7 +181,8 @@ MyView extends BaseHTMLElement{
   }
 
   //> postDisplay() is also available, and will be called on the next frame, but not really used in most of the component. 
-
+  //#endregion ---------- /Lifecycle ---------- 
+  
   //> This is NOT a BaseHTMLElement lifecyle, but a good pratice, and should have the logic to re-render or just update
   //> content on property or event change
   refresh(){

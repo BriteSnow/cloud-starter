@@ -40,7 +40,8 @@ on(document, 'APP_LOADED', async function () {
 	// if no UC, we display the LoginView
 
 	if (!uc) {
-		display(new LoginView(), 'body', 'empty');
+		// display(new LoginView(), 'body', 'empty');
+		document.body.innerHTML = '<v-login></v-login>';
 	} else {
 		document.body.innerHTML = '<v-main></v-main>';
 		const mainView = first(document.body) as MainView;
