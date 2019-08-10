@@ -18,7 +18,7 @@ Key Documents: [Architecture](doc/arch.md) | [UI Development](doc/ui.md)
 
 See [Architecture](doc/arch.md) for more information on the architecture and technology stack.
 
-## Key Structure
+## Code Structure
 
 This blueprint is based on a "single-repo" approach where all of the services are based on the same repository and can be built as a whole or individually. 
 
@@ -28,7 +28,7 @@ The key code structure is as follow:
 
 - **scripts/** files are just the build files for the various "DevOps" operations, such as building, REPL watch, and other custom scripts. 
 
-- **services/** base folder containing all of the backend services of the system as well as common resources. For example `services/web-server` is the node js web API and application service, and `services/agent` is the agent micro-service which manage some DevOps operations during dev/staging/deployment. 
+- **services/** base folder contains all of the backend services of the system as well as common resources. For example `services/web-server` is the node js web API and application service, and `services/agent` is the agent micro-service which manage some DevOps operations during dev/staging/deployment. 
 
 - **frontends/** is the base folder that contains all of the various client frontends. For web applications, there is usually a 1-1 mapping between the backend server (in the `services/**` foolder) with a `frontends/**` html/ts/css source.  During the build process each frontend distribution files (e.g., `app-bundle.js`) will get written into the corresponding server. For example, the `frontends/web/**` bundle files, such as `app-bundle.js`), will be copied in the web application folder `services/web-server/web-folder/` directory.
 
@@ -40,12 +40,12 @@ The key code structure is as follow:
 For more information, see [Architecture - Tech Stack](doc/arch.md#TechStack)
 
 - **Main Docker OS:** `Alpine` (small, well supported)
-  - `Debian/Strech[-slim]` For/When Rust and hopefully ML (`Unbutu` for ML if no choice)
+  - `Debian/buster[-slim]` For/When Rust and hopefully ML (`Unbutu` for ML if no choice)
 - **Main Backend Runtime/Language:** `Node.js / TypeScript` (see above, mature, robust, scalable, high-productive)
   - `Rust` When GC based language not appropriate (should be an exception). 
   - `Python` For Machine Learning model scripting.
 - **Database:** `Postgresql` (robust, mature, advanced, with no-sql capability with jsonb)
-- **Web:** `TypeScript`, `PostCss`, `DOM MVC` (**mvdom** Dom Centric MVC. simple scale better, used right the DOM is a solid foundation for building large application UIs))
+- **Web:** `TypeScript`, `PostCss`, `DOM MVC`, [Rollup](https://www.npmjs.com/package/rollup) ([mvdom](https://github.com/mvdom/mvdom) Dom Centric MVC. simple scale better, used right the DOM is a solid foundation for building large application UIs))
 - **IDE:** `VSCode` (best in class productivity with **TypeScript**, robust, fast, extensible with an amazing community). 
 
 
@@ -55,7 +55,7 @@ For more information, see [Architecture - Tech Stack](doc/arch.md#TechStack)
 
 As of now, the development environment has been tested on Mac, but it should work on Windows as well. 
 
-- Install **Docker** for Mac **with Kubernetes**
+- Install **Docker** for Mac **with Kubernetes** (Windows system with Docker for Windows with Kubernetes will be supported later)
 - Run a local docker registry with (for the Kubernetes local dev)
 
 ```sh
