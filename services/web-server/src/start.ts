@@ -1,4 +1,4 @@
-require('../../common/src/setup-module-aliases');
+require('../../_common/src/setup-module-aliases');
 
 import * as bodyParser from 'body-parser';
 import { AppError } from 'common/error';

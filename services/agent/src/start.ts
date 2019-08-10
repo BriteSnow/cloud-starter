@@ -1,4 +1,4 @@
-require('../../common/src/setup-module-aliases');
+require('../../_common/src/setup-module-aliases');
 
 import { getConfig } from 'common/config';
 import { getKnex } from 'common/da/db';

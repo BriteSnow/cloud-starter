@@ -22,7 +22,7 @@
 
 		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
 		"paths": {
-			"common/*": ["../../common/src/*"],
+			"common/*": ["../../_common/src/*"],
 			"shared/*": ["../../../shared/src/*"]
 		}, 
 
@@ -37,7 +37,7 @@
 		"./src/**/*.ts", // we take all of the server code
 		// Note: shared/ and commont/ts will be compiled as imported by the service .ts code (~ tree shaking)
 		//       However, setup-module-aliases needs to be used (require) in entry file, and therefore explicitly inluded. 
-		"../common/src/setup-module-aliases.ts",
+		"../_common/src/setup-module-aliases.ts",
 		// trick to make sure the full dist/ structured is created (can be removed if project import some shared libs) 		
 		"../../shared/src/entities.ts" 		
 	],
