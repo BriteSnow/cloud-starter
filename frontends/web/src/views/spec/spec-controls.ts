@@ -1,11 +1,13 @@
-import { customElement, addDOMEvents } from 'mvdom-xp';
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-controls.ts" />
+
+import { customElement, addOnEvents } from 'mvdom';
 import { BaseSpecView } from './spec-views';
 import { wait } from 'shared/utils';
 import { push, pull } from 'mvdom';
 
 @customElement('spec-controls')
 class SpecControlsView extends BaseSpecView {
-	events = addDOMEvents(this.events, {
+	events = addOnEvents(this.events, {
 
 		'CHANGE; .c-field': async (evt) => {
 			console.log('.c-field CHANGE evt.detail', evt.detail);

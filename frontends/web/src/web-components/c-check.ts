@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-check.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { on } from 'mvdom';
-import { attr, BaseFieldElement } from 'mvdom-xp';
+import { on, attr } from 'mvdom';
+import { BaseFieldElement } from 'mvdom-xp';
 import { htmlSvgSymbol } from './c-ico-symbol';
 
 /**

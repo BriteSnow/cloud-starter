@@ -1,7 +1,6 @@
-import { BaseDialog } from 'views/dialog/d-base-dialog';
-import { frag, pull, trigger } from 'mvdom';
-import { onEvent, customElement } from 'mvdom-xp';
+import { customElement, frag, onEvent, pull, trigger } from 'mvdom';
 import { Project } from 'shared/entities';
+import { BaseDialog } from 'views/dialog/d-base-dialog';
 
 
 

@@ -1,5 +1,4 @@
-import { first, push } from 'mvdom';
-import { onEvent, onHub, customElement, elem } from 'mvdom-xp';
+import { customElement, first, onEvent, onHub, push } from 'mvdom';
 import { logoff, UserContext } from 'ts/user-ctx';
 import { BaseViewElement } from './v-base';
 

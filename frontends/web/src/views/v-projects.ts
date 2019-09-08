@@ -1,8 +1,8 @@
-import { BaseViewElement } from './v-base';
-import { customElement, onEvent, elem, onHub } from 'mvdom-xp';
-import { on } from 'mvdom';
+import { customElement, on, onEvent, onHub } from 'mvdom';
+import { elem } from 'mvdom-xp';
 import { Project } from 'shared/entities';
 import { projectDco } from 'ts/dcos';
+import { BaseViewElement } from './v-base';
 
 @customElement('v-projects')
 export class ProjectsView extends BaseViewElement {

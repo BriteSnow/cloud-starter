@@ -1,6 +1,5 @@
-import { customElement, onHub } from 'mvdom-xp';
+import { all, customElement, first, onHub } from 'mvdom';
 import { BaseViewElement } from 'views/v-base';
-import { first, all } from 'mvdom';
 import { tagNameByName } from './spec-paths';
 
 const defaultPath = 'typo';

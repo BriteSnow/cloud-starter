@@ -1,4 +1,4 @@
-import { BaseHTMLElement } from 'mvdom-xp';
+import { BaseHTMLElement } from 'mvdom';
 import { pathAt } from 'ts/route';
 
 

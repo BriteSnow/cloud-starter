@@ -17,7 +17,7 @@ Handlebars.templates = Handlebars.template || {};
 // Make all templates partials (no reason why they should not)
 Handlebars.partials = Handlebars.templates;
 
-import mvdom from "mvdom";
+import * as mvdom from "mvdom";
 window.mvdom = mvdom;
 
 // Note: At some point, we might want to three shake this one, and have it local to app-bundle

@@ -1,8 +1,7 @@
-import { customElement, onEvent, style } from 'mvdom-xp';
-import { BaseViewElement } from './v-base';
-import { first, SelectTarget, pull } from 'mvdom';
-import { getGoogleOAuthUrl, login } from 'ts/user-ctx';
+import { customElement, first, onEvent, OnEvent, pull, style } from 'mvdom';
 import { ajaxPost } from 'ts/ajax';
+import { getGoogleOAuthUrl, login } from 'ts/user-ctx';
+import { BaseViewElement } from './v-base';
 
 type Mode = 'login' | 'register';
 
@@ -48,7 +47,7 @@ export class LoginView extends BaseViewElement {
 	//#region    ---------- Element Events ---------- 
 	//> In this section put all of the @onEvent bindings, which is event bound to the `this` element.
 	@onEvent('click', 'button.do')
-	headerClicked(evt: MouseEvent & SelectTarget) {
+	headerClicked(evt: MouseEvent & OnEvent) {
 		const mode = this.mode;
 		if (mode == 'login') {
 			this.doLogin();
@@ -60,7 +59,7 @@ export class LoginView extends BaseViewElement {
 	}
 
 	@onEvent('keyup', 'input')
-	_keyup(evt: KeyboardEvent & SelectTarget) {
+	_keyup(evt: KeyboardEvent & OnEvent) {
 		this.message = null;
 		if ('Enter' === evt.key) {
 			const mode = this.mode;

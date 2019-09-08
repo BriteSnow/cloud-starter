@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-select.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { all, first, frag, off, on, trigger } from 'mvdom';
-import { attr, style, BaseFieldElement } from 'mvdom-xp';
+import { all, attr, first, frag, off, on, style, trigger } from 'mvdom';
+import { BaseFieldElement } from 'mvdom-xp';
 
 /**
  * c-select is a select component.

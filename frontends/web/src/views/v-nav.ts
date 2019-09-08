@@ -1,7 +1,6 @@
-import { BaseViewElement } from './v-base';
-import { customElement, onHub } from 'mvdom-xp';
-import { all } from 'mvdom';
+import { all, customElement, onHub } from 'mvdom';
 import { pathAt } from 'ts/route';
+import { BaseViewElement } from './v-base';
 
 const defaultPath = '';
 

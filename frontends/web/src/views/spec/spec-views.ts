@@ -1,8 +1,9 @@
-import { BaseHTMLElement, customElement, onEvent, elem } from 'mvdom-xp';
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-views.ts" />
+
+import { BaseHTMLElement, customElement, frag, onEvent } from 'mvdom';
 import { render } from 'ts/render';
 import { BaseDialog } from 'views/dialog/d-base-dialog';
-import { tickStep } from 'd3';
-import { frag } from 'mvdom';
+import { elem } from 'mvdom-xp';
 
 export class BaseSpecView extends BaseHTMLElement {
 

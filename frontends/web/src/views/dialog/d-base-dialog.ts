@@ -1,5 +1,4 @@
-import { append, first, frag, trigger } from 'mvdom';
-import { BaseHTMLElement, onEvent } from 'mvdom-xp';
+import { append, BaseHTMLElement, first, frag, onEvent, trigger } from 'mvdom';
 
 export interface FooterConfig {
 	/** Either true/false or the label to be displayed in the button (default false, default label "OK") */

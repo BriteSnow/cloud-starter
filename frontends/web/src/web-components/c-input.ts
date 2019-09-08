@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-input.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { on, frag } from 'mvdom';
-import { attr, elem, css, BaseFieldElement } from 'mvdom-xp';
+import { attr, frag, on } from 'mvdom';
+import { css, BaseFieldElement } from 'mvdom-xp';
 
 
 /**
