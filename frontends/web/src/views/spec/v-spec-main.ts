@@ -1,3 +1,5 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-main.ts" />
+
 import { all, customElement, first, onHub } from 'mvdom';
 import { BaseViewElement } from 'views/v-base';
 import { tagNameByName } from './spec-paths';
