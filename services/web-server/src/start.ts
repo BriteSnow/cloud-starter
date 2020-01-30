@@ -6,13 +6,13 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import { extname, resolve } from 'path';
-import { routerDseGenerics } from './web/router-dse-generics';
+import { AuthFailError, clearAuth } from './auth';
+import { routerApiHello } from './web/router-api-hello';
+import { routerApiUserContext } from './web/router-api-user-context';
 import { routerAuthGoogleOAuth } from './web/router-auth-google-oauth';
 import { routerAuthLoginAndRegister } from './web/router-auth-login-register';
 import { routerAuthRequest } from './web/router-auth-request';
-import { routerApiUserContext } from './web/router-api-user-context';
-import { routerApiHello } from './web/router-api-hello';
-import { AuthFailError, clearAuth } from './auth';
+import { routerDseGenerics } from './web/router-dse-generics';
 
 const PORT = 8080;
 

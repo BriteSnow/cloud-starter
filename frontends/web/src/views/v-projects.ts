@@ -1,7 +1,7 @@
+import { projectDco } from 'base/dcos';
 import { customElement, on, onEvent, onHub } from 'mvdom';
 import { elem } from 'mvdom-xp';
 import { Project } from 'shared/entities';
-import { projectDco } from 'ts/dcos';
 import { BaseViewElement } from './v-base';
 
 @customElement('v-projects')

@@ -1,26 +1,29 @@
+import * as chokidar from 'chokidar';
 import { router } from 'cmdrouter';
 import { spawn } from 'p-spawn';
-import { CallReducer, wait } from './utils';
 import { join as joinPath } from 'path';
-import * as chokidar from 'chokidar';
+import { wait } from 'vdev';
+import { ico, SKETCH_FILE } from './cmd-ico';
+import { CallReducer } from './utils';
 
 const IMG_NAME_PREFIX = 'cstar-';
+const NOT_RESTART_IF_PATH_HAS = '/test/';
+
+
 router({ watch }).route();
 
-const webServerDir = 'services/web-server';
-
-const noRestartIfPathHas = '/test/';
 
 async function watch() {
 
-	// ./node_modules/.bin/vdev build watch web
+	// watch the watch for frontends/web
 	spawn('./node_modules/.bin/vdev', ['watch', 'web']);
 
+	// watch services (configure in .vscode/launch.json for debug)
 	watchService('web-server', '9228');
 
-	// watchService('gh-syncer', '9230');
+	// watchService('other-service', '9230');
 
-	// --------- agent sql watch --------- //
+	//#region    ---------- agent sql watch ---------- 
 	const recreateDbCr = new CallReducer(() => {
 		spawn('npm', ['run', 'vdev', 'kexec', 'agent', 'npm', 'run', 'recreateDb']);
 	}, 500);
@@ -36,18 +39,26 @@ async function watch() {
 		console.log(`services/agent/sql add: ${filePath}`);
 		recreateDbCr.map(filePath);
 	});
-	// --------- agent sql watch --------- //
+	//#endregion ---------- /agent sql watch ---------- 
 
+	//#region    ---------- ico watch ---------- 
+	const icoWatcher = chokidar.watch(SKETCH_FILE, { ignoreInitial: true, persistent: true });
+
+	icoWatcher.on('change', async function (filePath: string) {
+		await ico();
+	});
+
+	//#endregion ---------- /ico watch ---------- 
 }
 
 
 async function watchService(serviceName: string, debugPort: string) {
 	const serviceDir = `services/${serviceName}`;
 
-	// kubectl port-forward $(kubectl get pods -l run=bb-web-server --no-headers=true -o custom-columns=:metadata.name) 9229
-	// kubectl port-forward $(kubectl get pods -l run=bb-gh-syncer --no-headers=true -o custom-columns=:metadata.name) 9230:9229
+	// kubectl port-forward $(kubectl get pods -l run=cstar-web-server --no-headers=true -o custom-columns=:metadata.name) 9229
 	const podName = (await spawn('kubectl', ['get', 'pods', '-l', `run=${IMG_NAME_PREFIX}${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'], { capture: 'stdout' })).stdout.trim();
 	spawn('kubectl', ['port-forward', podName, `${debugPort}:9229`]);
+
 
 	spawn('tsc', ['-w'], { cwd: serviceDir }); // this will create a new restart
 
@@ -63,9 +74,8 @@ async function watchService(serviceName: string, debugPort: string) {
 	}, 500);
 
 	watcher.on('change', async function (filePath: string) {
-		console.log(`${serviceName} - change: ${filePath}`);
-		if (filePath.includes(noRestartIfPathHas)) {
-			console.log(`no restart because path contains ${noRestartIfPathHas}`);
+		if (filePath.includes(NOT_RESTART_IF_PATH_HAS)) {
+			// console.log(`no restart because path contains ${NOT_RESTART_IF_PATH_HAS}`);
 		} else {
 			cr.map(filePath);
 		}
@@ -73,9 +83,8 @@ async function watchService(serviceName: string, debugPort: string) {
 	});
 
 	watcher.on('add', async function (filePath: string) {
-		console.log(`${serviceName} - add: ${filePath}`);
-		if (filePath.includes(noRestartIfPathHas)) {
-			console.log(`no restart because path contains ${noRestartIfPathHas}`);
+		if (filePath.includes(NOT_RESTART_IF_PATH_HAS)) {
+			// console.log(`no restart because path contains ${NOT_RESTART_IF_PATH_HAS}`);
 		} else {
 			cr.map(filePath);
 		}

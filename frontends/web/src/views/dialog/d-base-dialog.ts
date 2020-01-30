@@ -91,7 +91,7 @@ export class BaseDialog extends BaseHTMLElement {
 			const f = frag(htmlStr);
 			footerEl.appendChild(f);
 		}
-		footerEl.style.display = null;
+		footerEl.style.display = '';
 		footerEl.classList.remove('hide');
 	}
 	//#endregion ---------- /Data Setters ---------- 

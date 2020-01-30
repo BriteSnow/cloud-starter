@@ -31,7 +31,7 @@ spec:
         run: cstar-db
     spec:
       containers:
-      - image: {{registry}}cstar-db:{{imageTag}}
+      - image: '{{registry}}cstar-db:{{imageTag}}'
         imagePullPolicy: Always
         name: cstar-db-ctn
         ports:

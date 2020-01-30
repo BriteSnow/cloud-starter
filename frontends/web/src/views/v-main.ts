@@ -1,5 +1,5 @@
+import { logoff, UserContext } from 'base/user-ctx';
 import { customElement, first, onEvent, onHub, push } from 'mvdom';
-import { logoff, UserContext } from 'ts/user-ctx';
 import { BaseViewElement } from './v-base';
 
 const defaultPath = "";

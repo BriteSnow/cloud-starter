@@ -1,31 +1,39 @@
+/**
+ *   This is the tsconfig.json for the backend services (not for devops or frontends)
+ */
 {
 	"compilerOptions": {
-		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
-		"target": "esNext",
+		// Target on node js 12+
+		"target": "es2020",
 
-		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
+		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
 		
-		// same as with browser, need to use 3rd party modules
-		"moduleResolution": "node",
+		// This is important to support 3rd party modules that are still in a node.js/commonjs way
+		"moduleResolution": "node", 
+		
 
-		// strict is the best way to extract the most value from TypeScript
-		"strict": true,
+		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
+		"strict": true, 
 
-		// all can be ts
+		// 99.99% of the code will be .ts, and .js files will just be module glue and does not need to be processed by typescript (keep the glue small)
 		"allowJs": false,
 		"checkJs": false,
 
-		"sourceMap": false,  // we do not need the sourcemap for server
+		"sourceMap": true,  // for debug
 
-		"outDir": "dist/",  /* Redirect output structure to the directory. */
+		// This will be the code run by the npm run start
+		"outDir": "./dist",
 
-		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
+		// Code mapping
+		"rootDir": "../../",
+		"baseUrl": "./src/",  // main service code
 		"paths": {
-			"common/*": ["../../_common/src/*"],
-			"shared/*": ["../../../shared/src/*"]
-		}, 
+			"common/*": ["../../_common/src/*"], // backend services common code
+			"shared/*": ["../../../shared/src/*"] // frontend and backend shared code
+		},
 
+		// decorators for backend service code
 		"experimentalDecorators": true,
 		
 		// allow to import moment like: import moment from "moment"
@@ -45,8 +53,6 @@
 	// Excluding 
 	"exclude": [
 		"node_modules",
-		"queue",
-		"client", // we exclude the client code
 		".rpt2_cache" // this folder will be created by the rollup-typescript2, so, need to exlude it, can become confusing.
 	]
 }

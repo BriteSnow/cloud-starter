@@ -4,10 +4,10 @@
 
  {
 	"compilerOptions": {
-		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
-		"target": "esNext",
+		// This is for the scripts/ ts files (build/devops scripts)
+		"target": "es2020",
 
-		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
+		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
 
 		// This is important to support 3rd party modules that are still in a node.js/commonjs way
@@ -16,13 +16,11 @@
 		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
 		"strict": true,
 
-		// 99% of the code will be .ts, and .js files will just be module glue and does not need to be processed by typescript (keep the glue small)
+		// 99.99% of the code will be .ts, and .js files will just be module glue and does not need to be processed by typescript (keep the glue small)
 		"allowJs": false,
 		"checkJs": false,
 
-		// "lib": ["esnext","dom"],
-
-		"sourceMap": false,  // we do not need the sourcemap		
+		"sourceMap": false,  // we do not need the sourcemap (for /scripts/*.ts)		
 
 		// Since we are using ts-node, not really needed, but just in case we want to do a "tsc" on folder.
 		"outDir": "./~out/", /* Redirect output structure to the directory. */

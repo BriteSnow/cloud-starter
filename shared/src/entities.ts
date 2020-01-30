@@ -15,10 +15,10 @@ export interface OAuth extends StampedEntity {
 	id: number;
 	userId: number;
 	oauth_token: string;
-	oauth_id?: string;
+	oauth_id?: string | null;
 	oauth_username?: string;
-	oauth_name?: string;
-	oauth_picture?: string;
+	oauth_name?: string | null;
+	oauth_picture?: string | null;
 }
 
 export interface Project extends StampedEntity {

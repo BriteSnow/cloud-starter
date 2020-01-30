@@ -1,8 +1,7 @@
+import * as chokidar from 'chokidar';
 import { router } from 'cmdrouter';
 import { spawn } from 'p-spawn';
-import { CallReducer, wait } from './utils';
-import { join as joinPath } from 'path';
-import * as chokidar from 'chokidar';
+import { CallReducer } from './utils';
 
 const servicesDir = 'services';
 

@@ -29,7 +29,7 @@ spec:
         run: cstar-queue
     spec:
       containers:
-      - image: {{registry}}cstar-queue:{{imageTag}}
+      - image: '{{registry}}cstar-queue:{{imageTag}}'
         imagePullPolicy: Always
         name: cstar-queue-ctn
         ports:

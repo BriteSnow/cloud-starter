@@ -1,22 +1,27 @@
+import { ajaxGet } from 'base/ajax';
+import { getUserContext } from 'base/user-ctx';
 import { first, on, trigger } from 'mvdom';
-import { ajaxGet } from 'ts/ajax';
-import { getUserContext } from 'ts/user-ctx';
+import 'mvdom-ui'; // import all mvdom-ui
+import { defaultIcons } from 'mvdom-ui';
 import { MainView } from 'views/v-main';
 
+
+// load the default mvdom-ui icon set
+defaultIcons.load();
 
 
 // --------- Load Resources --------- //
 //// Prepare the resource to be loaded before starting the application
 // NOTE: We start the loading as soon as possible (before the DOMContentLoaded)
-var svgSymbolsPromise = ajaxGet("/svg/sprite.svg", null, { contentType: "application/xml" });
+const svgSymbolsPromise = ajaxGet("/svg/sprite.svg", null, { contentType: "application/xml" });
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
 	// we make sure the the ajax for the svg/sprites.svg returns
 	svgSymbolsPromise.then(function (xmlDoc) {
 		// add the symbols to the head (external linking works but has issues - styling, and caching -)
-		var firstChildElement = xmlDoc.firstChildElement || xmlDoc.childNodes[0]; // edge does not seem to have .firstChildElement, at least for xlmDoc
-		var h = document.querySelector("head");
+		const firstChildElement = xmlDoc.firstChildElement || xmlDoc.childNodes[0]; // edge does not seem to have .firstChildElement, at least for xlmDoc
+		const h = document.querySelector("head");
 
 		if (h != null) {
 			h.appendChild(firstChildElement);

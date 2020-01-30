@@ -3,18 +3,19 @@
 	"compilerOptions": {
 		// For browser client, we target edge and above (es2018 seems to safe https://kangax.github.io/compat-table/es2016plus/)
 		"target": "es2018",
+
 		// For browser client, since we are using rollup to package, we target the es6/es2015 module
 		"module": "es2015",
 
 		// This is important to support 3rd party modules that are still in a node.js/commonjs way
 		"moduleResolution": "node", 
 
+		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
+		"strict": true, 
+
 		// 99% of the code will be .ts, and .js files will just be 3rd party libs and will be in 
 		"allowJs": false,
 		"checkJs": false,
-
-		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
-		"strict": true, 
 
 		// no need for comments in the generated code (we will have the source map)
 		"removeComments": true,
@@ -22,8 +23,7 @@
 		// Definitely wants sourcemapp
 		"sourceMap": true, /* Generates corresponding '.map' file. */
 
-		// This is just to check the code once in a while to check the tsc output with a raw "ts". 
-		// "npm run build" will use rollup and does not need the .js to be emitted.
+		// Rollup/Typescript will be used, so this is just to check the code once in a while to check the tsc output with a raw "ts". 
 		"outDir": "./~out/", /* Redirect output structure to the directory. */
 
 		// We point the root dir to the parent to include eventual ../../shared/ (shared .ts for frontends and backend services)

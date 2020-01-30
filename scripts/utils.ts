@@ -1,7 +1,5 @@
 import { now } from 'vdev';
 
-export { wait } from 'vdev';
-
 // --------- CallReducer --------- //
 type Fn = (item: any) => any;
 
@@ -15,7 +13,7 @@ export class CallReducer {
 
 	private fn: Fn;
 	private gracePeriod: number;
-	private items: any[] = [];
+	private items: string[] = [];
 	private result: any | undefined;
 
 	constructor(fn: Fn, gracePeriod: number) {
@@ -23,7 +21,7 @@ export class CallReducer {
 		this.gracePeriod = gracePeriod;
 	}
 
-	map(item?: any) {
+	map(item?: string) {
 		// add the data to the items list
 		if (item !== undefined) {
 			this.items.push(item);
@@ -57,5 +55,17 @@ export class CallReducer {
 		}
 	}
 }
-// --------- /web-server restart --------- //
+// --------- /CallReducer --------- //
 
+export async function prompt(message: string): Promise<string> {
+	// console.log(`\n${message}: `);
+	process.stdout.write(`${message}`);
+	return new Promise(function (resolve, reject) {
+		process.stdin.resume();
+		process.stdin.setEncoding('utf8');
+		process.stdin.on('data', function (text: Buffer) {
+			process.stdin.pause();
+			resolve(text.toString().trim());
+		});
+	});
+}

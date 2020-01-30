@@ -16,7 +16,7 @@ spec:
         run: cstar-web-server
     spec:
       containers:
-        - image: {{registry}}cstar-web-server:{{imageTag}}
+        - image: '{{registry}}cstar-web-server:{{imageTag}}'
           name: cstar-web-server-ctn
           imagePullPolicy: Always
           envFrom:

@@ -1,4 +1,8 @@
 
+# MUST WATCH VIDEO
+
+[Browser Event Loop](https://freek.dev/975-inside-the-browsers-event-loop)
+
 # Web UI Architecture & Patterns
 _[back](README.md)_
 

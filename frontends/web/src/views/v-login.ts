@@ -1,6 +1,6 @@
+import { ajaxPost } from 'base/ajax';
+import { getGoogleOAuthUrl, login } from 'base/user-ctx';
 import { customElement, first, onEvent, OnEvent, pull, style } from 'mvdom';
-import { ajaxPost } from 'ts/ajax';
-import { getGoogleOAuthUrl, login } from 'ts/user-ctx';
 import { BaseViewElement } from './v-base';
 
 type Mode = 'login' | 'register';
