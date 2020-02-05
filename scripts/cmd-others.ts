@@ -1,40 +1,13 @@
-import * as bcrypt from 'bcrypt';
 import * as child_process from 'child_process';
 import { router } from 'cmdrouter';
 import * as fs from 'fs-extra-plus';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
-import { performance } from 'perf_hooks';
 import { prompt } from './utils';
 
 const SERVICES_DIR = './services/';
 
-router({ crypt, pupdate, dclean, runTest }).route();
-
-// run these two commands
-// docker rmi -f $(docker images -f 'reference=localhost:5000/*' -q)
-// docker rmi -f $(docker images -f 'reference=britesnow/*' -q)
-
-async function crypt() {
-	const clear = 'Some Clear Text';
-	let start = performance.now();
-	const salt1 = await bcrypt.genSalt(10);
-	const hash1 = await bcrypt.hash(clear, salt1);
-	const timeHash = performance.now() - start;
-
-	start = performance.now();
-	const comp1 = await bcrypt.compare(clear, hash1);
-	const timeCompare = performance.now() - start;
-
-
-	const salt2 = salt1 + 'AAAAAAAAAA';
-	const hash2 = await bcrypt.hash(clear, salt2);
-	const comp2 = await bcrypt.compare(clear, hash2);
-	console.log(`SALT1: ${salt1}\nhash1: ${hash1}  - ${comp1} - ${timeHash} - ${timeCompare}`);
-	console.log(`SALT2: ${salt2}\nhash1: ${hash1}  - ${comp2}`);
-
-}
-
+router({ pupdate, dclean, runTest }).route();
 
 async function pupdate() {
 	const dirPath = (dirName: string) => Path.join(SERVICES_DIR, dirName + '/');
