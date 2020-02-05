@@ -139,12 +139,12 @@ function _render() {
 	<div class="dialog">
 		<header>CLOUD-STARTER</header>
 		<section class="content">
-
-			<c-input name="username" label="Username"></c-input>
-			<c-input name="pwd" label="Password" password></c-input>
-			<c-input name="repeat-pwd" label="Repeat Password" class="for-register"></c-input>
+			<m-input name="username" placeholder="username"></m-input>
+			<m-input name="pwd" password placeholder="password"></m-input>
+			<m-input name="repeat-pwd" placeholder="Repeat Password" class="for-register"></m-input>
 			<div></div>
-			<button class="do high">Login</button>
+			<button class="do high for-login">Login</button>
+			<button class="do high for-register">Register</button>
 		</section>
 		<footer>
 			<div class="message"></div>
