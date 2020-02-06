@@ -104,5 +104,7 @@ function _render() {
 	</main>
 	<footer>
 		some footer
-	</footer>`
+	</footer>
+	<div class="__version__">${window.__version__}</div>
+	`
 }

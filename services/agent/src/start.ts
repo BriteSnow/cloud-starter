@@ -12,9 +12,9 @@ async function main() {
 	// listenViaBlocking(client);
 	neverEnd();
 
-	const appVersion = await getConfig('appVersion');
+	const __version__ = await getConfig('__version__');
 
-	console.log(`-->> agent (${appVersion}) index.js - main() - started`);
+	console.log(`--> agent (${__version__}) - started`);
 
 	const knex = await getKnex();
 	const tableName = 'user';

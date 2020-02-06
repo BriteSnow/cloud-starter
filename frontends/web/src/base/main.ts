@@ -5,12 +5,13 @@ import 'mvdom-ui'; // import all mvdom-ui
 import { defaultIcons } from 'mvdom-ui';
 import { MainView } from 'views/v-main';
 
+window.__version__ = "DROP-002-SNAPSHOT";
+
+// --------- Load Resources --------- //
 
 // load the default mvdom-ui icon set
 defaultIcons.load();
 
-
-// --------- Load Resources --------- //
 //// Prepare the resource to be loaded before starting the application
 // NOTE: We start the loading as soon as possible (before the DOMContentLoaded)
 const svgSymbolsPromise = ajaxGet("/svg/sprite.svg", null, { contentType: "application/xml" });
@@ -50,12 +51,6 @@ on(document, 'APP_LOADED', async function () {
 		const mainView = first(document.body) as MainView;
 		mainView.userContext = uc;
 
-		// // then add this new MainView
-		// display(new MainView(uc), first('body')!).then(function () {
-		// 	// initialize the route, which will trigger a "CHANGE" on the routeHub hub. 
-		// 	// Note: we do that once the MainView has been added to the DOM so that it can react accordingly
-		// 	initRoute();
-		// });
 	}
 
 });

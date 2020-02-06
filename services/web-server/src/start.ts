@@ -1,6 +1,7 @@
 require('../../_common/src/setup-module-aliases');
 
 import * as bodyParser from 'body-parser';
+import { getConfig } from 'common/config';
 import { AppError } from 'common/error';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
@@ -15,6 +16,7 @@ import { routerAuthRequest } from './web/router-auth-request';
 import { routerDseGenerics } from './web/router-dse-generics';
 
 const PORT = 8080;
+const COOKIE__VERSION__ = '__version__';
 
 console.log('... start web-server');
 
@@ -22,6 +24,7 @@ main();
 
 async function main() {
 	const app = express();
+	const __version__ = await getConfig('__version__');
 
 	// will be used for the static file fall back (APIs will take precedence) 
 	const webDir = 'web-folder/'
@@ -45,6 +48,18 @@ async function main() {
 		}
 		next();
 	});
+
+	// set the app version cookie
+	app.use(async function (req, res, next) {
+		const oneYear = 7 * 24 * 3600 * 1000 * 52;
+		const appVersionCookie = req.cookies[COOKIE__VERSION__];
+
+		if (appVersionCookie !== __version__) {
+			res.cookie(COOKIE__VERSION__, __version__, { maxAge: oneYear });
+		}
+		next();
+	});
+
 
 	//// Mount the login/register/oauth routers
 	app.use(routerAuthGoogleOAuth.expressRouter);
@@ -103,14 +118,12 @@ async function main() {
 		}
 
 		res.status(500).json({ success: false, error });
-
-		// TODO: add log
 	});
 
 
 	// start the server
 	app.listen(PORT);
-	console.log(`... listening at ${PORT}`);
+	console.log(`--> web-server (${__version__}) - listening at ${PORT}`);
 }
 
 

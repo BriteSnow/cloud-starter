@@ -19,14 +19,14 @@ spec:
       volumes:
         - name: cstar-agent-src
           hostPath:
-            path: {{projectDir}}services/agent/src
+            path: '{{projectDir}}services/agent/src'
             type: Directory
         - name: bcrm-agent-sql
           hostPath:
-            path: {{projectDir}}services/agent/sql
+            path: '{{projectDir}}services/agent/sql'
             type: Directory
       containers:
-        - image: localhost:5000/cstar-agent:{{imageTag}}
+        - image: 'localhost:5000/cstar-agent:{{imageTag}}'
           name: cstar-agent-ctn
           imagePullPolicy: Always
           envFrom:

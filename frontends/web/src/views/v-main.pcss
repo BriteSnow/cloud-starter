@@ -75,18 +75,16 @@ v-main{
 		}
 	}
 
-	& > footer{
-		grid-area: 3 / 2 / 4 / 3;
-		color: #aaa;
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-end;
-		align-items: center;
-		padding-right: 64px;
-	}
-
 	&.un-auth{
 		display: none;
+	}
+
+	.__version__{
+		position: absolute;
+		bottom: 8px;
+		right: 8px;
+		opacity: .3;
+		font-size: 11px;
 	}
 
 }

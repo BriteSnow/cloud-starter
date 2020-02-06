@@ -11,6 +11,7 @@ Current documents:
 Coming soon: 
 
 - **Data** Data model, end-to-end access layers, best practices.
+- [build](build.md) Build flow and documentation.
 - [Dev](dev.md) Kuberenetes centric development workflow and technics.
 - [Css](css.md) Css/PostCSS best practices, technics, and links.
 - [Test](test.md) Test setup, running, best practices, technics, and links.
