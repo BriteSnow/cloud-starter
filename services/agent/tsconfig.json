@@ -36,8 +36,8 @@
 		// decorators for backend service code
 		"experimentalDecorators": true,
 		
-		// allow to import moment like: import moment from "moment"
-		"allowSyntheticDefaultImports": true
+		// Needed to call import default (replaces allowSyntheticDefaultImports)
+		"esModuleInterop": true
 	},
 
 	// Note: common and shared will be pulled as needed

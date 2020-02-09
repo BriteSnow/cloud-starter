@@ -5,7 +5,6 @@ import { getConfig } from 'common/config';
 import { getSysContext } from 'common/context';
 import { oauthDao, userDao } from 'common/da/daos';
 import { AppError } from 'common/error';
-import { encryptPwd } from 'common/password';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'googleapis-common';
 import { setAuth } from '../auth';
@@ -64,9 +63,9 @@ _router.get('/goauth-redirect', async function (req, res, next) {
 		//// auto create user for this user
 		// Note: For application that should not have auto register, this should redirect to a no access page.
 		if (user == null) {
-			// In the oauth register case, the user.key will be the first encrypted version of the auth_token 
-			const key = encryptPwd(oauth_token).substring(0, 127); // make sure it fits the table
-			const userId = await userDao.create(sysCtx, { username: oauth_username, key })
+			const username = oauth_username;
+			const clearPwd = oauth_token;
+			const userId = await userDao.createUser(sysCtx, { username, clearPwd });
 			user = await userDao.get(sysCtx, userId);
 		}
 
@@ -82,15 +81,14 @@ _router.get('/goauth-redirect', async function (req, res, next) {
 		// if exist, update the latest piicture and name.
 		else {
 			oauthId = oauth.id;
-			// Note: here we do not update the oauth_token in the db with the one just recieved, otherwise, other browsers logged in will be logged out.
+			// NOTE: here we do not update the oauth_token in the db with the one just recieved, otherwise, other browsers logged in will be logged out.
 			// TODO: can use user context
 			await oauthDao.update(sysCtx, oauthId, { oauth_name, oauth_picture, oauth_token });
 		}
 
 		//// authenticate the user
-		// now that we have the user and oauth object, we set the auth (set the cookies)
-		const userCredential = await userDao.getUserCredential(sysCtx, user.id);
-		await setAuth(res, userCredential); // force types pwd
+		const userCredential = await userDao.getUserAuthCredential(sysCtx, user.id);
+		await setAuth(res, userCredential);
 
 		res.redirect(302, '/'); // 302 (temporary)
 	}

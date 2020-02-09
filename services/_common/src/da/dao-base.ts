@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { QueryBuilder } from 'knex';
-import { QueryFilter, OpVal, QueryOptions, StampedEntity, Val } from 'shared/entities';
+import { OpVal, QueryFilter, QueryOptions, StampedEntity, Val } from 'shared/entities';
 import { Context } from '../context';
 import { Monitor } from '../perf';
 import { nowTimestamp } from '../utils-cloud-starter';

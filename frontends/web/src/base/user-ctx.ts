@@ -7,7 +7,7 @@ export interface UserContext {
 }
 
 export async function login(username: string, pwd: string) {
-	const r = await ajaxGet('/api/login', { username, pwd });
+	const r = await ajaxPost('/api/login', { username, pwd });
 	return r;
 }
 

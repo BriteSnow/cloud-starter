@@ -21,10 +21,14 @@ spec:
           hostPath:
             path: '{{projectDir}}services/agent/src'
             type: Directory
-        - name: bcrm-agent-sql
+        - name: cstar-agent-sql
           hostPath:
             path: '{{projectDir}}services/agent/sql'
             type: Directory
+        - name: cstar-agent-dist
+          hostPath:
+            path: '{{projectDir}}services/agent/dist'
+            type: Directory            
       containers:
         - image: 'localhost:5000/cstar-agent:{{imageTag}}'
           name: cstar-agent-ctn
@@ -38,5 +42,7 @@ spec:
             - mountPath: /service/src
               name: cstar-agent-src
             - mountPath: /service/sql
-              name: bcrm-agent-sql
+              name: cstar-agent-sql
+            - mountPath: /service/dist
+              name: cstar-agent-dist              
       restartPolicy: Always

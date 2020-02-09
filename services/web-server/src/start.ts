@@ -3,9 +3,8 @@ require('../../_common/src/setup-module-aliases');
 import * as bodyParser from 'body-parser';
 import { getConfig } from 'common/config';
 import { AppError } from 'common/error';
-import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
-import { NextFunction, Request, Response } from 'express';
+import cookieParser from 'cookie-parser';
+import express, { NextFunction, Request, Response } from 'express';
 import { extname, resolve } from 'path';
 import { AuthFailError, clearAuth } from './auth';
 import { routerApiHello } from './web/router-api-hello';
@@ -17,8 +16,6 @@ import { routerDseGenerics } from './web/router-dse-generics';
 
 const PORT = 8080;
 const COOKIE__VERSION__ = '__version__';
-
-console.log('... start web-server');
 
 main();
 

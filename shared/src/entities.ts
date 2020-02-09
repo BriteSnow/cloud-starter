@@ -4,10 +4,11 @@ import { StampedEntity } from './entities-base';
 export * from './entities-base';
 
 //#region    ---------- Entity Types ---------- 
+export type UserType = 'sys' | 'admin' | 'user';
 
 export interface User extends StampedEntity {
 	id: number;
-	type: 'sys' | 'admin' | 'user';
+	type: UserType;
 	username: string;
 }
 

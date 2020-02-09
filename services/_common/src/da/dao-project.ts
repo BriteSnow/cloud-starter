@@ -1,13 +1,12 @@
 import { Project, User } from 'shared/entities';
 import { Context } from '../context';
-import { BaseDao } from './dao-base';
-import { AccessRequires } from './access';
 import { saveProle } from '../role-manager';
+import { AccessRequires } from './access';
+import { BaseDao } from './dao-base';
 import { getKnex } from './db';
 
 export class ProjectDao extends BaseDao<Project, number> {
 	constructor() { super({ table: 'project', stamped: true }) }
-
 
 	@AccessRequires(['#sys'])
 	async getOwners(ctx: Context, projectId: number): Promise<User[]> {

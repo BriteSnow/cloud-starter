@@ -1,8 +1,8 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { BaseDao } from './dao-base';
 import { Context, getSysContext } from '../context';
 import { newTopFinder } from '../top-decorator';
+import { BaseDao } from './dao-base';
 
 const topFinder = newTopFinder();
 

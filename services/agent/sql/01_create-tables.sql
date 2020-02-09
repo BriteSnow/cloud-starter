@@ -6,13 +6,15 @@ CREATE TABLE config (
 
 CREATE TABLE "user" (
   id bigserial PRIMARY KEY,
+  uuid uuid NOT NULL,
+  salt varchar(128) NOT NULL,
   type varchar(16) NOT NULL,
   cid bigint, 
   ctime timestamp with time zone,
   mid bigint, 
   mtime timestamp with time zone,    
   username varchar(64), 
-  pwd varchar(64),
+  pwd varchar(128),
   key varchar(128)
 );
 ALTER SEQUENCE user_id_seq RESTART WITH 1000;

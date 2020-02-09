@@ -3,6 +3,7 @@ import { userDao } from 'common/da/daos';
 import { asNum } from 'common/utils';
 import { NextFunction, Request, Response } from 'express';
 import { extname } from 'path';
+import { UserType } from 'shared/entities';
 import { AuthFailError, clearAuth, COOKIE_AUTHTOKEN, COOKIE_USERID, createAuthToken } from '../auth';
 import { srouter } from '../express-utils';
 
@@ -41,7 +42,7 @@ _router.use(async function (req: Request, res: Response, next: NextFunction) {
 
 //#region    ---------- Utils ---------- 
 /** Authenticate a request and return userId or null if it did not pass */
-async function authRequest(req: Request): Promise<{ id: number, username: string }> {
+async function authRequest(req: Request): Promise<{ id: number, type: UserType, username: string }> {
 	const sysCtx = await getSysContext();
 	const cookieUserId = asNum(req.cookies[COOKIE_USERID] as string | null);
 	const cookieAuthToken = req.cookies[COOKIE_AUTHTOKEN];
@@ -53,7 +54,7 @@ async function authRequest(req: Request): Promise<{ id: number, username: string
 			let userId = cookieUserId;
 
 			//// get the key/username from user credential
-			const { username, key } = await userDao.getUserCredential(sysCtx, userId);
+			const { username, key, type } = await userDao.getUserAuthCredential(sysCtx, userId);
 
 			//// Validation
 			if (!username || !key) {
@@ -63,7 +64,7 @@ async function authRequest(req: Request): Promise<{ id: number, username: string
 			const authToken = await createAuthToken(userId, username, key);
 
 			if (cookieAuthToken === authToken) {
-				return { id: userId, username };
+				return { id: userId, type, username };
 			} else {
 				throw new AuthFailError('Wrong authentication in request');
 			}

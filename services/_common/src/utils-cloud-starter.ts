@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/utils-cloud-starter.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+import moment from 'moment';
 import { Timer as _Timer } from 'node-simple-timer';
-import * as moment from 'moment';
 
 //#region    ---------- time utils ---------- 
 // returns a now formatted for database

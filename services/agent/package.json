@@ -11,19 +11,23 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/services/agent/src/start",
     "gs": "./node_modules/.bin/vdev gs",
+    "credential": "node dist/services/agent/src/cmd-credential",
     "recreateDb": "node dist/services/agent/src/db recreateDb"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cmdrouter": "^0.3.1",
-    "knex": "^0.20.8",
+    "knex": "^0.20.9",
     "module-alias": "^2.2.2",
+    "moment": "^2.24.0",
+    "node-simple-timer": "^0.1.1",
     "p-spawn": "^0.5.0",
     "pg": "^7.18.1",
     "redis": "^2.8.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5",
-    "vdev": "^0.11.1"
+    "uuid": "^3.4.0",
+    "vdev": "^0.11.4"
   }
 }

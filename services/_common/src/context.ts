@@ -1,21 +1,18 @@
 import { User } from 'shared/entities';
-import { userDao } from './da/daos';
 import { PerfContext } from './perf';
 import { getProjectPrivileges } from './role-manager';
 
-// temporary hardcoded (should go to DB with roles)
 
+export type ContextUserType = Partial<User> & Pick<User, 'id' | 'username' | 'type'>;
 
-/** Context factory. Right now just based on userId */
-export async function newContext(userIdOrUser: number | Partial<User>) {
-	let user: Partial<User>;
-	// if we have a object, then, we can assume User
-	if (typeof userIdOrUser === 'object') {
-		user = userIdOrUser;
-	} else {
-		user = await userDao.get(await getSysContext(), userIdOrUser);
-	}
-	return new ContextImpl(user);
+/** Note: Make context an interface so that ContextImpl class does not get expose and app code cannot create it of the newContext factory */
+export interface Context {
+	readonly userId: number;
+	readonly userType: string;
+	readonly username: string | null;
+	readonly user: ContextUserType;
+	hasProjectPrivilege(projectId: number, privilege: string): Promise<boolean>;
+	readonly perfContext: PerfContext;
 }
 
 
@@ -24,21 +21,16 @@ let _sysContext: Context;
  * Get and cache the sysContext. 
  * Note: user 0, in the db, is of sys type, we can harcode the user data for now (perhpas later, do a knex.select to id:0 to get full data)
  */
-export async function getSysContext() {
+export async function getSysContext(): Promise<Context> {
 	if (!_sysContext) {
-		_sysContext = await newContext({ id: 0, username: 'sys', type: 'sys' }); // we know 0 is sys. 
+		_sysContext = newContext({ id: 0, username: 'sys', type: 'sys' }); // we know 0 is sys. 
 	}
 	return _sysContext;
 }
 
-/** Note: Make context an interface so that ContextImpl class does not get expose and app code cannot create it of the newContext factory */
-export interface Context {
-	readonly userId: number;
-	readonly userType: string;
-	readonly username: string | null;
-	readonly user: Partial<User>;
-	hasProjectPrivilege(projectId: number, privilege: string): Promise<boolean>;
-	readonly perfContext: PerfContext;
+export function newContext(user: Pick<User, 'id' | 'username' | 'type'>) {
+	// TODO: validate it has the right fields. 
+	return new ContextImpl(user);
 }
 
 //#region    ---------- Private Implementations ---------- 
@@ -47,7 +39,7 @@ class ContextImpl implements Context {
 	readonly userId: number;
 	readonly userType: string;
 	private privilegesByProjectId: Map<number, Set<string>> = new Map();
-	private _user: Partial<User>
+	private _user: ContextUserType
 	readonly perfContext = new PerfContext();
 
 	_data = new Map<string, any>(); // not used yet. 
@@ -60,7 +52,7 @@ class ContextImpl implements Context {
 		return { ...this._user }; // shalow copy (should be enough)
 	}
 
-	constructor(user: Partial<User>) {
+	constructor(user: ContextUserType) {
 		this.userId = user.id!;
 		this.userType = user.type!; // TODO: needs to find a way to type this so that type is non optional
 		this._user = user;

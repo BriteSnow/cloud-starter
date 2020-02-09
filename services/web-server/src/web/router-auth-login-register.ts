@@ -3,7 +3,7 @@
 
 import { getSysContext } from 'common/context';
 import { userDao } from 'common/da/daos';
-import { checkPwd, encryptPwd } from 'common/password';
+import { pwdCheck } from 'common/security/password';
 import { AuthFailError, clearAuth, setAuth } from '../auth';
 import { srouter } from '../express-utils';
 
@@ -15,15 +15,16 @@ _router.post('/api/logoff', async function (req, res, next) {
 });
 
 
-_router.get('/api/login', async function (req, res, next) {
+_router.post('/api/login', async function (req, res, next) {
 	const emptyCtx = await getSysContext();
-	const uname = req.query.username;
-	const pwd = req.query.pwd;
-	const userCredential = await userDao.getUserCredential(emptyCtx, uname);
+	const uname = req.body.username;
+	const clearPwd = req.body.pwd;
+	const userCredential = await userDao.getUserAuthCredential(emptyCtx, uname);
 
-	if (userCredential && checkPwd(pwd, userCredential.pwd)) {
-		const { username, id: userId } = userCredential;
+
+	if (userCredential && pwdCheck(clearPwd, userCredential)) {
 		await setAuth(res, userCredential);
+		const { username, id: userId } = userCredential;
 		return { success: true, username, userId };
 	} else {
 		throw new AuthFailError('Wrong username / password');
@@ -38,14 +39,11 @@ _router.post('/api/register', async function (req, res, next) {
 	if (!username || !clearPwd) {
 		throw new AuthFailError("username or pwd can't be empty");
 	}
-	// we encrypt the password
-	const pwd = encryptPwd(clearPwd);
-	const key = pwd; // Note: When register, user.key is set from user.pwd
-	const data = { username, pwd, key };
 
-	const id = await userDao.create(sysCtx, data);
+	const id = await userDao.createUser(sysCtx, clearPwd);
+	const user = userDao.get(sysCtx, id);
 
-	return { success: true, data: { id, username } };
+	return { success: true, data: user };
 });
 
 

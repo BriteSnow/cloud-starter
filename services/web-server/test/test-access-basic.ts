@@ -1,8 +1,8 @@
-import { userDao } from 'common/da/daos';
-import { newContext } from 'common/context';
 import * as assert from 'assert';
-import { initSuite } from './t-utils';
+import { newContext } from 'common/context';
+import { userDao } from 'common/da/daos';
 import { User } from 'shared/entities';
+import { initSuite } from './t-utils';
 
 describe('test-access-basic', async function () {
 
@@ -34,13 +34,14 @@ describe('test-access-basic', async function () {
 
 		// create test user 02 with admin
 		const testUser01Id = await userDao.create(suite.adminCtx, { username: 'test-access-basic-user-01' });
+		const testUser = await userDao.get(suite.sysCtx, testUser01Id);
 		suite.toClean('user', testUser01Id);
 
 		// test update testUser01 from userA, should fail
 		await assert.rejects(userDao.update(suite.userACtx, testUser01Id, { username: 'test-access-basic-user-01 updated' }), suite.errorNoAccess, 'updating test-user-01 from userA');
 
 		// test update testUser01 from testUser01, should work
-		const testUser01Ctx = await newContext(testUser01Id);
+		const testUser01Ctx = await newContext(testUser);
 		await userDao.update(testUser01Ctx, testUser01Id, { username: 'test-access-basic-user-01 update 2' })
 
 		// test get and check update from testUser01

@@ -1,6 +1,6 @@
-import { getKnex, closeKnex } from "common/da/db";
-import { newContext, Context as CommonContext, getSysContext } from 'common/context';
+import { Context as CommonContext, getSysContext, newContext } from 'common/context';
 import { userDao } from 'common/da/daos';
+import { closeKnex, getKnex } from "common/da/db";
 
 
 // Note: need to rename Context CommonContext because Mocha has it own Context
@@ -38,12 +38,12 @@ export function initSuite(suite: Mocha.Suite) {
 	// on the beforeAll, we create all of the context
 	suite.beforeAll(async function () {
 		suite.sysCtx = await getSysContext();
-		suite.adminCtx = await newContext(1); // admin user
+		suite.adminCtx = await userDao.newContextFromUserId(suite.sysCtx, 1); // admin user
 
 		// for each suite, we will have a some reusable users 
 		// Note: in some system, you might want to create couple of users per user type (visitorA, visitorB, userA, userB)
-		suite.userACtx = await newContext(await userDao.create(suite.adminCtx, { username: 'test-user-A', type: 'user' }));
-		suite.userBCtx = await newContext(await userDao.create(suite.adminCtx, { username: 'test-user-B', type: 'user' }));
+		suite.userACtx = await userDao.newContextFromUserId(suite.sysCtx, await userDao.createUser(suite.adminCtx, { username: 'test-user-A', clearPwd: 'welcome', type: 'user' }));
+		suite.userBCtx = await userDao.newContextFromUserId(suite.sysCtx, await userDao.createUser(suite.adminCtx, { username: 'test-user-B', clearPwd: 'welcome', type: 'user' }));
 	});
 
 	suite.afterAll(async function () {

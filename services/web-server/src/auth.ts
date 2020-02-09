@@ -1,9 +1,10 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/auth.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+import { UserAuthCredential } from 'common/da/dao-user';
+import { AppError } from 'common/error';
 import * as crypto from 'crypto';
 import { Response } from 'express';
-import { AppError } from 'common/error';
 
 
 export const COOKIE_USERID = 'userId';
@@ -11,7 +12,7 @@ export const COOKIE_AUTHTOKEN = 'authToken';
 
 export class AuthFailError extends AppError { }
 
-export async function setAuth(res: Response, data: { username: string, id: number, key: string }) {
+export async function setAuth(res: Response, data: UserAuthCredential) {
 	const { username, id: userId, key } = data;
 
 	const authToken = await createAuthToken(userId, username, key)
