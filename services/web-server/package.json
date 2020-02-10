@@ -33,7 +33,7 @@
     "moment": "^2.24.0",
     "node-simple-timer": "^0.1.1",
     "pg": "^7.18.1",
-    "redis": "^2.8.0",
+    "redis": "^3.0.2",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5",
     "useragent": "^2.3.0",

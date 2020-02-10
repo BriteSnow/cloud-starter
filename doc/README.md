@@ -4,7 +4,7 @@ Current documents:
 
 - **[Architecture](arch.md)** Top down architecture, overall code structure. 
 - **[UI](ui.md)** Web UI Application Component Model, approach, code structured, and best practices.
-- **[Authentication](auth.md)** Web application authentication model, request flow, and best practices.
+- **[Request Flow](request-flow.md)** Web application request flow, with authentication, authorization, and data layer. 
 - Best Practices: 
   - [Comments](comments.md) Short conventions and best practices about commenting.
 
