@@ -4,15 +4,6 @@
 import crypto from 'crypto';
 import { PwdEncryptData, PwdScheme } from './password-types';
 
-//#region    ---------- Scheme Clear ---------- 
-class SchemeClear extends PwdScheme {
-	encrypt(data: PwdEncryptData) {
-		console.log('WARNING - Clear PWD was check for user ${data.uuid} - Will be encrypted at first login');
-		return data.clearPwd;
-	}
-}
-//#endregion ---------- /Scheme Clear ----------
-
 
 //#region    ---------- Scheme Basic ---------- 
 class SchemeBasic extends PwdScheme {
@@ -42,7 +33,6 @@ class SchemeStronger extends PwdScheme {
 
 
 export const schemes = {
-	'00': new SchemeClear(),
 	'01': new SchemeBasic(),
 	'02': new SchemeStronger()
 }

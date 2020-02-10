@@ -35,13 +35,15 @@ export function pwdCheck(clearPwd: string, data: PwdCheckData): { pass: boolean,
 
 function extractSchemeId(pwd: string): { schemeId: SchemeId, pwd: string } {
 	const m = /^#E(\d+)#(.*)/.exec(pwd);
-	let schemeId: SchemeId = '00'; // if clear
+	let schemeId: SchemeId; // if clear
 	if (m) {
 		schemeId = m[1] as SchemeId;
 		if (!Object.keys(schemes).includes(schemeId)) {
 			throw new Error(`Scheme id ${schemeId} not recognized`);
 		}
 		pwd = m[2];
+	} else {
+		throw new Error(`No Scheme id in pwd`);
 	}
 
 	return { schemeId, pwd };
