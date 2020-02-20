@@ -25,13 +25,15 @@ _[back](README.md)_
 Here is the pseudo code flow of setting a auth cookies for a validated user request or login. 
 
 - New Values
+  - `uuid = decodeBase64(cookie.token.firstPart())`
   - `new_exp = now + logoff_duration`;
-  - `new_token = sha256.salt(global_salt + user.salt).update(user.uuid + exp).toString('base64')`;
-- Set Cookies
-  - set cookie - `__Secure-uuid = user.uuid; Secure; SameSite=Strict; HttpOnly; Domain=my-app.com` (sub domain allowed, to track cdn)
+  - `new_token_signature = sha256.salt(global_salt + user.salt).update(user.uuid + exp).toString('base64')`;
+- Set token cookies (only one needed to authenticate request)
+  - set cookie - `__Host-token = base64(uuid).base64(new_exp).base64(new_token_signature); Secure; SameSite=Strict; HttpOnly` (Domain locked, HttpOnly)
+- Set other cookies (optional, for Web UI features)
   - set cookie - `__Host-exp = new_exp; Secure; SameSite=Strict` (Domain locked, client accessible for UI notification)
-  - set cookie - `__Host-token = new_token; Secure; SameSite=Strict; HttpOnly` (Domain locked)
-  - set cookie - `__Host-__version__ = getServerVersion()` (usually a drop number, to match with client lib to know if need to reload)
+  - set cookie - `__Host-__version__ = getServerVersion(); Secure; SameSite=Strict` (Domain locked, usually a drop number, to match with client lib to know if need to reload)
+  - set cookie - `__Secure-uuid = user.uuid; Secure; SameSite=Strict; HttpOnly; Domain=my-app.com` (sub domain allowed, to track cdn)
 
 
 ## API Flow

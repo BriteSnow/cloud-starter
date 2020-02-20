@@ -1,9 +1,11 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/config.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+import { ConfigType } from './config-type';
+import * as configValues from './config-values';
 import { getKnex } from './da/db';
-import { ConfigType, staticConfigurations } from './config-type';
 
+export * from './config-values';
 
 /**
  * Return a configuration from a configuration name. Those configuration could be static, comes from redis, or from DB (and cached).
@@ -18,7 +20,7 @@ export async function getConfig(name: string): Promise<any> {
 
 	// if not found, try the static value
 	if (data == null) {
-		data = staticConfigurations[name];
+		data = (<any>configValues)[name];
 	}
 
 	if (data == null) {

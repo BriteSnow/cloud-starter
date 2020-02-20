@@ -5,6 +5,8 @@ metadata:
 type: Opaque
 data:
   db-password: d2VsY29tZQ==
+  pwd_scheme_01_salt: NzRmZWM5MmU5Njg2MjY0ZTM2MzcxODkxNjhlYjNjNTBmZmFh 
+  pwd_scheme_02_salt: NzRmZWM5MmU5Njg2MjY0ZTM2MzcxODkxNjhlYjNjNTBmZmFh
   # For google OAuth, uncomment values below and set the value (base64 encoded)
   # google_oauth-client_id: __BASE64_ENCODEC_GOOGLE_CLIENT_ID__
   # google_oauth-client_secret: __BASE64_ENCODEC_GOOGLE_CLIENT_SECRET__
@@ -14,6 +16,7 @@ kind: ConfigMap
 metadata:
   name: cstar-config
 data:
+  https_mode: 'false'
   db-host: cstar-db-srv
   db-database: cstar_db
   db-user: cstar_user

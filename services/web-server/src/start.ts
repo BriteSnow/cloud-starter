@@ -1,7 +1,7 @@
 require('../../_common/src/setup-module-aliases');
 
 import * as bodyParser from 'body-parser';
-import { getConfig } from 'common/config';
+import { HTTPS_MODE, __version__ } from 'common/config';
 import { AppError } from 'common/error';
 import cookieParser from 'cookie-parser';
 import express, { NextFunction, Request, Response } from 'express';
@@ -19,9 +19,9 @@ const COOKIE__VERSION__ = '__version__';
 
 main();
 
+
 async function main() {
 	const app = express();
-	const __version__ = await getConfig('__version__');
 
 	// will be used for the static file fall back (APIs will take precedence) 
 	const webDir = 'web-folder/'
@@ -32,6 +32,8 @@ async function main() {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
 
+	//// Initialize Schemes
+
 
 	//// First handler doing https redirect in  when in a prox env (production)
 	// Note: will not impact localhost development
@@ -39,9 +41,16 @@ async function main() {
 		// HTTPS Redirect: if we have a forwarded protocol HTTPS (from load balancer, make sure it is https)
 		const fwdProtocol = req.header('x-forwarded-proto');
 		if (fwdProtocol && fwdProtocol === 'http') {
-			const httpsUrl = 'https://' + req.hostname + req.originalUrl;
-			res.redirect(301, httpsUrl); // temporary to allow changing later, but could be set to 301 to make it permanent. 
-			return;
+			if (fwdProtocol === 'http') {
+				const httpsUrl = 'https://' + req.hostname + req.originalUrl;
+				res.redirect(301, httpsUrl); // temporary to allow changing later, but could be set to 301 to make it permanent. 
+				return;
+			} else {
+				// make sure the HTTPS_MODE is true, otherwise refuse connection
+				if (!HTTPS_MODE) {
+					throw Error("FATAL - service config does not have https 'https_mode' to true");
+				}
+			}
 		}
 		next();
 	});
@@ -68,11 +77,9 @@ async function main() {
 	//// Mount the /api/user-context/ API (special API that does not throw exception if not authenticated)
 	app.use('/api/', routerApiUserContext.expressRouter);
 
-
 	//// Mount hello world demo api
 	// Note: to remove once understood.
 	app.use('/api/', routerApiHello.expressRouter);
-
 
 	//// Mount DSE (Data Service Endpoint) Web APIs
 	// generic dse as fall back. 

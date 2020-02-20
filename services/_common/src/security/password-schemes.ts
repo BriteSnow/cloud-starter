@@ -2,12 +2,13 @@
 
 
 import crypto from 'crypto';
+import { PWD_SCHEME_01_SALT, PWD_SCHEME_02_SALT } from '../config';
 import { PwdEncryptData, PwdScheme } from './password-types';
 
 
 //#region    ---------- Scheme Basic ---------- 
 class SchemeBasic extends PwdScheme {
-	GLOBAL_SALT = '74fec92e9686264e3637189168eb3c50ffaa';
+	GLOBAL_SALT = PWD_SCHEME_01_SALT;
 
 	encrypt(data: PwdEncryptData) {
 		// for this example, we will use sha256, but can be made more secure if see, SchemeStronger.
@@ -20,7 +21,7 @@ class SchemeBasic extends PwdScheme {
 
 //#region    ---------- Scheme Stronger ---------- 
 class SchemeStronger extends PwdScheme {
-	GLOBAL_SALT = '74fec92e9686264e3637189168eb3c50ffaa';
+	GLOBAL_SALT = PWD_SCHEME_02_SALT;
 
 	encrypt(data: PwdEncryptData) {
 		const hash = crypto.createHmac('sha512', this.GLOBAL_SALT + data.salt);
