@@ -96,7 +96,7 @@ export class LoginView extends BaseViewElement {
 		if (oauthUrl) {
 			this.googleLink.setAttribute('href', oauthUrl);
 			// remove opacity to be full
-			style(this.googleLink, { opacity: null });
+			style(this.googleLink, { opacity: '' });
 		}
 	}
 	//#endregion ---------- /Lifecycle ---------- 
