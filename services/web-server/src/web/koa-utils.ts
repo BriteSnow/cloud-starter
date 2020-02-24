@@ -51,9 +51,11 @@ export function initKtx(koaCtx: ParameterizedContext, next: Next) {
 	//       Perhaps needs to have an empty/not-auth-yet Context, which will allow to be type strict from here.
 }
 
+/**
+ * Base App router that any application router should extends of. 
+ */
 export class AppRouter<S = KState, C = KCustom> extends BaseRouter<S, C>{
 	async assertKtx(ktx: ParameterizedContext<S, C>) {
-		console.log(`>>>> ... AppRouter  ... ${this.constructor.name}.assertKtx ${ktx.path}`);
 		if (ktx.state == null) {
 			throw new Error(`ERROR - BaseRouter assertKtx error - ktx does not have a '.state' property (make sure to initiliaze)`)
 		}
@@ -79,7 +81,7 @@ export function assertApiKtx(obj: Ktx & any): asserts obj is ApiKtx {
 }
 
 /**
- * Base router class for any API that requires a oauthentication. 
+ * Base router class for any API that requires authentication and have a ktx.state.utx. 
  */
 export class ApiRouter extends AppRouter<ApiKState, ApiKCustom>{
 	async assertKtx(ktx: ParameterizedContext<ApiKState, ApiKCustom>) {
