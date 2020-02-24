@@ -1,9 +1,6 @@
-import baseX from 'base-x';
 import crypto from 'crypto';
 import uuidV4 from 'uuid/v4';
 
-const BASE62 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const base62 = baseX(BASE62);
 const SALT_LENGTH = 18;
 
 main();
