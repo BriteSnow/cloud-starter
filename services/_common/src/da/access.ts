@@ -1,7 +1,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { Context, getSysContext } from '../context';
 import { newTopFinder } from '../top-decorator';
+import { assertUserContext, getSysContext } from '../user-context';
 import { BaseDao } from './dao-base';
 
 const topFinder = newTopFinder();
@@ -36,9 +36,11 @@ export function AccessRequires(privilege: string[] | string) {
 
 			// we perform the access control only for the top most class for this methods
 			if (isTop) {
-				const ctx = arguments[0] as Context;
-				if (!ctx.constructor.name.startsWith('Context')) {
-					throw new Error(`First argument of ${this.constructor.name}.${method.name} must be a "Context" and not a ${ctx.constructor.name}`);
+				const utx = arguments[0];
+				try {
+					assertUserContext(utx);
+				} catch (ex) {
+					throw new Error(`First argument of ${this.constructor.name}.${method.name} must be a "UserContext" and not a ${utx.constructor.name}`);
 				}
 
 				// At this point, we support AccessRequires only on Dao, we can broaden the support later (if needed)
@@ -48,8 +50,8 @@ export function AccessRequires(privilege: string[] | string) {
 				}
 				const dao: BaseDao<Object, number> = this;
 
-				const userId = ctx.userId;
-				const userType = ctx.userType;
+				const userId = utx.userId;
+				const userType = utx.userType;
 				let entityId: number | null = null;
 
 				let pass = false;
@@ -91,7 +93,7 @@ export function AccessRequires(privilege: string[] | string) {
 						if (projectId == null) {
 							throw new Error(`Cannot check AccessRequires on "${this.constructor.name}.${method.name}" because projectId not found in argument`);
 						}
-						const has = await ctx.hasProjectPrivilege(projectId, p);
+						const has = await utx.hasProjectPrivilege(projectId, p);
 						if (has) {
 							pass = true;
 							break;

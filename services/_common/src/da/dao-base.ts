@@ -3,8 +3,8 @@
 
 import { QueryBuilder } from 'knex';
 import { OpVal, QueryFilter, QueryOptions, StampedEntity, Val } from 'shared/entities';
-import { Context } from '../context';
 import { Monitor } from '../perf';
+import { UserContext } from '../user-context';
 import { nowTimestamp } from '../utils-cloud-starter';
 import { getKnex } from './db';
 
@@ -63,7 +63,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@Monitor()
-	async get(ctx: Context, id: I): Promise<E> {
+	async get(ctx: UserContext, id: I): Promise<E> {
 		const k = await getKnex();
 		let q = k(this.tableName);
 		if (this.columns) {
@@ -82,7 +82,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * @param ctx 
 	 * @param ids 
 	 */
-	async getForSomeIds(ctx: Context, ids: (I | undefined)[]): Promise<(E | undefined)[]> {
+	async getForSomeIds(ctx: UserContext, ids: (I | undefined)[]): Promise<(E | undefined)[]> {
 		// first filter the none defined
 		const definedIds = ids.filter(v => v !== undefined) as I[]; // help typing system
 		// NOTE: here we forst the id property, as per limitationof this API
@@ -103,7 +103,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * @param ctx 
 	 * @param ids 
 	 */
-	async getForIds(ctx: Context, ids: I[]): Promise<E[]> {
+	async getForIds(ctx: UserContext, ids: I[]): Promise<E[]> {
 		const k = await getKnex();
 		let q = k(this.tableName);
 
@@ -120,7 +120,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@Monitor()
-	async first(ctx: Context, data: Partial<E>): Promise<E | null> {
+	async first(ctx: UserContext, data: Partial<E>): Promise<E | null> {
 		const k = await getKnex();
 		const q = k(this.tableName);
 		const options = { matching: data, limit: 1 } as (QueryOptions<E> & Q); // needs typing int
@@ -136,7 +136,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@Monitor()
-	async create(ctx: Context, data: Partial<E>): Promise<I> {
+	async create(ctx: UserContext, data: Partial<E>): Promise<I> {
 		const k = await getKnex();
 
 		this.stamp(ctx, data, true);
@@ -153,7 +153,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * @param data 
 	 * @param uniqueProps 
 	 */
-	async createOrGetId(ctx: Context, data: Partial<E>, uniqueProps: Partial<E>): Promise<I> {
+	async createOrGetId(ctx: UserContext, data: Partial<E>, uniqueProps: Partial<E>): Promise<I> {
 		let id: I;
 		try {
 			id = await this.create(ctx, data);
@@ -178,7 +178,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@Monitor()
-	async update(ctx: Context, id: I, data: Partial<E>) {
+	async update(ctx: UserContext, id: I, data: Partial<E>) {
 		const k = await getKnex();
 
 		this.stamp(ctx, data);
@@ -187,7 +187,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		return r;
 	}
 
-	async updateBulk(ctx: Context, fn: (k: QueryBuilder<any, any>) => void, data: Partial<E>) {
+	async updateBulk(ctx: UserContext, fn: (k: QueryBuilder<any, any>) => void, data: Partial<E>) {
 		const k = await getKnex();
 		const q = k(this.tableName).update(data);
 
@@ -199,7 +199,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		return r;
 	}
 
-	protected stamp(ctx: Context, data: Partial<E>, forCreate?: boolean) {
+	protected stamp(ctx: UserContext, data: Partial<E>, forCreate?: boolean) {
 		if (this.stamped) {
 			// Force casting. We can assume this, might have a more elegant way (but should not need StampedDao though)
 			const stampedData: StampedEntity = (<any>data) as StampedEntity;
@@ -214,7 +214,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@Monitor()
-	async list(ctx: Context, queryOptions?: Q & CustomQuery): Promise<E[]> {
+	async list(ctx: UserContext, queryOptions?: Q & CustomQuery): Promise<E[]> {
 		const k = await getKnex();
 		let q = k(this.tableName);
 		this.completeQueryBuilder(ctx, q, queryOptions);
@@ -226,7 +226,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * Remove one or more entities from one or more id
 	 */
 	@Monitor()
-	async remove(ctx: Context, ids: I | I[]) {
+	async remove(ctx: UserContext, ids: I | I[]) {
 		const k = await getKnex();
 
 		// if we have a bulk ids, try to do the whereIn (for non-compound for now)
@@ -252,7 +252,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		}
 	}
 
-	protected completeQueryBuilder(ctx: Context, q: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
+	protected completeQueryBuilder(ctx: UserContext, q: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
 		// if this dao has a fixed column. 
 		if (this.columns) {
 			q.columns(this.columns);

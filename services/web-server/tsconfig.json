@@ -4,8 +4,8 @@
 
  {
 	"compilerOptions": {
-		// Target on node js 12+
-		"target": "es2020",
+		// ES2019 until node.js supports optional chaining / null coalescing
+		"target": "ES2019",
 
 		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
@@ -47,7 +47,7 @@
 		"./test/**/*.ts", 
 		// Note: shared/ and commont/ts will be compiled as imported by the service .ts code (~ tree shaking)
 		//       However, setup-module-aliases needs to be used (require) in entry file, and therefore explicitly inluded. 
-		"../_common/src/setup-module-aliases.ts" 
+		"../_common/src/setup-module-aliases.ts", "../_common/src/web/koa-utils.ts", "../_common/src/web/koa-base-router.ts" 
 	],
 
 	"exclude": [

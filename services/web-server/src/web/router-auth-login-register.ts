@@ -1,51 +1,54 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/router-auth-login-register.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { getSysContext } from 'common/context';
 import { userDao } from 'common/da/daos';
 import { pwdCheck } from 'common/security/password';
+import { getSysContext } from 'common/user-context';
 import { AuthFailError, clearAuth, setAuth } from '../auth';
-import { srouter } from '../express-utils';
-
-const _router = srouter();
-
-_router.post('/api/logoff', async function (req, res, next) {
-	clearAuth(res);
-	return { success: true };
-});
+import { AppRouter, Ktx, routePost } from './koa-utils';
 
 
-_router.post('/api/login', async function (req, res, next) {
-	const emptyCtx = await getSysContext();
-	const uname = req.body.username;
-	const clearPwd = req.body.pwd;
-	const userCredential = await userDao.getUserAuthCredential(emptyCtx, uname);
-
-
-	if (userCredential && pwdCheck(clearPwd, userCredential)) {
-		await setAuth(res, userCredential);
-		const { username, id: userId } = userCredential;
-		return { success: true, username, userId };
-	} else {
-		throw new AuthFailError('Wrong username / password');
-	}
-});
-
-_router.post('/api/register', async function (req, res, next) {
-	const sysCtx = await getSysContext();
-	console.log('register', typeof req.body);
-
-	const { username, pwd: clearPwd } = req.body;
-	if (!username || !clearPwd) {
-		throw new AuthFailError("username or pwd can't be empty");
+/**
+ * Note: This use the AppRouter since it is before authentication, and so the ktx is just Ktx
+ */
+class AuthLoginRegisterRouter extends AppRouter {
+	@routePost('/logoff')
+	async logoff(ktx: Ktx) {
+		clearAuth(ktx);
+		return { success: true };
 	}
 
-	const id = await userDao.createUser(sysCtx, clearPwd);
-	const user = userDao.get(sysCtx, id);
+	@routePost('/login')
+	async login(ktx: Ktx) {
+		const emptyCtx = await getSysContext();
+		const uname = ktx.request.body.username;
+		const clearPwd = ktx.request.body.pwd;
+		const userCredential = await userDao.getUserAuthCredential(emptyCtx, uname);
 
-	return { success: true, data: user };
-});
 
+		if (userCredential && pwdCheck(clearPwd, userCredential)) {
+			await setAuth(ktx, userCredential);
+			const { username, id: userId } = userCredential;
+			return { success: true, username, userId };
+		} else {
+			throw new AuthFailError('Wrong username / password');
+		}
+	}
 
+	@routePost('/register')
+	async register(ktx: Ktx) {
+		const sysCtx = await getSysContext();
 
-export const routerAuthLoginAndRegister = _router;
+		const { username, pwd: clearPwd } = ktx.request.body;
+		if (!username || !clearPwd) {
+			throw new AuthFailError("username or pwd can't be empty");
+		}
+
+		const id = await userDao.createUser(sysCtx, clearPwd);
+		const user = userDao.get(sysCtx, id);
+
+		return { success: true, data: user };
+	}
+}
+
+export default function apiRouter(prefix?: string) { return new AuthLoginRegisterRouter(prefix) };

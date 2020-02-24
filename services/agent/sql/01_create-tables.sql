@@ -15,8 +15,7 @@ CREATE TABLE "user" (
   mtime timestamp with time zone,    
   username varchar(64), 
   pwd varchar(128),
-  key varchar(128),
-
+  key varchar(128)
 );
 ALTER SEQUENCE user_id_seq RESTART WITH 1000;
 

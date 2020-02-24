@@ -1,51 +1,44 @@
-import { getSysContext, newContext } from 'common/context';
 import { userDao } from 'common/da/daos';
+import { getSysContext, newUserContext } from 'common/user-context';
 import { asNum } from 'common/utils';
-import { NextFunction, Request, Response } from 'express';
+import { Next } from 'koa';
 import { extname } from 'path';
 import { UserType } from 'shared/entities';
 import { AuthFailError, clearAuth, COOKIE_AUTHTOKEN, COOKIE_USERID, createAuthToken } from '../auth';
-import { srouter } from '../express-utils';
-
-const _router = srouter();
+import { ApiKtx, Ktx } from './koa-utils';
 
 
-// The requestAuth hook
-//   - Will autenticate all request path with extension except '/' and '/api/user-context'
-//   - Will skip exception for /api/user-context
-_router.use(async function (req: Request, res: Response, next: NextFunction) {
-
+export default async function authRequestMiddleware(ktx: Ktx, next: Next) {
 	// for now, if no extension, then assume it is an API, so, authenticate
-	if (!extname(req.path) && !req.path.endsWith('/')) {
+	if (!extname(ktx.path) && !ktx.path.endsWith('/')) {
 		try {
-			const user = await authRequest(req);
-			req.context = await newContext(user);
-			next();
-			return;
+			const user = await authRequest(ktx);
+			// now we make kits a ApiKtx
+			(<ApiKtx>ktx).state.utx = await newUserContext(user);
+			return next();
 		} catch (ex) {
 			// '/api/user-context' when no user is not an error, just returns success false
-			if (req.path === '/api/user-context') {
+			if (ktx.path === '/api/user-context') {
 				if (ex instanceof AuthFailError) {
-					clearAuth(res);
+					clearAuth(ktx);
 				}
-				res.json({ success: false });
+				ktx.body = { success: false };
 				return;
 			}
-			next(ex);
+			throw ex;
 		}
 
 	} else {
-		next();
+		return next();
 	}
 
-});
+}
 
-//#region    ---------- Utils ---------- 
 /** Authenticate a request and return userId or null if it did not pass */
-async function authRequest(req: Request): Promise<{ id: number, type: UserType, username: string }> {
+async function authRequest(ktx: Ktx): Promise<{ id: number, type: UserType, username: string }> {
 	const sysCtx = await getSysContext();
-	const cookieUserId = asNum(req.cookies[COOKIE_USERID] as string | null);
-	const cookieAuthToken = req.cookies[COOKIE_AUTHTOKEN];
+	const cookieUserId = asNum(ktx.cookies.get(COOKIE_USERID) as string | null);
+	const cookieAuthToken = ktx.cookies.get(COOKIE_AUTHTOKEN);
 
 	if (cookieUserId == null || cookieAuthToken == null) {
 		throw new AuthFailError('No authentication in request');
@@ -83,7 +76,4 @@ async function authRequest(req: Request): Promise<{ id: number, type: UserType, 
 }
 
 
-//#endregion ---------- /Utils ---------- 
 
-
-export const routerAuthRequest = _router;

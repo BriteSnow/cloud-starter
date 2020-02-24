@@ -4,8 +4,8 @@
 
  {
 	"compilerOptions": {
-		// This is for the scripts/ ts files (build/devops scripts)
-		"target": "es2020",
+		// ES2019 until node.js supports optional chaining / null coalescing
+		"target": "ES2019",
 
 		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",

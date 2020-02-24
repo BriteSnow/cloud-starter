@@ -1,21 +1,25 @@
-import { getSysContext } from 'common/context';
 import { userDao } from 'common/da/daos';
-import { srouter } from '../express-utils';
+import { getSysContext } from 'common/user-context';
+import { AppRouter, assertApiKtx, Ktx, routeGet } from './koa-utils';
 
-const _router = srouter();
+/**
+ * Note: since we do not know if this request is auth or not, just use AppRouter and then, assert ktx for ApiKtx
+ */
+class ApiUserContextRouter extends AppRouter {
+	@routeGet('/user-context')
+	async userContext(ktx: Ktx) {
+		const sysCtx = await getSysContext();
 
-_router.get('/user-context', async function (req, res, next) {
-	const sysCtx = await getSysContext();
-
-	try {
-		const user = await userDao.get(sysCtx, req.context.userId);
-		const name = user.username; // for now the display name will be the user name
-		return { success: true, data: { id: user.id, name, username: user.username } };
-	} catch (ex) {
-		return { success: false };
+		try {
+			assertApiKtx(ktx);
+			const user = await userDao.get(sysCtx, ktx.state.utx.userId);
+			const name = user.username; // for now the display name will be the user name
+			return { success: true, data: { id: user.id, name, username: user.username } };
+		} catch (ex) {
+			return { success: false };
+		}
 	}
+}
 
-});
 
-
-export const routerApiUserContext = _router;
+export default function apiRouter(prefix?: string) { return new ApiUserContextRouter(prefix) };

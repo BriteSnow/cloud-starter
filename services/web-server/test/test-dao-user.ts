@@ -1,6 +1,6 @@
 import { ok, strictEqual } from 'assert';
-import { getSysContext } from 'common/context';
 import { userDao } from 'common/da/daos';
+import { getSysContext } from 'common/user-context';
 
 /**
  * Test some basic crud operations with timestamps and all from admin (to access testing)

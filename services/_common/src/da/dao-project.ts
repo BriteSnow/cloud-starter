@@ -1,6 +1,6 @@
 import { Project, User } from 'shared/entities';
-import { Context } from '../context';
 import { saveProle } from '../role-manager';
+import { UserContext } from '../user-context';
 import { AccessRequires } from './access';
 import { BaseDao } from './dao-base';
 import { getKnex } from './db';
@@ -9,7 +9,7 @@ export class ProjectDao extends BaseDao<Project, number> {
 	constructor() { super({ table: 'project', stamped: true }) }
 
 	@AccessRequires(['#sys'])
-	async getOwners(ctx: Context, projectId: number): Promise<User[]> {
+	async getOwners(ctx: UserContext, projectId: number): Promise<User[]> {
 		const k = await getKnex();
 
 		// select "user".* from "user" right join user_prole on "user".id = user_prole."userId"
@@ -23,7 +23,7 @@ export class ProjectDao extends BaseDao<Project, number> {
 	}
 
 	//#region    ---------- BaseDao Overrides ---------- 
-	async create(ctx: Context, data: Partial<Project>) {
+	async create(ctx: UserContext, data: Partial<Project>) {
 		const projectId = await super.create(ctx, data);
 
 		await saveProle(ctx.userId, projectId, 'owner');
@@ -31,17 +31,17 @@ export class ProjectDao extends BaseDao<Project, number> {
 	}
 
 	@AccessRequires(['#sys', '#admin', 'project-read'])
-	async get(ctx: Context, id: number) {
+	async get(ctx: UserContext, id: number) {
 		return super.get(ctx, id);
 	}
 
 	@AccessRequires(['#sys', '#admin', 'project-write'])
-	async update(ctx: Context, id: number, data: Partial<Project>) {
+	async update(ctx: UserContext, id: number, data: Partial<Project>) {
 		return super.update(ctx, id, data);
 	}
 
 	@AccessRequires(['#sys', '#admin', 'project-remove'])
-	async remove(ctx: Context, ids: number | number[]) {
+	async remove(ctx: UserContext, ids: number | number[]) {
 		return super.remove(ctx, ids);
 	}
 	//#endregion ---------- /BaseDao Overrides ---------- 

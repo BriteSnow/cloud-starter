@@ -2,11 +2,11 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { QueryOptions, User, UserType } from "shared/entities";
-import { Context, newContext } from "../context";
 import { AppError } from "../error";
 import { createSalt, uuidV4 } from '../security/generators';
 import { pwdEncrypt } from '../security/password';
 import { PwdEncryptData } from '../security/password-types';
+import { newUserContext, UserContext } from "../user-context";
 import { AccessRequires } from "./access";
 import { BaseDao } from "./dao-base";
 import { getKnex } from "./db";
@@ -44,23 +44,23 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		super({ table: 'user', stamped: true, columns: USER_COLUMNS });
 	}
 
-	async getUserByUserName(ctx: Context, username: string): Promise<User | null> {
+	async getUserByUserName(ctx: UserContext, username: string): Promise<User | null> {
 		return this.first(ctx, { username });
 	}
 
 	//#region    ---------- BaseDao Overrides ---------- 
-	async create(ctx: Context, data: Partial<User>) {
+	async create(ctx: UserContext, data: Partial<User>) {
 		throw new Error('UserDao.create NOT AVAILABLE, use UserDao.createUser');
 		return -1; // for TS.
 	}
 
 	@AccessRequires(['#sys', '#admin'])
-	async remove(ctx: Context, id: number | number[]) {
+	async remove(ctx: UserContext, id: number | number[]) {
 		return super.remove(ctx, id);
 	}
 
 	@AccessRequires(['#sys', '#admin', '@id'])
-	async update(ctx: Context, id: number, data: Partial<User>) {
+	async update(ctx: UserContext, id: number, data: Partial<User>) {
 		throw new Error('UserDao.update NOT AVAILABLE, use UserDao.updateUser');
 		return -1; // for TS.
 	}
@@ -85,7 +85,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	//#endregion ---------- /Query Override ---------- 
 
 	//#region    ---------- Credential Methods ---------- 
-	async createUser(ctx: Context, data: CreateUserData) {
+	async createUser(ctx: UserContext, data: CreateUserData) {
 		const userCredential = newUserCredential(data.username, data.clearPwd);
 		const type = data.type;
 		return await super.create(ctx, { ...userCredential, type });
@@ -93,9 +93,9 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 
 
 	@AccessRequires(['#sys'])
-	async newContextFromUserId(ctx: Context, userId: number) {
+	async newContextFromUserId(ctx: UserContext, userId: number) {
 		const user = await this.get(ctx, userId);
-		return newContext(user);
+		return newUserContext(user);
 	}
 
 	/** 
@@ -104,7 +104,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	 * IMPORTANT: This is only to be used for login password check, and request authentication.
 	 **/
 	@AccessRequires(['#sys']) // here only sys context should be able to call this one
-	async getUserAuthCredential(ctx: Context, ref: number | string): Promise<UserAuthCredential> {
+	async getUserAuthCredential(ctx: UserContext, ref: number | string): Promise<UserAuthCredential> {
 		const k = await getKnex();
 		let q = k(this.tableName);
 		q.limit(1);

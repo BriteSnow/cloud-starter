@@ -1,6 +1,6 @@
 import * as assert from 'assert';
-import { newContext } from 'common/context';
 import { userDao } from 'common/da/daos';
+import { newUserContext } from 'common/user-context';
 import { User } from 'shared/entities';
 import { initSuite } from './t-utils';
 
@@ -41,7 +41,7 @@ describe('test-access-basic', async function () {
 		await assert.rejects(userDao.update(suite.userACtx, testUser01Id, { username: 'test-access-basic-user-01 updated' }), suite.errorNoAccess, 'updating test-user-01 from userA');
 
 		// test update testUser01 from testUser01, should work
-		const testUser01Ctx = await newContext(testUser);
+		const testUser01Ctx = await newUserContext(testUser);
 		await userDao.update(testUser01Ctx, testUser01Id, { username: 'test-access-basic-user-01 update 2' })
 
 		// test get and check update from testUser01

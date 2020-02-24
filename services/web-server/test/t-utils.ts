@@ -1,6 +1,6 @@
-import { Context as CommonContext, getSysContext, newContext } from 'common/context';
 import { userDao } from 'common/da/daos';
 import { closeKnex, getKnex } from "common/da/db";
+import { getSysContext, newUserContext, UserContext as CommonContext } from 'common/user-context';
 
 
 // Note: need to rename Context CommonContext because Mocha has it own Context
@@ -55,10 +55,10 @@ export function initSuite(suite: Mocha.Suite) {
 
 	suite.beforeEach(async function () {
 		// Before each test, we make sure we have refresh context, since context are used to cache privileges and other context data
-		suite.sysCtx = await newContext(suite.sysCtx.user);
-		suite.adminCtx = await newContext(suite.adminCtx.user);
-		suite.userACtx = await newContext(suite.userACtx.user);
-		suite.userBCtx = await newContext(suite.userBCtx.user);
+		suite.sysCtx = await newUserContext(suite.sysCtx.user);
+		suite.adminCtx = await newUserContext(suite.adminCtx.user);
+		suite.userACtx = await newUserContext(suite.userACtx.user);
+		suite.userBCtx = await newUserContext(suite.userBCtx.user);
 	})
 
 	suite.afterEach(async function () {

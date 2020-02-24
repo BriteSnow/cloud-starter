@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { Timer } from 'node-simple-timer';
-import { Context } from './context';
+import { assertUserContext, UserContext } from './user-context';
 
 /** This is what will be shared by the PerfContext (user just need the ref to the object) */
 class PerfItem {
@@ -89,19 +89,17 @@ export function Monitor() {
 		const method = descriptor.value!;
 
 		descriptor.value = async function monitorWrapper(this: any) {
-			const ctx = arguments[0] as Context;
-			if (ctx == null || !ctx.constructor.name.startsWith('Context')) {
-				throw new Error(`Cannot`)
-			}
-			const pToken = ctx.perfContext.open(`${this.constructor.name}.${propertyKey}`);
+			const utx = arguments[0] as UserContext;
+			assertUserContext(utx);
+			const pToken = utx.perfContext.open(`${this.constructor.name}.${propertyKey}`);
 
 			const r = method.apply(this, arguments);
-			ctx.perfContext.close(pToken);
+			utx.perfContext.close(pToken);
 			const obj = this;
 			// if the return is a promise, we end on complete
 			if (r && typeof (r.then) === 'function') {
 				r.then(function () {
-					ctx.perfContext.end(pToken);
+					utx.perfContext.end(pToken);
 				}).catch(function () {
 					// NOTE: Here we need to have a .catch, otherwise node believes this promise was not caught and log an error
 				});
@@ -109,7 +107,7 @@ export function Monitor() {
 			}
 			// otherwise, we close now
 			else {
-				ctx.perfContext.end(pToken);
+				utx.perfContext.end(pToken);
 			}
 
 			return r;

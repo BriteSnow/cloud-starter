@@ -6,7 +6,7 @@ import { getProjectPrivileges } from './role-manager';
 export type ContextUserType = Partial<User> & Pick<User, 'id' | 'username' | 'type'>;
 
 /** Note: Make context an interface so that ContextImpl class does not get expose and app code cannot create it of the newContext factory */
-export interface Context {
+export interface UserContext {
 	readonly userId: number;
 	readonly userType: string;
 	readonly username: string | null;
@@ -16,26 +16,32 @@ export interface Context {
 }
 
 
-let _sysContext: Context;
+let _sysContext: UserContext;
 /** 
  * Get and cache the sysContext. 
  * Note: user 0, in the db, is of sys type, we can harcode the user data for now (perhpas later, do a knex.select to id:0 to get full data)
  */
-export async function getSysContext(): Promise<Context> {
+export async function getSysContext(): Promise<UserContext> {
 	if (!_sysContext) {
-		_sysContext = newContext({ id: 0, username: 'sys', type: 'sys' }); // we know 0 is sys. 
+		_sysContext = newUserContext({ id: 0, username: 'sys', type: 'sys' }); // we know 0 is sys. 
 	}
 	return _sysContext;
 }
 
-export function newContext(user: Pick<User, 'id' | 'username' | 'type'>) {
+export function assertUserContext(obj: any): asserts obj is UserContext {
+	if (!(obj instanceof UserContextImpl)) {
+		throw new Error(`Object is not of type UserContext ${obj?.constructor.name}`);
+	}
+}
+
+export function newUserContext(user: Pick<User, 'id' | 'username' | 'type'>) {
 	// TODO: validate it has the right fields. 
-	return new ContextImpl(user);
+	return new UserContextImpl(user);
 }
 
 //#region    ---------- Private Implementations ---------- 
 
-class ContextImpl implements Context {
+class UserContextImpl implements UserContext {
 	readonly userId: number;
 	readonly userType: string;
 	private privilegesByProjectId: Map<number, Set<string>> = new Map();
