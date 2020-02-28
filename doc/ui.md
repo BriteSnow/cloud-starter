@@ -105,20 +105,19 @@ The MVDOM best practices for component communication use those three schemes:
 projectChange(data: ...) { ...}
 ```
 
-### Best practices
+### Base HTML Class (mvdom and mvdom-ui)
 
-For the application development, all custom components will extend at least `BaseHTMLElement` which provided normalized methods and properties (coming soon) to express the component behavior without re-implementing underlying custom elements lifecycle and its intricacies. 
+In this application frontends, we will be using [mvdom](https://github.com/mvdom/mvdom) which is a micro library enabling for native Web Component development. 
 
-- `mvdom-xp` contains the base class that custom component should inherit from.
+- The base class of all components (component elements and views) will be [mvdom](https://github.com/mvdom/mvdom) `BaseHTMLElement`
+  - Sub Classes implement `init()` to create the innerHTML or appendChild, to set states, and to bind events. It is garanteed to be called only once. 
+  - Always called `super.init()` at the beginning of the `init()` SubClass implementation. 
+  - Not need to worry about `connectedCallback()` (if called, make sure to call `super.connectedCallback()`)
+- We will use the [mvdom-ui](https://github.com/mvdom/mvdom-ui) `InputElement`, ... for basic input field components, and extends from `BaseFieldElement` for our custom element. 
+  - `BaseFieldElement` normalize the `.value` pattern and disabled, readonly css/property behavior, and should be used for any custom element. 
+  - mvdom-ui also provide a set of base input element such as `InputElement <m-input/>` `SelectElement <m-select/>` that should be used and can be simply styled. 
+- Views will extends an application base case `BaseViewElement` with some addtional utilities for view lifecycles. 
 
-  - `BaseHTMLElement` provides a basic class for all Sub Classes to inherit from. 
-    - Sub Classes implement `init()` to create the innerHTML or appendChild, to set states, and to bind events. It is garanteed to be called only once. 
-    - Always called `super.init()` at the beginning of the `init()` SubClass implementation. 
-    - Not need to worry about `connectedCallback()` (if called, make sure to call `super.connectedCallback()`)
-
-  - `BaseFieldElement` inherit _BaseHTMLElement_ and provide the basic logic for **field based** Custom Component that have name / value, such as input, checkbox, options, ...
-    - Sub Classes needs to manage their `.value` state, and call `this.triggerChange()`, implemented by _BaseFieldElement_, to trigger the DOM `CHANGE` event on the component with `{detail:{name,value}}`. Do not trigger this event manually as _BaseFieldElement_ has some guard for it, just call `this.triggerChange()`.
-    - `BaseFieldElement.init` will add the needed `mvdom dx` css class and pusher/puller if the component tag as `.name` and event a generic pusher/puller for all field based custom components. See [SpecControlsView](../frontends/web/src/views/Spec/SpecViews.ts)
 
 #### Anatomy of a Simple Web Component
 

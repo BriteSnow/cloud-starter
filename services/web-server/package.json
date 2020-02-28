@@ -18,7 +18,7 @@
   "dependencies": {
     "@google-cloud/bigquery": "^4.7.0",
     "@koa/router": "^8.0.8",
-    "@types/koa": "^2.11.1",
+    "@types/koa": "^2.11.2",
     "@types/koa-static": "^4.0.1",
     "@types/koa__router": "^8.0.2",
     "@types/mocha": "^7.0.1",
@@ -32,7 +32,7 @@
     "koa-compose": "^4.1.0",
     "koa-send": "^5.0.0",
     "koa-static": "^5.0.0",
-    "mocha": "^7.0.1",
+    "mocha": "^7.1.0",
     "module-alias": "^2.2.2",
     "moment": "^2.24.0",
     "node-simple-timer": "^0.1.1",
@@ -41,6 +41,6 @@
     "ts-node": "^8.6.2",
     "typescript": "^3.8.2",
     "useragent": "^2.3.0",
-    "uuid": "^7.0.0"
+    "uuid": "^7.0.1"
   }
 }

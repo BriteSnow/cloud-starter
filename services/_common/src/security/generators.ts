@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import _uuidv4 from 'uuid/v4';
+import { v4 } from 'uuid';
 
 const SALT_LENGTH = 18;
 
@@ -11,7 +11,7 @@ export function createSalt() {
 
 /** Return a new uuidV4 as string */
 export function uuidV4() {
-	return _uuidv4();
+	return v4();
 }
 
 
