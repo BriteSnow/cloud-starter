@@ -3,6 +3,16 @@ _[back](README.md)_
 
 The best practice defines three type of comments. 
 
+### Module comment
+
+A module commponent, is a comment for a whole module (e.g., a TypeScript file).
+Should be at the top of the file, one empty line above the import, and one empty line below the eventual license comment.
+
+```ts
+/////////////////////
+// This module provides the authentication web context (KTX) logic
+////
+```
 ### One Line Comments
 
 Used to concisely describe few like of code, or a methods or a property. 
