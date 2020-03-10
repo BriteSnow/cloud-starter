@@ -1,16 +1,20 @@
+import { Immutable } from 'immer';
 import { User } from 'shared/entities';
+import { freeze } from 'shared/utils';
 import { PerfContext } from './perf';
 import { getProjectPrivileges } from './role-manager';
 
 
-export type ContextUserType = Partial<User> & Pick<User, 'id' | 'username' | 'type'>;
+/**
+ * Subset of the User object for UserContext object
+ */
+export type UserForContext = Immutable<Pick<User, 'id' | 'type'>>;
 
 /** Note: Make context an interface so that ContextImpl class does not get expose and app code cannot create it of the newContext factory */
 export interface UserContext {
 	readonly userId: number;
 	readonly userType: string;
-	readonly username: string | null;
-	readonly user: ContextUserType;
+	readonly user: UserForContext;
 	hasProjectPrivilege(projectId: number, privilege: string): Promise<boolean>;
 	readonly perfContext: PerfContext;
 }
@@ -23,7 +27,7 @@ let _sysContext: UserContext;
  */
 export async function getSysContext(): Promise<UserContext> {
 	if (!_sysContext) {
-		_sysContext = newUserContext({ id: 0, username: 'sys', type: 'sys' }); // we know 0 is sys. 
+		_sysContext = newUserContext({ id: 0, type: 'sys' }); // we know 0 is sys. 
 	}
 	return _sysContext;
 }
@@ -34,7 +38,7 @@ export function assertUserContext(obj: any): asserts obj is UserContext {
 	}
 }
 
-export function newUserContext(user: Pick<User, 'id' | 'username' | 'type'>) {
+export function newUserContext(user: Pick<User, 'id' | 'type'>) {
 	// TODO: validate it has the right fields. 
 	return new UserContextImpl(user);
 }
@@ -42,28 +46,21 @@ export function newUserContext(user: Pick<User, 'id' | 'username' | 'type'>) {
 //#region    ---------- Private Implementations ---------- 
 
 class UserContextImpl implements UserContext {
-	readonly userId: number;
-	readonly userType: string;
+	get userId() { return this._user.id };
+	get userType() { return this._user.type };
 	private privilegesByProjectId: Map<number, Set<string>> = new Map();
-	private _user: ContextUserType
+	private _user: UserForContext
 	readonly perfContext = new PerfContext();
 
 	_data = new Map<string, any>(); // not used yet. 
-
-	get username() {
-		return (this._user && this._user.username) ? this._user.username : null;
-	}
 
 	get user() {
 		return { ...this._user }; // shalow copy (should be enough)
 	}
 
-	constructor(user: ContextUserType) {
-		this.userId = user.id!;
-		this.userType = user.type!; // TODO: needs to find a way to type this so that type is non optional
-		this._user = user;
+	constructor(user: UserForContext) {
+		this._user = freeze(user);
 	}
-
 
 	public async hasProjectPrivilege(projectId: number, privilege: string) {
 

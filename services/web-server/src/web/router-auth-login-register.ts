@@ -20,11 +20,10 @@ class AuthLoginRegisterRouter extends AppRouter {
 
 	@routePost('/login')
 	async login(ktx: Ktx) {
-		const emptyCtx = await getSysContext();
+		const sysCtx = await getSysContext();
 		const uname = ktx.request.body.username;
 		const clearPwd = ktx.request.body.pwd;
-		const userCredential = await userDao.getUserAuthCredential(emptyCtx, uname);
-
+		const userCredential = await userDao.getUserAuthCredentialByUsername(sysCtx, uname);
 
 		if (userCredential && pwdCheck(clearPwd, userCredential)) {
 			await setAuth(ktx, userCredential);

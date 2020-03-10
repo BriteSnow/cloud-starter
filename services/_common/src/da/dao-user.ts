@@ -1,8 +1,12 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/da/dao-user.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+/////////////////////
+// User DAO. Advanced DAO to manage the security aspect of the user. 
+////
+
 import { QueryOptions, User, UserType } from "shared/entities";
-import { AppError } from "../error";
+import { freeze } from 'shared/utils';
 import { createSalt, uuidV4 } from '../security/generators';
 import { pwdEncrypt } from '../security/password';
 import { PwdEncryptData } from '../security/password-types';
@@ -10,6 +14,7 @@ import { newUserContext, UserContext } from "../user-context";
 import { AccessRequires } from "./access";
 import { BaseDao } from "./dao-base";
 import { getKnex } from "./db";
+
 
 interface UserCredential extends Pick<User, 'username'> {
 	salt: string;
@@ -20,7 +25,6 @@ interface UserCredential extends Pick<User, 'username'> {
 export interface UserAuthCredential extends UserCredential, Pick<User, 'id' | 'type'> {
 	key: string
 };
-
 
 interface CreateUserData {
 	type?: UserType;
@@ -35,7 +39,7 @@ const USER_COLUMNS = ['id', 'uuid', 'username', 'type', 'cid', 'ctime', 'mid', '
 // Security only columns, only to be used in getUserAuthCredential, 
 const USER_SECURITY_COLUMNS = ['salt', 'key', 'pwd'];
 
-// Credential for authentication
+// Credential for authentication used in 
 const USER_AUTH_CREDENTIAL_COLUMNS = ['id', 'uuid', 'username', 'type', ...USER_SECURITY_COLUMNS];
 
 
@@ -98,28 +102,50 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		return newUserContext(user);
 	}
 
+
 	/** 
 	 * Return a user credential necessary to authenticate a user (.id, .username, .uuid, .salt, .pwd, .key). 
 	 * IMPORTANT: This is the ONLY methods that should return the 'user.pwd' and 'user.key'
 	 * IMPORTANT: This is only to be used for login password check, and request authentication.
 	 **/
 	@AccessRequires(['#sys']) // here only sys context should be able to call this one
-	async getUserAuthCredential(ctx: UserContext, ref: number | string): Promise<UserAuthCredential> {
+	async getUserAuthCredentialByUuid(ctx: UserContext, uuid: string): Promise<UserAuthCredential> {
+		return this.getUserAuthCredential(ctx, { uuid });
+	}
+	@AccessRequires(['#sys']) // here only sys context should be able to call this one
+	async getUserAuthCredentialById(ctx: UserContext, id: number): Promise<UserAuthCredential> {
+		return this.getUserAuthCredential(ctx, { id });
+	}
+	@AccessRequires(['#sys']) // here only sys context should be able to call this one
+	async getUserAuthCredentialByUsername(ctx: UserContext, username: string): Promise<UserAuthCredential> {
+		return this.getUserAuthCredential(ctx, { username });
+	}
+
+	private async getUserAuthCredential(ctx: UserContext, ref: { uuid: string }): Promise<UserAuthCredential>;
+	private async getUserAuthCredential(ctx: UserContext, ref: { id: number }): Promise<UserAuthCredential>;
+	private async getUserAuthCredential(ctx: UserContext, ref: { username: string }): Promise<UserAuthCredential>;
+	private async getUserAuthCredential(ctx: UserContext, ref: { uuid?: string, id?: number, username?: string }): Promise<UserAuthCredential> {
 		const k = await getKnex();
 		let q = k(this.tableName);
 		q.limit(1);
 		q.columns(USER_AUTH_CREDENTIAL_COLUMNS);
-		const colName = (typeof ref === 'string') ? 'username' : 'id';
-		const result = await q.where(colName, ref);
-		if (!result || result.length < 1) {
-			throw new AppError(`Cannot find userWithCredential for ${ref}`);
+		if (ref.uuid != null) {
+			q.where('uuid', ref.uuid);
+		} else if (ref.id != null) {
+			q.where('id', ref.id);
+		} else if (ref.username != null) {
+			q.where('username', ref.username);
+		} else {
+			throw new Error(`Cannot find userWithCredential`);
 		}
-		return result[0] as UserAuthCredential;
+		const result = await q;
+		if (!result || result.length < 1) {
+			throw new Error(`Cannot find userWithCredential for ${ref.id ?? ref.uuid ?? ref.username}`);
+		}
+		return freeze(result[0]) as UserAuthCredential;
 	}
 	//#endregion ---------- /Credential Methods ---------- 
 }
-
-
 //#region    ---------- Utils ---------- 
 
 /**

@@ -1,12 +1,16 @@
 import { userDao } from 'common/da/daos';
+import { checkToken, parseToken, UserCredForToken } from 'common/security/token';
 import { getSysContext, newUserContext } from 'common/user-context';
-import { asNum } from 'common/utils';
 import { Next } from 'koa';
 import { extname } from 'path';
 import { UserType } from 'shared/entities';
-import { AuthFailError, clearAuth, COOKIE_AUTHTOKEN, COOKIE_USERID, createAuthToken } from '../auth';
+import { freeze } from 'shared/utils';
+import { AuthFailError, clearAuth, extractToken, setAuth } from '../auth';
 import { ApiKtx, Ktx } from './koa-utils';
 
+//#region    ---------- ERROR ---------- 
+const ERROR_INVALID_AUTH = 'INVALID_AUTH';
+//#endregion ---------- /ERROR ---------- 
 
 export default async function authRequestMiddleware(ktx: Ktx, next: Next) {
 	// for now, if no extension, then assume it is an API, so, authenticate
@@ -34,46 +38,27 @@ export default async function authRequestMiddleware(ktx: Ktx, next: Next) {
 
 }
 
-/** Authenticate a request and return userId or null if it did not pass */
-async function authRequest(ktx: Ktx): Promise<{ id: number, type: UserType, username: string }> {
+
+export async function authRequest(ktx: Ktx): Promise<{ id: number, type: UserType }> {
 	const sysCtx = await getSysContext();
-	const cookieUserId = asNum(ktx.cookies.get(COOKIE_USERID) as string | null);
-	const cookieAuthToken = ktx.cookies.get(COOKIE_AUTHTOKEN);
+	const cookieAuthToken = extractToken(ktx);
 
-	if (cookieUserId == null || cookieAuthToken == null) {
-		throw new AuthFailError('No authentication in request');
-	} else {
-		try {
-			let userId = cookieUserId;
+	// Note: By design, the throw are information less to not give too much information in log stack. Can be extended later.
+	try {
+		// check cookie  exist
+		if (cookieAuthToken == null) { throw new Error() }
 
-			//// get the key/username from user credential
-			const { username, key, type } = await userDao.getUserAuthCredential(sysCtx, userId);
+		const tokenData = parseToken(cookieAuthToken);
+		const { id, type, uuid, salt } = await userDao.getUserAuthCredentialByUuid(sysCtx, tokenData.uuid);
+		const cred: UserCredForToken = freeze({ uuid, salt }); // make sure can't be tampered between check and setAuth
+		checkToken(tokenData, cred);
+		setAuth(ktx, cred);
+		return { id, type };
 
-			//// Validation
-			if (!username || !key) {
-				throw new AuthFailError('username or key was not defined, cannnot authenticate');
-			}
-
-			const authToken = await createAuthToken(userId, username, key);
-
-			if (cookieAuthToken === authToken) {
-				return { id: userId, type, username };
-			} else {
-				throw new AuthFailError('Wrong authentication in request');
-			}
-		} catch (ex) {
-			if (ex instanceof AuthFailError) {
-				throw ex;
-			}
-			else {
-				throw new AuthFailError(ex.message);
-			}
-
-		}
-
+	} catch {
+		throw new AuthFailError(ERROR_INVALID_AUTH);
 	}
 
 }
-
 
 

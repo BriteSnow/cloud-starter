@@ -10,6 +10,7 @@ import { OAuth2Client } from 'googleapis-common';
 import { setAuth } from '../auth';
 import { AppRouter, Ktx, routeGet, success } from './koa-utils';
 
+
 // Module Error Code
 const ErrorCode = Object.freeze({
 	NO_GOOGLE_BACKEND_CREDENTIALS: 'NO_GOOGLE_BACKEND_CREDENTIALS'
@@ -89,7 +90,7 @@ class GoogleOAuthRouter extends AppRouter {
 			}
 
 			//// authenticate the user
-			const userCredential = await userDao.getUserAuthCredential(sysCtx, user.id);
+			const userCredential = await userDao.getUserAuthCredentialById(sysCtx, user.id);
 			await setAuth(ktx, userCredential);
 
 			ktx.redirect('/'); // 302 (temporary by default, can do ktx.status = 301 for permanent)

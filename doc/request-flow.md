@@ -17,8 +17,7 @@ _[back](README.md)_
     - Validate request `clearPwd` from body with encrypted `userCredential.pwd`
       - Validate by calling `pwdFromRequest = pwdEncrypt(clearPwd, userCredential) === userCredential.pwd`
     - If Fail: clear all auth cookies and send `{success:false}`
-    - If pass, set `Auth Cookies` (see Auth Cookie section)
-
+    - If pass, **Set Auth Cookies**
 
 ## Set Auth Cookies
 
@@ -26,8 +25,8 @@ Here is the pseudo code flow of setting a auth cookies for a validated user requ
 
 - New Values
   - `uuid = decodeBase64(cookie.token.firstPart())`
-  - `new_exp = now + logoff_duration`;
-  - `new_token_signature = sha256.salt(global_salt + user.salt).update(user.uuid + exp).toString('base64')`;
+  - `new_exp = now + session_duration`;
+  - `new_token_signature = sha256.salt(global_salt + user.salt).update(user.uuid + new_exp).toString('base64')`;
 - Set token cookies (only one needed to authenticate request)
   - set cookie - `__Host-token = base64(uuid).base64(new_exp).base64(new_token_signature); Secure; SameSite=Strict; HttpOnly` (Domain locked, HttpOnly)
 - Set other cookies (optional, for Web UI features)

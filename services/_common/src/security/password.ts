@@ -1,6 +1,10 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/security/password.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+/////////////////////
+// Password encryption module. 
+// Note: This is a good idea to have it attached as it is more of a boilerplate code.
+////
 
 import { schemes } from './password-schemes';
 import { PwdCheckData, PwdEncryptData } from './password-types';

@@ -5,6 +5,7 @@ import { QueryBuilder } from 'knex';
 import { OpVal, QueryFilter, QueryOptions, StampedEntity, Val } from 'shared/entities';
 import { Monitor } from '../perf';
 import { UserContext } from '../user-context';
+import { removeProps } from '../utils';
 import { nowTimestamp } from '../utils-cloud-starter';
 import { getKnex } from './db';
 
@@ -139,6 +140,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	async create(ctx: UserContext, data: Partial<E>): Promise<I> {
 		const k = await getKnex();
 
+		this.cleanForSave(ctx, data, true);
 		this.stamp(ctx, data, true);
 
 		const r = await k(this.tableName).insert(data).returning(this.idNames);
@@ -181,6 +183,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	async update(ctx: UserContext, id: I, data: Partial<E>) {
 		const k = await getKnex();
 
+		this.cleanForSave(ctx, data);
 		this.stamp(ctx, data);
 
 		const r = await k(this.tableName).update(data).where(this.getWhereIdObject(id));
@@ -193,13 +196,22 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 
 		fn(q);
 
+		this.cleanForSave(ctx, data);
 		this.stamp(ctx, data);
 
-		const r = await q.then();
+		const r = await q;
 		return r;
 	}
 
+	/**
+	 * Clean the data object of any properties that should not be part of the create or update. 
+	 */
+	protected cleanForSave(ctx: UserContext, data: Partial<E>, forCreate = false) {
+		// Those will be set in this.stamp
+		removeProps(data, ['cid', 'ctime', 'mid', 'mtime']);
+	}
 	protected stamp(ctx: UserContext, data: Partial<E>, forCreate?: boolean) {
+
 		if (this.stamped) {
 			// Force casting. We can assume this, might have a more elegant way (but should not need StampedDao though)
 			const stampedData: StampedEntity = (<any>data) as StampedEntity;

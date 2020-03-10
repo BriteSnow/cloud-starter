@@ -1,5 +1,10 @@
-//// NOTE: This is the password-schemes model. 
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/security/generator-schemes.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+/////////////////////
+// Module containing the various pwd schemes. 
+// Note: Usually will need to be detached with some app specific constant import
+////
 
 import crypto from 'crypto';
 import { PWD_SCHEME_01_SALT, PWD_SCHEME_02_SALT } from '../config';
@@ -14,7 +19,6 @@ class SchemeBasic extends PwdScheme {
 		// for this example, we will use sha256, but can be made more secure if see, SchemeStronger.
 		return crypto.createHash("sha256").update(this.GLOBAL_SALT + data.clearPwd).digest("hex");
 	}
-
 }
 //#endregion ---------- /Scheme Basic ----------
 
@@ -28,7 +32,6 @@ class SchemeStronger extends PwdScheme {
 		hash.update(data.uuid + data.clearPwd);
 		return hash.digest('base64');
 	}
-
 }
 //#endregion ---------- /Scheme Stronger ----------
 

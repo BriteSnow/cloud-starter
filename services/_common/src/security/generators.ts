@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/security/generators.ts" />
+// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import crypto from 'crypto';
 import { v4 } from 'uuid';
 
