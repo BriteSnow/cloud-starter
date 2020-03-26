@@ -1,21 +1,20 @@
 
 
 import { deepStrictEqual as equal } from 'assert';
-import { HOME_URL, initSuite } from '../suite-utils';
+import { HOME_URL, initSuite, textContent } from '../suite-utils';
+
 
 describe('nav', function () {
 
-	const suite = initSuite(this, true);
+	const suite = initSuite(this);
 
 	it('nav-list', async function () {
+
 		const page = suite.page;
 
 		await page.goto(HOME_URL);
-		const vnavMenu = await page.waitForSelector("v-nav");
-		// console.log('>>> nav-list', vnavMenu);
-		const navLabel = await page.$eval("v-nav a:first-child", (el) => {
-			return el.textContent?.trim();
-		});
+		await page.waitForSelector("v-nav");
+		const navLabel = await textContent(page, 'v-nav a:first-child');
 		equal(navLabel, 'Home');
 	});
 

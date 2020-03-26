@@ -32,7 +32,7 @@ export function pwdCheck(clearPwd: string, data: PwdCheckData): { scheme_outdate
 
 	// build the response
 	if (pwd !== clearPwdEncrypted) {
-		throw new AppError(ERROR_PWD_CHECK_FAIL, `Authentical Fail`); // IMPORTANT: Never put either password in ANY log
+		throw new AppError(ERROR_PWD_CHECK_FAIL, `Authentication Fail`); // IMPORTANT: Never put either password in ANY log
 	}
 	const scheme_outdated = schemeId !== defaultSchemeId;
 	return { scheme_outdated };
