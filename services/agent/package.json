@@ -17,18 +17,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/uuid": "^7.0.0",
+    "@types/uuid": "^7.0.2",
     "cmdrouter": "^0.3.1",
-    "knex": "^0.20.11",
+    "knex": "^0.20.13",
     "module-alias": "^2.2.2",
     "moment": "^2.24.0",
     "node-simple-timer": "^0.1.1",
     "p-spawn": "^0.5.0",
     "pg": "^7.18.2",
     "redis": "^3.0.2",
-    "ts-node": "^8.6.2",
+    "ts-node": "^8.8.1",
     "typescript": "^3.8.3",
     "uuid": "^7.0.2",
-    "vdev": "^0.11.4"
+    "vdev": "^0.11.5"
   }
 }
