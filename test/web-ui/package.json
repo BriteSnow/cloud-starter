@@ -1,0 +1,19 @@
+{
+  "name": "test-web-ui",
+  "version": "0.0.0",
+  "description": "Web UI test using Puppeteer",
+  "main": "index.js",
+  "scripts": {
+    "test": "TS_NODE_FILES=true ./node_modules/.bin/mocha ./src/spec/**/*.spec.ts",
+    "testw": "TS_NODE_FILES=true ./node_modules/.bin/mocha ./src/test/**/*.spec.ts --watch --watch-files './src/**/*.ts'"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/mocha": "^7.0.2",
+    "@types/puppeteer": "^2.0.1",
+    "mocha": "^7.1.1",
+    "puppeteer": "^2.1.1",
+    "typescript": "^3.8.3"
+  }
+}

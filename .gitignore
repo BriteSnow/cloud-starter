@@ -1,5 +1,8 @@
-# Ignore mac info files
-.DS_Store
+# By Default ignore all .* (can make exception)
+.*
+
+# Except .gitignore
+!.gitignore
 
 # Ignore .vscode
 # For this project, we actually allow .vscode files to be added to show the best practices.
