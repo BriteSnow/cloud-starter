@@ -6,9 +6,11 @@
 // Note: This is a good idea to have it attached as it is more of a boilerplate code.
 ////
 
+import { AppError } from '../error';
 import { schemes } from './password-schemes';
 import { PwdCheckData, PwdEncryptData } from './password-types';
 
+const ERROR_PWD_CHECK_FAIL = 'PWD_CHECK_FAIL';
 
 type SchemeId = keyof typeof schemes;
 
@@ -22,16 +24,18 @@ export function pwdEncrypt(data: PwdEncryptData) {
 	return `#E${schemeId}#${hash}`;
 }
 
-export function pwdCheck(clearPwd: string, data: PwdCheckData): { pass: boolean, scheme_outdated: boolean } {
+export function pwdCheck(clearPwd: string, data: PwdCheckData): { scheme_outdated: boolean } {
 	const { schemeId, pwd } = extractSchemeId(data.pwd);
 	const scheme = schemes[schemeId];
 	const { uuid, username, salt } = data;
 	const clearPwdEncrypted = scheme.encrypt({ uuid, username, salt, clearPwd });
 
 	// build the response
-	const pass = pwd === clearPwdEncrypted;
+	if (pwd !== clearPwdEncrypted) {
+		throw new AppError(ERROR_PWD_CHECK_FAIL, `Authentical Fail`); // IMPORTANT: Never put either password in ANY log
+	}
 	const scheme_outdated = schemeId !== defaultSchemeId;
-	return { pass, scheme_outdated };
+	return { scheme_outdated };
 }
 
 //#endregion ---------- /public function ----------
