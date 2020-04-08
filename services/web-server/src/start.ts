@@ -1,6 +1,6 @@
 require('../../_common/src/setup-module-aliases');
 
-import { __version__ } from 'common/config';
+import { __version__ } from 'common/conf-values';
 import { AppError } from 'common/error';
 import Koa, { Next } from 'koa';
 import koaBody from 'koa-body';

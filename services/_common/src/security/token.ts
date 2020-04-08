@@ -9,7 +9,7 @@
 import crypto from 'crypto';
 import moment from 'moment';
 import { freeze } from 'shared/utils';
-import { WEB_TOKEN_DURATION, WEB_TOKEN_SALT } from '../config-values';
+import { WEB_TOKEN_DURATION, WEB_TOKEN_SALT } from '../conf-values';
 import { AppError } from '../error';
 import { b64dec, b64enc } from '../utils';
 

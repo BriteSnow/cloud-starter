@@ -1,4 +1,4 @@
-FROM britesnow/base-node
+FROM britesnow/base-node-buster
 
 RUN mkdir /service
 

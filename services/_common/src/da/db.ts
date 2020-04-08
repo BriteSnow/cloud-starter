@@ -3,7 +3,7 @@
 
 import knexClient from 'knex';
 import { types } from 'pg';
-import { getConfig } from '../config';
+import { DB } from '../conf-values';
 export { QueryInterface } from 'knex';
 
 
@@ -25,7 +25,7 @@ let _knex: knexClient | undefined;
 export async function getKnex() {
 
 	if (!_knex) {
-		const dbOpts = await getConfig('db');
+		const dbOpts = DB;
 		try {
 			_knex = await knexClient({
 				client: 'pg',

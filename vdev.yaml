@@ -55,4 +55,4 @@ version:
   files:
     - frontends/web/src/base/main.ts
     - services/web-server/web-folder/index.html
-    - services/_common/src/config-values.ts
+    - services/_common/src/conf-values.ts

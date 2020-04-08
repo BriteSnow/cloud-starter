@@ -1,7 +1,7 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/router-auth-google-oauth.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { getConfig } from 'common/config';
+import { GOOGLE_OAUTH } from 'common/conf-values';
 import { oauthDao, userDao } from 'common/da/daos';
 import { AppError } from 'common/error';
 import { getSysContext } from 'common/user-context';
@@ -104,11 +104,13 @@ class GoogleOAuthRouter extends AppRouter {
 
 // return the google oauth client if appropriate config exists, otherwise, return null.
 async function getOAuth2Client(): Promise<OAuth2Client | null> {
-	const { client_id, client_secret, redirect_url } = await getConfig('google_oauth');
+
 	// return null if not client. 
-	if (!client_id || !client_secret) {
+	if (GOOGLE_OAUTH == null) {
 		return null;
 	}
+
+	const { client_id, client_secret, redirect_url } = GOOGLE_OAUTH;
 	return new google.auth.OAuth2(client_id, client_secret, redirect_url);
 }
 

@@ -24,7 +24,7 @@ export class MainView extends BaseViewElement {
 		this._userContext = v;
 		push(this.headerAsideEl, { name: this._userContext.name });
 	}
-	//#endregion ---------- /Data Setters ---------- 
+	//#endn pregion ---------- /Data Setters ---------- 
 
 
 	//#region    ---------- Element & Hub Events ---------- 

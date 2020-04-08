@@ -5,7 +5,7 @@
 // Module responsible to set and get the auth data from the web request context (ktx)
 ////
 
-import { HTTPS_MODE, WEB_TOKEN_DURATION } from 'common/config';
+import { HTTPS_MODE, WEB_TOKEN_DURATION } from 'common/conf-values';
 import { AppError } from 'common/error';
 import { createToken, newExpiration, UserCredForToken } from 'common/security/token';
 import { freeze } from 'shared/utils';

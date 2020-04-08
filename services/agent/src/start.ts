@@ -1,6 +1,6 @@
 require('../../_common/src/setup-module-aliases');
 
-import { getConfig } from 'common/config';
+import { __version__ } from 'common/conf-values';
 import { getKnex } from 'common/da/db';
 
 
@@ -13,8 +13,6 @@ async function main() {
 
 	// listenViaBlocking(client);
 	neverEnd();
-
-	const __version__ = await getConfig('__version__');
 
 	console.log(`--> agent (${__version__}) - started`);
 

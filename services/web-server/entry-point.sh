@@ -1,4 +1,3 @@
-#!/bin/ash
 npm start > ./service.log &
 
 # Make sure the file get created before we to the tail -f

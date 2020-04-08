@@ -1,4 +1,4 @@
-FROM britesnow/base-agent
+FROM britesnow/base-agent-buster
 
 RUN mkdir /service
 

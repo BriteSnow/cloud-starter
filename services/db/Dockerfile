@@ -1,4 +1,4 @@
-FROM postgres:11-alpine
+FROM postgres:11
 
 
 CMD docker-entrypoint.sh postgres
