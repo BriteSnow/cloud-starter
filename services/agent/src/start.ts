@@ -1,6 +1,6 @@
 require('../../_common/src/setup-module-aliases');
 
-import { __version__ } from 'common/conf-values';
+import { __version__ } from 'common/conf';
 import { getKnex } from 'common/da/db';
 
 

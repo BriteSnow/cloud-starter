@@ -3,7 +3,7 @@
 
 import knexClient from 'knex';
 import { types } from 'pg';
-import { DB } from '../conf-values';
+import { DB } from '../conf';
 export { QueryInterface } from 'knex';
 
 

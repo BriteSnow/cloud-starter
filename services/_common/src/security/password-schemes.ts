@@ -7,7 +7,7 @@
 ////
 
 import crypto from 'crypto';
-import { PWD_SCHEME_01_SALT, PWD_SCHEME_02_SALT } from '../conf-values';
+import { PWD_SCHEME_01_SALT, PWD_SCHEME_02_SALT } from '../conf';
 import { PwdEncryptData, PwdScheme } from './password-types';
 
 
