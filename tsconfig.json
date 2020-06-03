@@ -23,7 +23,7 @@
 		"sourceMap": false,  // we do not need the sourcemap (for /scripts/*.ts)		
 
 		// Since we are using ts-node, not really needed, but just in case we want to do a "tsc" on folder.
-		"outDir": "./~out/", /* Redirect output structure to the directory. */
+		"outDir": ".out", /* Redirect output structure to the directory. */
 
 		"baseUrl": ".",
 		

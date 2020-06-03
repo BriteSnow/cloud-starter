@@ -138,6 +138,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 
 	@Monitor()
 	async create(ctx: UserContext, data: Partial<E>): Promise<I> {
+		console.log('>>>>> ahaha salvo');
 		const k = await getKnex();
 
 		this.cleanForSave(ctx, data, true);
@@ -227,6 +228,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 
 	@Monitor()
 	async list(ctx: UserContext, queryOptions?: Q & CustomQuery): Promise<E[]> {
+		console.log('>>>>> ahaha salvo');
 		const k = await getKnex();
 		let q = k(this.tableName);
 		this.completeQueryBuilder(ctx, q, queryOptions);

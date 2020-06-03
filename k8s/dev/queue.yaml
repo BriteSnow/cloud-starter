@@ -13,7 +13,7 @@ spec:
   selector:
     run: cstar-queue # this will select from the template.spec.metadata.labels (the pod)
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cstar-queue-dep
@@ -29,11 +29,24 @@ spec:
       labels:
         run: cstar-queue
     spec:
+      # The host-sys volume and init containers are to disable the THP for redis. 
+      # Will be disabled at the node level, but other services do not need THP to function properly. 
+      volumes:
+        - name: host-sys
+          hostPath:
+            path: /sys
+      initContainers: 
+        - name: disable-thp
+          image: busybox
+          volumeMounts:
+            - name: host-sys
+              mountPath: /host-sys
+          command: ["sh", "-c", "echo never >/host-sys/kernel/mm/transparent_hugepage/enabled"] 
       containers:
-      - image: localhost:5000/cstar-queue:{{imageTag}}
-        imagePullPolicy: Always
-        name: cstar-queue-ctn
-        ports:
-        - containerPort: 6379
-          protocol: TCP
+        - image: localhost:5000/cstar-queue:{{imageTag}}
+          imagePullPolicy: Always
+          name: cstar-queue-ctn
+          ports:
+          - containerPort: 6379
+            protocol: TCP
       restartPolicy: Always

@@ -3,7 +3,7 @@ import { router } from 'cmdrouter';
 import { spawn } from 'p-spawn';
 import { join as joinPath } from 'path';
 import { wait } from 'vdev';
-import { ico, SKETCH_FILE } from './cmd-ico';
+import { sketch, SKETCH_FILE } from './cmd-sketch';
 import { CallReducer } from './utils';
 
 const IMG_NAME_PREFIX = 'cstar-';
@@ -45,7 +45,7 @@ async function watch() {
 	const icoWatcher = chokidar.watch(SKETCH_FILE, { ignoreInitial: true, persistent: true });
 
 	icoWatcher.on('change', async function (filePath: string) {
-		await ico();
+		await sketch();
 	});
 
 	//#endregion ---------- /ico watch ---------- 

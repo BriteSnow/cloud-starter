@@ -1,4 +1,3 @@
-#!/bin/ash
 echo "Killing npm $(pgrep npm)"
 # probably can use 'pkill npm' as well
 kill -9 $(pgrep npm)
