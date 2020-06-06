@@ -92,30 +92,30 @@ As show above, this component models split Web Components into **three main cate
 
 As best practice, it is usually more scalable to have components being **stateless** **from a data standpoint**. Meaning, that components can expose a data setters (should no more than one), but won't keep a copy of the data, and therefore won't expose a getter for this property. dom rendering, the component will be the necessary reference information in the elements (`data-id="${project.id}"`) so the custom event trigger can serialize the important data reference information without having to keep a whole copy of the data locally (which then add unnecessary state synchronization complexity to the application model)
 
-The MVDOM best practices for component communication use those three schemes:
+The dom-native best practices for component communication use those three schemes:
 
 - **parent-to-child** (and grand children) communication is done via **data property setters** or **UI states property getters and setters** 
 
 - **child-to-parents**  (and grand parents) communication is done via  **custom DOM events** (e.g., `FORM_SUBMIT`)
 
-- **app-to-components** communication, beyond the traditional parent to child or child to parents, used the MVDOM pub/sub library, via the HUB API. For example, if a View or even Component element wants to listen to a data change, it can by having method such as:
+- **app-to-components** communication, beyond the traditional parent to child or child to parents, used the dom-native pub/sub library, via the HUB API. For example, if a View or even Component element wants to listen to a data change, it can by having method such as:
 
 ```ts
 @onHub('dcoHub','Project', 'create, update')
 projectChange(data: ...) { ...}
 ```
 
-### Base HTML Class (mvdom and mvdom-ui)
+### Base HTML Class (dom-native and @dom-native/ui)
 
-In this application frontends, we will be using [mvdom](https://github.com/mvdom/mvdom) which is a micro library enabling for native Web Component development. 
+In this application frontends, we will be using [dom-native](https://github.com/dom-native/dom-native) which is a micro library enabling for native Web Component development. 
 
-- The base class of all components (component elements and views) will be [mvdom](https://github.com/mvdom/mvdom) `BaseHTMLElement`
+- The base class of all components (component elements and views) will be [dom-native](https://github.com/dom-native/dom-native) `BaseHTMLElement`
   - Sub Classes implement `init()` to create the innerHTML or appendChild, to set states, and to bind events. It is garanteed to be called only once. 
   - Always called `super.init()` at the beginning of the `init()` SubClass implementation. 
   - Not need to worry about `connectedCallback()` (if called, make sure to call `super.connectedCallback()`)
-- We will use the [mvdom-ui](https://github.com/mvdom/mvdom-ui) `InputElement`, ... for basic input field components, and extends from `BaseFieldElement` for our custom element. 
+- We will use the [dom-native](https://github.com/dom-native/dom-native) `InputElement`, ... for basic input field components, and extends from `BaseFieldElement` for our custom element. 
   - `BaseFieldElement` normalize the `.value` pattern and disabled, readonly css/property behavior, and should be used for any custom element. 
-  - mvdom-ui also provide a set of base input element such as `InputElement <m-input/>` `SelectElement <m-select/>` that should be used and can be simply styled. 
+  - dom-native also provide a set of base input element such as `InputElement <m-input/>` `SelectElement <m-select/>` that should be used and can be simply styled. 
 - Views will extends an application base case `BaseViewElement` with some addtional utilities for view lifecycles. 
 
 

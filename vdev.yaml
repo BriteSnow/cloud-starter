@@ -40,10 +40,10 @@ blocks:
         rollupOptions:
           globals:
             d3: window.d3
-            mvdom: window.mvdom
             handlebars: window.Handlebars        
       - name: css
-        entries: ./src/**/*.pcss
+        entries: ['./pcss/main.pcss', '../_common/src/components/**/*.pcss', './src/**/*.pcss']
+        watch: ['./**/*.pcss','../_common/**/*.pcss'] # Only for watch. Any changes on those folder we trigger a full rebuild
         dist: ./css/all-bundle.css
       - name: tmpl
         entries: ./src/**/*.tmpl

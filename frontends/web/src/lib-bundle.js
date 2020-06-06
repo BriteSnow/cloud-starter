@@ -17,9 +17,6 @@ Handlebars.templates = Handlebars.template || {};
 // Make all templates partials (no reason why they should not)
 Handlebars.partials = Handlebars.templates;
 
-import * as mvdom from "mvdom";
-window.mvdom = mvdom;
-
 // Note: At some point, we might want to three shake this one, and have it local to app-bundle
 // import * as d3 from "d3";
 // window.d3 = d3;

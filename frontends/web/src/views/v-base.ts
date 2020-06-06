@@ -1,5 +1,5 @@
 import { pathAt } from 'base/route';
-import { BaseHTMLElement } from 'mvdom';
+import { BaseHTMLElement } from 'dom-native';
 
 
 

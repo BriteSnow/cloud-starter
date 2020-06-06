@@ -1,9 +1,9 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/ts/render.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+import { frag } from 'dom-native';
 import * as Handlebars from "handlebars";
 
-import { frag } from "mvdom";
 
 
 export function render(templateName: string, data?: any): DocumentFragment {

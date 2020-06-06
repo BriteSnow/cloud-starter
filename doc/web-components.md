@@ -83,6 +83,8 @@ HTML Template hold a HTML DOM for later to be cloned. It is not displayed or ren
 Run in console in the http://localhost:8080/_spec/controls page
 
 ```js
+import { first } from 'dom-native';
+
 let t1 = document.createElement('template');
 
 // innerHTML, which is the same as if the <template> element is in the page, create the #document-fragment
@@ -97,5 +99,5 @@ t1.innerHTML = '<c-input label="fieldZ" value="zzz"></c-input>';
 
 
 // If we clone the document fragment (.content) in the DOM, then constructor and connectedCallback WILL get called.
-mvdom.first('.spec-form > section').appendChild(t1.content.cloneNode(true));
+first('.spec-form > section').appendChild(t1.content.cloneNode(true));
 ```

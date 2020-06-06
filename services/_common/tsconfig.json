@@ -24,7 +24,7 @@
 
 		"sourceMap": true,  // for debug
 
-		"outDir": "./~out/", /* Redirect output structure to the directory. */
+		"outDir": "./out/", /* Redirect output structure to the directory. */
 
 		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
 		"paths": {

@@ -1,6 +1,6 @@
 
+export { asNum } from 'utils-min';
 export * from './utils-cloud-starter';
-export { asNum } from './utils-mvdom-xp';
 
 
 //////////

@@ -1,6 +1,6 @@
 import { ajaxPost } from 'base/ajax';
 import { getGoogleOAuthUrl, login } from 'base/user-ctx';
-import { customElement, first, onEvent, OnEvent, pull, style } from 'mvdom';
+import { customElement, first, onEvent, OnEvent, pull, style } from 'dom-native';
 import { BaseViewElement } from './v-base';
 
 type Mode = 'login' | 'register';
@@ -138,9 +138,9 @@ function _render() {
 	<div class="dialog">
 		<header>CLOUD-STARTER</header>
 		<section class="content">
-			<m-input name="username" placeholder="username"></m-input>
-			<m-input name="pwd" password placeholder="password"></m-input>
-			<m-input name="repeat-pwd" placeholder="Repeat Password" class="for-register"></m-input>
+			<d-input name="username" placeholder="username"></d-input>
+			<d-input name="pwd" password placeholder="password"></d-input>
+			<d-input name="repeat-pwd" placeholder="Repeat Password" class="for-register"></d-input>
 			<div></div>
 			<button class="do high for-login">Login</button>
 			<button class="do high for-register">Register</button>

@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/ts/route.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { hub, on } from 'mvdom';
-import { asNum } from 'mvdom-xp';
+import { hub, on } from 'dom-native';
+import { asNum } from 'utils-min';
 
 // Global routeHub to trigger the events
 const routeHub = hub("routeHub");

@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-input.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { attr, frag, on } from 'mvdom';
-import { css, BaseFieldElement } from 'mvdom-xp';
+import { BaseFieldElement } from '@dom-native/ui';
+import { attr, className, frag, on } from 'dom-native';
 
 
 /**
@@ -41,7 +41,7 @@ export class InputElement extends BaseFieldElement {
 
 	//// Properties (CSS Reflective)
 	get focused(): boolean { return this.classList.contains('focused') };
-	set focused(b: boolean) { css(this, { focused: b }) };
+	set focused(b: boolean) { className(this, { focused: b }) };
 
 	//// Property (Value)
 	get value() { return this.inputEl.value };

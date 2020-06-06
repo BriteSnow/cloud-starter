@@ -45,7 +45,7 @@ For more information, see [Architecture - Tech Stack](doc/arch.md#TechStack)
   - `Rust` When GC based language not appropriate (should be an exception). 
   - `Python` For Machine Learning model scripting.
 - **Database:** `Postgresql` (robust, mature, advanced, with no-sql capability with jsonb)
-- **Web:** `TypeScript`, `PostCss`, `DOM MVC`, [Rollup](https://www.npmjs.com/package/rollup) ([mvdom](https://github.com/mvdom/mvdom) Dom Centric MVC. simple scale better, used right the DOM is a solid foundation for building large application UIs))
+- **Web:** `TypeScript`, `PostCss`, `DOM MVC`, [Rollup](https://www.npmjs.com/package/rollup) ([dom-native](https://github.com/dom-native/dom-native) Dom Centric MVC. simple scale better, used right the DOM is a solid foundation for building large application UIs))
 - **IDE:** `VSCode` (best in class productivity with **TypeScript**, robust, fast, extensible with an amazing community). 
 
 

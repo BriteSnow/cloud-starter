@@ -16,8 +16,6 @@ Things to be aware about javascript hidden danger.
 v = Number('123'); // OK. === 123 (litteral 123)
 v = Number(''); // DANGER. === 0;
 
-// GUIDELINE, use mvdom-xp 'asNum('')' or other lib (parseInt work as expected, but only int)
-v = asNum('');; // null
 ```
 
 ### Array Number Sorting

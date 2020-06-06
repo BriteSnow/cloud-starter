@@ -1,9 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-controls.ts" />
 
-import { customElement, addOnEvents } from 'mvdom';
-import { BaseSpecView } from './spec-views';
+import { addOnEvents, customElement, pull, push } from 'dom-native';
 import { wait } from 'shared/utils';
-import { push, pull } from 'mvdom';
+import { BaseSpecView } from './spec-views';
 
 @customElement('spec-controls')
 class SpecControlsView extends BaseSpecView {

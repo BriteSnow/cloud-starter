@@ -1,0 +1,18 @@
+{
+  "name": "services_common",
+  "version": "0.0.0",
+  "description": "common code for backend services",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "knex": "^0.21.1"
+  }
+}

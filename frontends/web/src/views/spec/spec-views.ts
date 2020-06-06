@@ -1,8 +1,7 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-views.ts" />
 
 import { render } from 'base/render';
-import { BaseHTMLElement, customElement, frag, onEvent } from 'mvdom';
-import { elem } from 'mvdom-xp';
+import { BaseHTMLElement, customElement, elem, frag, onEvent } from 'dom-native';
 import { BaseDialog } from 'views/dialog/d-base-dialog';
 
 export class BaseSpecView extends BaseHTMLElement {

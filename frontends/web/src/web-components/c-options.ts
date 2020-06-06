@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-options.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { all, attr, first, on } from 'mvdom';
-import { BaseFieldElement } from 'mvdom-xp';
+import { BaseFieldElement } from '@dom-native/ui';
+import { all, attr, first, on } from 'dom-native';
 
 /**
  * c-options custom element encapsulate a label/input field group ()`c-input > label, input`) structure.

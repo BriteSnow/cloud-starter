@@ -1,5 +1,5 @@
-import { attr, closest } from "mvdom";
-import { asNum } from "mvdom-xp";
+import { attr, closest } from 'dom-native';
+import { asNum } from 'utils-min';
 
 
 export function guard<U>(val: U | null | undefined, message: string): U {

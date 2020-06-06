@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-select.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { all, attr, first, frag, off, on, style, trigger } from 'mvdom';
-import { BaseFieldElement } from 'mvdom-xp';
+import { BaseFieldElement } from '@dom-native/ui';
+import { all, attr, first, frag, off, on, style, trigger } from 'dom-native';
 
 /**
  * c-select is a select component.
@@ -153,6 +153,12 @@ customElements.define("c-select", SelectElement);
  * Component to be used only by the SelectElement (for now).
  */
 class SelectPopupElement extends BaseFieldElement {
+	get value(): any {
+		throw new Error('Method not implemented.');
+	}
+	set value(val: any) {
+		throw new Error('Method not implemented.');
+	}
 	_options!: Option[];
 	_select!: SelectElement;
 

@@ -1,15 +1,19 @@
-import { psqlImport, pgStatus, pgTest, list, download } from 'vdev';
 import { router } from 'cmdrouter';
 import * as fs from 'fs-extra-plus';
-import { basename, join as joinPath } from 'path';
 import { ensureDir } from 'fs-extra-plus';
+import { basename, join as joinPath } from 'path';
+import { download, list, pgStatus, pgTest, psqlImport } from 'vdev';
 
 
-const sqlDir = 'sql';
+const sqlDir = 'sql/';
 const host = 'cstar-db-srv';
 
+// Root Postgres credential to create dev database
+const POSTGRES_DB_CRED = { user: 'postgres', database: 'postgres', password: 'postgres', host };
+
+
 const dbPrefix = 'cstar_';
-const dbOpts = { user: dbPrefix + "user", db: dbPrefix + "db", host: host };
+const APP_DB_CRED = { user: dbPrefix + "user", database: dbPrefix + "db", host: host };
 
 router({ updateDb: runDropSqls, recreateDb }).route();
 
@@ -22,21 +26,19 @@ async function recreateDb() {
 	}
 
 	//// Drop the bb_ db and user
-	const t = await pgTest(dbOpts);
-	if (t.success) { // drop only if exist
-		// local test: // psql -U postgres -d postgres -f sql/_drop-db.sql
-		await psqlImport({ user: "postgres", db: "postgres", host }, [`${sqlDir}/_drop-db.sql`]);
-	}
+	const t = await pgTest(APP_DB_CRED);
+	// local test: // psql -U postgres -d postgres -f sql/_drop-db.sql
+	await psqlImport(POSTGRES_DB_CRED, [`${sqlDir}/_drop-db.sql`]);
 
 	const allSqlFiles = await fs.glob('*.sql', sqlDir);
 
 	//// create the bb_... database / user
 	// local test: psql -U postgres -d postgres -f sql/00_create-db.sql
-	await psqlImport({ user: "postgres", db: "postgres", host }, [`${sqlDir}/00_create-db.sql`]);
+	await psqlImport(POSTGRES_DB_CRED, [`${sqlDir}/00_create-db.sql`]);
 
 	//// Option 1) At the beginning, load from sql
 	const sqlFiles = filterNumbered(allSqlFiles, 1);
-	await psqlImport(dbOpts, sqlFiles);
+	await psqlImport(APP_DB_CRED, sqlFiles);
 
 	//// Option 2) When app is in prod, this will take the data from prod
 	//await loadProdDb();
@@ -52,7 +54,7 @@ async function runDropSqls() {
 		// TODO: need to gets the db changelog first, to run only what is missing.
 		const dropFiles = await fs.glob('drop-*.sql', sqlDir);
 		console.log('dropFiles\n', dropFiles);
-		await psqlImport(dbOpts, dropFiles);
+		await psqlImport(APP_DB_CRED, dropFiles);
 	} catch (ex) {
 		console.log('Failed updatedb: ', ex);
 	}
@@ -71,10 +73,10 @@ async function loadProdDb() {
 
 	//// 4) Import the prod sql
 	// local test: psql -U bb_user -d bb_db -f ~tmp/sql/prod-db.sql
-	await psqlImport(dbOpts, [joinPath(tmpProdSqlDir, prodFileName)]);
+	await psqlImport(APP_DB_CRED, [joinPath(tmpProdSqlDir, prodFileName)]);
 
 	//// 5) Reset the passwords to welcome (clear)
-	await psqlImport(dbOpts, [`${sqlDir}/_reset-passwords.sql`]);
+	await psqlImport(APP_DB_CRED, [`${sqlDir}/_reset-passwords.sql`]);
 
 
 }

@@ -1,8 +1,8 @@
-import { projectDao } from 'common/da/daos';
-import { wait } from 'common/utils-cloud-starter';
 import { strictEqual } from 'assert';
-import { initSuite } from './t-utils';
+import { projectDao } from 'common/da/daos';
 import { Project } from 'shared/entities';
+import { wait } from 'utils-min';
+import { initSuite } from './t-utils';
 import assert = require('assert');
 
 /**

@@ -1,5 +1,5 @@
 import { pathAt } from 'base/route';
-import { all, customElement, onHub } from 'mvdom';
+import { all, customElement, onHub } from 'dom-native';
 import { BaseViewElement } from './v-base';
 
 const defaultPath = '';

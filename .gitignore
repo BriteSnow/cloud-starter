@@ -1,12 +1,11 @@
 # By Default ignore all .* (can make exception)
 .*
 
-# Except .gitignore
+# Include .gitignore
 !.gitignore
 
-# Ignore .vscode
-# For this project, we actually allow .vscode files to be added to show the best practices.
-#.vscode/
+# Include .vscode (for debugging)
+!.vscode/
 
 # ignore node things
 node_modules/
@@ -22,23 +21,18 @@ package-lock.json
 # rollup typescript error
 .rpt2_cache/
 
-# prevent all root folders and filenames starting with "~". By convension, they are local folders only
-# used for personal notes, data store, output dir, ...
-~*
-
-# prevent compiled css and js files
-services/web-server/web-folder/js/*.js
-services/web-server/web-folder/css/*.css
-services/web-server/web-folder/test/*.js
-services/web-server/web-folder/test/*.css
+# prevent compiled css and js files 
+# Note: typically, we have a src/lib-bundle.js as part of the source, but it will be included as it does not below.
+js/*.js
+css/*.css
+test/*.js
+test/*.css
 
 # ignore the dev-test.ts files, they are for personal development
 test-dev.ts
 
 # prevent the .map
 *.map
-
-
 
 # We ignore all dist folder
 dist/

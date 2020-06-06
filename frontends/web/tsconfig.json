@@ -24,7 +24,7 @@
 		"sourceMap": true, /* Generates corresponding '.map' file. */
 
 		// Rollup/Typescript will be used, so this is just to check the code once in a while to check the tsc output with a raw "ts". 
-		"outDir": "./~out/", /* Redirect output structure to the directory. */
+		"outDir": ".out/", /* Redirect output structure to the directory. */
 
 		// We point the root dir to the parent to include eventual ../../shared/ (shared .ts for frontends and backend services)
 		"rootDir": "../../",

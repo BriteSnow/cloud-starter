@@ -21,7 +21,7 @@ export const DB_PASSWORD = process.env.db_password!;
 export const DB_HOST = process.env.db_host!;
 export const DB_DATABASE = process.env.db_database!;
 export const DB_USER = process.env.db_user!;
-export const DB = freeze({ host: DB_HOST, database: DB_DATABASE, user: DB_USER, pwd: DB_PASSWORD });
+export const DB = Object.freeze({ host: DB_HOST, database: DB_DATABASE, user: DB_USER, password: DB_PASSWORD });
 
 //// GOOGLE OAUTH
 export const GOOGLE_OAUTH_REDIRECT_URL = process.env.google_oauth_redirect_url!;

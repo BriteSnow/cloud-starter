@@ -2,7 +2,7 @@ import * as chokidar from 'chokidar';
 import { router } from 'cmdrouter';
 import { spawn } from 'p-spawn';
 import { join as joinPath } from 'path';
-import { wait } from 'vdev';
+import { wait } from 'utils-min';
 import { sketch, SKETCH_FILE } from './cmd-sketch';
 import { CallReducer } from './utils';
 

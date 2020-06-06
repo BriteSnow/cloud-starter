@@ -1,15 +1,14 @@
+import '@dom-native/ui';
+import { defaultIcons } from '@dom-native/ui';
 import { ajaxGet } from 'base/ajax';
 import { getUserContext } from 'base/user-ctx';
-import { first, on, trigger } from 'mvdom';
-import 'mvdom-ui'; // import all mvdom-ui
-import { defaultIcons } from 'mvdom-ui';
+import { first, on, trigger } from 'dom-native';
 import { MainView } from 'views/v-main';
 
 window.__version__ = "DROP-002-SNAPSHOT";
 
-// --------- Load Resources --------- //
-
-// load the default mvdom-ui icon set
+//#region    ---------- Initialize DOM ---------- 
+// load the default @dom-native/ui icon set
 defaultIcons.load();
 
 //// Prepare the resource to be loaded before starting the application
@@ -33,10 +32,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 	});
 });
+//#endregion ---------- /Initialize DOM ---------- 
 
-// --------- /Load Resources --------- //	
 
-//#region    ---------- Start The Application ---------- 
+//#region    ---------- Start Application ---------- 
 //// Start the application 
 on(document, 'APP_LOADED', async function () {
 
@@ -54,6 +53,6 @@ on(document, 'APP_LOADED', async function () {
 	}
 
 });
-//#endregion ---------- /Start The Application ----------
+//#endregion ---------- /Start Application ----------
 
 
