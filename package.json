@@ -31,7 +31,7 @@
     "tslib": "^2.0.0",
     "typescript": "^3.9.5",
     "uuid": "^8.1.0",
-    "vdev": "file:../../node-vdev/node-vdev_src/vdev-0.11.21-SNAPSHOT.tgz"
+    "vdev": "^0.11.21"
   },
   "devDependencies": {
     "@types/csvtojson": "^1.1.5",

@@ -32,6 +32,10 @@ export async function getSysContext(): Promise<UserContext> {
 	return _sysContext;
 }
 
+export function isUserContext(obj: any): obj is UserContext {
+	return (obj instanceof UserContextImpl);
+}
+
 export function assertUserContext(obj: any): asserts obj is UserContext {
 	if (!(obj instanceof UserContextImpl)) {
 		throw new Error(`Object is not of type UserContext ${obj?.constructor.name}`);

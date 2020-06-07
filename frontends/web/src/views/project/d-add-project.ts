@@ -11,7 +11,6 @@ class AddProjectDialog extends BaseDialog {
 	@onEvent('OK')
 	onOK() {
 		const data = pull(this.contentEl) as Partial<Project>;
-		console.log('->>> ', data);
 		trigger(this, 'ADD_PROJECT', { detail: data });
 	}
 	//#endregion ---------- /Element Events ---------- 

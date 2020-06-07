@@ -1,21 +1,21 @@
+-- for uuid v4 gen_randome_uuid()
+CREATE extension IF NOT EXISTS pgcrypto;
 
-CREATE TABLE config ( 
-  "name" varchar(32) PRIMARY KEY, 
-  data jsonb
-);
 
 CREATE TABLE "user" (
   id bigserial PRIMARY KEY,
-  uuid uuid NOT NULL UNIQUE,
-  salt varchar(128) NOT NULL UNIQUE,
+  uuid uuid NOT NULL UNIQUE DEFAULT gen_random_uuid(),
   type varchar(16) NOT NULL,
+  -- password salt for password encryption
+  psalt uuid NOT NULL UNIQUE  DEFAULT gen_random_uuid(),
+  pwd varchar(128),
+  -- token salt for session cookie
+  tsalt uuid NOT NULL UNIQUE  DEFAULT gen_random_uuid(),
   cid bigint, 
   ctime timestamp with time zone,
   mid bigint, 
   mtime timestamp with time zone,    
-  username varchar(64), 
-  pwd varchar(128),
-  key varchar(128)
+  username varchar(64)
 );
 ALTER SEQUENCE user_id_seq RESTART WITH 1000;
 

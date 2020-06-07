@@ -1,5 +1,5 @@
 import { userDao } from 'common/da/daos';
-import { closeKnex, getKnex } from "common/da/db";
+import { closeKnex, getKnexClient } from "common/da/db";
 import { getSysContext, newUserContext, UserContext as CommonContext } from 'common/user-context';
 
 
@@ -72,7 +72,7 @@ export function initSuite(suite: Mocha.Suite) {
 
 
 async function clean(toClean: [string, number][]) {
-	const k = await getKnex();
+	const k = await getKnexClient();
 	for (const item of toClean) {
 
 		const [tableName, id] = item;

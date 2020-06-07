@@ -19,6 +19,7 @@
   "dependencies": {
     "@types/uuid": "^8.0.0",
     "cmdrouter": "^0.3.1",
+    "immer": "^6.0.9",
     "knex": "^0.21.1",
     "module-alias": "^2.2.2",
     "moment": "^2.26.0",

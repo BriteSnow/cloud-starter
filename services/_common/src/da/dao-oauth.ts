@@ -11,21 +11,21 @@ export class OAuthDao extends BaseDao<OAuth, number>{
 		super({ table: 'oauth', stamped: true });
 	}
 
-	async getForUserId(ctx: UserContext, userId: number) {
-		return super.first(ctx, { userId });
+	async getForUserId(utx: UserContext, userId: number) {
+		return super.first(utx, { userId });
 	}
 
 	//#region    ---------- BaseDao Overrides ---------- 
 
 	// For now, we allow anybody to call this for registration. 
 	@AccessRequires(['#sys', '#admin'])
-	async create(ctx: UserContext, data: Partial<OAuth>) {
-		return super.create(ctx, data);
+	async create(utx: UserContext, data: Partial<OAuth>) {
+		return super.create(utx, data);
 	}
 
 	@AccessRequires(['#sys', '#admin'])
-	async update(ctx: UserContext, id: number, data: Partial<OAuth>) {
-		return super.update(ctx, id, data);
+	async update(utx: UserContext, id: number, data: Partial<OAuth>) {
+		return super.update(utx, id, data);
 	}
 	//#endregion ---------- /BaseDao Overrides ---------- 
 }

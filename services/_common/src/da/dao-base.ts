@@ -7,7 +7,7 @@ import { Monitor } from '../perf';
 import { UserContext } from '../user-context';
 import { removeProps } from '../utils';
 import { nowTimestamp } from '../utils-cloud-starter';
-import { getKnex } from './db';
+import { knexQuery } from './db';
 
 export interface CustomQuery {
 	custom?: (q: QueryBuilder<any, any>) => void;
@@ -64,13 +64,13 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@Monitor()
-	async get(ctx: UserContext, id: I): Promise<E> {
-		const k = await getKnex();
-		let q = k(this.tableName);
+	async get(utx: UserContext, id: I): Promise<E> {
+		const { query } = await knexQuery({ utx, tableName: this.tableName });
+
 		if (this.columns) {
-			q.columns(this.columns);
+			query.columns(this.columns);
 		}
-		const r = await q.where(this.getWhereIdObject(id));
+		const r = await query.where(this.getWhereIdObject(id));
 
 		if (r.length === 0) {
 			throw new Error(`dao.get error, can't find ${this.tableName}[${id}]`);
@@ -80,14 +80,13 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 
 	/**
 	 * Same as getForIds, but allow some array item to be undefined, and when so, undefined will be returned.
-	 * @param ctx 
 	 * @param ids 
 	 */
-	async getForSomeIds(ctx: UserContext, ids: (I | undefined)[]): Promise<(E | undefined)[]> {
+	async getForSomeIds(utx: UserContext, ids: (I | undefined)[]): Promise<(E | undefined)[]> {
 		// first filter the none defined
 		const definedIds = ids.filter(v => v !== undefined) as I[]; // help typing system
 		// NOTE: here we forst the id property, as per limitationof this API
-		const entities = await this.getForIds(ctx, definedIds);
+		const entities = await this.getForIds(utx, definedIds);
 		// NOTE: here we need to explicity set the correct type (typescript get it wrong :(, they are working on it)
 		// NOTE: Also, here we assume that the entity as .id. Will  need to clean this up.
 		const a = entities.map((ent: E) => [(<any>ent).id, ent]) as [number, E][];
@@ -101,35 +100,33 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * Return a list of entity for a list of id. 
 	 * - Assume the .id the id property of this entity (need to be generalized)
 	 * - Assume .id is a number
-	 * @param ctx 
+	 * @param utx 
 	 * @param ids 
 	 */
-	async getForIds(ctx: UserContext, ids: I[]): Promise<E[]> {
-		const k = await getKnex();
-		let q = k(this.tableName);
+	async getForIds(utx: UserContext, ids: I[]): Promise<E[]> {
+		const { query } = await knexQuery({ utx, tableName: this.tableName });
 
 		// for now only supports dao that have 'id' as key (i.e. assumption are numbers)
 		if (this.idNames === 'id') {
-			q.whereIn('id', (<any>ids) as number[]);
+			query.whereIn('id', (<any>ids) as number[]);
 		} else {
 			throw new Error(`Can't call getForIds on a dao that does not have 'id' and idNames ${this.constructor.name}`);
 		}
 
 
-		const r = (await q.then()) as any[];
+		const r = (await query.then()) as any[];
 		return this.processEntities(r);
 	}
 
 	@Monitor()
-	async first(ctx: UserContext, data: Partial<E>): Promise<E | null> {
-		const k = await getKnex();
-		const q = k(this.tableName);
-		const options = { matching: data, limit: 1 } as (QueryOptions<E> & Q); // needs typing int
-		this.completeQueryBuilder(ctx, q, options);
-		const entities = (await q.then()) as any[];
+	async first(utx: UserContext, data: Partial<E>): Promise<E | null> {
+		const { query } = await knexQuery({ utx, tableName: this.tableName });
 
-		// TODO: probably need to limit 1
-		// TODO: should probably use the defaultOrderBy
+
+		const options = { matching: data, limit: 1 } as (QueryOptions<E> & Q); // needs typing int
+		this.completeQueryBuilder(utx, query, options);
+		const entities = (await query.then()) as any[];
+
 		if (entities.length === 0) {
 			return null;
 		}
@@ -137,39 +134,39 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@Monitor()
-	async create(ctx: UserContext, data: Partial<E>): Promise<I> {
-		console.log('>>>>> ahaha salvo');
-		const k = await getKnex();
+	async create(utx: UserContext, data: Partial<E>): Promise<I> {
+		const { query } = await knexQuery({ utx, tableName: this.tableName });
 
-		this.cleanForSave(ctx, data, true);
-		this.stamp(ctx, data, true);
+		this.cleanForSave(utx, data, true);
+		this.stamp(utx, data, true);
 
-		const r = await k(this.tableName).insert(data).returning(this.idNames);
+		const r = await query.insert(data).returning(this.idNames);
 		return r[0] as I;
 	}
 
 	/**
 	 * Try a create and if fail ON CONFLICT, return the id matching the uniqueProps name/values
 	 * Note: this is not really an upsert because does not update anything if can't insert. 
-	 * Note: Today, we do  not use the ... ON CONFLICT ... as returning 
-	 * @param ctx 
+	 * TODO: Use the on ... ON CONFLICT ... way
+	 * @param utx 
 	 * @param data 
 	 * @param uniqueProps 
 	 */
-	async createOrGetId(ctx: UserContext, data: Partial<E>, uniqueProps: Partial<E>): Promise<I> {
+	async createOrGetId(utx: UserContext, data: Partial<E>, uniqueProps: Partial<E>): Promise<I> {
 		let id: I;
 		try {
-			id = await this.create(ctx, data);
+			id = await this.create(utx, data);
 		} catch (ex) {
 			// for now,  we will assume it is on on conflict with the uniqueProp
-			const k = await getKnex();
+			const { query } = await knexQuery({ utx, tableName: this.tableName });
+
 			const idNames = (this.idNames instanceof Array) ? this.idNames : [this.idNames];
-			const r = await k(this.tableName).select().column(idNames).where(uniqueProps);
+			const r = await query.select().column(idNames).where(uniqueProps);
 
 			if (r.length === 0) {
 				const desc = `Can't get ${this.tableName} on unique props ${uniqueProps} after conflict create (conflict cause: ${ex.message})`;
 				// TODO: need to enable when log framework get implemented
-				// ctx.log({ level: 'error', method: 'BaseDao.silentCreate', desc });
+				// utx.log({ level: 'error', method: 'BaseDao.silentCreate', desc });
 				throw desc;
 			}
 
@@ -181,58 +178,58 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@Monitor()
-	async update(ctx: UserContext, id: I, data: Partial<E>) {
-		const k = await getKnex();
+	async update(utx: UserContext, id: I, data: Partial<E>) {
+		const { query } = await knexQuery({ utx, tableName: this.tableName });
 
-		this.cleanForSave(ctx, data);
-		this.stamp(ctx, data);
+		this.cleanForSave(utx, data);
+		this.stamp(utx, data);
 
-		const r = await k(this.tableName).update(data).where(this.getWhereIdObject(id));
+		const r = await query.update(data).where(this.getWhereIdObject(id));
 		return r;
 	}
 
-	async updateBulk(ctx: UserContext, fn: (k: QueryBuilder<any, any>) => void, data: Partial<E>) {
-		const k = await getKnex();
-		const q = k(this.tableName).update(data);
+	async updateBulk(utx: UserContext, fn: (k: QueryBuilder<any, any>) => void, data: Partial<E>) {
+		const { query } = await knexQuery({ utx, tableName: this.tableName });
 
-		fn(q);
+		query.update(data);
+		fn(query);
 
-		this.cleanForSave(ctx, data);
-		this.stamp(ctx, data);
+		this.cleanForSave(utx, data);
+		this.stamp(utx, data);
 
-		const r = await q;
+		const r = await query;
 		return r;
 	}
 
 	/**
 	 * Clean the data object of any properties that should not be part of the create or update. 
 	 */
-	protected cleanForSave(ctx: UserContext, data: Partial<E>, forCreate = false) {
+	protected cleanForSave(utx: UserContext, data: Partial<E>, forCreate = false) {
 		// Those will be set in this.stamp
 		removeProps(data, ['cid', 'ctime', 'mid', 'mtime']);
 	}
-	protected stamp(ctx: UserContext, data: Partial<E>, forCreate?: boolean) {
+
+	protected stamp(utx: UserContext, data: Partial<E>, forCreate?: boolean) {
 
 		if (this.stamped) {
 			// Force casting. We can assume this, might have a more elegant way (but should not need StampedDao though)
 			const stampedData: StampedEntity = (<any>data) as StampedEntity;
 			const now = nowTimestamp();
 			if (forCreate) {
-				stampedData.cid = ctx.userId;
+				stampedData.cid = utx.userId;
 				stampedData.ctime = now;
 			}
-			stampedData.mid = ctx.userId;
+			stampedData.mid = utx.userId;
 			stampedData.mtime = now;
 		}
 	}
 
 	@Monitor()
-	async list(ctx: UserContext, queryOptions?: Q & CustomQuery): Promise<E[]> {
-		console.log('>>>>> ahaha salvo');
-		const k = await getKnex();
-		let q = k(this.tableName);
-		this.completeQueryBuilder(ctx, q, queryOptions);
-		const entities = (await q.then()) as any[]; // TODO: need to check if this is the common way
+	async list(utx: UserContext, queryOptions?: Q & CustomQuery): Promise<E[]> {
+		const { query } = await knexQuery({ utx, tableName: this.tableName });
+
+		this.completeQueryBuilder(utx, query, queryOptions);
+		const entities = (await query.then()) as any[]; // TODO: need to check if this is the common way
 		return this.processEntities(entities);
 	}
 
@@ -240,21 +237,21 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * Remove one or more entities from one or more id
 	 */
 	@Monitor()
-	async remove(ctx: UserContext, ids: I | I[]) {
-		const k = await getKnex();
+	async remove(utx: UserContext, ids: I | I[]) {
+		const { query } = await knexQuery({ utx, tableName: this.tableName });
 
 		// if we have a bulk ids, try to do the whereIn (for non-compound for now)
 		if (ids instanceof Array) {
 
 			//// if single id properties, we can do whereIn
 			if (typeof this.idNames === 'string') {
-				return k(this.tableName).delete().whereIn(this.idNames, ids);
+				return query.delete().whereIn(this.idNames, ids);
 			}
 			//// if not a compound id, need to do it one by one for now. 
 			else {
 				let deleteCount = 0;
 				for (const id of ids) {
-					deleteCount += await k(this.tableName).delete().where(this.getWhereIdObject(id));
+					deleteCount += await query.delete().where(this.getWhereIdObject(id));
 				}
 				return deleteCount;
 			}
@@ -262,32 +259,32 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		}
 		// otherwise, if single id, so ssingle delete
 		else {
-			return k(this.tableName).delete().where(this.getWhereIdObject(ids));
+			return query.delete().where(this.getWhereIdObject(ids));
 		}
 	}
 
-	protected completeQueryBuilder(ctx: UserContext, q: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
+	protected completeQueryBuilder(utx: UserContext, query: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
 		// if this dao has a fixed column. 
 		if (this.columns) {
-			q.columns(this.columns);
+			query.columns(this.columns);
 		}
 
 		if (queryOptions) {
 
 			if (queryOptions.matching) {
-				completeQueryFilter(q, queryOptions.matching)
+				completeQueryFilter(query, queryOptions.matching)
 			}
 
 			if (queryOptions.custom) {
-				queryOptions.custom(q);
+				queryOptions.custom(query);
 			}
 
 			if (queryOptions.limit != null) {
-				q.limit(queryOptions.limit);
+				query.limit(queryOptions.limit);
 			}
 
 			if (queryOptions.offset != null) {
-				q.offset(queryOptions.offset);
+				query.offset(queryOptions.offset);
 			}
 
 			//// add the filters
@@ -296,12 +293,12 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 				if (filters instanceof Array) {
 					for (const filter of filters) {
 						// TOTEST: need to unit test
-						q.orWhere(function () {
-							completeQueryFilter(q, filter);
+						query.orWhere(function () {
+							completeQueryFilter(query, filter);
 						});
 					}
 				} else {
-					completeQueryFilter(q, filters);
+					completeQueryFilter(query, filters);
 				}
 			}
 
@@ -313,7 +310,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 					asc = false;
 					orderBy = orderBy.substring(1);
 				}
-				q = q.orderBy(orderBy, (asc) ? 'ASC' : 'DESC');
+				query.orderBy(orderBy, (asc) ? 'ASC' : 'DESC');
 			}
 
 		}
@@ -350,7 +347,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 }
 
-function completeQueryFilter(q: QueryBuilder<any, any>, filter: QueryFilter) {
+function completeQueryFilter(query: QueryBuilder<any, any>, filter: QueryFilter) {
 	// key can be 'firstName' or 'age;>'
 	for (const column in filter) {
 
@@ -361,14 +358,14 @@ function completeQueryFilter(q: QueryBuilder<any, any>, filter: QueryFilter) {
 		// first handle the new case. 
 		if (opVal.val === null) {
 			if (opVal.op === '=') {
-				q.whereNull(column);
+				query.whereNull(column);
 			} else if (opVal.op === '!=') {
-				q.whereNotNull(column);
+				query.whereNotNull(column);
 			}
 		}
 		// handle the case value is define
 		else if (value != null) {
-			q.andWhere(column, opVal.op, opVal.val);
+			query.andWhere(column, opVal.op, opVal.val);
 		}
 	}
 }

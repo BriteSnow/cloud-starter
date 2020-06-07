@@ -11,8 +11,11 @@
 node_modules/
 npm-debug.log
 
-# Ignore gke-prod (for prod)
-k8s/gke-prod
+# handpick with kubernetes file we would want to key
+k8s/
+!k8s/dev
+!k8s/aws
+
 
 # Ignore package-lock.json 
 # (this is debatable, but package-lock.json could pause more issues than anything else in certain scenarios)
@@ -21,18 +24,16 @@ package-lock.json
 # rollup typescript error
 .rpt2_cache/
 
-# prevent compiled css and js files 
-# Note: typically, we have a src/lib-bundle.js as part of the source, but it will be included as it does not below.
-js/*.js
-css/*.css
-test/*.js
-test/*.css
+# By default those files are compile output
+*.js
+*.css
+*.map 
+
+# Except the lib-bundle file
+!src/lib-bundle.js
 
 # ignore the dev-test.ts files, they are for personal development
 test-dev.ts
-
-# prevent the .map
-*.map
 
 # We ignore all dist folder
 dist/

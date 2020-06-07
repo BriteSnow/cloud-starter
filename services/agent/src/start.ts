@@ -1,35 +1,17 @@
 require('../../_common/src/setup-module-aliases');
 
-import { __version__ } from 'common/conf';
-import { getKnex } from 'common/da/db';
+
+/////////////////////
+// The agent service is primarely designed to run administative task, and therefore does not do anything 
+// in the start process. However, as some point, it could listen to redis stream and/or pub/sub to do some
+// administrative task ask well. 
+////
 
 
 //main();
 
-
 async function main() {
 
-	// const client = await getNewRedisClient();
-
-	// listenViaBlocking(client);
-	neverEnd();
-
-	console.log(`--> agent (${__version__}) - started`);
-
-	const knex = await getKnex();
-	const tableName = 'user';
-	try {
-		const obj = await knex(tableName).first().from(tableName);
-	} catch (ex) {
-		console.log(`Error - Cannot get connection`, ex);
-	}
-	console.log('user obj')
-}
-
-async function neverEnd() {
-	await new Promise(function (resolve, reject) {
-		console.log('Will never end...');
-	});
 }
 
 

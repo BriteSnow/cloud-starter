@@ -36,7 +36,6 @@ export function pwdCheck(clearPwd: string, data: PwdCheckData): { scheme_outdate
 	const scheme_outdated = schemeId !== defaultSchemeId;
 	return { scheme_outdated };
 }
-
 //#endregion ---------- /public function ----------
 
 

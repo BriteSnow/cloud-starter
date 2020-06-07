@@ -7,23 +7,22 @@
 
 import { QueryOptions, User, UserType } from "shared/entities";
 import { freeze } from 'shared/utils';
-import { createSalt, uuidV4 } from '../security/generators';
+import { v4 as uuidV4 } from 'uuid';
 import { pwdEncrypt } from '../security/password';
 import { PwdEncryptData } from '../security/password-types';
 import { newUserContext, UserContext } from "../user-context";
 import { AccessRequires } from "./access";
 import { BaseDao } from "./dao-base";
-import { getKnex } from "./db";
-
+import { knexQuery } from './db';
 
 interface UserCredential extends Pick<User, 'username'> {
-	salt: string;
+	psalt: string;
 	uuid: string;
 	pwd: string;
 }
 
 export interface UserAuthCredential extends UserCredential, Pick<User, 'id' | 'type'> {
-	key: string
+	tsalt: string;
 };
 
 interface CreateUserData {
@@ -37,7 +36,7 @@ interface CreateUserData {
 const USER_COLUMNS = ['id', 'uuid', 'username', 'type', 'cid', 'ctime', 'mid', 'mtime'];
 
 // Security only columns, only to be used in getUserAuthCredential, 
-const USER_SECURITY_COLUMNS = ['salt', 'key', 'pwd'];
+const USER_SECURITY_COLUMNS = ['psalt', 'tsalt', 'pwd'];
 
 // Credential for authentication used in 
 const USER_AUTH_CREDENTIAL_COLUMNS = ['id', 'uuid', 'username', 'type', ...USER_SECURITY_COLUMNS];
@@ -48,23 +47,23 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		super({ table: 'user', stamped: true, columns: USER_COLUMNS });
 	}
 
-	async getUserByUserName(ctx: UserContext, username: string): Promise<User | null> {
-		return this.first(ctx, { username });
+	async getUserByUserName(utx: UserContext, username: string): Promise<User | null> {
+		return this.first(utx, { username });
 	}
 
 	//#region    ---------- BaseDao Overrides ---------- 
-	async create(ctx: UserContext, data: Partial<User>) {
+	async create(utx: UserContext, data: Partial<User>) {
 		throw new Error('UserDao.create NOT AVAILABLE, use UserDao.createUser');
 		return -1; // for TS.
 	}
 
 	@AccessRequires(['#sys', '#admin'])
-	async remove(ctx: UserContext, id: number | number[]) {
-		return super.remove(ctx, id);
+	async remove(utx: UserContext, id: number | number[]) {
+		return super.remove(utx, id);
 	}
 
 	@AccessRequires(['#sys', '#admin', '@id'])
-	async update(ctx: UserContext, id: number, data: Partial<User>) {
+	async update(utx: UserContext, id: number, data: Partial<User>) {
 		throw new Error('UserDao.update NOT AVAILABLE, use UserDao.updateUser');
 		return -1; // for TS.
 	}
@@ -89,16 +88,17 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	//#endregion ---------- /Query Override ---------- 
 
 	//#region    ---------- Credential Methods ---------- 
-	async createUser(ctx: UserContext, data: CreateUserData) {
+	async createUser(utx: UserContext, data: CreateUserData) {
+		// FIXME: Needs to NOT use newUserCredential. Create user row first, then, get psalt, and use it to get the encypted pwd and update the user.
 		const userCredential = newUserCredential(data.username, data.clearPwd);
 		const type = data.type;
-		return await super.create(ctx, { ...userCredential, type });
+		return await super.create(utx, { ...userCredential, type });
 	}
 
 
 	@AccessRequires(['#sys'])
-	async newContextFromUserId(ctx: UserContext, userId: number) {
-		const user = await this.get(ctx, userId);
+	async newContextFromUserId(utx: UserContext, userId: number) {
+		const user = await this.get(utx, userId);
 		return newUserContext(user);
 	}
 
@@ -109,36 +109,36 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	 * IMPORTANT: This is only to be used for login password check, and request authentication.
 	 **/
 	@AccessRequires(['#sys']) // here only sys context should be able to call this one
-	async getUserAuthCredentialByUuid(ctx: UserContext, uuid: string): Promise<UserAuthCredential> {
-		return this.getUserAuthCredential(ctx, { uuid });
+	async getUserAuthCredentialByUuid(utx: UserContext, uuid: string): Promise<UserAuthCredential> {
+		return this.getUserAuthCredential(utx, { uuid });
 	}
 	@AccessRequires(['#sys']) // here only sys context should be able to call this one
-	async getUserAuthCredentialById(ctx: UserContext, id: number): Promise<UserAuthCredential> {
-		return this.getUserAuthCredential(ctx, { id });
+	async getUserAuthCredentialById(utx: UserContext, id: number): Promise<UserAuthCredential> {
+		return this.getUserAuthCredential(utx, { id });
 	}
 	@AccessRequires(['#sys']) // here only sys context should be able to call this one
-	async getUserAuthCredentialByUsername(ctx: UserContext, username: string): Promise<UserAuthCredential> {
-		return this.getUserAuthCredential(ctx, { username });
+	async getUserAuthCredentialByUsername(utx: UserContext, username: string): Promise<UserAuthCredential> {
+		return this.getUserAuthCredential(utx, { username });
 	}
 
-	private async getUserAuthCredential(ctx: UserContext, ref: { uuid: string }): Promise<UserAuthCredential>;
-	private async getUserAuthCredential(ctx: UserContext, ref: { id: number }): Promise<UserAuthCredential>;
-	private async getUserAuthCredential(ctx: UserContext, ref: { username: string }): Promise<UserAuthCredential>;
-	private async getUserAuthCredential(ctx: UserContext, ref: { uuid?: string, id?: number, username?: string }): Promise<UserAuthCredential> {
-		const k = await getKnex();
-		let q = k(this.tableName);
-		q.limit(1);
-		q.columns(USER_AUTH_CREDENTIAL_COLUMNS);
+	private async getUserAuthCredential(utx: UserContext, ref: { uuid: string }): Promise<UserAuthCredential>;
+	private async getUserAuthCredential(utx: UserContext, ref: { id: number }): Promise<UserAuthCredential>;
+	private async getUserAuthCredential(utx: UserContext, ref: { username: string }): Promise<UserAuthCredential>;
+	private async getUserAuthCredential(utx: UserContext, ref: { uuid?: string, id?: number, username?: string }): Promise<UserAuthCredential> {
+		const { query } = await knexQuery({ utx, tableName: this.tableName });
+
+		query.limit(1);
+		query.columns(USER_AUTH_CREDENTIAL_COLUMNS);
 		if (ref.uuid != null) {
-			q.where('uuid', ref.uuid);
+			query.where('uuid', ref.uuid);
 		} else if (ref.id != null) {
-			q.where('id', ref.id);
+			query.where('id', ref.id);
 		} else if (ref.username != null) {
-			q.where('username', ref.username);
+			query.where('username', ref.username);
 		} else {
 			throw new Error(`Cannot find userWithCredential`);
 		}
-		const result = await q;
+		const result = await query;
 		if (!result || result.length < 1) {
 			throw new Error(`Cannot find userWithCredential for ${ref.id ?? ref.uuid ?? ref.username}`);
 		}
@@ -152,15 +152,18 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
  * Create a new uuid, salt, and pwd given a username and clearPwd.
  * 
  * Use by registration and agent `npm run credential admin welcome` commands
+ * 
+ * TODO: Needs to move this to cmd-credentials as the dao-user.create should use the db generated uuid/psalt/tsalt
  */
 export function newUserCredential(username: string, clearPwd: string): UserCredential {
 	const uuid = uuidV4();
-	const salt = createSalt();
+	const tsalt = uuidV4();
+	const psalt = uuidV4();
 	const toEncrypt: PwdEncryptData = {
 		uuid,
 		username,
 		clearPwd,
-		salt,
+		psalt,
 	}
 
 	const pwd = pwdEncrypt(toEncrypt);
@@ -169,7 +172,7 @@ export function newUserCredential(username: string, clearPwd: string): UserCrede
 		username,
 		uuid,
 		pwd,
-		salt
+		psalt
 	}
 }
 //#endregion ---------- /Utils ----------
