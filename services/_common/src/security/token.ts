@@ -32,7 +32,7 @@ export interface TokenData {
 /** User Credential needed for Token check and create */
 export interface UserCredForToken {
 	readonly uuid: string;
-	readonly salt: string;
+	readonly tsalt: string;
 }
 
 /**
@@ -94,7 +94,7 @@ export function newExpiration() {
 }
 
 function sign(data: UserCredForToken, exp: string) {
-	const hash = crypto.createHmac('sha256', WEB_TOKEN_SALT + data.salt);
+	const hash = crypto.createHmac('sha256', WEB_TOKEN_SALT + data.tsalt);
 	hash.update(data.uuid + exp);
 	return hash.digest('base64');
 }

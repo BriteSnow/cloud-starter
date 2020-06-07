@@ -27,9 +27,8 @@ export function pwdEncrypt(data: PwdEncryptData) {
 export function pwdCheck(clearPwd: string, data: PwdCheckData): { scheme_outdated: boolean } {
 	const { schemeId, pwd } = extractSchemeId(data.pwd);
 	const scheme = schemes[schemeId];
-	const { uuid, username, salt } = data;
-	const clearPwdEncrypted = scheme.encrypt({ uuid, username, salt, clearPwd });
-
+	const { uuid, username, psalt } = data;
+	const clearPwdEncrypted = scheme.encrypt({ uuid, username, psalt, clearPwd });
 	// build the response
 	if (pwd !== clearPwdEncrypted) {
 		throw new AppError(ERROR_PWD_CHECK_FAIL, `Authentication Fail`); // IMPORTANT: Never put either password in ANY log

@@ -1,8 +1,8 @@
 require('../../_common/src/setup-module-aliases');
 
 import { newUserCredential } from 'common/da/dao-user';
-import { createSalt } from 'common/security/generators';
 import { pwdCheck } from 'common/security/password';
+import { v4 as uuidV4 } from 'uuid';
 
 main();
 
@@ -11,7 +11,7 @@ async function main() {
 
 	// if both are not defined, then, just show salt
 	if (!username && !clearPwd) {
-		console.log(`New SALT: ${createSalt()}`);
+		console.log(`New uuidv4: ${uuidV4()}`);
 		return;
 	}
 

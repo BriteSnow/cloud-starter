@@ -28,9 +28,10 @@ class SchemeStronger extends PwdScheme {
 	GLOBAL_SALT = PWD_SCHEME_02_SALT;
 
 	encrypt(data: PwdEncryptData) {
-		const hash = crypto.createHmac('sha512', this.GLOBAL_SALT + data.salt);
+		const hash = crypto.createHmac('sha512', this.GLOBAL_SALT + data.psalt);
 		hash.update(data.uuid + data.clearPwd);
-		return hash.digest('base64');
+		const encPwd = hash.digest('base64');
+		return encPwd;
 	}
 }
 //#endregion ---------- /Scheme Stronger ----------

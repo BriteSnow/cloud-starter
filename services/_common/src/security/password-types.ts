@@ -8,14 +8,14 @@
 export interface PwdEncryptData {
 	uuid: string;
 	username: string;
-	salt: string;
+	psalt: string;
 	clearPwd: string;
 }
 
 export interface PwdCheckData {
 	uuid: string;
 	username: string;
-	salt: string;
+	psalt: string;
 	pwd: string; // encrypted pwd
 }
 
