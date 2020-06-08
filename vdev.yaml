@@ -42,7 +42,7 @@ blocks:
             d3: window.d3
             handlebars: window.Handlebars        
       - name: css
-        entries: ['./pcss/main.pcss', '../_common/src/components/**/*.pcss', './src/**/*.pcss']
+        entries: ['./pcss/main.pcss', './src/**/*.pcss']
         watch: ['./**/*.pcss','../_common/**/*.pcss'] # Only for watch. Any changes on those folder we trigger a full rebuild
         dist: ./css/all-bundle.css
       - name: tmpl
