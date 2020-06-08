@@ -20,16 +20,12 @@ export interface UserContext {
 }
 
 
-let _sysContext: UserContext;
 /** 
- * Get and cache the sysContext. 
- * Note: user 0, in the db, is of sys type, we can harcode the user data for now (perhpas later, do a knex.select to id:0 to get full data)
+ * Create a new SysContext on every call. 
+ * Note: user 0, if hardcode to be the sys user and can be in memory only for now. 
  */
 export async function getSysContext(): Promise<UserContext> {
-	if (!_sysContext) {
-		_sysContext = newUserContext({ id: 0, type: 'sys' }); // we know 0 is sys. 
-	}
-	return _sysContext;
+	return newUserContext({ id: 0, type: 'sys' }); // we know 0 is sys. 
 }
 
 export function isUserContext(obj: any): obj is UserContext {

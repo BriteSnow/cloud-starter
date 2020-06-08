@@ -3,7 +3,8 @@
 
 export const CommonErrorCode = Object.freeze({
 	INVALID_INPUT: 'INVALID_INPUT',
-	APP_ERROR: 'APP_ERROR'
+	APP_ERROR: 'APP_ERROR',
+	CODE_ERROR: 'CODE_ERROR'
 });
 
 export class AppError extends Error {

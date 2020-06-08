@@ -42,7 +42,7 @@
     "ts-node": "^8.10.2",
     "typescript": "^3.9.5",
     "useragent": "^2.3.0",
-    "utils-min": "^0.1.12",
+    "utils-min": "^0.1.13",
     "uuid": "^8.1.0"
   }
 }

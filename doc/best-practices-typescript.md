@@ -1,4 +1,4 @@
-# Best Practices 
+# TypeScript & Modern ES/JS Best Practices 
 
 Best practices for modern ES / TS coding. 
 
@@ -6,14 +6,14 @@ Best practices for modern ES / TS coding.
 ## Object - basic - variable extraction, value access, building
 
 ```ts
-// 1) Use null chaining/coalescing to eventual data
-// 2) Explicitly type variable to ensure proper type as much as possible
+// 1) USE null chaining/coalescing to eventual data
+// 2) USE explicitly variable types for data structure when possible
 const filter: Filter = panel?.options?.filter ?? {};
 
-// 3) Use Destructuring to initialize variables (ts type will carry over)
+// 3) USE Destructuring to initialize variables (ts type will carry over)
 const { labelIds, excludelabelIds } = filter;
 
-// 3) Use single name/value object literal when possible.
+// 4) USE single name/value object literal when possible.
 const labelFilter = { labelIds, excludelabelIds };
 ```
 
@@ -21,14 +21,13 @@ const labelFilter = { labelIds, excludelabelIds };
 ## Object - create variant
 
 ```ts
-
 // 1) Create variant of object with spread syntax and overriding given property
 // 2) Set the type for receiving variable (here Filter) to guarantee expected type
 const filterForOpen: Filter = {...filter, state: 'open'};
 const filterForColose: Filter = {...defaultFilter, ...filter, state: 'close'};
 
 // type example (for above)
-type Filter = {name?: string, state?: 'open' | 'close' | 'both' , labelIds?: number[] }; // type example
+type Filter = {name?: string, state?: 'open' | 'close' | 'both' , labelIds?: number[] };
 ```
 
 - spread syntax : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
@@ -36,29 +35,62 @@ type Filter = {name?: string, state?: 'open' | 'close' | 'both' , labelIds?: num
 
 ## Object - Object Literal & Interface v.s. Class
 
-- USE object literal and TS Interfaces for most data structure. (i.e., when keys are property names). (.e.g., entities, log record, api argument / return data structure, `const user: User = {id, username}`).
+```ts
+// 1) USE object literal and TS interfaces for most data structure
+const user: User = {id, username};
 
-- USE class when inheritance, behavior, or annotation must be part of the object (e.g., daos, dcos, UserContextImpl, logger, ...)
+// 2) USE class when inheritance, behavior, or annotation must be part of the object 
+//    (e.g., Daos, UserContextImpl, Logger<LogRecord>)
+const userDao = new UserDao();
+```
 
 
-## Object - Object v.s. Map
+## Object - When to use Object v.s. Map
 
-- USE object (or class) and TS Interfaces for ALL data structure that can be express via interface, type, or class. 
+- **USE object** (or class) and TS Interfaces for ALL data structure that can be express via interface, type, or class. For example when fix set of property names. Use object literal and spread merging when possible.
 
-- USE Map or Set as data container (similar to array but with quick has/delete per key). (e.g. cache, dictionary for quick lookup, ...)
+- **USE Map** or Set as data container with fix key type and value type (i.e., `Map<number, Ticket>()`). Similar to array or Set, especially when key/value can grow or shrink. For exampe: 
+	- Caches, dictionaries (temporary in a function, or global)
+	- When key/value can grow and shrink.
 
-- DO NOT object has a hashmap (when element can grow and shrink, or are dynamic). This is what Map is for. 
+- **CAN USE object** for representating a simple static and relatively name/value data set when dot access (e.g., `.name: true/false`) is preferred (e.g., for UI string templating). 
+	- Good example is to represent privilege access and `${privileges.comment ? '<button>add</button>' : ''` format (flags, roles, privileges), Small list of names that are usually built once as object. 
+
+- DO NOT USE object has a hashmap when elements can grow and shrink. This is what Maps are for. 
+
+```ts
+//// Map Example - local dictionary
+const tickets: Ticket[] = loadTickets();
+// To Map
+const ticketsById = new Map(tickets.map((t): [number, Ticket] => [t.id!, t])); 
+
+for (...){
+	if (ticketsById.has(ticketId)){
+		...
+	}
+}
+
+//// Object Example - Acceptable use of object as static list of name/value
+const FLAG_NAMES = Object.freeze(['foo', 'bar'] as const);
+type Flag = typeof FLAG_NAMES[number]; // type: 'foo' | 'bar'
+
+type Flags = {[flag in Flag]?: boolean};
+const flagsArr: Flag[] = ['foo']; // could come from database
+
+// Here we create the object once, which will ave a config 
+const flags: Flags = flagsArr.reduce((obj: any, v) => (obj[v] = true, obj), {});
+```
 
 
 ## Array - concat 
 
-- USE `arr1.push(...arr2)` when adding in place, and `arr2` is relatively small (< 100).
+- **USE push with spread** `arr1.push(...arr2)` when adding in place, and `arr2` is relatively small (< 100).
 
-- USE spread `[...arr1, ...arr2]` when new array is preferred. 
+- **USE spread** `[...arr1, ...arr2]` when new array is preferred. 
 
-- USE concat `arr1.concat(arr2)` when `arr2` is multiple thousands of items or above. This will create a new array, however [.concat is still faster than in place push on big arrays](https://jsperf.com/big-array-concat-spread-push). (performance gain negligeable relative to application though)
+- **USE concat** `arr1.concat(arr2)` when `arr2` is multiple thousands of items or above. This will create a new array, however [.concat is still faster than in place push on big arrays](https://jsperf.com/big-array-concat-spread-push). (performance gain negligeable relative to application though)
 
-- USE `arr1.push(item)` when adding in place one item at a time.
+- **USE push item** `arr1.push(item)` when adding in place one item at a time.
 
 - DO NOT USE `Array.prototype.push.apply(arr1, arr2)` anymore, the `arr1.push(...arr2)` spread is as fast and much more concise and readable.
 
@@ -111,18 +143,36 @@ const object = names.reduce((obj: any, v) => (obj[v] = true), {});
 
 ## Time - now, moment, timezone
 
-- USE `const now = Date.now()` to get the now time number. 
+- **USE Date.now** `const now = Date.now()` to get the now time number. 
 
-- USE [moment](https://www.npmjs.com/package/moment) for more date/format manipulation. 
+- **USE [moment](https://www.npmjs.com/package/moment)** for more date/format manipulation. 
 
-- USE [moment-timezone (superset)](https://www.npmjs.com/package/moment-timezone) when timezone needed (should used for services)
+- **USE [moment-timezone (superset)](https://www.npmjs.com/package/moment-timezone)** when timezone needed (should used for services)
 
 - DO NOT USE `new Date().getTime()` (longer, less readable, does not add any value compared to `Date.now()`)
+
+## Type - property names from array
+
+- **USE as const and typeof[number]** to type a list of property names and typescript types
+	> Note: This allows to get the list of names accessible in javascript code (for validations or sql column names), as well as typescript typing for stronger and more expressive typing. 
+
+### Example: 
+
+```ts
+const FLAG_NAMES = Object.freeze(['foo', 'bar'] as const);
+type Flag = typeof FLAG_NAMES[number]; // type: 'foo' | 'bar'
+
+// flags object
+type FlagObj = {[flag in Flag]?: boolean}
+const flags: Flag[] = ['foo'];
+const flagsObj = flags.reduce((obj: any, v) => (obj[v] = true, obj), {});
+
+```
 
 
 ## Typeguards - assertTypeName & isTypeName
 
-- USE `isTypeName` Typescript `val is type` to check and set the type of an object.
+- **USE `isTypeName`** Typescript `val is type` to check and set the type of an object.
 ```ts
 // USE isTypeName naming convention
 export function isUserContext(obj: any): obj is UserContext{
@@ -138,7 +188,7 @@ if (isUserContext(someObject)){
 }
 ```
 
-- USE `assertTypeName` Typescript `asserts` to guarantee type correctness (when exception is preferred)
+- **USE `assertTypeName`** Typescript `asserts` to guarantee type correctness (when exception is preferred)
 
 ```ts
 // USE assertTypeName convention

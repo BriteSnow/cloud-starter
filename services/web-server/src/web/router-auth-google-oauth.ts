@@ -90,7 +90,7 @@ class GoogleOAuthRouter extends AppRouter {
 			}
 
 			//// authenticate the user
-			const userCredential = await userDao.getUserAuthCredentialById(sysCtx, user.id);
+			const userCredential = await userDao.getUserCredForAuth(sysCtx, { id: user.id });
 			await setAuth(ktx, userCredential);
 
 			ktx.redirect('/'); // 302 (temporary by default, can do ktx.status = 301 for permanent)

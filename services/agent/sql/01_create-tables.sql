@@ -1,11 +1,13 @@
 -- for uuid v4 gen_randome_uuid()
 CREATE extension IF NOT EXISTS pgcrypto;
 
+CREATE TYPE user_type AS ENUM ('sys', 'admin', 'user');
 
 CREATE TABLE "user" (
   id bigserial PRIMARY KEY,
   uuid uuid NOT NULL UNIQUE DEFAULT gen_random_uuid(),
-  type varchar(16) NOT NULL,
+  username varchar(64) NOT NULL UNIQUE,
+  type user_type NOT NULL DEFAULT 'user',
   -- password salt for password encryption
   psalt uuid NOT NULL UNIQUE  DEFAULT gen_random_uuid(),
   pwd varchar(128),
@@ -14,8 +16,7 @@ CREATE TABLE "user" (
   cid bigint, 
   ctime timestamp with time zone,
   mid bigint, 
-  mtime timestamp with time zone,    
-  username varchar(64)
+  mtime timestamp with time zone
 );
 ALTER SEQUENCE user_id_seq RESTART WITH 1000;
 

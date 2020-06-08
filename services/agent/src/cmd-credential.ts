@@ -1,24 +1,26 @@
 require('../../_common/src/setup-module-aliases');
 
-import { newUserCredential } from 'common/da/dao-user';
-import { pwdCheck } from 'common/security/password';
+import { router } from 'cmdrouter';
+import { userDao } from 'common/da/daos';
+import { closeKnex } from 'common/da/db';
+import { pwdCheck, pwdEncrypt } from 'common/security/password';
+import { PwdEncryptData } from 'common/security/password-types';
+import { getSysContext } from 'common/user-context';
 import { v4 as uuidV4 } from 'uuid';
 
-main();
 
-async function main() {
-	const [username, clearPwd] = process.argv.slice(2);
+router({ _default, makeCredential, createUser, setPwd }).route();
+
+function _default() {
+	console.log(`New uuidv4: ${uuidV4()}`);
+}
+
+async function makeCredential(username?: string, clearPwd?: string) {
 
 	// if both are not defined, then, just show salt
-	if (!username && !clearPwd) {
-		console.log(`New uuidv4: ${uuidV4()}`);
+	if (!username || !clearPwd) {
+		console.log('CANNOT EXEC - Not enough arguments to makeCredential. Needs username and clearPwd');
 		return;
-	}
-
-	// otherwise much have both
-	if (process.argv.length < 4) {
-		console.log(`ERROR - Must have 'npm run credential _username_ _clearPassword_' to generate a user credential`);
-		return
 	}
 
 	// create a new credential
@@ -32,4 +34,52 @@ async function main() {
 	console.log(check);
 	console.log();
 
+}
+
+async function createUser(username: string, clearPwd: string) {
+	// if both are not defined, then, just show salt
+	if (!username || !clearPwd) {
+		console.log('CANNOT EXEC - Not enough arguments to makeCredential. Needs username and clearPwd');
+		return;
+	}
+	const sysUtx = await getSysContext();
+	await userDao.createUser(sysUtx, { username, clearPwd });
+	await closeKnex();
+}
+
+async function setPwd(username: string, clearPwd: string) {
+	const sysUtx = await getSysContext();
+	await userDao.setPwd(sysUtx, { username }, clearPwd);
+	await closeKnex();
+}
+
+
+
+interface UserCredential {
+	uuid: string,
+	username: string,
+	pwd: string,
+	psalt: string,
+}
+
+/**
+ * Create a new uuid, salt, and pwd given a username and clearPwd without creating it in the db. 
+ */
+export function newUserCredential(username: string, clearPwd: string): UserCredential {
+	const uuid = uuidV4();
+	const psalt = uuidV4();
+	const toEncrypt: PwdEncryptData = {
+		uuid,
+		clearPwd,
+		psalt,
+	}
+
+	const pwd = pwdEncrypt(toEncrypt);
+
+	return {
+		username,
+		uuid,
+		pwd,
+		psalt
+	}
 }

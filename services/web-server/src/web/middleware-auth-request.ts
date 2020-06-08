@@ -49,7 +49,8 @@ export async function authRequest(ktx: Ktx): Promise<{ id: number, type: UserTyp
 		if (cookieAuthToken == null) { throw new Error() }
 
 		const tokenData = parseToken(cookieAuthToken);
-		const { id, type, uuid, tsalt } = await userDao.getUserAuthCredentialByUuid(sysCtx, tokenData.uuid);
+		const { uuid } = tokenData;
+		const { id, tsalt, type } = await userDao.getUserCredForAuth(sysCtx, { uuid });
 		const cred: UserCredForToken = freeze({ uuid, tsalt }); // make sure can't be tampered between check and setAuth
 		checkToken(tokenData, cred);
 		setAuth(ktx, cred);

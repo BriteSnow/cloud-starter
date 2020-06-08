@@ -3,14 +3,21 @@ import { StampedEntity } from './entities-base';
 
 export * from './entities-base';
 
-//#region    ---------- Entity Types ---------- 
+
+//#region    ---------- User ---------- 
+export const USER_COLUMNS = Object.freeze(['id', 'uuid', 'username', 'type', 'cid', 'ctime', 'mid', 'mtime'] as const);
+type UserPropName = typeof USER_COLUMNS[number];
+
 export type UserType = 'sys' | 'admin' | 'user';
 
 export interface User extends StampedEntity {
 	id: number;
+	uuid: string;
 	type: UserType;
 	username: string;
 }
+//#endregion ---------- /User ---------- 
+
 
 export interface OAuth extends StampedEntity {
 	id: number;
@@ -26,4 +33,3 @@ export interface Project extends StampedEntity {
 	id: number;
 	name: string;
 }
-//#endregion ---------- /Entity Types ----------
