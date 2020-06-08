@@ -4,11 +4,15 @@
 
 {
 	"compilerOptions": {
-		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
-		"target": "esNext",
+		// NOTE: For shared in the browser, the web/tsconfig.ts will take precedence, so we are ok even if es2020 is not for client yet.
+		// ES2020 for node 14+
+		"target": "ES2020",
 
-		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
+		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
+		
+		// This is important to support 3rd party modules
+		"moduleResolution": "node", 
 
 		"composite": true, 
 		
@@ -24,9 +28,6 @@
 		"baseUrl": "./src",
 		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
 		"strict": true, 
-
-		// This is important to support 3rd party modules that are still in a node.js/commonjs way
-		"moduleResolution": "node", 
 
 		"experimentalDecorators": true,
 		

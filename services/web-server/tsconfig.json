@@ -4,14 +4,14 @@
 
  {
 	"compilerOptions": {
-		// ES2019 until node.js supports optional chaining / null coalescing
-		"target": "ES2019",
+		// ES2020 for node 14+
+		"target": "ES2020",
 
 		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
 		
-		// This is important to support 3rd party modules that are still in a node.js/commonjs way
-		"moduleResolution": "node", 
+		// This is important to support 3rd party modules
+		"moduleResolution": "node",  
 		
 
 		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
@@ -47,7 +47,7 @@
 		"./test/**/*.ts", 
 		// Note: shared/ and commont/ts will be compiled as imported by the service .ts code (~ tree shaking)
 		//       However, setup-module-aliases needs to be used (require) in entry file, and therefore explicitly inluded. 
-		"../_common/src/setup-module-aliases.ts", "../_common/src/web/koa-utils.ts", "../_common/src/web/koa-base-router.ts" 
+		"../_common/src/setup-module-aliases.ts"
 	],
 
 	"exclude": [

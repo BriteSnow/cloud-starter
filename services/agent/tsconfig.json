@@ -3,13 +3,13 @@
  */
 {
 	"compilerOptions": {
-		// ES2019 until node.js supports optional chaining / null coalescing
-		"target": "ES2019",
+		// ES2020 for node 14+
+		"target": "ES2020",
 
 		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
 		
-		// This is important to support 3rd party modules that are still in a node.js/commonjs way
+		// This is important to support 3rd party modules
 		"moduleResolution": "node", 
 		
 

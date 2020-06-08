@@ -4,7 +4,7 @@
 
  {
 	"compilerOptions": {
-		// ES2019 until node.js supports optional chaining / null coalescing
+		// ES2019 for browser testing, ok to be ES20219
 		"target": "ES2019",
 
 		// For now, we keep the traditional commonsjs way

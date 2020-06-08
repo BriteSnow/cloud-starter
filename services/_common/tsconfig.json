@@ -5,13 +5,13 @@
 
 {
 	"compilerOptions": {
-		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
-		"target": "esNext",
+		// ES2020 for node 14+
+		"target": "ES2020",
 
-		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
+		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
 		
-		// This is important to support 3rd party modules that are still in a node.js/commonjs way
+		// This is important to support 3rd party modules
 		"moduleResolution": "node", 
 		
 
