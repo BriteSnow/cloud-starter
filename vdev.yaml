@@ -26,7 +26,9 @@ realms:
 blocks:
   - db
   - queue
-  - agent
+  - _common  
+  - name: agent
+    dbuildDependencies: _common
   - name: web
     dir: frontends/web/
     baseDistDir: services/web-server/web-folder
@@ -49,7 +51,7 @@ blocks:
         entries: ./src/**/*.tmpl
         dist: ./js/templates.js
   - name: web-server
-    dbuildDependencies: web # build dependency for when running dbuild (no effect on build).
+    dbuildDependencies: ['_common','web'] # build dependency for when running dbuild (no effect on build).
 
 version: 
   files:

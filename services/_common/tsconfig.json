@@ -40,6 +40,6 @@
 
 	// We want more control about which code we will compile and exclude
 	"include": [
-		"./src/**/*.ts", "../web-server/src/web/koa-utils.ts", "../web-server/src/web/koa-base-router.ts"
+		"./src/**/*.ts"
 	]
 }
