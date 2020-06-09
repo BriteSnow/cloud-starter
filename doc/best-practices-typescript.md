@@ -6,15 +6,15 @@ Best practices for modern ES / TS coding.
 ## Object - basic - variable extraction, value access, building
 
 ```ts
-// 1) USE null chaining/coalescing to eventual data
-// 2) USE explicitly variable types for data structure when possible
+// 1) USE null chaining/coalescing to extract deep data
+// 2) USE explicit variable types for data structure when possible
 const filter: Filter = panel?.options?.filter ?? {};
 
 // 3) USE Destructuring to initialize variables (ts type will carry over)
-const { labelIds, excludelabelIds } = filter;
+const { labelIds, excludeLabelIds } = filter;
 
 // 4) USE single name/value object literal when possible.
-const labelFilter = { labelIds, excludelabelIds };
+const labelFilter = { labelIds, excludeLabelIds };
 ```
 
 
