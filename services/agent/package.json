@@ -14,14 +14,14 @@
     "makeCredential": "node dist/services/agent/src/cmd-credential makeCredential",
     "createUser": "node dist/services/agent/src/cmd-credential createUser",
     "setPwd": "node dist/services/agent/src/cmd-credential setPwd",
-    "recreateDb": "node dist/services/agent/src/db recreateDb"
+    "recreateDb": "node dist/services/agent/src/cmd-db recreateDb"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/uuid": "^8.0.0",
     "cmdrouter": "^0.3.1",
-    "immer": "^6.0.9",
+    "immer": "^7.0.1",
     "knex": "^0.21.1",
     "module-alias": "^2.2.2",
     "moment": "^2.26.0",

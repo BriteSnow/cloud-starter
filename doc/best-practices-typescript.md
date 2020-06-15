@@ -226,3 +226,8 @@ console.log('->> here are some value:', value);
 This allows quick full search with `->>` which is unique enough to just show the debug concole log. If another developer forgot to remove one of those DEBUG `console.log` it will be simple to find out. 
 
 > IMPORTANT: DEBUG `console.log` should NEVER be commited in any branch that will be pushed to a repo. Can be part of local commits while development a feature, but needs to be removed when finalizing the commit. The application loggin system should be used to log information that the application might need. 
+
+
+## Blog posts and articles
+
+- [cjs vs AMD vs UMD vs ESM](https://dev.to/iggredible/what-the-heck-are-cjs-amd-umd-and-esm-ikm)

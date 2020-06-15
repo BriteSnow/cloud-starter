@@ -13,10 +13,11 @@ export { QueryInterface } from 'knex';
 
 
 //#region    ---------- PG Type Parsers ---------- 
-// 20: int8
+// To get list - select oid, typname, typarray from pg_type;
+
+// 20: int8 (bigint)
 types.setTypeParser(20, function (val: string) {
 	return parseInt(val); // TODO: need to make it bigInt
-	//return val;
 });
 
 // 1016: _int8 (i.e., int8[])
@@ -24,7 +25,6 @@ types.setTypeParser(20, function (val: string) {
 types.setTypeParser(1016, function (val: string) {
 	return pgArrayParse(val, parseInt); // TODO: needs to make it big int
 });
-
 //#endregion ---------- /PG Type Parsers ---------- 
 
 // KnexClient for the application (will be set by getKnexClient())

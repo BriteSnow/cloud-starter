@@ -4,9 +4,9 @@
 
 {
 	"compilerOptions": {
-		// NOTE: For shared in the browser, the web/tsconfig.ts will take precedence, so we are ok even if es2020 is not for client yet.
-		// ES2020 for node 14+
-		"target": "ES2020",
+		// NOTE: For shared in the browser, the web/tsconfig.ts will take precedence, so we are ok even if ESNEXT is not for client yet.
+		// ESNEXT for node 14+
+		"target": "ESNEXT",
 
 		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",

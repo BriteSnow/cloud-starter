@@ -1,3 +1,5 @@
+require('../../_common/src/setup-module-aliases');
+
 import { router } from 'cmdrouter';
 import * as fs from 'fs-extra-plus';
 import { ensureDir } from 'fs-extra-plus';

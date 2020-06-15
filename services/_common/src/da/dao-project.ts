@@ -1,4 +1,5 @@
 import { Project, User } from 'shared/entities';
+import { Monitor } from '../perf';
 import { saveProle } from '../role-manager';
 import { UserContext } from '../user-context';
 import { AccessRequires } from './access';
@@ -23,6 +24,7 @@ export class ProjectDao extends BaseDao<Project, number> {
 	}
 
 	//#region    ---------- BaseDao Overrides ---------- 
+	@Monitor()
 	async create(utx: UserContext, data: Partial<Project>) {
 		const projectId = await super.create(utx, data);
 
