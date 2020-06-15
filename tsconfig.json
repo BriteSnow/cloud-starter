@@ -4,8 +4,11 @@
 
  {
 	"compilerOptions": {
-		// ESNEXT for node 14+
+		// ESNEXT for Node.js 14+
 		"target": "ESNEXT",
+
+    // When ESNEXT target, to use native class field. 
+		"useDefineForClassFields": true,
 
 		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
@@ -23,14 +26,17 @@
 		"sourceMap": false,  // we do not need the sourcemap (for /scripts/*.ts)		
 
 		// Since we are using ts-node, not really needed, but just in case we want to do a "tsc" on folder.
-		"outDir": ".out", /* Redirect output structure to the directory. */
+		"outDir": ".out", 
 
 		"baseUrl": ".",
 		
 		"experimentalDecorators": true,
 				
 		// Needed to call import default (replaces allowSyntheticDefaultImports)
-		"esModuleInterop": true
+		"esModuleInterop": true, 
+
+		// Disallow inconsistently-cased references to the same file.
+		"forceConsistentCasingInFileNames": true  
 	},
 
 	// We want more control about which code we will compile and exclude

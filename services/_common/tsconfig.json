@@ -5,8 +5,11 @@
 
 {
 	"compilerOptions": {
-		// ESNEXT for node 14+
+		// ESNEXT for Node.js 14+
 		"target": "ESNEXT",
+
+    // When ESNEXT target, to use native class field. 
+		"useDefineForClassFields": true,
 
 		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
@@ -34,8 +37,10 @@
 		"experimentalDecorators": true,
 		
 		// Needed to call import default (replaces allowSyntheticDefaultImports)
-		"esModuleInterop": true
-	
+		"esModuleInterop": true,
+
+		// Disallow inconsistently-cased references to the same file.
+		"forceConsistentCasingInFileNames": true  
 	},
 
 	// We want more control about which code we will compile and exclude

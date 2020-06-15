@@ -15,18 +15,18 @@ type ToRegister<S, C> = {
 	routeItems: RouteItem<S, C>[]
 }
 
-export class BaseRouter<S, C> {
-	readonly __toRegister!: ToRegister<S, C>;
+export class BaseRouter<S, C> implements BaseRouterPrototype<S, C> {
+	// Note: here declare, because this will be set at the to the constructor function before hand, so no need to emit the var
+	declare readonly __toRegister: ToRegister<S, C>;
 
-	private readonly koaRouterWrapper: KoaRouterWrapper<S, C>;
-
-	private readonly _middleware: Middleware<any, any>; // keep type flexible here
+	readonly #koaRouterWrapper: KoaRouterWrapper<S, C>;
+	#middleware: Middleware<any, any>; // keep type flexible here
 
 	/** Return the composed middleware of all of the route of this router */
-	middleware() { return this._middleware }
+	middleware() { return this.#middleware }
 
 	constructor(prefix?: string) {
-		this.koaRouterWrapper = new KoaRouterWrapper(prefix);
+		this.#koaRouterWrapper = new KoaRouterWrapper(prefix);
 
 		//// wrap the use item
 		const wrappedUseMiddelwares = this.__toRegister.useItems.map(useItem => this.wrapUseMiddleware(useItem));
@@ -38,11 +38,11 @@ export class BaseRouter<S, C> {
 				continue;
 			}
 			const wrappedRequestHandler = this.wrapRequestHandler(item.handler);
-			this.koaRouterWrapper.registerRoute(item.requestMethod, item.path, wrappedRequestHandler);
+			this.#koaRouterWrapper.registerRoute(item.requestMethod, item.path, wrappedRequestHandler);
 		}
 
 		//// create new composed middleware (use items first, then the routes)
-		this._middleware = koaCompose([...wrappedUseMiddelwares, this.koaRouterWrapper.routes()]);
+		this.#middleware = koaCompose([...wrappedUseMiddelwares, this.#koaRouterWrapper.routes()]);
 	}
 
 	async assertKtx(ktx: ParameterizedContext<S, C>) {
@@ -98,8 +98,8 @@ export class BaseRouter<S, C> {
 
 }
 
-interface BaseRouterPrototype {
-	__toRegister: ToRegister<any, any>;
+interface BaseRouterPrototype<S = any, C = any> {
+	__toRegister: ToRegister<S, C>;
 }
 
 //#region    ---------- Route Decorators ---------- 
@@ -155,6 +155,7 @@ function addRouteItem(target: BaseRouterPrototype, propertyKey: string, descript
 }
 
 function getToRegister(target: BaseRouterPrototype) {
+	console.log('->> ', target);
 	if (target.__toRegister == null) {
 		target.__toRegister = { useItems: [], routeItems: [] };
 	}

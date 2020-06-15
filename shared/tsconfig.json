@@ -4,9 +4,11 @@
 
 {
 	"compilerOptions": {
-		// NOTE: For shared in the browser, the web/tsconfig.ts will take precedence, so we are ok even if ESNEXT is not for client yet.
-		// ESNEXT for node 14+
+		// ESNEXT for Node.js 14+
 		"target": "ESNEXT",
+
+    // When ESNEXT target, to use native class field. 
+		"useDefineForClassFields": true,
 
 		// For now, we keep the traditional commonsjs way
 		"module": "commonjs",
@@ -32,7 +34,10 @@
 		"experimentalDecorators": true,
 		
 		// Needed to call import default (replaces allowSyntheticDefaultImports)
-		"esModuleInterop": true
+		"esModuleInterop": true,
+
+		// Disallow inconsistently-cased references to the same file.
+		"forceConsistentCasingInFileNames": true  		
 	
 	},
 

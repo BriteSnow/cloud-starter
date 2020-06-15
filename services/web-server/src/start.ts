@@ -1,6 +1,6 @@
 require('../../_common/src/setup-module-aliases');
 
-import { PERF_LOG_THRESHOLD as PERF_LOG_THRESHOLD_WEB, __version__ } from 'common/conf';
+import { PERF_LOG_THRESHOLD_WEB, __version__ } from 'common/conf';
 import { AppError } from 'common/error';
 import Koa, { Next } from 'koa';
 import koaBody from 'koa-body';
