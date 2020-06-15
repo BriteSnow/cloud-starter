@@ -1,6 +1,6 @@
 require('../../_common/src/setup-module-aliases');
 
-import { __version__ } from 'common/conf';
+import { PERF_LOG_THRESHOLD as PERF_LOG_THRESHOLD_WEB, __version__ } from 'common/conf';
 import { AppError } from 'common/error';
 import Koa, { Next } from 'koa';
 import koaBody from 'koa-body';
@@ -112,7 +112,15 @@ async function main() {
 // for error handling: https://github.com/koajs/koa/wiki/Error-Handling
 async function handleRequestOverall(ktx: Ktx, next: Next) {
 	try {
+		const start = Date.now();
 		await next();
+		const duration = Date.now() - start;
+
+		// Log perf info is slower than threshold
+		if (duration >= PERF_LOG_THRESHOLD_WEB) {
+			console.log(`WARNING - PERF ${duration}ms > ${PERF_LOG_THRESHOLD_WEB}ms - ${ktx.path}\n` + JSON.stringify(ktx.state.utx?.perfContext.items, null, '  ') + '\n');
+		}
+
 	} catch (err) {
 		let error: any;
 		let err_msg: string | undefined;

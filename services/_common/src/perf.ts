@@ -6,7 +6,8 @@ import { assertUserContext, UserContext } from './user-context';
 /** This is what will be shared by the PerfContext (user just need the ref to the object) */
 interface PerfItem {
 	name: string;
-	startTime: number | null;
+	startTime?: number;
+	endTime?: number;
 	duration?: number;
 	subs?: PerfItem[];
 }
@@ -14,20 +15,32 @@ interface PerfItem {
 /** The full implementation for the PerfItem. */
 class PerfItemImpl implements PerfItem {
 	name: string;
-	startTime: number;
-	endTime: number | undefined;
+	startTime?: number;
+	endTime?: number;
 	subs?: PerfItem[];
 
 	duration?: number;
 
-	constructor(name: string) {
+	constructor(name: string, duration?: number) {
 		this.name = name;
-		this.startTime = Date.now();
+
+		// if duration, then, the PrefItem is just about duration (already computed, no startTime)
+		if (duration != null) {
+			this.duration = duration;
+		}
+		// if not, then, assume the caller will call perfContext.end(handle)
+		else {
+			this.startTime = Date.now();
+		}
+
 	}
 
 	end() {
-		this.endTime = Date.now();
-		this.duration = this.endTime - this.startTime;
+		if (this.startTime != null) {
+			this.endTime = Date.now();
+			this.duration = this.endTime - this.startTime;
+		}
+		// TODO: might need to do a CODE-ERROR log here
 		return this;
 	}
 
@@ -52,7 +65,7 @@ export class PerfContext {
 	//       because if nobody has the handle, then, nobody is loking for the item
 	//       this is a good use of WeakMap
 	// Note: The PerfItemImpl will not be lost since they are in the rootItems tree
-	#itemPerHandle = new WeakMap<Symbol, PerfItemImpl>();
+	#itemPerHandle = new Map<Symbol, PerfItemImpl>();
 
 	/** 
 	 * Return the root items and all of the subItems 
@@ -60,6 +73,18 @@ export class PerfContext {
 	 */
 	get items() { return this.rootItems }
 
+	/** 
+	 * Add a already computed perfItem (only duration, no startTime).
+	 * Note: For now, this will be added to the rootItems
+	 */
+	add(name: string, duration: number) {
+		this.rootItems.push(new PerfItemImpl(name, duration));
+	}
+
+	/** 
+	 * Start a new Perf Timer by name. 
+	 * Will be added to rootItems if no current PerfItem in the stack, otehrwise, as .subs 
+	 **/
 	start(name: string) {
 		const p = new PerfItemImpl(name);
 		// if there is a pending item, we add it as sub

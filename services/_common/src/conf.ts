@@ -31,3 +31,7 @@ export const GOOGLE_OAUTH_REDIRECT_URL = process.env.google_oauth_redirect_url!;
 export const GOOGLE_OAUTH_CLIENT_ID = process.env.google_oauth_client_id!;
 export const GOOGLE_OAUTH_CLIENT_SECRET = process.env.google_oauth_client_secret!;
 export const GOOGLE_OAUTH = GOOGLE_OAUTH_CLIENT_ID ? freeze({ client_id: GOOGLE_OAUTH_CLIENT_ID, redirect_url: GOOGLE_OAUTH_REDIRECT_URL, client_secret: GOOGLE_OAUTH_CLIENT_SECRET }) : null;
+
+
+//// OTHERS
+export const PERF_LOG_THRESHOLD_WEB = 1000; // in ms. Threshold when utx.perfContext.items should be logged

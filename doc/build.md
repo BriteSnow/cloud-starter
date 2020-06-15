@@ -39,8 +39,6 @@ To have a consistent versioning system across all blocks (backend and frontend),
 Once the version is included in the various code, it can be siplay
 
 
-### 
-
 
 ### 
 

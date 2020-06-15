@@ -13,6 +13,7 @@ export function success<T = any>(data?: T): ApiResponse<T> {
 
 //#region    ---------- Base App Router ---------- 
 export interface KState {
+	utx?: UserContext, // will be defined in APIKState, but allow to avoid casting
 	webLogInfo: {
 		ip: string,
 		timestamp: string,
