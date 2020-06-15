@@ -54,6 +54,12 @@ export class PerfContext {
 	// Note: The PerfItemImpl will not be lost since they are in the rootItems tree
 	#itemPerHandle = new WeakMap<Symbol, PerfItemImpl>();
 
+	/** 
+	 * Return the root items and all of the subItems 
+	 * TODO: would need to clone or use immerjs
+	 */
+	get items() { return this.rootItems }
+
 	start(name: string) {
 		const p = new PerfItemImpl(name);
 		// if there is a pending item, we add it as sub
