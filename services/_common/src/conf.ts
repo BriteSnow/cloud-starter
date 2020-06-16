@@ -5,12 +5,13 @@
  * - For more complex value, use the config `getConfig` method (which also return those property/values)
  **/
 
-import { freeze } from 'shared/utils';
 
 export const __version__ = "DROP-002-SNAPSHOT";
 
 // should HOST environment should be set by kuberenetes.
-export const KHOST = process.env.HOST ?? 'no-host';
+export const KHOST = process.env.HOSTNAME ?? 'no-host';
+
+export const SERVICE_NAME = process.env.service_name ?? 'no-service';
 
 //// HTTP
 export const HTTPS_MODE = (process.env.https_mode === 'true') ? true : false;
@@ -30,8 +31,14 @@ export const DB = Object.freeze({ host: DB_HOST, database: DB_DATABASE, user: DB
 export const GOOGLE_OAUTH_REDIRECT_URL = process.env.google_oauth_redirect_url!;
 export const GOOGLE_OAUTH_CLIENT_ID = process.env.google_oauth_client_id!;
 export const GOOGLE_OAUTH_CLIENT_SECRET = process.env.google_oauth_client_secret!;
-export const GOOGLE_OAUTH = GOOGLE_OAUTH_CLIENT_ID ? freeze({ client_id: GOOGLE_OAUTH_CLIENT_ID, redirect_url: GOOGLE_OAUTH_REDIRECT_URL, client_secret: GOOGLE_OAUTH_CLIENT_SECRET }) : null;
+export const GOOGLE_OAUTH = GOOGLE_OAUTH_CLIENT_ID ? Object.freeze({ client_id: GOOGLE_OAUTH_CLIENT_ID, redirect_url: GOOGLE_OAUTH_REDIRECT_URL, client_secret: GOOGLE_OAUTH_CLIENT_SECRET }) : null;
 
+
+//// LOG
+export const LOG_DIR = './logs/';
+export const LOG_MAX_COUNT = Number(process.env.log_max_count!);
+export const LOG_MAX_TIME = Number(process.env.log_max_time!);
+export const LOG = Object.freeze({ maxCount: LOG_MAX_COUNT, maxTime: LOG_MAX_TIME });
 
 //// OTHERS
 export const PERF_LOG_THRESHOLD_WEB = 1000; // in ms. Threshold when utx.perfContext.items should be logged

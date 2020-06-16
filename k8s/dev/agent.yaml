@@ -38,6 +38,9 @@ spec:
                 name: cstar-config
             - secretRef:
                 name: cstar-secret
+          env:
+            - name: service_name
+              value: agent          
           volumeMounts:
             - mountPath: /service/src
               name: cstar-agent-src

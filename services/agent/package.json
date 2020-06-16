@@ -25,7 +25,6 @@
     "knex": "^0.21.1",
     "module-alias": "^2.2.2",
     "moment": "^2.26.0",
-    "node-simple-timer": "^0.1.1",
     "p-spawn": "^0.5.1",
     "pg": "^8.2.1",
     "redis": "^3.0.2",

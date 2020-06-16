@@ -38,6 +38,9 @@ spec:
                 name: cstar-config
             - secretRef:
                 name: cstar-secret
+          env:
+            - name: service_name
+              value: web-server                    
           volumeMounts:
             - mountPath: /service/web-folder
               name: cstar-web-server-web-folder

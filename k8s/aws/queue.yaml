@@ -29,10 +29,10 @@ spec:
         run: cstar-queue
     spec:
       containers:
-      - image: '{{registry}}cstar-queue:{{imageTag}}'
-        imagePullPolicy: Always
-        name: cstar-queue-ctn
-        ports:
-        - containerPort: 6379
-          protocol: TCP
+        - image: '{{registry}}cstar-queue:{{imageTag}}'
+          imagePullPolicy: Always
+          name: cstar-queue-ctn
+          ports:
+            - containerPort: 6379
+              protocol: TCP
       restartPolicy: Always

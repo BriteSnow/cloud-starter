@@ -20,7 +20,6 @@
     "immer": "^7.0.1",
     "mocha": "^8.0.1",
     "moment": "^2.26.0",
-    "node-simple-timer": "^0.1.1",
     "p-spawn": "^0.5.1",
     "postgres-array": "^2.0.0",
     "qs": "^6.9.4",

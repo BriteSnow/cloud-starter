@@ -2,31 +2,18 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import moment from 'moment';
-import { Timer as _Timer } from 'node-simple-timer';
 
 //#region    ---------- time utils ---------- 
 // returns a now formatted for database
 export function nowTimestamp() {
 	return moment().utc().toISOString();
 }
-
-export function timer() {
-	return new Timer();
-}
-
-class Timer extends _Timer {
-	constructor() {
-		super(true);
-	}
-	ms() {
-		return Math.round(this.milliseconds());
-	}
-}
 //#endregion ---------- /time utils ---------- 
 
 
 //#region    ---------- string utils ---------- 
-export function formatSize(sizeInBytes: number, formatter?: string) {
+// NOTE: This is ok for display formatting, but should not not / 1024 for storage (lose precision and get too many decimals)
+export function formatSize(sizeInBytes: number, formatter?: string): string {
 	formatter = formatter || "{v}{n}";
 	let i = -1;
 	const byteUnits = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];

@@ -17,6 +17,7 @@ export interface UserContext {
 	readonly user: UserForContext;
 	hasProjectPrivilege(projectId: number, privilege: string): Promise<boolean>;
 	readonly perfContext: PerfContext;
+	readonly orgId?: number;
 }
 
 

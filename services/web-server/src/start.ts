@@ -2,6 +2,7 @@ require('../../_common/src/setup-module-aliases');
 
 import { PERF_LOG_THRESHOLD_WEB, __version__ } from 'common/conf';
 import { AppError } from 'common/error';
+import { web_log } from 'common/log/logger';
 import Koa, { Next } from 'koa';
 import koaBody from 'koa-body';
 import koaSend from 'koa-send';
@@ -9,7 +10,7 @@ import koaStatic from 'koa-static';
 import { extname } from 'path';
 import { AuthFailError, clearAuth } from './auth';
 import dseGenerics from './web/dse-generics';
-import { initKtx, KCustom, KState, Ktx } from './web/koa-utils';
+import { buildWebLogRecord, initKtx, KCustom, KState, Ktx } from './web/koa-utils';
 import authRequestMiddleware from './web/middleware-auth-request';
 import routerApiUserContext from './web/router-api-user-context';
 import routerAuthGoogleOAuth from './web/router-auth-google-oauth';
@@ -112,13 +113,13 @@ async function main() {
 // for error handling: https://github.com/koajs/koa/wiki/Error-Handling
 async function handleRequestOverall(ktx: Ktx, next: Next) {
 	try {
-		const start = Date.now();
 		await next();
-		const duration = Date.now() - start;
+		const rec = buildWebLogRecord(ktx);
+		await web_log(rec);
 
-		// Log perf info is slower than threshold
-		if (duration >= PERF_LOG_THRESHOLD_WEB) {
-			console.log(`WARNING - PERF ${duration}ms > ${PERF_LOG_THRESHOLD_WEB}ms - ${ktx.path}\n` + JSON.stringify(ktx.state.utx?.perfContext.items, null, '  ') + '\n');
+		// Additional console.log on threshold
+		if (rec.duration >= PERF_LOG_THRESHOLD_WEB) {
+			console.log(`WARNING - PERF ${rec.duration}ms > ${PERF_LOG_THRESHOLD_WEB}ms - ${ktx.path}\n` + JSON.stringify(ktx.state.utx?.perfContext.items, null, '  ') + '\n');
 		}
 
 	} catch (err) {

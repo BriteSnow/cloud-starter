@@ -1,6 +1,7 @@
 require('../../_common/src/setup-module-aliases');
 
 import { router } from 'cmdrouter';
+import { DB } from 'common/conf';
 import * as fs from 'fs-extra-plus';
 import { ensureDir } from 'fs-extra-plus';
 import { basename, join as joinPath } from 'path';
@@ -10,12 +11,10 @@ import { download, list, pgStatus, pgTest, psqlImport } from 'vdev';
 const sqlDir = 'sql/';
 const host = 'cstar-db-srv';
 
-// Root Postgres credential to create dev database
+// Root Postgres credential to create db (only for dev/test/~stage, so harcoded pasword, must match db.yaml POSTGRES_PASSWORD env value)
 const POSTGRES_DB_CRED = { user: 'postgres', database: 'postgres', password: 'postgres', host };
 
-
-const dbPrefix = 'cstar_';
-const APP_DB_CRED = { user: dbPrefix + "user", database: dbPrefix + "db", host: host };
+const APP_DB_CRED = DB;
 
 router({ updateDb: runDropSqls, recreateDb }).route();
 
@@ -28,7 +27,7 @@ async function recreateDb() {
 	}
 
 	//// Drop the bb_ db and user
-	const t = await pgTest(APP_DB_CRED);
+	const t = await pgTest(POSTGRES_DB_CRED);
 	// local test: // psql -U postgres -d postgres -f sql/_drop-db.sql
 	await psqlImport(POSTGRES_DB_CRED, [`${sqlDir}/_drop-db.sql`]);
 

@@ -13,7 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/ioredis": "^4.16.5",
+    "ioredis": "^4.17.3",
     "knex": "^0.21.1",
-    "pg": "^8.2.1"
+    "pg": "^8.2.1",
+    "redstream": "^0.1.7"
   }
 }

@@ -6,7 +6,7 @@ import { types } from 'pg';
 import { parse as pgArrayParse } from 'postgres-array';
 import { Pool } from 'tarn';
 import { isEmpty } from 'utils-min';
-import { DB } from '../conf';
+import { DB, KHOST } from '../conf';
 import { UserContext } from '../user-context';
 import { nowTimestamp } from '../utils-cloud-starter';
 export { QueryInterface } from 'knex';
@@ -129,7 +129,7 @@ export async function getKnexClient() {
 				createConStartMap.delete(evtId);
 				if (duration > longestCreate) {
 					// TODO: Need to use new logger when available
-					console.log(`PERF-INFO - ${nowTimestamp()} - db pool - longest create ${duration}ms`);
+					console.log(`PERF-INFO - ${nowTimestamp()} - db pool - longest create ${duration}ms - from ${KHOST}`);
 					longestCreate = duration;
 				}
 			});
@@ -144,7 +144,7 @@ export async function getKnexClient() {
 				acquireConStartMap.delete(evtId);
 				if (duration > longestAcquire) {
 					// TODO: Need to use new logger when available
-					console.log(`PERF-INFO - ${nowTimestamp()} - db pool - longest acquire ${duration}ms`);
+					console.log(`PERF-INFO - ${nowTimestamp()} - db pool - longest acquire ${duration}ms - from ${KHOST}`);
 					longestAcquire = duration;
 				}
 			});

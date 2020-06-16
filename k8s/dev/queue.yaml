@@ -46,7 +46,10 @@ spec:
         - image: localhost:5000/cstar-queue:{{imageTag}}
           imagePullPolicy: Always
           name: cstar-queue-ctn
+          env:
+            - name: service_name
+              value: queue              
           ports:
-          - containerPort: 6379
-            protocol: TCP
+            - containerPort: 6379
+              protocol: TCP
       restartPolicy: Always

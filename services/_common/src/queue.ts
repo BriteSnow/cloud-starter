@@ -1,95 +1,57 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/queue.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { promisify } from 'util';
-import redis = require('redis');
-import { RedisClient } from 'redis';
+import IORedis, { Redis } from "ioredis";
 
 
-/** 
- * Wait for the next message from a queue (usually used in a for loop)
- * Assumptions: 
- *   - a queue is a redis list
- *   - can wait for a single queue
- *   - assume the message is one json element and can be parsed as such
-*/
-export async function queuePop(queueName: string) {
 
-	const client = await getRedisClient();
-
-	// here we assume 
-	const result = await client.brpop(queueName, 0);
-
-	// assume result is of one item, and first item is json formatted
-	const msg = result[1];
-	const data = JSON.parse(msg);
-	return data;
-}
-
-export async function queuePush(queueName: string, message: any) {
-	const client = await getRedisClient();
-	const str = JSON.stringify(message);
-	await client.lpush(queueName, str);
-}
-
-
-//#region    ---------- Redis Client Promise Wrapper ---------- 
+//#region    ---------- RedisClient Factory / Cache ---------- 
+const host = 'cstar-queue-srv';
 const maxRetry = 100;
-let _predisClient: any | undefined;
-/**
- * Simple redis wrapper that add promise and default retry_strategy (can't return typed object since all signature change)
- */
-export async function getRedisClient(host?: string): Promise<any> {
-	host = (host) ? host : 'cstar-queue-srv';
 
-	if (_predisClient) {
-		return _predisClient;
+interface Clients {
+	common?: Redis, // for any non blocking redis call
+	// 'job_queue_name'?: Redis // per stream blocking name 
+}
+
+const clients: Clients = {};
+
+/**
+ * Redis client factory / cache for named redis client. 
+ * 
+ * IMPORTANT: Most of the application code should just use the shared 'common' redis client for NON BLOCKING read and write to the redis server. 
+ *            However, for JobManagers, since they are read block on stream, they MUST have their own redis client so that they do not block other code. 
+ *            This is why this function provides a simple way to get client by name, and the default is 'common'
+ * 
+ * NOTE: Also, we are fully typing which name we are allowing here, to make the code more tight, and prevent missed used of the API. If more 
+ *       Names are needed, add the name in the Clients interface above. 
+ */
+export function getRedisClient(name: keyof Clients = 'common'): Redis {
+	let client = clients[name];
+
+	if (!client) {
+		client = createRedisClient(name);
+		clients[name] = client;
 	}
 
-	// get the raw redis client ()
-	const _redis_client: RedisClient = redis.createClient({
-		host,
-		retry_strategy: function (options) {
+	return client;
+}
 
-			let errorMsg = `Redis connection fail`;
+function createRedisClient(name: string) {
 
-			if (options.error && options.error.code === 'ECONNREFUSED') {
-				errorMsg = ` ECONNREFUSED`;
-				// End reconnecting on a specific error and flush all commands with
-				// a individual error
-				//return new Error('The server refused the connection');
-			}
-			if (options.total_retry_time > 1000 * 60 * 60) {
-				// End reconnecting after a specific timeout and flush all commands
-				// with a individual error
-				return new Error('Retry time exhausted');
-			}
-			if (options.attempt > maxRetry) {
-				// End reconnecting with built in error
-				return new Error('Retry attempt exhausted');
-			}
-
-			errorMsg += ` will retry again (attempt: ${options.attempt} total_retry_time:${options.total_retry_time})`;
-
-			console.log(errorMsg);
-
+	const client = new IORedis(host, {
+		maxRetriesPerRequest: maxRetry,
+		sentinelRetryStrategy: function (times: number) {
+			console.log(`INFO - Redis client for ${name} sentinelRetryStrategy`, times);
 			// reconnect after some time (wait longer with attempt up to 3 seconds)
-			return Math.min(options.attempt * 100, 3000);
+			return Math.min(times * 10, 3000);
 		}
 	});
 
-	_redis_client.on('ready', function (data: any) {
-		console.log(`Redis client ready`, (<any>_redis_client).connection_options);
-	})
-	const methods = ['expire', 'get', 'set', 'quit', 'on', 'subscribe', 'psubscribe', 'lpush', 'rpush', 'brpop', 'rpop', 'lrange', 'del'];
-	const client: any = { _redis_client };
-	for (const m of methods) {
-		client[m] = promisify((<any>_redis_client)[m]).bind(_redis_client);
-	}
+	client.on('ready', async function (data: any) {
+		console.log(`INFO - Redis client for ${name} ready`);
+	});
 
-
-	_predisClient = client;
-
-	return _predisClient;
+	return client
 }
-//#endregion ---------- /Redis Client Promise Wrapper ----------
+//#endregion ---------- /RedisClient Factory / Cache ----------

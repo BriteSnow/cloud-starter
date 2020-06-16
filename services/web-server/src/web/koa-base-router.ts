@@ -155,7 +155,6 @@ function addRouteItem(target: BaseRouterPrototype, propertyKey: string, descript
 }
 
 function getToRegister(target: BaseRouterPrototype) {
-	console.log('->> ', target);
 	if (target.__toRegister == null) {
 		target.__toRegister = { useItems: [], routeItems: [] };
 	}

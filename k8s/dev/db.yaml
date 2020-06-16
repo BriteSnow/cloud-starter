@@ -36,11 +36,14 @@ spec:
         imagePullPolicy: Always
         name: cstar-db-ctn
         env:
-          # NOT FOR PRODUCTION!!!!! FOR DEV ONLY
-          - name: POSTGRES_HOST_AUTH_METHOD
-            value: 'trust'        
+          - name: service_name
+            value: db         
+          # Default root postgres user password.
+          # NOT FOR PRODUCTION!!!!! FOR DEV ONLY. In prod use cloud sql / rds. Set root password.
+          - name: POSTGRES_PASSWORD
+            value: 'postgres'        
         ports:
-        - containerPort: 5432
-          protocol: TCP
+          - containerPort: 5432
+            protocol: TCP
       restartPolicy: Always
 
