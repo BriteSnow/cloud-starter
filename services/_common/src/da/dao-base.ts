@@ -7,6 +7,7 @@ import { Monitor } from '../perf';
 import { UserContext } from '../user-context';
 import { removeProps } from '../utils';
 import { nowTimestamp } from '../utils-cloud-starter';
+import { AccessRequires } from './access';
 import { knexQuery } from './db';
 
 export interface CustomQuery {
@@ -26,14 +27,14 @@ export interface BaseDaoOptions {
 // Note: for now, the knex can take a generic I for where value
 // @annoC
 export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
-	readonly tableName: string;
+	readonly table: string;
 	readonly idNames: string | string[];
 	protected readonly stamped: boolean;
 	protected readonly orderBy: string | null;
 	protected readonly columns?: string[];
 
 	constructor(opts: BaseDaoOptions) {
-		this.tableName = opts.table;
+		this.table = opts.table;
 		this.stamped = opts.stamped;
 		this.idNames = (opts.idNames) ? opts.idNames : 'id';
 		this.orderBy = (opts.orderBy) ? opts.orderBy : null;
@@ -42,6 +43,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		}
 	}
 
+	//#region    ---------- Data Entity Processing ---------- 
 	/**
 	 * Convenient methods to process a list of object to this entity. 
 	 * 
@@ -49,23 +51,73 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * 
 	 * @param objects 
 	 */
-	processEntities(objects: any[]): E[] {
-		return objects.map(obj => this.processEntity(obj));
+	protected parseRecords(objects: any[]): E[] {
+		return objects.map(obj => this.parseRecord(obj));
 	}
 
 	/**
-	 * Process a data from the db into a full entity type.
-	 * Overriden by the sub Dao as needed. 
+	 * Parse the raw database record to entity. 
 	 * 
-	 * Note: usually, this can hadd some defineProperty to get some data from computation
+	 * Default implementation return return obj as is.
+	 * 
+	 * Note: usually, this can add some defineProperty to get some data from computation
 	 */
-	processEntity(obj: any): E {
+	protected parseRecord(obj: any): E {
 		return obj as E;
 	}
 
+	/**
+	 * Serialize an entity to its database table row record. 
+	 * 
+	 * By Default, return object as is.
+	 */
+	protected serializeEntity(entity: E): any {
+		return entity;
+	}
+
+	/**
+	* Clean the data object of any properties that should not be part of the create or update. 
+	* This will be and must be caused before before the dao.stamp, for any create/update
+	*
+	* TODO: Right now, remove in place, but should create new object if needed, and return new object. 
+	*/
+	protected cleanForSave(utx: UserContext, data: Partial<E>, forCreate = false): Partial<E> {
+		// Those will be set in this.stamp
+		removeProps(data, ['cid', 'ctime', 'mid', 'mtime']);
+		return data;
+	}
+
+
+
+	protected stamp(utx: UserContext, data: Partial<E>, forCreate?: boolean): Partial<E> {
+
+		if (this.stamped) {
+			// Force casting. We can assume this, might have a more elegant way (but should not need StampedDao though)
+			const stampedData: Partial<E> & StampedEntity = data;
+			const now = nowTimestamp();
+			if (forCreate) {
+				stampedData.cid = utx.userId;
+				stampedData.ctime = now;
+			}
+			stampedData.mid = utx.userId;
+			stampedData.mtime = now;
+			return stampedData;
+		} else {
+			return data;
+		}
+
+
+
+	}
+	//#endregion ---------- /Data Entity Processing ---------- 
+
+
+	//#region    ---------- Public Interface ---------- 
+
 	@Monitor()
+	@AccessRequires() // will force #sys only for baseDao
 	async get(utx: UserContext, id: I): Promise<E> {
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 
 		if (this.columns) {
 			query.columns(this.columns);
@@ -73,15 +125,16 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		const r = await query.where(this.getWhereIdObject(id));
 
 		if (r.length === 0) {
-			throw new Error(`dao.get error, can't find ${this.tableName}[${id}]`);
+			throw new Error(`dao.get error, can't find ${this.table}[${id}]`);
 		}
-		return this.processEntity(r[0]);
+		return this.parseRecord(r[0]);
 	}
 
 	/**
 	 * Same as getForIds, but allow some array item to be undefined, and when so, undefined will be returned.
 	 * @param ids 
 	 */
+	@AccessRequires() // will force #sys only for baseDao
 	async getForSomeIds(utx: UserContext, ids: (I | undefined)[]): Promise<(E | undefined)[]> {
 		// first filter the none defined
 		const definedIds = ids.filter(v => v !== undefined) as I[]; // help typing system
@@ -103,8 +156,9 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * @param utx 
 	 * @param ids 
 	 */
+	@AccessRequires() // will force #sys only for baseDao
 	async getForIds(utx: UserContext, ids: I[]): Promise<E[]> {
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 
 		// for now only supports dao that have 'id' as key (i.e. assumption are numbers)
 		if (this.idNames === 'id') {
@@ -115,12 +169,13 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 
 
 		const r = (await query.then()) as any[];
-		return this.processEntities(r);
+		return this.parseRecords(r);
 	}
 
 	@Monitor()
+	@AccessRequires() // will force #sys only for baseDao
 	async first(utx: UserContext, data: Partial<E>): Promise<E | null> {
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 
 
 		const options = { matching: data, limit: 1 } as (QueryOptions<E> & Q); // needs typing int
@@ -130,15 +185,16 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		if (entities.length === 0) {
 			return null;
 		}
-		return this.processEntity(entities[0]);
+		return this.parseRecord(entities[0]);
 	}
 
 	@Monitor()
+	@AccessRequires() // will force #sys only for baseDao
 	async create(utx: UserContext, data: Partial<E>): Promise<I> {
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 
-		this.cleanForSave(utx, data, true);
-		this.stamp(utx, data, true);
+		data = this.cleanForSave(utx, data, true);
+		data = this.stamp(utx, data, true);
 
 		const r = await query.insert(data).returning(this.idNames);
 		return r[0] as I;
@@ -152,19 +208,20 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * @param data 
 	 * @param uniqueProps 
 	 */
+	@AccessRequires() // will force #sys only for baseDao
 	async createOrGetId(utx: UserContext, data: Partial<E>, uniqueProps: Partial<E>): Promise<I> {
 		let id: I;
 		try {
 			id = await this.create(utx, data);
 		} catch (ex) {
 			// for now,  we will assume it is on on conflict with the uniqueProp
-			const { query } = await knexQuery({ utx, tableName: this.tableName });
+			const { query } = await knexQuery({ utx, tableName: this.table });
 
 			const idNames = (this.idNames instanceof Array) ? this.idNames : [this.idNames];
 			const r = await query.select().column(idNames).where(uniqueProps);
 
 			if (r.length === 0) {
-				const desc = `Can't get ${this.tableName} on unique props ${uniqueProps} after conflict create (conflict cause: ${ex.message})`;
+				const desc = `Can't get ${this.table} on unique props ${uniqueProps} after conflict create (conflict cause: ${ex.message})`;
 				// TODO: need to enable when log framework get implemented
 				// utx.log({ level: 'error', method: 'BaseDao.silentCreate', desc });
 				throw desc;
@@ -178,8 +235,9 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@Monitor()
+	@AccessRequires() // will force #sys only for baseDao
 	async update(utx: UserContext, id: I, data: Partial<E>) {
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 
 		this.cleanForSave(utx, data);
 		this.stamp(utx, data);
@@ -188,8 +246,9 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		return r;
 	}
 
+	@AccessRequires() // will force #sys only for baseDao
 	async updateBulk(utx: UserContext, fn: (k: QueryBuilder<any, any>) => void, data: Partial<E>) {
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 
 		query.update(data);
 		fn(query);
@@ -201,44 +260,25 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		return r;
 	}
 
-	/**
-	 * Clean the data object of any properties that should not be part of the create or update. 
-	 */
-	protected cleanForSave(utx: UserContext, data: Partial<E>, forCreate = false) {
-		// Those will be set in this.stamp
-		removeProps(data, ['cid', 'ctime', 'mid', 'mtime']);
-	}
 
-	protected stamp(utx: UserContext, data: Partial<E>, forCreate?: boolean) {
-
-		if (this.stamped) {
-			// Force casting. We can assume this, might have a more elegant way (but should not need StampedDao though)
-			const stampedData: StampedEntity = (<any>data) as StampedEntity;
-			const now = nowTimestamp();
-			if (forCreate) {
-				stampedData.cid = utx.userId;
-				stampedData.ctime = now;
-			}
-			stampedData.mid = utx.userId;
-			stampedData.mtime = now;
-		}
-	}
 
 	@Monitor()
+	@AccessRequires() // will force #sys only for baseDao
 	async list(utx: UserContext, queryOptions?: Q & CustomQuery): Promise<E[]> {
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 
 		this.completeQueryBuilder(utx, query, queryOptions);
-		const entities = (await query.then()) as any[]; // TODO: need to check if this is the common way
-		return this.processEntities(entities);
+		const records = (await query.then()) as any[]; // TODO: need to check if this is the common way
+		return this.parseRecords(records);
 	}
 
 	/**
 	 * Remove one or more entities from one or more id
 	 */
 	@Monitor()
+	@AccessRequires() // will force #sys only for baseDao
 	async remove(utx: UserContext, ids: I | I[]) {
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 
 		// if we have a bulk ids, try to do the whereIn (for non-compound for now)
 		if (ids instanceof Array) {
@@ -262,7 +302,10 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 			return query.delete().where(this.getWhereIdObject(ids));
 		}
 	}
+	//#endregion ---------- /Public Interface ---------- 
 
+
+	//#region    ---------- Query Processors ---------- 
 	protected completeQueryBuilder(utx: UserContext, query: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
 		// if this dao has a fixed column. 
 		if (this.columns) {
@@ -326,7 +369,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		// if the id value is a scalar number/string, then, check and return the appropriate object
 		if (t === 'number' || t === 'string') {
 			if (this.idNames instanceof Array) {
-				throw new Error(`Dao for ${this.tableName} has composite ids ${this.idNames} but method passed only one parameter ${id}`);
+				throw new Error(`Dao for ${this.table} has composite ids ${this.idNames} but method passed only one parameter ${id}`);
 			}
 			const name = this.idNames as string;
 			r[name] = id;
@@ -336,7 +379,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 			for (const name of this.idNames) {
 				const val = id[name];
 				if (val == null) {
-					throw new Error(`Dao for ${this.tableName} requires id property ${name}, but not present it ${id}`);
+					throw new Error(`Dao for ${this.table} requires id property ${name}, but not present it ${id}`);
 				}
 				r[name] = val;
 			}
@@ -345,6 +388,8 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		return r;
 
 	}
+	//#endregion ---------- /Query Processors ---------- 
+
 }
 
 function completeQueryFilter(query: QueryBuilder<any, any>, filter: QueryFilter) {

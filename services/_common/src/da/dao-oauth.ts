@@ -18,12 +18,12 @@ export class OAuthDao extends BaseDao<OAuth, number>{
 	//#region    ---------- BaseDao Overrides ---------- 
 
 	// For now, we allow anybody to call this for registration. 
-	@AccessRequires(['#sys', '#admin'])
+	@AccessRequires()
 	async create(utx: UserContext, data: Partial<OAuth>) {
 		return super.create(utx, data);
 	}
 
-	@AccessRequires(['#sys', '#admin'])
+	@AccessRequires()
 	async update(utx: UserContext, id: number, data: Partial<OAuth>) {
 		return super.update(utx, id, data);
 	}

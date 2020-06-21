@@ -1,8 +1,8 @@
-import { projectDao } from 'common/da/daos';
-import { initSuite } from './t-utils'
 import * as assert from 'assert';
-import { saveProle } from 'common/role-manager';
+import { saveProjectRole } from 'common/da/access-project';
+import { projectDao } from 'common/da/daos';
 import { Project } from 'shared/entities';
+import { initSuite } from './t-utils';
 
 
 describe("test-access-project", async function () {
@@ -59,7 +59,7 @@ describe("test-access-project", async function () {
 		suite.toClean('project', testProject01Id);
 
 		// assign 'viewer' role to userB
-		await saveProle(suite.userBCtx.userId, testProject01Id, 'viewer');
+		await saveProjectRole(suite.userBCtx.userId, testProject01Id, 'pr_viewer');
 
 		// test read from userB, should work
 		const testProject01 = await projectDao.get(suite.userBCtx, testProject01Id);
@@ -82,7 +82,7 @@ describe("test-access-project", async function () {
 		suite.toClean('project', testProject01Id);
 
 		// assign 'member' role to userB
-		await saveProle(suite.userBCtx.userId, testProject01Id, 'member');
+		await saveProjectRole(suite.userBCtx.userId, testProject01Id, 'pr_member');
 
 		// test read from userB, should work
 		const testProject01 = await projectDao.get(suite.userBCtx, testProject01Id);
@@ -107,7 +107,7 @@ describe("test-access-project", async function () {
 		suite.toClean('project', testProject01Id);
 
 		// assign 'manager' role to userB
-		saveProle(suite.userBCtx.userId, testProject01Id, 'manager');
+		saveProjectRole(suite.userBCtx.userId, testProject01Id, 'pr_admin');
 
 		// test read from userB, should work
 		let testProject01 = await projectDao.get(suite.userBCtx, testProject01Id);

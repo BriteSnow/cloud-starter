@@ -1,13 +1,19 @@
 -- for uuid v4 gen_randome_uuid()
 CREATE extension IF NOT EXISTS pgcrypto;
 
-CREATE TYPE user_type AS ENUM ('sys', 'admin', 'user');
+CREATE TYPE user_role AS ENUM ('r_admin', 'r_user');
+
+-- user access modifiers, with their negatives
+CREATE TYPE user_access AS ENUM ('a_ui', '!a_ui', 'a_api', '!a_api');
 
 CREATE TABLE "user" (
   id bigserial PRIMARY KEY,
   uuid uuid NOT NULL UNIQUE DEFAULT gen_random_uuid(),
   username varchar(64) NOT NULL UNIQUE,
-  type user_type NOT NULL DEFAULT 'user',
+  -- global roles
+  role user_role NOT NULL DEFAULT 'r_user',
+  -- access modifiers
+  accesses user_access[], 
   -- password salt for password encryption
   psalt uuid NOT NULL UNIQUE  DEFAULT gen_random_uuid(),
   pwd varchar(128),
@@ -18,6 +24,7 @@ CREATE TABLE "user" (
   mid bigint, 
   mtime timestamp with time zone
 );
+-- reserving for 1000 for dev, test, and administrative purproses.
 ALTER SEQUENCE user_id_seq RESTART WITH 1000;
 
 
@@ -41,7 +48,6 @@ ALTER SEQUENCE oauth_id_seq RESTART WITH 1000;
 
 
 CREATE TYPE job_state AS ENUM ('new', 'queued', 'processing', 'completed', 'failed');
-
 CREATE TABLE job (
   id bigserial PRIMARY KEY,
   "newTime" timestamp with time zone,
@@ -57,7 +63,6 @@ CREATE TABLE job (
 );
 
 
-
 CREATE TABLE "project" (
   id bigserial PRIMARY KEY,
   cid bigint, 
@@ -69,10 +74,17 @@ CREATE TABLE "project" (
 ALTER SEQUENCE project_id_seq RESTART WITH 1000;
 
 
+
+CREATE TYPE prole_name AS ENUM (
+	'pr_owner',
+	'pr_admin',
+	'pr_member',
+	'pr_viewer');
+
 CREATE TABLE "user_prole" (
   "userId" bigint NOT NULL,
   "projectId" bigint NOT NULL,
-  "name" varchar(32) NOT NULL,
+  "role" prole_name NOT NULL,
   PRIMARY KEY("userId", "projectId"),
   FOREIGN KEY ("userId") REFERENCES "user" (id) on delete cascade,
   FOREIGN KEY ("projectId") REFERENCES "project" (id) on delete cascade

@@ -5,11 +5,12 @@
 // User DAO. Advanced DAO to manage the security aspect of the user. 
 ////
 
-import { QueryOptions, User, UserType, USER_COLUMNS } from "shared/entities";
+import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ACCESSES, GLOBAL_ROLES, isAccess } from 'shared/access-types';
+import { QueryOptions, User, USER_COLUMNS } from "shared/entities";
 import { freeze } from 'shared/utils';
 import { AppError, CommonErrorCode } from '../error';
 import { pwdEncrypt } from '../security/password';
-import { newUserContext, UserContext } from "../user-context";
+import { UserContext } from "../user-context";
 import { AccessRequires } from "./access";
 import { BaseDao } from "./dao-base";
 import { knexQuery } from './db';
@@ -17,9 +18,10 @@ import { knexQuery } from './db';
 
 
 /* Data needed for authentication */
-export interface UserCredForAuth extends Pick<User, 'id' | 'type' | 'username'> {
+export interface UserCredForAuth extends Pick<User, 'id' | 'username'> {
 	uuid: string;
 	tsalt: string;
+	accesses: GlobalAccesses;
 }
 
 /* Data needed for login (auth plus password info*/
@@ -29,7 +31,6 @@ export interface UserCredForLogin extends UserCredForAuth {
 }
 
 interface CreateUserData {
-	type?: UserType;
 	username: string;
 	clearPwd: string;
 }
@@ -39,10 +40,10 @@ const USER_SECURITY_COLUMNS = Object.freeze(['pwd', 'psalt', 'tsalt']);
 
 
 // For auth only
-const USER_COLUMNS_FOR_AUTH = Object.freeze(['id', 'uuid', 'username', 'type', 'tsalt']);
+const USER_COLUMNS_FOR_AUTH = Object.freeze(['id', 'uuid', 'username', 'role', 'accesses', 'tsalt']);
 
-// For login only
-const USER_COLUMNS_FOR_LOGIN = Object.freeze([...USER_COLUMNS_FOR_AUTH, 'pwd', 'psalt']);
+// For login only (export for agent)
+export const USER_COLUMNS_FOR_LOGIN = Object.freeze([...USER_COLUMNS_FOR_AUTH, 'pwd', 'psalt']);
 
 
 // User identifier of a user
@@ -66,12 +67,12 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		return -1; // for TS.
 	}
 
-	@AccessRequires(['#sys', '#admin'])
+	@AccessRequires()
 	async remove(utx: UserContext, id: number | number[]) {
 		return super.remove(utx, id);
 	}
 
-	@AccessRequires(['#sys', '#admin', '@id'])
+	@AccessRequires('a_admin_edit_user', '@id')
 	async update(utx: UserContext, id: number, data: Partial<User>) {
 		throw new Error('UserDao.update NOT AVAILABLE, use UserDao.updateUser');
 		return -1; // for TS.
@@ -84,7 +85,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	 * Note: Here we log a code error so that we can fix the code approrietaly.
 	 * @param user 
 	 */
-	processEntity(user: User) {
+	parseRecord(user: User) {
 		// Check that we do not expose the security columns
 		for (const col of USER_SECURITY_COLUMNS) {
 			if ((<any>user)[col] !== undefined) {
@@ -98,10 +99,10 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 
 	//#region    ---------- Credential Methods ---------- 
 	async createUser(utx: UserContext, data: CreateUserData) {
-		const { type, username, clearPwd } = data;
+		const { username, clearPwd } = data;
 
 		// first we create the new user
-		const userId = await super.create(utx, { username, type });
+		const userId = await super.create(utx, { username });
 		// then we set the new password (for create, no need to reset psalt or tsalt)
 		await this.setPwd(utx, { id: userId }, clearPwd, false, false);
 
@@ -120,13 +121,13 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	 * @param resetTSalt default true
 	 * @param resetPSalt default true
 	 */
-	@AccessRequires(['#sys', '@id'])
+	@AccessRequires('a_admin_edit_user', '@id')
 	async setPwd(utx: UserContext, userKey: UserKey, clearPwd: string, resetTSalt = true, resetPSalt = true) {
 		checkUserKey(userKey);
 
 		//// reset psalt if set to reset
 		if (resetPSalt) {
-			const { query } = await knexQuery({ utx, tableName: this.tableName });
+			const { query } = await knexQuery({ utx, tableName: this.table });
 			await query.update({ psalt: query.client.raw('gen_random_uuid()') }).where(userKey);
 		}
 
@@ -136,7 +137,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		const pwd = pwdEncrypt({ uuid, psalt, clearPwd });
 
 		//// update user pwd, and eventually tsalt if set to true above
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 		const data: { pwd: string, tsalt?: any } = { pwd };
 		if (resetTSalt) {
 			data.tsalt = query.client.raw('gen_random_uuid()');
@@ -145,25 +146,20 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	}
 
 
-	@AccessRequires(['#sys'])
-	async newContextFromUserId(utx: UserContext, userId: number) {
-		const user = await this.get(utx, userId);
-		return newUserContext(user);
-	}
 
-	@AccessRequires(['#sys']) // here only sys context should be able to call this one
+	@AccessRequires() // here only sys context should be able to call this one
 	async getUserCredForAuth(utx: UserContext, key: UserKey): Promise<UserCredForAuth> {
 		// Note: can force the return type as per columns
 		return this.getUserCred(utx, USER_COLUMNS_FOR_AUTH, key) as Promise<UserCredForAuth>;
 	}
 
-	@AccessRequires(['#sys']) // here only sys context should be able to call this one
+	@AccessRequires() // here only sys context should be able to call this one
 	async getUserCredForLogin(utx: UserContext, key: UserKey): Promise<UserCredForLogin> {
 		// Note: can force the return type as per columns
 		return this.getUserCred(utx, USER_COLUMNS_FOR_LOGIN, key) as Promise<UserCredForLogin>;
 	}
 
-	@AccessRequires(['#sys']) // here only sys context should be able to call this one
+	@AccessRequires() // here only sys context should be able to call this one
 	async getUserCredForCreate(utx: UserContext, key: UserKey): Promise<UserCredForLogin> {
 		// Note: can force the return type as per columns
 		return this.getUserCred(utx, USER_COLUMNS_FOR_LOGIN, key) as Promise<UserCredForLogin>;
@@ -171,7 +167,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 
 	// Note: Only to be used in the getUserCred... context of dao-user
 	private async getUserCred(utx: UserContext, columns: readonly string[], key: UserKey): Promise<UserCredForAuth | UserCredForLogin> {
-		const { query } = await knexQuery({ utx, tableName: this.tableName });
+		const { query } = await knexQuery({ utx, tableName: this.table });
 
 		// make sure it is only the key only has one of those three
 		checkUserKey(key);
@@ -182,10 +178,51 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		query.where(key);
 		const result = await query;
 
+		const rawUserObj = result[0];
+		rawUserObj.accesses = UserDao.parseAccess(rawUserObj);
+
 		// Note: assume columns are correct
-		return freeze(result[0]) as UserCredForLogin | UserCredForAuth;
+		return freeze(rawUserObj) as UserCredForLogin | UserCredForAuth;
 	}
 	//#endregion ---------- /Credential Methods ---------- 
+
+	static parseAccess(rawUserObj: { role: GlobalRoleName, accesses?: string[] }): Readonly<{ [key in GlobalAccess]?: true }> {
+		const { role, accesses } = rawUserObj;
+
+		// temporarely store the data in a set (best container for the work)
+		const userAccesses = new Set<GlobalAccess>();
+
+		// process the roles
+		GLOBAL_ROLES.get(role)?.forEach(a => userAccesses.add(a))
+
+		// process accessModifier (accessRule is 'accessname' or '!accessname')
+		if (accesses) {
+			for (const accessModifier of accesses) {
+				let accessName = accessModifier;
+				let negate = false;
+				if (accessModifier.startsWith('!')) {
+					accessName = accessModifier.substring(1);
+					negate = true;
+				}
+				if (isAccess(accessName)) {
+					if (negate) {
+						userAccesses.delete(accessName);
+					} else {
+						userAccesses.add(accessName);
+					}
+				} else {
+					console.log(`CODE ERROR - IGNORE - ${accessName} if not a valid GLOBAL_ACCESSES. Must be one of ${GLOBAL_ACCESSES}`);
+				}
+			}
+		}
+
+
+		// build the object {[key in GlobalAccess]: true} for pervasive code access. 
+		return Object.freeze(Array.from(userAccesses.values())
+			.reduce((acc, val) => { acc[val] = true; return acc },
+				{} as { [key in GlobalAccess]?: true }));
+	}
+
 
 }
 

@@ -161,7 +161,7 @@ export function Monitor() {
 	return function (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) {
 		const method = descriptor.value!;
 
-		descriptor.value = async function monitorWrapper(this: any) {
+		const fn = async function (this: any) {
 
 			let r: any;
 
@@ -200,6 +200,11 @@ export function Monitor() {
 
 			}
 		}
+
+		// simplify debugging
+		Object.defineProperty(fn, "name", { value: `${method.name}_monitorWrapper` });
+
+		descriptor.value = fn;
 	}
 
 }

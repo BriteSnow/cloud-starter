@@ -1,9 +1,8 @@
 import { userDao } from 'common/da/daos';
 import { checkToken, parseToken, UserCredForToken } from 'common/security/token';
-import { getSysContext, newUserContext } from 'common/user-context';
+import { getSysContext, newUserContext, UserForContext } from 'common/user-context';
 import { Next } from 'koa';
 import { extname } from 'path';
-import { UserType } from 'shared/entities';
 import { freeze } from 'shared/utils';
 import { AuthFailError, clearAuth, extractToken, setAuth } from '../auth';
 import { Ktx } from './koa-utils';
@@ -44,7 +43,7 @@ export default async function authRequestMiddleware(ktx: Ktx, next: Next) {
 }
 
 
-export async function authRequest(ktx: Ktx): Promise<{ id: number, type: UserType }> {
+export async function authRequest(ktx: Ktx): Promise<UserForContext> {
 	const sysCtx = await getSysContext();
 	const cookieAuthToken = extractToken(ktx);
 
@@ -55,11 +54,11 @@ export async function authRequest(ktx: Ktx): Promise<{ id: number, type: UserTyp
 
 		const tokenData = parseToken(cookieAuthToken);
 		const { uuid } = tokenData;
-		const { id, tsalt, type } = await userDao.getUserCredForAuth(sysCtx, { uuid });
+		const { id, tsalt, accesses } = await userDao.getUserCredForAuth(sysCtx, { uuid });
 		const cred: UserCredForToken = freeze({ uuid, tsalt }); // make sure can't be tampered between check and setAuth
 		checkToken(tokenData, cred);
 		setAuth(ktx, cred);
-		return { id, type };
+		return { id, accesses };
 
 	} catch {
 		throw new AuthFailError(ERROR_INVALID_AUTH);

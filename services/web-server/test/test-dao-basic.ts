@@ -18,11 +18,11 @@ describe("test-dao-basic", async function () {
 		const ctx = suite.adminCtx;
 
 		//// cleanup existing test project
-		let testProjects = await projectDao.list(ctx, { matching: { name: { op: 'ilike', val: 'test%' } } });
+		let testProjects = await projectDao.list(ctx, { access: 'pa_view', matching: { name: { op: 'ilike', val: 'test%' } } });
 		if (testProjects.length > 0) {
 			await projectDao.remove(ctx, testProjects.map(p => p.id));
 		}
-		testProjects = await projectDao.list(ctx, { matching: { name: { op: 'ilike', val: 'test%' } } });
+		testProjects = await projectDao.list(ctx, { access: 'pa_view', matching: { name: { op: 'ilike', val: 'test%' } } });
 		strictEqual(testProjects.length, 0);
 
 		//// create test data
@@ -31,20 +31,20 @@ describe("test-dao-basic", async function () {
 		await projectDao.create(ctx, { name: 'test - 003' });
 
 		//// check the test data
-		testProjects = await projectDao.list(ctx, { matching: { name: { op: 'ilike', val: 'test%' } } });
+		testProjects = await projectDao.list(ctx, { access: 'pa_view', matching: { name: { op: 'ilike', val: 'test%' } } });
 		strictEqual(testProjects.length, 3);
 
 		//// delete one
 		const p1 = testProjects.shift()!;
 		let deleted = await projectDao.remove(ctx, p1.id);
 		strictEqual(deleted, 1);
-		testProjects = await projectDao.list(ctx, { matching: { name: { op: 'ilike', val: 'test%' } } });
+		testProjects = await projectDao.list(ctx, { access: 'pa_view', matching: { name: { op: 'ilike', val: 'test%' } } });
 		strictEqual(testProjects.length, 2);
 
 		//// test delete the multiple 
 		deleted = await projectDao.remove(ctx, testProjects.map(p => p.id));
 		strictEqual(deleted, 2);
-		testProjects = await projectDao.list(ctx, { matching: { name: { op: 'ilike', val: 'test%' } } });
+		testProjects = await projectDao.list(ctx, { access: 'pa_view', matching: { name: { op: 'ilike', val: 'test%' } } });
 		strictEqual(testProjects.length, 0);
 	});
 
@@ -77,7 +77,7 @@ describe("test-dao-basic", async function () {
 			strictEqual(project.mid, suite.sysCtx.userId);
 
 			// test list
-			const projects = await projectDao.list(suite.adminCtx, { matching: { name: 'test-dao-basic-crud-project_project-01-updated' } });
+			const projects = await projectDao.list(suite.adminCtx, { access: 'pa_view', matching: { name: 'test-dao-basic-crud-project_project-01-updated' } });
 			strictEqual(projects[0].name, 'test-dao-basic-crud-project_project-01-updated');
 
 

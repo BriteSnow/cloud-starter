@@ -56,7 +56,7 @@ async function watchService(serviceName: string, debugPort: string) {
 	const serviceDir = `services/${serviceName}`;
 
 	// kubectl port-forward $(kubectl get pods -l run=cstar-web-server --no-headers=true -o custom-columns=:metadata.name) 9229
-	const podName = (await spawn('kubectl', ['get', 'pods', '-l', `run=${IMG_NAME_PREFIX}${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'], { capture: 'stdout' })).stdout.trim();
+	const podName = (await spawn('kubectl', ['get', 'pods', '-l', `run=${IMG_NAME_PREFIX}${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'], { capture: 'stdout' })).stdout?.trim();
 	spawn('kubectl', ['port-forward', podName, `${debugPort}:9229`]);
 
 

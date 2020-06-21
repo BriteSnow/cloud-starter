@@ -147,9 +147,9 @@ export function buildWebLogRecord(ktx: ParameterizedContext<KState & Partial<Api
 		if (ktx.state.utx.userId != null) {
 			rec.userId = ktx.state.utx.userId;
 		}
-		if (ktx.state.utx.orgId != null) {
-			rec.orgId = ktx.state.utx.orgId;
-		}
+		// if (ktx.state.utx.orgId != null) {
+		// 	rec.orgId = ktx.state.utx.orgId;
+		// }
 	}
 
 	return rec;

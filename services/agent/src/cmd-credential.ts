@@ -2,7 +2,7 @@ require('../../_common/src/setup-module-aliases');
 
 import { router } from 'cmdrouter';
 import { userDao } from 'common/da/daos';
-import { closeKnex } from 'common/da/db';
+import { closeKnexClient } from 'common/da/db';
 import { pwdCheck, pwdEncrypt } from 'common/security/password';
 import { PwdEncryptData } from 'common/security/password-types';
 import { getSysContext } from 'common/user-context';
@@ -44,13 +44,13 @@ async function createUser(username: string, clearPwd: string) {
 	}
 	const sysUtx = await getSysContext();
 	await userDao.createUser(sysUtx, { username, clearPwd });
-	await closeKnex();
+	await closeKnexClient();
 }
 
 async function setPwd(username: string, clearPwd: string) {
 	const sysUtx = await getSysContext();
 	await userDao.setPwd(sysUtx, { username }, clearPwd);
-	await closeKnex();
+	await closeKnexClient();
 }
 
 

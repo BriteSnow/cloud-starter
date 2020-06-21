@@ -16,9 +16,6 @@ class DseGenerics extends ApiRouter {
 		const dao = daoByEntity[type];
 
 		let queryOptions: any = {};
-		if (ktx.query.wksId != null) {
-			queryOptions.wksId = ktx.query.wksId;
-		}
 		if (ktx.query.matching) {
 			queryOptions.matching = JSON.parse(ktx.query.matching);
 		}

@@ -2,6 +2,9 @@ require('../../_common/src/setup-module-aliases');
 
 import { router } from 'cmdrouter';
 import { DB } from 'common/conf';
+import { UserCredForLogin, USER_COLUMNS_FOR_LOGIN } from 'common/da/dao-user';
+import { closeKnexClient, getKnexClient } from 'common/da/db';
+import { pwdEncrypt } from 'common/security/password';
 import * as fs from 'fs-extra-plus';
 import { ensureDir } from 'fs-extra-plus';
 import { basename, join as joinPath } from 'path';
@@ -10,6 +13,8 @@ import { download, list, pgStatus, pgTest, psqlImport } from 'vdev';
 
 const sqlDir = 'sql/';
 const host = 'cstar-db-srv';
+
+const DEV_PWD = 'welcome';
 
 // Root Postgres credential to create db (only for dev/test/~stage, so harcoded pasword, must match db.yaml POSTGRES_PASSWORD env value)
 const POSTGRES_DB_CRED = { user: 'postgres', database: 'postgres', password: 'postgres', host };
@@ -44,9 +49,12 @@ async function recreateDb() {
 	//// Option 2) When app is in prod, this will take the data from prod
 	//await loadProdDb();
 
-
 	//// 6) Import the drop sqls
 	await runDropSqls();
+
+	//// 7) Reset passwords for dev
+	await resetPasswords();
+
 }
 
 
@@ -84,10 +92,30 @@ async function loadProdDb() {
 
 
 
+
 // --------- /Commands --------- //
 
 
 // --------- Private Utils --------- //
+
+async function resetPasswords() {
+	const k = await getKnexClient();
+
+
+	const list = await k.table('user').select([...USER_COLUMNS_FOR_LOGIN]) as UserCredForLogin[];
+
+	for (const user of list) {
+		const pwd = pwdEncrypt({
+			uuid: user.uuid,
+			psalt: user.psalt,
+			clearPwd: DEV_PWD
+		});
+		await k.table('user').update({ pwd }).where({ id: user.id });
+		console.log(`Update pwd for user ${user.id} ${user.username}`);
+	}
+
+	await closeKnexClient();
+}
 
 async function checkRunning(): Promise<boolean> {
 	const status = await pgStatus({ host });

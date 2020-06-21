@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra-plus';
 import * as Path from 'path';
-import { isString } from 'util';
+import { isString } from 'utils-min';
 
 
 //#region    ---------- BaseLog ---------- 

@@ -156,13 +156,10 @@ export async function getKnexClient() {
 		}
 	}
 
-
-
 	return _knex;
-
 }
 
-export async function closeKnex() {
+export async function closeKnexClient() {
 	const k = await getKnexClient();
 	await k.destroy();
 	_knex = undefined;

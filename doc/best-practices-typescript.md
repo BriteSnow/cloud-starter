@@ -18,7 +18,7 @@ const labelFilter = { labelIds, excludeLabelIds };
 ```
 
 
-## Object - create variant
+## Object - create variant with spread
 
 ```ts
 // 1) Create variant of object with spread syntax and overriding given property
@@ -45,11 +45,11 @@ const userDao = new UserDao();
 ```
 
 
-## Object - When to use Object v.s. Map
+## Object - Object Literal v.s. Map
 
 - **USE object** (or class) and TS Interfaces for ALL data structure that can be express via interface, type, or class. For example when fix set of property names. Use object literal and spread merging when possible.
 
-- **USE Map** or Set as data container with fix key type and value type (i.e., `Map<number, Ticket>()`). Similar to array or Set, especially when key/value can grow or shrink. For exampe: 
+- **USE Map** or **Set** as data container with fix key type (i.e., `Map<number, Ticket>()`). Similar to array or Set, especially when key/value can grow or shrink. For exampe: 
 	- Caches, dictionaries (temporary in a function, or global)
 	- When key/value can grow and shrink.
 
@@ -70,15 +70,7 @@ for (...){
 	}
 }
 
-//// Object Example - Acceptable use of object as static list of name/value
-const FLAG_NAMES = Object.freeze(['foo', 'bar'] as const);
-type Flag = typeof FLAG_NAMES[number]; // type: 'foo' | 'bar'
 
-type Flags = {[flag in Flag]?: boolean};
-const flagsArr: Flag[] = ['foo']; // could come from database
-
-// Here we create the object once, which will ave a config 
-const flags: Flags = flagsArr.reduce((obj: any, v) => (obj[v] = true, obj), {});
 ```
 
 
@@ -122,14 +114,38 @@ let [...new Set([...array1 ,...array2])];
 
 ## Array - to Map
 
+- **USE** Array to Map when needs to create a dictionary of object by a key (name, id, ...)
+
 ```ts
-const tickets: Ticket[] = loadTickets();
+type Ticket = { id: number, title: string };
+const tickets: Ticket[] = [{ id: 1, title: 'first' }, { id: 2, title: 'second' }];
 
 // To Map
-const ticketsById = new Map(tickets.map((t): [number, Ticket] => [t.id!, t])); 
-// infer correct Map<number, Ticket>, because of (t): [number, Ticket] 
-
+const ticketsById = new Map(tickets.map((t) => [t.id!, t]));
+// infer correct Map<number, Ticket>
 ```
+
+> NOTE: Map keys can be anything, even object or classes.
+
+## Array - to Set
+
+- **USE** Array to Set when need to do repetitive exist lookup for key like name, id. 
+
+```ts
+const privileges = ['read', 'write', 'create_user'];
+
+const privelegeSet = new Set(privileges);
+
+// then, 
+for (const name of ...){
+	if (privelgeSet.has(...)){ // rather then privileges.includes(name) 
+		....
+	}
+}
+```
+
+> NOTE: Set items can be anything, even object or classes.
+
 
 ## Array - to object with Array.reduce
 
@@ -151,34 +167,48 @@ const object = names.reduce((obj: any, v) => (obj[v] = true), {});
 
 - DO NOT USE `new Date().getTime()` (longer, less readable, does not add any value compared to `Date.now()`)
 
-## Type - property names from array
+## Type - String array to Type
 
 - **USE as const and typeof[number]** to type a list of property names and typescript types
 	> Note: This allows to get the list of names accessible in javascript code (for validations or sql column names), as well as typescript typing for stronger and more expressive typing. 
 
-### Example: 
-
 ```ts
+// db best practice: CREATE TYPE flag_name AS ENUM ('foo', 'bar');
 const FLAG_NAMES = Object.freeze(['foo', 'bar'] as const);
-type Flag = typeof FLAG_NAMES[number]; // type: 'foo' | 'bar'
+type FlagName = typeof FLAG_NAMES[number]; // type: 'foo' | 'bar'
 
 // flags object
-type FlagObj = {[flag in Flag]?: boolean}
+type FlagObj = {[flag in FlagName]?: boolean}
 const flags: Flag[] = ['foo'];
+// Acceptable use of object as "map" (fix relatively small list of flag: true, when .propName is needed, i.e ui templating)
 const flagsObj = flags.reduce((obj: any, v) => (obj[v] = true, obj), {});
+```
+
+## Type - object literal keys as union type
+
+```ts
+export const PROJECT_ROLES = {
+	pr_owner,
+	pr_admin,
+	pr_member,
+	pr_visitor
+};
+
+
+// "pr_owner" | "pr_admin" | ...
+type ProjectRoleName = keyof typeof PROJECT_ROLES;
 
 ```
 
 
 ## Typeguards - assertTypeName & isTypeName
 
-- **USE `isTypeName`** Typescript `val is type` to check and set the type of an object.
+- **USE `isTypeName`** Typescript (predicate signature) `val is type` to check and set the type of an object.
 ```ts
 // USE isTypeName naming convention
 export function isUserContext(obj: any): obj is UserContext{
 	return (obj instanceof UserContextImpl);
 }
-
 
 //// Usage:
 

@@ -1,19 +1,20 @@
 
+import { ProjectAccesses } from './access-types';
 import { StampedEntity } from './entities-base';
 
 export * from './entities-base';
 
 
 //#region    ---------- User ---------- 
-export const USER_COLUMNS = Object.freeze(['id', 'uuid', 'username', 'type', 'cid', 'ctime', 'mid', 'mtime'] as const);
+// Default user columns (more defined in dao-user for auth, login, ...)
+export const USER_COLUMNS = Object.freeze(['id', 'uuid', 'username', 'cid', 'ctime', 'mid', 'mtime'] as const);
 type UserPropName = typeof USER_COLUMNS[number];
 
-export type UserType = 'sys' | 'admin' | 'user';
+// postgres enum user_type
 
 export interface User extends StampedEntity {
 	id: number;
 	uuid: string;
-	type: UserType;
 	username: string;
 }
 //#endregion ---------- /User ---------- 
@@ -32,4 +33,5 @@ export interface OAuth extends StampedEntity {
 export interface Project extends StampedEntity {
 	id: number;
 	name: string;
+	accesses?: ProjectAccesses
 }
