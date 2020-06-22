@@ -21,7 +21,7 @@
     "@types/mocha": "^7.0.2",
     "@types/module-alias": "^2.0.0",
     "@types/useragent": "^2.1.1",
-    "backlib": "0.0.2-SNAPSHOT-4",
+    "backlib": "^0.1.0",
     "fs-extra-plus": "^0.5.18",
     "googleapis": "^52.1.0",
     "immer": "^7.0.3",
