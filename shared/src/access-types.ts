@@ -8,7 +8,7 @@ const _GLOBAL_ACCESSES = freeze([
 	'a_ui', // ui web interface access (web login). Can be negated in user.accesses modifiers
 	'a_api', // for API access. Can bee added in user.accesses modifiers
 	'a_admin', // all basic admin tasks
-	'a_admin_edit_user', // ability to reset user information
+	'a_admin_edit_user' // ability to reset user information
 ] as const);
 
 export type GlobalAccess = typeof _GLOBAL_ACCESSES[number];
@@ -52,7 +52,7 @@ const _PROJECT_ACCESSES = freeze([
 	'pa_user_remove',
 	'pa_ticket_create',
 	'pa_label_assign',
-	'pa_view', // view info and tickets from a projects
+	'pa_view' // view info and tickets from a projects
 ] as const);
 
 // ProjectPrivilege type "pp_user_add_admin" | "pp_edit" | ....

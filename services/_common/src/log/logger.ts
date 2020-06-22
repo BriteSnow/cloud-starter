@@ -1,11 +1,11 @@
 
+import { BaseLog, LogWriter } from 'backlib';
 import redstream, { RedStream } from 'redstream';
 import { objectDataParser } from 'redstream/dist/utils';
 import { ServiceLogRecord, WebLogRecord } from 'shared/log-types';
 import { KHOST, LOG, LOG_DIR } from '../conf';
 import { getRedisClient } from '../queue';
 import { nowTimestamp, typify } from '../utils';
-import { BaseLog, LogWriter } from './log-lib';
 
 const BASE_LOG_WRITER_OPTIONS = { ...LOG, dir: LOG_DIR };
 

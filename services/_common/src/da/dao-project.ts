@@ -1,6 +1,5 @@
 import { assertProjectAccess, ProjectAccess, PROJECT_ROLES, PROJECT_ROLES_BY_ACCESS } from 'shared/access-types';
 import { Project, QueryOptions, User } from 'shared/entities';
-import { isNotEmpty } from 'utils-min';
 import { AppError } from '../error';
 import { Monitor } from '../perf';
 import { UserContext } from '../user-context';
@@ -25,12 +24,15 @@ export class ProjectDao extends BaseDao<Project, number, ProjectQueryOptions> {
 	protected parseRecord(obj: any): Project {
 		const entity = super.parseRecord(obj) as any;
 
-		// Note: if we have prole we creat the ProjectAccesses object from the role
+		// If .prole create the ProjectAccesses object from the role
 		if (entity.prole) {
 			const accessList = PROJECT_ROLES.get(entity.prole) as Readonly<ProjectAccess[]>;
 			entity.accesses = Object.freeze(accessList?.reduce(
 				(acc, val) => { acc[val] = true; return acc },
 				{} as { [key in ProjectAccess]?: true }));
+
+			// rmove the prole, nobody should use it after this.
+			delete entity['prole'];
 		}
 
 		return entity as Project;
@@ -38,7 +40,7 @@ export class ProjectDao extends BaseDao<Project, number, ProjectQueryOptions> {
 	//#endregion ---------- /Entity Processing ---------- 
 
 
-	@AccessRequires('pa_user_assign_admin')
+	@AccessRequires('a_admin', 'pa_user_assign_admin')
 	async getOwners(utx: UserContext, projectId: number): Promise<User[]> {
 		const { query } = await knexQuery({ utx, tableName: 'user' });
 
@@ -53,24 +55,30 @@ export class ProjectDao extends BaseDao<Project, number, ProjectQueryOptions> {
 	}
 
 	//#region    ---------- BaseDao Overrides ---------- 
-	@AccessRequires('pa_view')
+	@AccessRequires('a_admin', 'pa_view')
 	async get(utx: UserContext, id: number) {
 		return super.get(utx, id);
 	}
 
-	@AccessRequires('pa_view')
+	@AccessRequires('a_admin', 'pa_view')
 	@Monitor()
 	async list(utx: UserContext, queryOptions?: ProjectQueryOptions): Promise<Project[]> {
-		const access = queryOptions?.access;
+		const queryAccess = queryOptions?.access;
 
-		// make sure valid access
-		assertProjectAccess(access);
+		//// if #sys or a_admin global access, query all
+		if (utx.hasAccess('#sys') || utx.hasAccess('a_admin')) {
+			return super.list(utx, queryOptions);
+		}
+		//// otherwise, if queryAccess, has to be project scoped
+		else if (queryAccess === 'pa_view') { // check that it matches the @AccessRequires of the method
+			// make sure valid access
+			assertProjectAccess(queryAccess);
 
-		// get project roles for this access
-		const roles = PROJECT_ROLES_BY_ACCESS.get(access);
-		if (isNotEmpty(roles)) {
+			// get project roles for this access
+			// Note: for now, just store project roles in deb, so, we have to reverse access to roles to make appropriate query
+			const roles = PROJECT_ROLES_BY_ACCESS.get(queryAccess)!; // safe as we know pa_view has roles
+
 			const { query } = await knexQuery({ utx, tableName: this.table });
-			const role = roles[0];
 			query.columns(PROJECT_COLUMNS.map(n => `project.${n}`));
 			query.column('user_prole.role as prole');
 			this.completeQueryBuilder(utx, query, queryOptions);
@@ -83,20 +91,15 @@ export class ProjectDao extends BaseDao<Project, number, ProjectQueryOptions> {
 			const records = await query;
 
 			return this.parseRecords(records);
-		} else {
-			// otherwise, if not a #sys, we throw exception
-			if (!utx.hasAccess('#sys')) {
-				throw new AppError(`Cannot do productDao.list for user ${utx.userId} - No project role found for access ${access}`);
-			}
-			// if #sys, then, just return raw list
-			else {
-				return super.list(utx, queryOptions);
-			}
-
 		}
+		//// otheriwise, throw error
+		else {
+			throw new AppError(`Cannot do productDao.list for user ${utx.userId} - No project role found for access ${queryAccess}`);
+		}
+
 	}
 
-	@AccessRequires('#user') // any user can read
+	@AccessRequires('#user') // any user can create a new project, it will be the pr_owner
 	@Monitor()
 	async create(utx: UserContext, data: Partial<Project>) {
 		const projectId = await super.create(utx, data);
@@ -107,12 +110,12 @@ export class ProjectDao extends BaseDao<Project, number, ProjectQueryOptions> {
 
 
 
-	@AccessRequires('pa_edit')
+	@AccessRequires('a_admin', 'pa_edit')
 	async update(utx: UserContext, id: number, data: Partial<Project>) {
 		return super.update(utx, id, data);
 	}
 
-	@AccessRequires('pa_delete')
+	@AccessRequires('a_admin', 'pa_delete')
 	async remove(utx: UserContext, ids: number | number[]) {
 		return super.remove(utx, ids);
 	}

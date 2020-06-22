@@ -1,12 +1,12 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+import { newLeafTracer } from 'backlib';
 import { GlobalAccess, GLOBAL_ACCESSES, isProjectAccess, ProjectAccess, PROJECT_ACCESSES } from 'shared/access-types';
 import { isFunction } from 'util';
 import { asNum } from 'utils-min';
-import { newTopFinder } from '../top-decorator';
 import { assertUserContext, getSysContext, UserContext } from '../user-context';
 
-const topFinder = newTopFinder();
+const leafTracer = newLeafTracer();
 
 
 /////////////////////
@@ -61,10 +61,10 @@ export function AccessRequires(...accessList: Access[]) {
 
 		const fn = async function accessRequiresWrapper(this: any) {
 			const sysCtx = await getSysContext();
-			const isTop = topFinder.isTop(this.constructor, target.constructor, propertyKey);
+			const isLeafMethod = leafTracer.trace(this.constructor, target.constructor, propertyKey);
 
 			// we perform the access control only for the top most class for this methods
-			if (isTop) {
+			if (isLeafMethod) {
 				const methodRef = `${this.constructor.name}.${method.name}`;
 
 				//// check UTX
@@ -105,10 +105,9 @@ export function AccessRequires(...accessList: Access[]) {
 				//// Check AccessList if needed
 				if (!pass) {
 
-
 					for (const access of accessList) {
 
-						// USERID MATCH - if we have access with @propEname, meaning matching utx.userId with entity propName property value
+						//// USERID MATCH - if we have access with @propEname, meaning matching utx.userId with entity propName property value
 						if (access.startsWith('@')) {
 							const propName = access.substring(1); // propName to be 
 
@@ -142,7 +141,7 @@ export function AccessRequires(...accessList: Access[]) {
 							break;
 						}
 
-						// PROJECT PRIVILEGE
+						//// PROJECT PRIVILEGE
 						else if (PROJECT_ACCESSES.has(access)) {
 							// First, try to get the projectId from utx or parameters if project table
 							const projectId = utx.projectId ?? ((dao.table === 'project') ? entityId : undefined);
