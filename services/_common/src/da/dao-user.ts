@@ -5,7 +5,7 @@
 // User DAO. Advanced DAO to manage the security aspect of the user. 
 ////
 
-import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ACCESSES, GLOBAL_ROLES, isAccess } from 'shared/access-types';
+import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ROLES, isAccess } from 'shared/access-types';
 import { QueryOptions, User, USER_COLUMNS } from "shared/entities";
 import { freeze } from 'shared/utils';
 import { AppError, CommonErrorCode } from '../error';
@@ -211,7 +211,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 						userAccesses.add(accessName);
 					}
 				} else {
-					console.log(`CODE ERROR - IGNORE - ${accessName} if not a valid GLOBAL_ACCESSES. Must be one of ${GLOBAL_ACCESSES}`);
+					console.log(`CODE ERROR - IGNORE - ${accessName} if not a valid GLOBAL_ACCESSES.`);
 				}
 			}
 		}

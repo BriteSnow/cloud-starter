@@ -4,7 +4,11 @@ CREATE extension IF NOT EXISTS pgcrypto;
 CREATE TYPE user_role AS ENUM ('r_admin', 'r_user');
 
 -- user access modifiers, with their negatives
-CREATE TYPE user_access AS ENUM ('a_ui', '!a_ui', 'a_api', '!a_api');
+CREATE TYPE user_access AS ENUM (
+  'a_ui', '!a_ui', 
+  'a_api', '!a_api', 
+  'a_admin', '!a_admin', 
+  'a_admin_edit_user', '!a_admin_edit_user');
 
 CREATE TABLE "user" (
   id bigserial PRIMARY KEY,

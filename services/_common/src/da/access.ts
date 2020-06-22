@@ -1,7 +1,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { newLeafTracer } from 'backlib';
-import { GlobalAccess, GLOBAL_ACCESSES, isProjectAccess, ProjectAccess, PROJECT_ACCESSES } from 'shared/access-types';
+import { GlobalAccess, isAccess, isProjectAccess, ProjectAccess } from 'shared/access-types';
 import { isFunction } from 'util';
 import { asNum } from 'utils-min';
 import { assertUserContext, getSysContext, UserContext } from '../user-context';
@@ -105,6 +105,9 @@ export function AccessRequires(...accessList: Access[]) {
 				//// Check AccessList if needed
 				if (!pass) {
 
+					// if needed entity record for the entityId (loaded only if needed)
+					let entity: any;
+
 					for (const access of accessList) {
 
 						//// USERID MATCH - if we have access with @propEname, meaning matching utx.userId with entity propName property value
@@ -113,7 +116,7 @@ export function AccessRequires(...accessList: Access[]) {
 
 							// If we have entity id, we fetch and check
 							if (entityId != null) {
-								const entity: any = await dao.get(sysCtx, entityId);
+								entity = entity ?? await dao.get(sysCtx, entityId);
 								const val = entity[propName];
 								if (userId === val) {
 									pass = true;
@@ -136,13 +139,15 @@ export function AccessRequires(...accessList: Access[]) {
 						}
 
 						//// GLOBAL ACCESS check
-						else if (GLOBAL_ACCESSES.has(access)) {
-							pass = true;
-							break;
+						else if (isAccess(access)) {
+							if (utx.hasAccess(access)) {
+								pass = true;
+								break;
+							}
 						}
 
 						//// PROJECT PRIVILEGE
-						else if (PROJECT_ACCESSES.has(access)) {
+						else if (isProjectAccess(access)) {
 							// First, try to get the projectId from utx or parameters if project table
 							const projectId = utx.projectId ?? ((dao.table === 'project') ? entityId : undefined);
 							// if not, data might be queryOptions, and might have a .access
@@ -150,7 +155,7 @@ export function AccessRequires(...accessList: Access[]) {
 
 							// if we have a query access, check if valid
 							if (queryAccess && !isProjectAccess(queryAccess)) {
-								throw new AccessDecoratorError(`queryOptions.access ${queryAccess} is not a valid project access. Should be one of ${Array.from(PROJECT_ACCESSES as Set<string>)}`);
+								throw new AccessDecoratorError(`queryOptions.access ${queryAccess} is not a valid project access.`);
 							}
 
 							// if we do ot have projectId in context/params or queryAccess, then, no enough information to validate access

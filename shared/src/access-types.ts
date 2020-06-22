@@ -2,7 +2,7 @@ const { freeze, entries } = Object; // for readibility
 
 
 //#region    ---------- App Access ---------- 
-const _GLOBAL_ACCESSES = freeze([
+const GLOBAL_ACCESSES = freeze([
 	'#sys', // this is a special access only for getSysContext
 	'#user', // any logged request (api or user) get the special #user access
 	'a_ui', // ui web interface access (web login). Can be negated in user.accesses modifiers
@@ -11,21 +11,21 @@ const _GLOBAL_ACCESSES = freeze([
 	'a_admin_edit_user' // ability to reset user information
 ] as const);
 
-export type GlobalAccess = typeof _GLOBAL_ACCESSES[number];
+export type GlobalAccess = typeof GLOBAL_ACCESSES[number];
 
 export type GlobalAccesses = { [key in GlobalAccess]?: true };
 
 // Note: Widen type to string to allow caller to call .has(name:string) 
-export const GLOBAL_ACCESSES = freeze(new Set(_GLOBAL_ACCESSES as readonly string[]));
+const GLOBAL_ACCESSES_SET = freeze(new Set(GLOBAL_ACCESSES as readonly string[]));
 
 export function isAccess(name: string): name is GlobalAccess {
-	return GLOBAL_ACCESSES.has(name);
+	return GLOBAL_ACCESSES_SET.has(name);
 }
 
 // By default r_user have the web ui access.
 // Also all users have the special '#user' access (any user)
-const r_user = freeze(['#user', 'a_ui'] as const);
-const r_admin = freeze([...r_user, 'a_admin', 'a_admin_edit_user'] as const);
+const r_user: Readonly<GlobalAccess[]> = freeze(['#user', 'a_ui']);
+const r_admin: Readonly<GlobalAccess[]> = freeze([...r_user, 'a_admin', 'a_admin_edit_user']);
 
 const _GLOBAL_ROLES = freeze({
 	r_user,
@@ -36,7 +36,7 @@ const _GLOBAL_ROLES = freeze({
 export type GlobalRoleName = keyof typeof _GLOBAL_ROLES;
 
 
-// Note: Wider map (Map<string, readonly ProjectPivilegeName[]>) allowing caller to call .has(name:string)
+// Note: widen tyime to allow .get(string)
 export const GLOBAL_ROLES = freeze(new Map(entries(_GLOBAL_ROLES)));
 
 //#endregion ---------- /App Access ---------- 
@@ -44,7 +44,7 @@ export const GLOBAL_ROLES = freeze(new Map(entries(_GLOBAL_ROLES)));
 //#region    ---------- Project Access ---------- 
 // `pa_` prefix for Project Privilege
 // The list of all project privilege Should be 
-const _PROJECT_ACCESSES = freeze([
+const PROJECT_ACCESSES = freeze([
 	'pa_delete',
 	'pa_user_assign_admin', // add user admin (only owner)
 	'pa_edit', // edit the project name, description, 
@@ -56,29 +56,28 @@ const _PROJECT_ACCESSES = freeze([
 ] as const);
 
 // ProjectPrivilege type "pp_user_add_admin" | "pp_edit" | ....
-export type ProjectAccess = typeof _PROJECT_ACCESSES[number];
+export type ProjectAccess = typeof PROJECT_ACCESSES[number];
 
 export type ProjectAccesses = { [key in ProjectAccess]?: true };
 
 // Note: Widen type to string to allow caller to call .has(name:string) 
-export const PROJECT_ACCESSES = freeze(new Set(_PROJECT_ACCESSES as readonly string[]));
+const PROJECT_ACCESSES_SET = freeze(new Set(PROJECT_ACCESSES as readonly string[]));
 
 export function isProjectAccess(name: any): name is ProjectAccess {
-	return PROJECT_ACCESSES.has(name);
+	return PROJECT_ACCESSES_SET.has(name);
 }
 export function assertProjectAccess(name: any): asserts name is ProjectAccess {
 	if (!isProjectAccess(name)) {
-		throw new Error(`Access ${name} is not a valid project access. Must be one of ${_PROJECT_ACCESSES}`);
+		throw new Error(`Access ${name} is not a valid project access. Must be one of ${PROJECT_ACCESSES}`);
 	}
 }
 
 
 // `pr_` prefix for Project Role
-// Define the project role, which is a list of privileges (for now just name as const, but below will be type with ProjectPrivilege for typing)
-const pr_viewer = freeze(['pa_view'] as const);
-const pr_member = freeze([...pr_viewer, 'pa_label_assign', 'pa_ticket_create'] as const);
-const pr_admin = freeze([...pr_member, 'pa_user_remove', 'pa_user_add', 'pa_edit'] as const);
-const pr_owner = _PROJECT_ACCESSES;
+const pr_viewer: Readonly<ProjectAccess[]> = freeze(['pa_view']);
+const pr_member: Readonly<ProjectAccess[]> = freeze([...pr_viewer, 'pa_label_assign', 'pa_ticket_create']);
+const pr_admin: Readonly<ProjectAccess[]> = freeze([...pr_member, 'pa_user_remove', 'pa_user_add', 'pa_edit']);
+const pr_owner: Readonly<ProjectAccess[]> = PROJECT_ACCESSES;
 
 
 // Project Roles to be export with the correct typing (this will post mistak above)
@@ -96,9 +95,9 @@ export type ProjectRoleName = keyof typeof _PROJECT_ROLES;
 export const PROJECT_ROLES = freeze(new Map(entries(_PROJECT_ROLES)));
 
 // Note: To help ProjectRolesName entry key typing (otherwise string)
-const rolesEntries = entries(_PROJECT_ROLES) as [ProjectRoleName, Readonly<ProjectAccess[]>][];
+const projectRolesEntries = entries(_PROJECT_ROLES) as [ProjectRoleName, Readonly<ProjectAccess[]>][];
 
-export const PROJECT_ROLES_BY_ACCESS = freeze(rolesEntries
+export const PROJECT_ROLES_BY_ACCESS = freeze(projectRolesEntries
 	.reduce((acc, [role, accesses]) => {
 		for (const access of accesses) {
 			const roles = acc.get(access)?.concat(role) ?? [role];
