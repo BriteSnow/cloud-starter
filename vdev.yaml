@@ -1,6 +1,5 @@
 system: cstar
 baseBlockDir: services/ # used as the base dir .dir (as '${baseDir}/${blockName}/'')
-k8sDir: k8s/
 imageTag: '{{__version__}}'
 
 realms:
@@ -9,11 +8,11 @@ realms:
     webExternalPort: 8080
     
   dev:
-    yamlDir: dev/ # for dev, we override the yamlDir
+    yamlDir: k8s/dev/ # for dev, we override the yamlDir
     context: docker-desktop
   
   aws:
-    yamlDir: aws/
+    yamlDir: k8s/aws/
     context: arn:aws:eks:us-west-2:349642121055:cluster/eks-cluster-01
     registry: 349642121055.dkr.ecr.us-west-2.amazonaws.com/
     defaultConfigurations: ['agent', 'db', 'queue', 'web-server']
@@ -26,6 +25,7 @@ realms:
 blocks:
   - db
   - queue
+  - mock-s3
   - _common  
   - name: agent
     dbuildDependencies: _common

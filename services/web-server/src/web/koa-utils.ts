@@ -1,4 +1,4 @@
-import { BaseRouter } from 'backlib';
+import { BaseRouter } from '@backlib/koa';
 import { SERVICE_NAME } from 'common/conf';
 import { UserContext } from 'common/user-context';
 import { Next, ParameterizedContext } from 'koa';
@@ -7,7 +7,7 @@ import { WebLogRecord } from 'shared/log-types';
 import useragent from 'useragent';
 import { pruneEmpty } from 'utils-min';
 
-export { routeDelete, routeGet, routePatch, routePost, routeUse } from 'backlib';
+export { routeDelete, routeGet, routePatch, routePost, routeUse } from '@backlib/koa';
 
 export function success<T = any>(data?: T): ApiResponse<T> {
 	return { success: true, data };

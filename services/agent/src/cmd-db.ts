@@ -30,7 +30,7 @@ async function recreateDb() {
 	if (!(await checkRunning())) {
 		return;
 	}
-
+	console.log('->> recreateDb', POSTGRES_DB_CRED);
 	//// Drop the bb_ db and user
 	const t = await pgTest(POSTGRES_DB_CRED);
 	// local test: // psql -U postgres -d postgres -f sql/_drop-db.sql
@@ -118,7 +118,9 @@ async function resetPasswords() {
 }
 
 async function checkRunning(): Promise<boolean> {
-	const status = await pgStatus({ host });
+	console.log('->> checkRunning', POSTGRES_DB_CRED);
+	const status = await pgStatus(POSTGRES_DB_CRED);
+	console.log('->> checkRunning 2',);
 	if (!status.accepting) {
 		console.log(`Database not ready (${status.message})`);
 	}

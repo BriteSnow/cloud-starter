@@ -13,12 +13,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/ioredis": "^4.16.6",
-    "backlib": "^0.1.0",
+    "@backlib/koa": "^0.2.0",
+    "@types/ioredis": "^4.17.2",
+    "backlib": "^0.2.0",
     "ioredis": "^4.17.3",
-    "knex": "^0.21.1",
-    "pg": "^8.2.1",
-    "redstream": "^0.1.7",
-    "utils-min": "^0.1.14"
+    "knex": "^0.21.2",
+    "pg": "^8.3.0",
+    "redstream": "^0.1.9",
+    "utils-min": "^0.1.15"
   }
 }

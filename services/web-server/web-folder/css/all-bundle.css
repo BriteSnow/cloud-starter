@@ -1963,15 +1963,15 @@ c-select[disabled]{
 		opacity: .5;
 	}
 
-c-select[readonly]{
-		border-bottom: solid 1px var(--bdr-lighter);
-	}
-
 /* Note: on Chrome, if visibility hidden on c-ico, we get unwanted horizontal scroll bar */
 
 c-select[readonly] c-ico svg{
 			visibility: hidden;
 		}
+
+c-select[readonly]{
+		border-bottom: solid 1px var(--bdr-lighter);
+}
 
 c-select.no-value > div {
 			color: var(--txt-med);

@@ -17,7 +17,21 @@ metadata:
   name: cstar-config
 data:
   https_mode: 'false'
+
+  # Core store credential (when mino)
+  core_store_bucket_name: core-store-bucket
+  core_store_access_key_id: AKIAIOSFODNN7EXAMPLE
+  core_store_access_key_secret: wJalrXUtnFEMIKK7MDENGKKPxRfiCYEXAMPLEKEY
+  # Core store info
+  core_store_root_dir: core-store-root/
+
+  # for dev only (points to kubernetes minio docker image). Comment when on S3
+  core_store_minio_endpoint: http://mock-s3-srv:9000
+
+  # Database
   db_host: cstar-db-srv
   db_database: cstar_db
   db_user: cstar_user
+
+  # Google
   google_oauth_redirect_url: http://localhost:8080/goauth-redirect
