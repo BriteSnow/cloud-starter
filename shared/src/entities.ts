@@ -1,5 +1,5 @@
 
-import { ProjectAccesses } from './access-types';
+import { WksAccesses } from './access-types';
 import { StampedEntity } from './entities-base';
 
 export * from './entities-base';
@@ -30,8 +30,21 @@ export interface OAuth extends StampedEntity {
 	oauth_picture?: string | null;
 }
 
-export interface Project extends StampedEntity {
+export interface Wks extends StampedEntity {
 	id: number;
+	uuid: string;
 	name: string;
-	accesses?: ProjectAccesses
+	accesses?: WksAccesses
+}
+
+export interface WksScopedEntity {
+	wksId: number;
+}
+
+export interface Media extends StampedEntity, WksScopedEntity {
+	id: number;
+	uuid: string;
+	name: string;
+	path: string;
+	url: string; // set by MediaDao.parseRecord
 }

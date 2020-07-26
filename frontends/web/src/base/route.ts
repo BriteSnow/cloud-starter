@@ -29,6 +29,11 @@ export function param(name: string): string | null {
 	return getRouteInfo().param(name);
 }
 
+
+export function getRouteWksId() {
+	return asNum(getRouteInfo().pathAt(0));
+}
+
 export function pushPath(path: string) {
 	history.pushState('', document.title, path);
 	_routeInfo = null; // reset routeInfo
@@ -72,6 +77,7 @@ export class RouteInfo {
 	param(name: string): string | null {
 		return this._data.params.get(name);
 	}
+
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {

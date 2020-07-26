@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { hub } from 'dom-native';
-import { ajaxDelete as webDelete, ajaxGet as webGet, ajaxPatch as webPatch, ajaxPost as webPost } from './ajax';
+import { webDelete, webGet, webPatch, webPost } from './web-request';
 
 
 export const dcoHub = hub('dcoHub');
@@ -28,7 +28,7 @@ export class BaseDco<E, F> {
 	}
 
 	async list(filter?: F): Promise<E[]> {
-		const result = await webGet(`/api/dse/${this._entityType}`, filter);
+		const result = await webGet(`/api/dse/${this._entityType}`, { body: filter });
 		if (result.success) {
 			return result.data as any[];
 		} else {
@@ -37,7 +37,7 @@ export class BaseDco<E, F> {
 	}
 
 	async create(props: any): Promise<E> {
-		const result = await webPost(`/api/dse/${this._entityType}`, props);
+		const result = await webPost(`/api/dse/${this._entityType}`, { body: props });
 		const entity = result.data;
 		if (result.success) {
 			dcoHub.pub(this._entityType, 'create', entity);
@@ -48,7 +48,7 @@ export class BaseDco<E, F> {
 	}
 
 	async update(id: number, props: Partial<E>): Promise<any> {
-		const result = await webPatch(`/api/dse/${this._entityType}/${id}`, props);
+		const result = await webPatch(`/api/dse/${this._entityType}/${id}`, { body: props });
 		const entity = result.data;
 		if (result.success) {
 			dcoHub.pub(this._entityType, 'update', entity);

@@ -1,3 +1,4 @@
+import { getRouteWksId } from 'base/route';
 import { logoff, UserContext } from 'base/user-ctx';
 import { customElement, first, onEvent, onHub, push } from 'dom-native';
 import { BaseViewElement } from './v-base';
@@ -5,7 +6,7 @@ import { BaseViewElement } from './v-base';
 const defaultPath = "";
 
 const tagNameByPath: { [name: string]: string } = {
-	"": 'v-projects',
+	"": 'v-home',
 	"_spec": 'v-spec-main',
 };
 
@@ -71,13 +72,20 @@ export class MainView extends BaseViewElement {
 	}
 
 	refresh() {
-		const newPath = this.hasNewPathAt(0, defaultPath);
+		// first, try to get the wksId from the route, and if valid, then, show v-wks-main
+		const wksId = getRouteWksId();
+		if (wksId != null) {
+			this.mainEl.innerHTML = `<v-wks-main wks-id="${wksId}"></v-wks-main>`;
+		} else {
+			const newPath = this.hasNewPathAt(0, defaultPath);
 
-		// update this view/content only if the path has changed
-		if (newPath != null) {
-			const tagName = tagNameByPath[newPath];
-			this.mainEl.innerHTML = `<${tagName}></${tagName}>`;
+			// update this view/content only if the path has changed
+			if (newPath != null) {
+				const tagName = tagNameByPath[newPath];
+				this.mainEl.innerHTML = `<${tagName}></${tagName}>`;
+			}
 		}
+
 	}
 
 }
@@ -86,19 +94,17 @@ export class MainView extends BaseViewElement {
 function _render() {
 	return `
 	<header>
-		<c-ico class="to-menu">menu</c-ico>
+		<d-ico name="ico-menu">menu</d-ico>
 		<h3>CLOUD STARTER</h3>
 		<aside class="toogle-user-menu">
 			<c-ico>user</c-ico>
 			<div class="dx dx-name">Some name</div>
 			<c-menu class="display-none">
-					<div class="do-logoff">Logoff</div>
-					<a href="#profile">Profile</a>
+				<div class="do-logoff">Logoff</div>
+				<a href="#profile">Profile</a>
 			</c-menu>
 		</aside>
 	</header>
-	
-	<v-nav></v-nav>
 
 	<main>
 	</main>

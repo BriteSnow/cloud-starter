@@ -1024,11 +1024,81 @@ button.main-button:active:not(:disabled):not(.disabled){
 		color: red;
 	}
 
+nav{
+
+	flex: 1;
+	/* display: grid;
+	grid-template-rows: repeat(auto-fill, 3rem);	
+	grid-row-gap: 1rem;
+	padding-top: 3rem; */
+	padding-top: 1rem; 
+	display: flex;
+	flex-direction: column;
+	background: red;
+
+}
+
+nav a{ 
+		-webkit-font-smoothing: antialiased; 
+		text-decoration: inherit; 
+		text-transform: inherit; 
+		font-size: 1rem; 
+		line-height: 2rem; 
+		font-weight: 500; 
+		letter-spacing: .0075em;;
+		font-weight: 400;
+		height: 2.5rem;
+		color: var(txt);
+		margin-bottom: 1rem;
+		display: grid;
+		grid-auto-columns: .25rem .75rem 1.5rem 1rem 1fr;
+		grid-auto-flow: column;
+		color: var(--txt);
+	}
+
+nav a .bar{
+			grid-column: 1;
+		}
+
+nav a c-ico{
+			grid-column: 3;
+			align-self: center; /* vertical center */
+  		justify-self: center; /* horizontal center */
+		}
+
+nav a label, nav a .label{
+			grid-column: 5;
+			display: flex;
+			align-items: center; /* vertical center */			
+		}
+
+nav a.sel{
+			background: #fff;
+		}
+
+nav a.sel .label{
+				color: var(--txt-dark);
+				font-weight: 600;
+			}
+
+nav a.sel c-ico{
+				fill: var(--ico-dark);
+			}
+
+nav a.sel .bar{
+				background: var(--bkg-prime);
+			}
+
+nav a:hover{
+			background: #fff;
+		}
+
 .card{
 	box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
 		0px 1px 1px 0px rgba(0, 0, 0, 0.14),
 		0px 1px 3px 0px rgba(0, 0, 0, 0.12);;
 	background: var(--bkg-L2);
+	color: var(--txt);
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 
@@ -1046,6 +1116,7 @@ button.main-button:active:not(:disabled):not(.disabled){
 		grid-template-columns: 2rem 1fr 1rem;
 		padding: 1rem;
 		user-select: none;
+
 	}
 
 .card > header h2{
@@ -1069,17 +1140,14 @@ button.main-button:active:not(:disabled):not(.disabled){
 			grid-row: 2;
 		}
 
-.card > header aside{
+.card > header d-ico{
 			cursor: pointer;
 			grid-column: 3;
-			grid-row: 1;
+			grid-row: 1;				
+			fill: var(--ico-L4);
+			width: 1.25rem;
+			height: 1.25rem;
 		}
-
-.card > header aside i{
-				fill: var(--ico-L4);
-				width: 1.25rem;
-				height: 1.25rem;
-			}
 
 .card > section{
 		-webkit-font-smoothing: antialiased;
@@ -1241,20 +1309,22 @@ ul a:hover{
 			background: var(--bkg-sel);
 		}
 
-main > *{
+main > .screen{
 	display: grid; 
 	grid-auto-flow: column;
 	grid-template-rows: 1rem 3rem 1rem 1fr;
 	padding: 1rem;
+
+
 }
 
-main > * > header{
+main > .screen > header{
 		grid-row: 2;
 		display: grid;
 		align-items: center;
 	}
 
-main > * > header h1{
+main > .screen > header h1{
 			-webkit-font-smoothing: antialiased;
 			text-decoration: inherit;
 			text-transform: inherit;
@@ -1264,13 +1334,9 @@ main > * > header h1{
 			letter-spacing: normal;
 		}
 
-main > * > header .tab-bar{
+main > .screen > header .tab-bar{
 			padding-left: 3rem;
 		}
-
-main > * > section {
-		grid-row: 4;
-	}
 
 .tab-bar{
 	border-bottom: solid 1px #ddd;
@@ -1287,6 +1353,40 @@ main > * > section {
 .tab-bar > *.sel{
 			color: var(--clr-scnd);
 			border-bottom: solid 2px var(--clr-scnd);
+		}
+
+v-home > section {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, 16rem);
+		grid-template-rows: repeat(auto-fill, 12rem);
+		grid-gap: 2rem;
+	}
+
+v-home > section .card.wks-add{
+			cursor: pointer;
+			display: grid;
+			grid-template-rows: 1fr auto 1rem auto 1fr;
+			align-items: center; /* vertical center */
+			justify-items: center;
+		}
+
+v-home > section .card.wks-add c-symbol{
+				grid-row: 2;
+				width: 4rem;
+				height: 4rem;
+				align-self: flex-end;
+				opacity: .3;
+			}
+
+v-home > section .card.wks-add h3{
+				grid-row: 4;
+				align-self: flex-start;
+				opacity: .5;
+			}
+
+v-home > section .card { 
+			cursor: pointer;
+			display: block;
 		}
 
 v-login{
@@ -1361,7 +1461,7 @@ v-login.register-mode .dialog .for-login{
 v-main{
 	flex: 1;
 	display: grid;
-	grid-template-columns: 15rem auto;
+	grid-template-columns: 1fr;
 	grid-template-rows: 4rem auto 1.5rem;
 
 }
@@ -1374,7 +1474,7 @@ v-main > header{
 		z-index: 100;
 	}
 
-v-main > header > c-ico { 
+v-main > header > d-ico { 
 			justify-self: center;
 			align-self: center;
 			fill: #fff;
@@ -1431,15 +1531,8 @@ v-main > header > aside c-menu{
 				min-width: 10rem;
 			}
 
-v-main > v-nav{
-		grid-area: 2 / 1 / 4 / 2;
-		background-color: var(--bkg-nav);
-		display: flex;
-		overflow: hidden;
-	}
-
 v-main > main{
-		grid-area: 2 / 2 / 3 / 3;
+		grid-area: 2 / 1 / 3 / 1;
 		display: flex;
 		background: #fff;
 	}
@@ -1447,6 +1540,11 @@ v-main > main{
 v-main > main > * {
 			flex: 1;
 		}
+
+v-main > footer{
+		border: solid 1px red;
+		grid-area: 3 / 1 / 3 / 3;
+	}
 
 v-main.un-auth{
 		display: none;
@@ -1467,7 +1565,7 @@ v-nav{
 	grid-template-rows: repeat(auto-fill, 3rem);	
 	grid-row-gap: 1rem;
 	padding-top: 3rem; */
-	padding-top: 3rem; 
+	padding-top: 1rem; 
 	display: flex;
 	flex-direction: column;
 	background: red;
@@ -1529,38 +1627,56 @@ v-nav a:hover{
 			background: #fff;
 		}
 
-v-projects > section {
+v-wks-main{
+	display: grid;
+	grid-template-columns: 15rem auto;
+	grid-template-rows: 1fr;
+	padding: 0;
+
+}
+
+v-wks-main > nav{
+		background-color: var(--bkg-nav);
+		display: flex;
+		overflow: hidden;
+	}
+
+v-wks-main > section {
+		padding: 1rem;
+		
 		display: grid;
 		grid-template-columns: repeat(auto-fill, 16rem);
 		grid-template-rows: repeat(auto-fill, 12rem);
 		grid-gap: 2rem;
 	}
 
-v-projects > section .card.project-add{
-			cursor: pointer;
-			display: grid;
-			grid-template-rows: 1fr auto 1rem auto 1fr;
-			align-items: center; /* vertical center */
-			justify-items: center;
+v-wks-main > section .media-add{
+			opacity: .2;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			background: var(--bdr-lightest);
+
+			border: dashed 3px var(--bdr);
+			justify-content: center;
 		}
 
-v-projects > section .card.project-add c-symbol{
-				grid-row: 2;
-				width: 4rem;
-				height: 4rem;
-				align-self: flex-end;
-				opacity: .3;
+v-wks-main > section .media-add h3{
+				color: black;
 			}
 
-v-projects > section .card.project-add h3{
-				grid-row: 4;
-				align-self: flex-start;
+v-wks-main > section .media-add d-ico{
+				width: 3rem;
+				height: 3rem;
+				max-width: 3rem;
+				max-height: 3rem;
+			}
+
+v-wks-main > section .media-add:hover{
 				opacity: .5;
 			}
-
-v-projects > section .card.project { 
-			
-		}
 
 /* NOTE: this is a class selector as it will be added by the d-base-dialog base */
 

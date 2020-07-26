@@ -2,7 +2,7 @@ import { Immutable } from 'immer';
 import { GlobalAccess, GlobalAccesses } from 'shared/access-types';
 import { User } from 'shared/entities';
 import { freeze } from 'shared/utils';
-import { getProjectAccesses } from './da/access-project';
+import { getWksAccesses } from './da/access-wks';
 import { PerfContext } from './perf';
 
 
@@ -11,8 +11,7 @@ import { PerfContext } from './perf';
  */
 export interface UserForContext extends Immutable<Pick<User, 'id'>> {
 	accesses: GlobalAccesses;
-	projectId?: number; // the eventual project scope of the context
-	// orgId?: number; // TODO: the eventual order scope of the context
+	wksId?: number; // the eventual wks scope of the context
 }
 
 /** Note: Make context an interface so that ContextImpl class does not get expose and app code cannot create it of the newContext factory */
@@ -21,11 +20,10 @@ export interface UserContext {
 	readonly user: UserForContext;
 	/** Check global access */
 	hasAccess(access: GlobalAccess): boolean;
-	/** Check project access */
-	hasProjectAccess(projectId: number, access: string): Promise<boolean>;
+	/** Check wks access */
+	hasWksAccess(wksId: number, access: string): Promise<boolean>;
 	readonly perfContext: PerfContext;
-	readonly projectId?: number; // NOT implemented yet
-	// readonly orgId?: number; // TODO: NOT implemented yet
+	readonly wksId?: number;
 }
 
 
@@ -61,7 +59,9 @@ class UserContextImpl implements UserContext {
 	#data = new Map<string, any>(); // not used yet. 
 
 	get userId() { return this.#user.id };
-	private accessesByProjectId: Map<number, Set<string>> = new Map();
+	get wksId() { return this.#user.wksId };
+
+	private accessesByWksId: Map<number, Set<string>> = new Map();
 	readonly perfContext = new PerfContext();
 
 
@@ -81,15 +81,15 @@ class UserContextImpl implements UserContext {
 		return this.#user.accesses[access] ?? false;
 	}
 
-	async hasProjectAccess(projectId: number, access: string) {
+	async hasWksAccess(wksId: number, access: string) {
 
-		// first, get the privileges for this user on this project (from context cache)
-		let privileges = this.accessesByProjectId.get(projectId);
+		// first, get the privileges for this user on this wks (from context cache)
+		let privileges = this.accessesByWksId.get(wksId);
 		// if not found, we load it and set it to the context cache
 		if (privileges == null) {
-			const privilegesArray = await getProjectAccesses(this.userId, projectId);
+			const privilegesArray = await getWksAccesses(this.userId, wksId);
 			privileges = new Set(privilegesArray);
-			this.accessesByProjectId.set(projectId, privileges);
+			this.accessesByWksId.set(wksId, privileges);
 		}
 		return privileges.has(access);
 	}

@@ -4,6 +4,7 @@ import { getSysContext, newUserContext, UserForContext } from 'common/user-conte
 import { Next } from 'koa';
 import { extname } from 'path';
 import { freeze } from 'shared/utils';
+import { asNum } from 'utils-min';
 import { AuthFailError, clearAuth, extractToken, setAuth } from '../auth';
 import { Ktx } from './koa-utils';
 
@@ -17,6 +18,7 @@ export default async function authRequestMiddleware(ktx: Ktx, next: Next) {
 		try {
 			const start = Date.now();
 			const user = await authRequest(ktx);
+
 			// now we make kits a ApiKtx
 			const utx = await newUserContext(user);
 			ktx.state.utx = utx;
@@ -58,7 +60,9 @@ export async function authRequest(ktx: Ktx): Promise<UserForContext> {
 		const cred: UserCredForToken = freeze({ uuid, tsalt }); // make sure can't be tampered between check and setAuth
 		checkToken(tokenData, cred);
 		setAuth(ktx, cred);
-		return { id, accesses };
+		const wksId = asNum(ktx.query.wksId);
+
+		return { id, accesses, wksId };
 
 	} catch {
 		throw new AuthFailError(ERROR_INVALID_AUTH);

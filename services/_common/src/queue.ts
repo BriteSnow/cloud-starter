@@ -1,17 +1,12 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/queue.ts" />
-// (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
-
 import IORedis, { Redis } from "ioredis";
 
 
-
 //#region    ---------- RedisClient Factory / Cache ---------- 
-const host = 'cstar-queue-srv';
-const maxRetry = 100;
+const REDIS_MAX_RETRY = 100;
+const QUEUE_HOST = 'cstar-queue-srv';
 
 interface Clients {
-	common?: Redis, // for any non blocking redis call
-	// 'job_queue_name'?: Redis // per stream blocking name 
+	common?: Redis
 }
 
 const clients: Clients = {};
@@ -20,7 +15,7 @@ const clients: Clients = {};
  * Redis client factory / cache for named redis client. 
  * 
  * IMPORTANT: Most of the application code should just use the shared 'common' redis client for NON BLOCKING read and write to the redis server. 
- *            However, for JobManagers, since they are read block on stream, they MUST have their own redis client so that they do not block other code. 
+ *            However, for JobManagers, since they are read block, they MUST have their own redis client so that they do not block other code. 
  *            This is why this function provides a simple way to get client by name, and the default is 'common'
  * 
  * NOTE: Also, we are fully typing which name we are allowing here, to make the code more tight, and prevent missed used of the API. If more 
@@ -39,8 +34,8 @@ export function getRedisClient(name: keyof Clients = 'common'): Redis {
 
 function createRedisClient(name: string) {
 
-	const client = new IORedis(host, {
-		maxRetriesPerRequest: maxRetry,
+	const client = new IORedis(QUEUE_HOST, {
+		maxRetriesPerRequest: REDIS_MAX_RETRY,
 		sentinelRetryStrategy: function (times: number) {
 			console.log(`INFO - Redis client for ${name} sentinelRetryStrategy`, times);
 			// reconnect after some time (wait longer with attempt up to 3 seconds)
@@ -55,3 +50,9 @@ function createRedisClient(name: string) {
 	return client
 }
 //#endregion ---------- /RedisClient Factory / Cache ----------
+
+
+
+
+
+

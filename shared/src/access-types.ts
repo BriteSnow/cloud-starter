@@ -41,71 +41,70 @@ export const GLOBAL_ROLES = freeze(new Map(entries(_GLOBAL_ROLES)));
 
 //#endregion ---------- /App Access ---------- 
 
-//#region    ---------- Project Access ---------- 
-// `pa_` prefix for Project Privilege
-// The list of all project privilege Should be 
-const PROJECT_ACCESSES = freeze([
-	'pa_delete',
-	'pa_user_assign_admin', // add user admin (only owner)
-	'pa_edit', // edit the project name, description, 
-	'pa_user_add', // add user
-	'pa_user_remove',
-	'pa_ticket_create',
-	'pa_label_assign',
-	'pa_view' // view info and tickets from a projects
+//#region    ---------- Wks Access ---------- 
+// `wa_` prefix for Wks Privilege
+// The list of all Wks privilege Should be 
+const WKS_ACCESSES = freeze([
+	'wa_delete',
+	'wa_user_assign_admin', // add user admin (only owner)
+	'wa_content_create', // Create new content for this wks
+	'wa_content_edit', // 
+	'wa_content_view', // view info and tickets from a Wkss
+	'wa_user_add', // add user
+	'wa_user_remove'
 ] as const);
 
-// ProjectPrivilege type "pp_user_add_admin" | "pp_edit" | ....
-export type ProjectAccess = typeof PROJECT_ACCESSES[number];
+// WksPrivilege type "pp_user_add_admin" | "pp_edit" | ....
+export type WksAccess = typeof WKS_ACCESSES[number];
 
-export type ProjectAccesses = { [key in ProjectAccess]?: true };
+export type WksAccesses = { [key in WksAccess]?: true };
 
 // Note: Widen type to string to allow caller to call .has(name:string) 
-const PROJECT_ACCESSES_SET = freeze(new Set(PROJECT_ACCESSES as readonly string[]));
+const WKS_ACCESSES_SET = freeze(new Set(WKS_ACCESSES as readonly string[]));
 
-export function isProjectAccess(name: any): name is ProjectAccess {
-	return PROJECT_ACCESSES_SET.has(name);
+export function isWksAccess(name: any): name is WksAccess {
+	return WKS_ACCESSES_SET.has(name);
 }
-export function assertProjectAccess(name: any): asserts name is ProjectAccess {
-	if (!isProjectAccess(name)) {
-		throw new Error(`Access ${name} is not a valid project access. Must be one of ${PROJECT_ACCESSES}`);
+export function assertWksAccess(name: any): asserts name is WksAccess {
+	if (!isWksAccess(name)) {
+		throw new Error(`Access ${name} is not a valid workspace access. Must be one of ${WKS_ACCESSES}`);
 	}
 }
 
 
-// `pr_` prefix for Project Role
-const pr_viewer: Readonly<ProjectAccess[]> = freeze(['pa_view']);
-const pr_member: Readonly<ProjectAccess[]> = freeze([...pr_viewer, 'pa_label_assign', 'pa_ticket_create']);
-const pr_admin: Readonly<ProjectAccess[]> = freeze([...pr_member, 'pa_user_remove', 'pa_user_add', 'pa_edit']);
-const pr_owner: Readonly<ProjectAccess[]> = PROJECT_ACCESSES;
+// `wr_` prefix for Wks Role
+const wr_viewer: Readonly<WksAccess[]> = freeze(['wa_content_view']);
+const wr_editor: Readonly<WksAccess[]> = freeze([...wr_viewer, 'wa_content_create', 'wa_content_edit']);
+const wr_admin: Readonly<WksAccess[]> = freeze([...wr_editor, 'wa_user_remove', 'wa_user_add']);
+const wr_owner: Readonly<WksAccess[]> = WKS_ACCESSES;
 
 
-// Project Roles to be export with the correct typing (this will post mistak above)
-const _PROJECT_ROLES = freeze({
-	pr_owner,
-	pr_admin,
-	pr_member,
-	pr_viewer
+// Wks Roles to be export with the correct typing (this will post mistak above)
+const _WKS_ROLES = freeze({
+	wr_owner: wr_owner,
+	wr_admin: wr_admin,
+	wr_editor: wr_editor,
+	wr_viewer: wr_viewer
 } as const);
 
-export type ProjectRoleName = keyof typeof _PROJECT_ROLES;
+export type WksRoleName = keyof typeof _WKS_ROLES;
 
 
-// Note: Readonly Map<string, ProjectPrivilegeName> Wider map (Map<string, readonly ProjectPivilegeName[]>) allowing caller to call .has(name:string)
-export const PROJECT_ROLES = freeze(new Map(entries(_PROJECT_ROLES)));
+// Note: Readonly Map<string, WksPrivilegeName> Wider map (Map<string, readonly WksPivilegeName[]>) allowing caller to call .has(name:string)
+export const WKS_ROLES = freeze(new Map(entries(_WKS_ROLES)));
 
-// Note: To help ProjectRolesName entry key typing (otherwise string)
-const projectRolesEntries = entries(_PROJECT_ROLES) as [ProjectRoleName, Readonly<ProjectAccess[]>][];
+// Note: To help WksRolesName entry key typing (otherwise string)
+const wksRolesEntries = entries(_WKS_ROLES) as [WksRoleName, Readonly<WksAccess[]>][];
 
-export const PROJECT_ROLES_BY_ACCESS = freeze(projectRolesEntries
+export const WKS_ROLES_BY_ACCESS = freeze(wksRolesEntries
 	.reduce((acc, [role, accesses]) => {
 		for (const access of accesses) {
 			const roles = acc.get(access)?.concat(role) ?? [role];
 			acc.set(access, freeze(roles));
 		}
 		return acc;
-	}, new Map<ProjectAccess, Readonly<ProjectRoleName[]>>()));
-//#endregion ---------- /Project Access ----------
+	}, new Map<WksAccess, Readonly<WksRoleName[]>>()));
+//#endregion ---------- /Wks Access ----------
 
 
 

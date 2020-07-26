@@ -1,6 +1,6 @@
 import * as assert from 'assert';
-import { saveProjectRole } from 'common/da/access-project';
-import { projectDao } from 'common/da/daos';
+import { saveWksRole } from 'common/da/access-wks';
+import { wksDao } from 'common/da/daos';
 import { initSuite } from './t-utils';
 
 /**
@@ -8,22 +8,22 @@ import { initSuite } from './t-utils';
  *
  */
 
-describe("test-dao-project", async function () {
+describe("test-dao-wks", async function () {
 
 	const suite = initSuite(this);
 
-	it('dao-project-get-owners', async function () {
+	it('dao-wks-get-owners', async function () {
 		try {
 
 			//// SETUP
-			// create project (container object)
-			const projectId = await projectDao.create(suite.userACtx, { name: 'test-dao-basic-crud-ticket_project-01' });
-			suite.toClean('project', projectId);
+			// create wks (container object)
+			const wksId = await wksDao.create(suite.userACtx, { name: 'test-dao-basic-crud-ticket_wks-01' });
+			suite.toClean('wks', wksId);
 			// set userB as viewer
-			await saveProjectRole(suite.userBCtx.userId, projectId, 'pr_viewer');
+			await saveWksRole(suite.userBCtx.userId, wksId, 'wr_viewer');
 
 			// test 
-			const owners = await projectDao.getOwners(suite.sysCtx, projectId); // getOwner requires sysCtx for now. 
+			const owners = await wksDao.getOwners(suite.sysCtx, wksId); // getOwner requires sysCtx for now. 
 			assert.strictEqual(owners.length, 1, 'number of owners');
 			assert.strictEqual(owners[0].id, suite.userACtx.userId, 'owner should be userA');
 			assert.strictEqual(((<any>owners[0]).pwd == null), true, '.pwd should not be exposed');

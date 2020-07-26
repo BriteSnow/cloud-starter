@@ -1,5 +1,5 @@
-import { ajaxPost } from 'base/ajax';
 import { getGoogleOAuthUrl, login } from 'base/user-ctx';
+import { webPost } from 'base/web-request';
 import { customElement, first, onEvent, OnEvent, pull, style } from 'dom-native';
 import { BaseViewElement } from './v-base';
 
@@ -121,7 +121,7 @@ export class LoginView extends BaseViewElement {
 		const data = pull(this.fieldset);
 
 		try {
-			const result = await ajaxPost('/api/register', data);
+			const result = await webPost('/api/register', { body: data });
 		} catch (ex) {
 			console.log('error register', ex);
 			this.footerMessage.textContent = ex.error || ex.message;

@@ -26,7 +26,10 @@ data:
   core_store_root_dir: core-store-root/
 
   # for dev only (points to kubernetes minio docker image). Comment when on S3
-  core_store_minio_endpoint: http://mock-s3-srv:9000
+  core_store_minio_endpoint: http://cstar-mock-s3-srv:9000
+
+  # Note: For dev. In prod, this will be the CDN url that will point to the core bucket backend.
+  core_store_cdn_base_url: http://localhost:9000/core-store-bucket/
 
   # Database
   db_host: cstar-db-srv

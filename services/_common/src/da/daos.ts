@@ -1,12 +1,15 @@
 import { BaseDao } from './dao-base';
+import { MediaDao } from './dao-media';
 import { OAuthDao } from './dao-oauth';
-import { ProjectDao } from './dao-project';
 import { UserDao } from './dao-user';
+import { WksDao } from './dao-wks';
 
 
 export const userDao = new UserDao();
 
-export const projectDao = new ProjectDao();
+export const wksDao = new WksDao();
+
+export const mediaDao = new MediaDao();
 
 export const oauthDao = new OAuthDao();
 
@@ -16,7 +19,8 @@ export const oauthDao = new OAuthDao();
  */
 export const daoByEntity: { [type: string]: BaseDao<any, any> } = {
 	User: userDao,
-	Project: projectDao
+	Wks: wksDao,
+	Media: mediaDao
 }
 
 

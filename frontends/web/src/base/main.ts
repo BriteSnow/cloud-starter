@@ -1,7 +1,7 @@
 import '@dom-native/ui';
 import { defaultIcons } from '@dom-native/ui';
-import { ajaxGet } from 'base/ajax';
 import { getUserContext } from 'base/user-ctx';
+import { webGet } from 'base/web-request';
 import { first, on, trigger } from 'dom-native';
 import { MainView } from 'views/v-main';
 
@@ -13,7 +13,7 @@ defaultIcons.load();
 
 //// Prepare the resource to be loaded before starting the application
 // NOTE: We start the loading as soon as possible (before the DOMContentLoaded)
-const svgSymbolsPromise = ajaxGet("/svg/sprite.svg", null, { contentType: "application/xml" });
+const svgSymbolsPromise = webGet("/svg/sprite.svg", { contentType: "application/xml" });
 
 document.addEventListener("DOMContentLoaded", function (event) {
 

@@ -1,17 +1,17 @@
-import { projectDao } from 'common/da/daos';
-import { Project } from 'shared/entities';
+import { wksDao } from 'common/da/daos';
+import { Wks } from 'shared/entities';
 import { ApiKtx } from './koa-utils';
 
-/** Get the projectId from reques, and get the Project object */
-export async function getProjectFromReq(ktx: ApiKtx): Promise<Partial<Project>> {
+/** Get the wksId from reques, and get the Wks object */
+export async function getWksFromReq(ktx: ApiKtx): Promise<Partial<Wks>> {
 	const ctx = ktx.state.utx;
 
-	const projectId = ktx.query.projectId;
+	const wksId = ktx.query.wksId;
 
-	// guard if no project id
-	if (projectId == null) {
-		throw new Error(`Cannot list tickets because now 'projectId' query param provided`)
+	// guard if no wks id
+	if (wksId == null) {
+		throw new Error(`Cannot list tickets because now 'wksId' query param provided`)
 	}
-	const project = projectDao.get(ctx, projectId);
-	return project;
+	const wks = wksDao.get(ctx, wksId);
+	return wks;
 }

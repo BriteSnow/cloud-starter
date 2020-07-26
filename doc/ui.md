@@ -125,48 +125,86 @@ In this application frontends, we will be using [dom-native](https://github.com/
 
 ```ts
 @customElement('v-my') // use the ts decorator to define the element, just on top of the class definition
-MyView extends BaseHTMLElement{
+class MyView extends BaseHTMLElement{
 
   //// Key Elements
-  //> Here we defined the key children elements getters from this web components. They are read only, and use document query 
-  //> for resiliency (this way, if the HTML change, still work). We start with the code `//// Key Elements` code block comments.  
-  get headerEl() { return first(this, 'header')!} //> Here we can make `!` as we know that after init() it they will always exists.
-  get contentEl() { return first(this, 'content')!} //> By convention, all elements property getters should end with `El` 
+  get headerEl() { return first(this, 'header')!}
+  get contentEl() { return first(this, 'content')!}
 
   //// Data Setters
-  //> Now we define the "data setters" of the component, in this components, we willl have two, but usually one is the prefered way
-  set title(v: string) { this.headerEl.textContent = v} //> Note that here we do NOT keep the data, which is the best practice if we do not need to return it. 
-  set content(v: string) { this.contentEl.textContent = v} //> Same pattern here. Obviously, we could have taken some HTML or element. 
-  //> It's usually a good practice to avoid to have multiple data getters, but some component might have one data getter, 
-  //> such as the BaseFieldElement, which has .value, and also .name (which is more a read only and a reflection of the name attribute)
+  set title(v: string) { this.headerEl.textContent = v}
+  set content(v: string) { this.contentEl.textContent = v}
 
   //// State Getters/Setters
-  //> Here we put the component state getters/setters, that usually reflect their states in the corresponding component css class names
-  //> or attribute (see BaseFieldElement)
   get highlighted() { return this.classList.contains('highlighted')}
-  set highlighted(v: boolean) { css(this, {highlighted: v})} //> Here just use the css(el, obj) convenient css setter for v is a boolean and set or remove the key as class name
+  set highlighted(v: boolean) { css(this, {highlighted: v})}
 
   //#region    ---------- Element Events ---------- 
-  //> In this section put all of the @onEvent bindings, which is event bound to the `this` element.
   @onEvent('click', 'header')
-  headerClicked(evt: MouseEvent & SelectTarget){
+  headerClicked(evt: MouseEvent & OnEvent){
     console.log('header was clicked', evt.selectTarget);
   }
   //#endregion ---------- /Element Events ---------- 
 
   //#region    ---------- Doc/Win Events ---------- 
-  //> Put here any events bound with `@onDoc` and `@onWin`
-  //> Note: Try to avoid those as much as possible, but sometime, we have to have those to trap keyboards that are not linked to an input element, 
-  //>       or window resize for examples. 
+  //...
   //#endregion ---------- /Doc/Win Events ---------- 
 
   //#region    ---------- Hub Events ---------- 
   @onHub('dcoHub', 'Project', 'create')
   projectCreated(data: Project, info: {topic: string, label: string}){
-    console.log(data, info.topic, info.label); // [object object] Project create
+    console.log(data, info.topic, info.label); 
   }
   //#endregion ---------- /Hub Events ---------- 
 
+  //#region    ---------- Lifecycle ---------- 
+  init(){ 
+    super.init(); // here by convention, call super.init()
+    this.innerHTML = _render(); 
+  }
+
+  preDisplay(){
+  }
+  //#endregion ---------- /Lifecycle ---------- 
+  
+  refresh(){
+  }
+}
+
+//// HTML
+_render(){
+  return `<header></header>
+  <section> 
+  </section>
+  `
+}
+```
+
+- `@customElement('v-my')` use the ts decorator to define the element, just on top of the class definition
+- `//// Key Elements` Here we defined the key children elements getters from this web components. They are read only, and use document query. for resiliency (this way, if the HTML change, still work).
+  - e.g., `get headerEl() { return first(this, 'header')!}`
+    - Here we can make `!` as we know that after init() it they will always exists.
+    - By convention, all elements property getters should end with `El` 
+- `//// Data Setters` Now we define the "data setters" of the component, in this components, we willl have two, but usually one is the prefered way
+  - e.g., `set title(v: string) { this.headerEl.textContent = v}`
+    -  Note that here we do NOT keep the data, which is the best practice if we do not need to return it. 
+    - Same pattern here. Obviously, we could have taken some HTML or element. 
+    - It's usually a good practice to avoid to have multiple data getters, but some component might have one data getter, 
+    - such as the BaseFieldElement, which has .value, and also .name (which is more a read only and a reflection of the name attribute)
+- `//// State Getters/Setters` Here we put the component state getters/setters, that usually reflect their states in the corresponding component css class names or attribute (see BaseFieldElement)
+  - e.g., 
+    - `get highlighted() { return this.classList.contains('highlighted')}`
+    - `set highlighted(v: boolean) { css(this, {highlighted: v})} `
+  - Here just use the css(el, obj) convenient css setter for v is a boolean and set or remove the key as class name
+- `//#region    ---------- Element Events ---------- ` In this section put all of the @onEvent bindings, which is event bound to the `this` element.
+  - `@onEvent('click', 'header')`
+- `//#region    ---------- Doc/Win Events ---------- `
+  - Put here any events bound with `@onDoc` and `@onWin`. Try to avoid those as much as possible, but sometime, we have to have those to trap keyboards that are not linked to an input element.
+-  `//#region    ---------- Hub Events ---------- ` Put hub events
+ 
+
+```ts
+...
   //#region    ---------- Lifecycle ---------- 
   //> `init()`will be called ONCE just after the constructor (in the connectedCallback lifecycle)
   //> Create the HTML structure or content of the html element, can use `this.innerHTML` or `this.appendChild(fragment)`

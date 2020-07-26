@@ -49,10 +49,10 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * 
 	 * MUST NOT BE OVERRIDEN, override processEntity instead.
 	 * 
-	 * @param objects 
+	 * @param dbRecs 
 	 */
-	protected parseRecords(objects: any[]): E[] {
-		return objects.map(obj => this.parseRecord(obj));
+	protected parseRecords(dbRecs: any[]): E[] {
+		return dbRecs.map(obj => this.parseRecord(obj));
 	}
 
 	/**
@@ -62,8 +62,8 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	 * 
 	 * Note: usually, this can add some defineProperty to get some data from computation
 	 */
-	protected parseRecord(obj: any): E {
-		return obj as E;
+	protected parseRecord(dbRec: any): E {
+		return dbRec as E;
 	}
 
 	/**

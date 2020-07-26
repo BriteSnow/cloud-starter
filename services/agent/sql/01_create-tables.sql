@@ -66,48 +66,49 @@ CREATE TABLE job (
   error text
 );
 
-
-CREATE TABLE "project" (
+CREATE TABLE "wks" (
   id bigserial PRIMARY KEY,
+  uuid uuid NOT NULL UNIQUE DEFAULT gen_random_uuid(),
   cid bigint, 
   ctime timestamp with time zone,
   mid bigint, 
   mtime timestamp with time zone,  
   name varchar(64)
 );
-ALTER SEQUENCE project_id_seq RESTART WITH 1000;
+ALTER SEQUENCE wks_id_seq RESTART WITH 1000;
 
 
-
-CREATE TYPE prole_name AS ENUM (
-	'pr_owner',
-	'pr_admin',
-	'pr_member',
-	'pr_viewer');
-
-CREATE TABLE "user_prole" (
-  "userId" bigint NOT NULL,
-  "projectId" bigint NOT NULL,
-  "role" prole_name NOT NULL,
-  PRIMARY KEY("userId", "projectId"),
-  FOREIGN KEY ("userId") REFERENCES "user" (id) on delete cascade,
-  FOREIGN KEY ("projectId") REFERENCES "project" (id) on delete cascade
-);
-
-
-CREATE TABLE "task" (
+CREATE TABLE "media" (
   id bigserial PRIMARY KEY,
+  uuid uuid NOT NULL UNIQUE DEFAULT gen_random_uuid(),
   cid bigint, 
   ctime timestamp with time zone,
   mid bigint, 
   mtime timestamp with time zone,
-  started boolean default false,
-  completed boolean default false,
-  "projectId" bigint NOT NULL,
-  title varchar(128), 
-  FOREIGN KEY ("projectId") REFERENCES "project" (id) on delete cascade
+  "wksId" bigint NOT NULL,    
+  name varchar(64),
+  path varchar(256),
+  FOREIGN KEY ("wksId") REFERENCES "wks" (id) on delete cascade
 );
-ALTER SEQUENCE task_id_seq RESTART WITH 1000;
+ALTER SEQUENCE media_id_seq RESTART WITH 1000;
+
+
+
+CREATE TYPE wrole_name AS ENUM (
+	'wr_owner',
+	'wr_admin',
+	'wr_editor',
+	'wr_viewer');
+
+CREATE TABLE "user_wks" (
+  "userId" bigint NOT NULL,
+  "wksId" bigint NOT NULL,
+  "role" wrole_name NOT NULL,
+  PRIMARY KEY("userId", "wksId"),
+  FOREIGN KEY ("userId") REFERENCES "user" (id) on delete cascade,
+  FOREIGN KEY ("wksId") REFERENCES "wks" (id) on delete cascade
+);
+
 
 CREATE TABLE "label" (
   id bigserial PRIMARY KEY,
@@ -115,21 +116,9 @@ CREATE TABLE "label" (
   ctime timestamp with time zone,
   mid bigint, 
   mtime timestamp with time zone,    
-  "projectId" bigint NOT NULL,
+  "wksId" bigint NOT NULL,
   name varchar(128), 
-  color varchar(32)
+  color varchar(32),
+  FOREIGN KEY ("wksId") REFERENCES "wks" (id) on delete cascade
 );
 ALTER SEQUENCE label_id_seq RESTART WITH 1000;
-
-
-CREATE TABLE "task_label" (
-  "taskId" bigint NOT NULL,
-  "labelId" bigint NOT NULL,
-  cid bigint, 
-  ctime timestamp with time zone,
-  mid bigint, 
-  mtime timestamp with time zone,    
-  PRIMARY KEY("taskId", "labelId"),
-  FOREIGN KEY ("taskId") REFERENCES "task" (id) on delete cascade,
-  FOREIGN KEY ("labelId") REFERENCES "label" (id) on delete cascade
-);

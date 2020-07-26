@@ -1,7 +1,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { newLeafTracer } from 'backlib';
-import { GlobalAccess, isAccess, isProjectAccess, ProjectAccess } from 'shared/access-types';
+import { GlobalAccess, isAccess, isWksAccess, WksAccess } from 'shared/access-types';
 import { isFunction } from 'util';
 import { asNum } from 'utils-min';
 import { assertUserContext, getSysContext, UserContext } from '../user-context';
@@ -27,7 +27,7 @@ type EntityMatchAccess =
 	'@cid' | // match utx.userId with second arg (number value or .cid)
 	'@userId';  // match utx.userId with second arg (number value or .userId)
 
-export type Access = GlobalAccess | ProjectAccess | EntityMatchAccess;
+export type Access = GlobalAccess | WksAccess | EntityMatchAccess;
 
 
 class AccessFail extends Error { }
@@ -46,10 +46,10 @@ class AccessDecoratorError extends Error {
  * There are 4 types of Access name. They all match to the corresponding domaing 
  *  - `#admin` this match if the user is an 'admin' at the 
  *  - `@id | @cid | ...` are the utx.userId with second arg number or data.id, data.cid, ... secpmd argument property match
- *  - `pp_...` are the project privilege name
- *  - `pr_...` are the project role names
+ *  - `pp_...` are the wks privilege name
+ *  - `wr_...` are the wks role names
  * 
- * Note: In this application, Role are scoped by project (can be scoped on different object or root depending of the app need)
+ * Note: In this application, Role are scoped by wks (can be scoped on different object or root depending of the app need)
  */
 
 //#region    ---------- Decorator ---------- 
@@ -146,25 +146,25 @@ export function AccessRequires(...accessList: Access[]) {
 							}
 						}
 
-						//// PROJECT PRIVILEGE
-						else if (isProjectAccess(access)) {
-							// First, try to get the projectId from utx or parameters if project table
-							const projectId = utx.projectId ?? ((dao.table === 'project') ? entityId : undefined);
+						//// WKS PRIVILEGE
+						else if (isWksAccess(access)) {
+							// First, try to get the wksId from utx or parameters if wks table
+							const wksId = utx.wksId ?? ((dao.table === 'wks') ? entityId : undefined);
 							// if not, data might be queryOptions, and might have a .access
 							const queryAccess = data?.access;
 
 							// if we have a query access, check if valid
-							if (queryAccess && !isProjectAccess(queryAccess)) {
-								throw new AccessDecoratorError(`queryOptions.access ${queryAccess} is not a valid project access.`);
+							if (queryAccess && !isWksAccess(queryAccess)) {
+								throw new AccessDecoratorError(`queryOptions.access ${queryAccess} is not a valid wks access.`);
 							}
 
-							// if we do ot have projectId in context/params or queryAccess, then, no enough information to validate access
-							if (projectId == null && !queryAccess) {
-								throw new AccessDecoratorError(`access ${access} on ${methodRef} requires a 'utx.projectId' or projectId second arg or queryOptions.access, but find none.`);
+							// if we do ot have wksId in context/params or queryAccess, then, no enough information to validate access
+							if (wksId == null && !queryAccess) {
+								throw new AccessDecoratorError(`access ${access} on ${methodRef} requires a 'utx.wksId' or wksId second arg or queryOptions.access, but find none.`);
 							}
 
-							// first, if projectId context, check access
-							if (projectId != null && await utx.hasProjectAccess(projectId, access)) {
+							// first, if wksId context, check access
+							if (wksId != null && await utx.hasWksAccess(wksId, access)) {
 								pass = true;
 								break;
 							}

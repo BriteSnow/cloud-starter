@@ -32,6 +32,9 @@ export const CORE_STORE_BUCKET = freeze({
 
 export const CORE_STORE_ROOT_DIR = env.core_store_root_dir!;
 
+// ->> FIXME MUST BE IN _conf.yaml
+// Note: For dev, we assume localhost:9000/_bucket_name_/. For prod, it will be the cdn base url to the core store bucket backend.
+export const CORE_STORE_CDN_BASE_URL = env.core_store_cdn_base_url!;
 
 //// Database
 export const DB_PASSWORD = env.db_password!;

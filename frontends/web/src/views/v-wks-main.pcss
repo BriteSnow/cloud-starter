@@ -1,0 +1,48 @@
+
+v-wks-main{
+	display: grid;
+	grid-template-columns: 15rem auto;
+	grid-template-rows: 1fr;
+	padding: 0;
+	& > nav{
+		background-color: var(--bkg-nav);
+		display: flex;
+		overflow: hidden;
+	}
+
+	& > section {
+		padding: 1rem;
+		
+		display: grid;
+		grid-template-columns: repeat(auto-fill, 16rem);
+		grid-template-rows: repeat(auto-fill, 12rem);
+		grid-gap: 2rem;
+
+		.media-add{
+			opacity: .2;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			background: var(--bdr-lightest);
+
+			border: dashed 3px var(--bdr);
+			justify-content: center;
+			h3{
+				color: black;
+			}
+			d-ico{
+				width: 3rem;
+				height: 3rem;
+				max-width: 3rem;
+				max-height: 3rem;
+			}
+
+			&:hover{
+				opacity: .5;
+			}
+		}
+	}
+
+}

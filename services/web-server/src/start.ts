@@ -10,7 +10,8 @@ import koaStatic from 'koa-static';
 import { extname } from 'path';
 import { AuthFailError, clearAuth } from './auth';
 import dseGenerics from './web/dse-generics';
-import dseProject from './web/dse-project';
+import dseMedia from './web/dse-media';
+import dseWks from './web/dse-wks';
 import { buildWebLogRecord, initKtx, KCustom, KState, Ktx } from './web/koa-utils';
 import authRequestMiddleware from './web/middleware-auth-request';
 import routerApiUserContext from './web/router-api-user-context';
@@ -35,7 +36,7 @@ async function main() {
 	app.proxy = true;
 
 	// set the body parser middleware
-	app.use(koaBody());
+	app.use(koaBody({ multipart: true }));
 
 	//// Handle error and log overall request 
 	app.use(handleRequestOverall);
@@ -85,8 +86,11 @@ async function main() {
 	//// Mount DSE (Data Service Endpoint) Web APIs
 	// generic dse as fall back. 
 	// Note: Once the application mature, this might be removed all together if all exposed API you be explicit.
-	app.use(dseProject('/api').middleware());
+	app.use(dseWks('/api').middleware());
+	app.use(dseMedia('/api').middleware());
 	app.use(dseGenerics('/api').middleware());
+
+
 
 
 	//// Path with not extension and not yet bound to API are assumed to be app state, and load the same index.html application
