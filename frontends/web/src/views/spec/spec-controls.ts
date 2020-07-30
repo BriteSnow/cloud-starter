@@ -1,7 +1,7 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-controls.ts" />
 
 import { addOnEvents, customElement, pull, push } from 'dom-native';
-import { wait } from 'shared/utils';
+import { wait } from 'utils-min';
 import { BaseSpecView } from './spec-views';
 
 @customElement('spec-controls')

@@ -44,7 +44,8 @@ export interface WksScopedEntity {
 export interface Media extends StampedEntity, WksScopedEntity {
 	id: number;
 	uuid: string;
-	name: string;
-	path: string;
+	srcName: string; // the orginal source name
+	name: string; // the name of the main media file (can have different extension as srcName)
+	folderPath: string; // from after the contentRoot
 	url: string; // set by MediaDao.parseRecord
 }

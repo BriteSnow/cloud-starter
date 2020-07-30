@@ -15,13 +15,18 @@ router({ watch }).route();
 
 async function watch() {
 
+	//#region    ---------- Frontend watch ---------- 
 	// watch the watch for frontends/web
 	spawn('./node_modules/.bin/vdev', ['watch', 'web']);
+	//#endregion ---------- /Frontend watch ---------- 
 
+	//#region    ---------- services watch ---------- 
+	// NOTE: the number is the debug port, and we avoid the standard 9229 as chrome tend to automatically ping it which create console noise
 	// watch services (configure in .vscode/launch.json for debug)
 	watchService('web-server', '9228');
+	watchService('vid-init', '9230');
+	//#endregion ---------- /services watch ---------- 
 
-	// watchService('other-service', '9230');
 
 	//#region    ---------- agent sql watch ---------- 
 	const recreateDbCr = new CallReducer(() => {
@@ -47,7 +52,6 @@ async function watch() {
 	icoWatcher.on('change', async function (filePath: string) {
 		await sketch();
 	});
-
 	//#endregion ---------- /ico watch ---------- 
 }
 

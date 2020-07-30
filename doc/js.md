@@ -1,11 +1,5 @@
 
 
-## Immutable
-
-- Use [immer](https://immerjs.github.io/immer/docs/introduction)
-- [immutable.js vs immer.js](https://www.youtube.com/watch?v=bFuRvcAEiHg)
-
-
 ## JavaScript Danger Zone
 
 Things to be aware about javascript hidden danger. 

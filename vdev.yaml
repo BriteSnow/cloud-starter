@@ -27,6 +27,8 @@ blocks:
   - queue
   - mock-s3
   - _common  
+  - name: vid-init
+    dbuildDependencies: _common  
   - name: agent
     dbuildDependencies: _common
   - name: web

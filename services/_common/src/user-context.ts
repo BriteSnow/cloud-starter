@@ -1,7 +1,5 @@
-import { Immutable } from 'immer';
 import { GlobalAccess, GlobalAccesses } from 'shared/access-types';
 import { User } from 'shared/entities';
-import { freeze } from 'shared/utils';
 import { getWksAccesses } from './da/access-wks';
 import { PerfContext } from './perf';
 
@@ -9,7 +7,7 @@ import { PerfContext } from './perf';
 /**
  * Subset of the User object for UserContext object
  */
-export interface UserForContext extends Immutable<Pick<User, 'id'>> {
+export interface UserForContext extends Readonly<Pick<User, 'id'>> {
 	accesses: GlobalAccesses;
 	wksId?: number; // the eventual wks scope of the context
 }
@@ -31,8 +29,8 @@ export interface UserContext {
  * Create a new SysContext on every call. 
  * Note: user 0, if hardcode to be the sys user and can be in memory only for now. 
  */
-export async function getSysContext(): Promise<UserContext> {
-	return newUserContext({ id: 0, accesses: { '#sys': true } }); // we know 0 is sys. 
+export async function getSysContext(opts?: { wksId: number }): Promise<UserContext> {
+	return newUserContext({ id: 0, wksId: opts?.wksId, accesses: { '#sys': true } }); // we know 0 is sys. 
 }
 
 
@@ -70,7 +68,7 @@ class UserContextImpl implements UserContext {
 		if (user.accesses['#sys'] && user.id !== 0) {
 			throw new Error(`FATAL ERROR - #sys is only valid for user.id 0, but was requested for (${user.id})`);
 		}
-		this.#user = freeze(user);
+		this.#user = Object.freeze(user);
 	}
 
 	get user() {

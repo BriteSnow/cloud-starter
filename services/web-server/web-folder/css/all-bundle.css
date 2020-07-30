@@ -1389,6 +1389,44 @@ v-home > section .card {
 			display: block;
 		}
 
+v-images{
+	padding: 1rem;
+	
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 16rem);
+	grid-template-rows: repeat(auto-fill, 12rem);
+	grid-gap: 2rem;
+
+}
+
+v-images .media-add{
+		opacity: .2;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		background: var(--bdr-lightest);
+
+		border: dashed 3px var(--bdr);
+		justify-content: center;
+	}
+
+v-images .media-add h3{
+			color: black;
+		}
+
+v-images .media-add d-ico{
+			width: 3rem;
+			height: 3rem;
+			max-width: 3rem;
+			max-height: 3rem;
+		}
+
+v-images .media-add:hover{
+			opacity: .5;
+		}
+
 v-login{
 	flex: 1;	
 }
@@ -1627,11 +1665,50 @@ v-nav a:hover{
 			background: #fff;
 		}
 
+v-videos{
+	padding: 1rem;
+	
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 16rem);
+	grid-template-rows: repeat(auto-fill, 12rem);
+	grid-gap: 2rem;
+
+}
+
+v-videos .media-add{
+		opacity: .2;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		background: var(--bdr-lightest);
+
+		border: dashed 3px var(--bdr);
+		justify-content: center;
+	}
+
+v-videos .media-add h3{
+			color: black;
+		}
+
+v-videos .media-add d-ico{
+			width: 3rem;
+			height: 3rem;
+			max-width: 3rem;
+			max-height: 3rem;
+		}
+
+v-videos .media-add:hover{
+			opacity: .5;
+		}
+
 v-wks-main{
 	display: grid;
 	grid-template-columns: 15rem auto;
 	grid-template-rows: 1fr;
 	padding: 0;
+
 
 }
 
@@ -1640,43 +1717,6 @@ v-wks-main > nav{
 		display: flex;
 		overflow: hidden;
 	}
-
-v-wks-main > section {
-		padding: 1rem;
-		
-		display: grid;
-		grid-template-columns: repeat(auto-fill, 16rem);
-		grid-template-rows: repeat(auto-fill, 12rem);
-		grid-gap: 2rem;
-	}
-
-v-wks-main > section .media-add{
-			opacity: .2;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-
-			background: var(--bdr-lightest);
-
-			border: dashed 3px var(--bdr);
-			justify-content: center;
-		}
-
-v-wks-main > section .media-add h3{
-				color: black;
-			}
-
-v-wks-main > section .media-add d-ico{
-				width: 3rem;
-				height: 3rem;
-				max-width: 3rem;
-				max-height: 3rem;
-			}
-
-v-wks-main > section .media-add:hover{
-				opacity: .5;
-			}
 
 /* NOTE: this is a class selector as it will be added by the d-base-dialog base */
 

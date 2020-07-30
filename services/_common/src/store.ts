@@ -20,7 +20,7 @@ export async function getCoreBucket() {
 
 
 function wrapBucket(bucket: Bucket) {
-	const bucketStream = getBucketStream(bucket.name);
+	const bucketStream = getBucketEventStream(bucket.name);
 
 	// wrap the upload
 	const fnUpload = bucket.upload;
@@ -44,14 +44,26 @@ function wrapBucket(bucket: Bucket) {
 
 
 //#region    ---------- Bucket Streams ---------- 
-function getBucketStream(bucketName: string) {
-	let bucketStream = bucketStreamByBucketName.get(bucketName);
-	if (bucketStream == null) {
-		const ioRedis = getRedisClient();
-		bucketStream = redstream(ioRedis, bucketName + '_event');
-		bucketStreamByBucketName.set(bucketName, bucketStream);
+/**
+ * If dedicatedClient, then, returns a new redstream with a new redis client (non cached)
+ * If dedicatedClient = false, then, returns
+ * @param bucketName Return a bucket stream 
+ * @param dedicatedClient 
+ */
+export function getBucketEventStream(bucketName: string, dedicatedClient = false) {
+	const streamKey = bucketName + '_event';
+	if (dedicatedClient) {
+		return redstream(getRedisClient(true), streamKey);
+	} else {
+		let bucketStream = bucketStreamByBucketName.get(bucketName);
+		if (bucketStream == null) {
+			const ioRedis = getRedisClient();
+			bucketStream = redstream(ioRedis, streamKey);
+			bucketStreamByBucketName.set(bucketName, bucketStream);
+		}
+		return bucketStream;
 	}
-	return bucketStream;
+
 }
 //#endregion ---------- /Bucket Streams ----------
 

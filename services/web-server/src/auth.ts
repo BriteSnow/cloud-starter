@@ -8,13 +8,12 @@
 import { HTTPS_MODE, WEB_TOKEN_DURATION } from 'common/conf';
 import { AppError } from 'common/error';
 import { createToken, newExpiration, UserCredForToken } from 'common/security/token';
-import { freeze } from 'shared/utils';
 import { Ktx } from 'web/koa-utils';
 
 
 const COOKIE_WTOKEN = 'token';
 const COOKIE_SECURE = HTTPS_MODE; // for local dev this will be false
-const COOKIE_WTOKEN_SET_OPTIONS = freeze({ maxAge: WEB_TOKEN_DURATION * 1000, httpOnly: true, secure: COOKIE_SECURE, sameSite: 'strict' } as const);
+const COOKIE_WTOKEN_SET_OPTIONS = Object.freeze({ maxAge: WEB_TOKEN_DURATION * 1000, httpOnly: true, secure: COOKIE_SECURE, sameSite: 'strict' } as const);
 
 export class AuthFailError extends AppError { }
 

@@ -11,7 +11,6 @@ class MediaDse extends ApiRouter {
 
 	@routePost('/dse/Media')
 	async create(ktx: ApiKtx) {
-		console.log('->> ...',);
 		const utx = ktx.state.utx;
 		// ctx.router available
 		const file = ktx.request.files?.file; // 'file' is the formData name for the first file

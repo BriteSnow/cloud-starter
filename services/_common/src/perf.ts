@@ -69,7 +69,6 @@ export class PerfContext {
 
 	/** 
 	 * Return the root items and all of the subItems 
-	 * TODO: would need to clone or use immerjs
 	 */
 	get items() { return this.rootItems }
 

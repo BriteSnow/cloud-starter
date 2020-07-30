@@ -85,9 +85,10 @@ CREATE TABLE "media" (
   ctime timestamp with time zone,
   mid bigint, 
   mtime timestamp with time zone,
-  "wksId" bigint NOT NULL,    
+  "wksId" bigint NOT NULL,
+  "srcName" varchar(64),
   name varchar(64),
-  path varchar(256),
+  "folderPath" varchar(256),
   FOREIGN KEY ("wksId") REFERENCES "wks" (id) on delete cascade
 );
 ALTER SEQUENCE media_id_seq RESTART WITH 1000;

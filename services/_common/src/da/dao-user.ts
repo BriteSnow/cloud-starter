@@ -7,7 +7,6 @@
 
 import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ROLES, isAccess } from 'shared/access-types';
 import { QueryOptions, User, USER_COLUMNS } from "shared/entities";
-import { freeze } from 'shared/utils';
 import { AppError, CommonErrorCode } from '../error';
 import { pwdEncrypt } from '../security/password';
 import { UserContext } from "../user-context";
@@ -182,7 +181,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		rawUserObj.accesses = UserDao.parseAccess(rawUserObj);
 
 		// Note: assume columns are correct
-		return freeze(rawUserObj) as UserCredForLogin | UserCredForAuth;
+		return Object.freeze(rawUserObj) as UserCredForLogin | UserCredForAuth;
 	}
 	//#endregion ---------- /Credential Methods ---------- 
 

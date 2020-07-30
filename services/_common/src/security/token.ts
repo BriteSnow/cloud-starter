@@ -8,7 +8,6 @@
 
 import crypto from 'crypto';
 import moment from 'moment';
-import { freeze } from 'shared/utils';
 import { WEB_TOKEN_DURATION, WEB_TOKEN_SALT } from '../conf';
 import { AppError } from '../error';
 import { b64dec, b64enc } from '../utils';
@@ -49,7 +48,7 @@ export function parseToken(token_string: string): TokenData {
 		const exp = b64dec(parts[1]);
 		const sign_b64 = parts[2];
 
-		return freeze({ uuid, exp, sign_b64 });
+		return Object.freeze({ uuid, exp, sign_b64 });
 
 	} catch {
 		throw new Error(ERROR_TOKEN_WRONG_FORMAT);

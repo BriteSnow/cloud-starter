@@ -3,7 +3,6 @@ import { checkToken, parseToken, UserCredForToken } from 'common/security/token'
 import { getSysContext, newUserContext, UserForContext } from 'common/user-context';
 import { Next } from 'koa';
 import { extname } from 'path';
-import { freeze } from 'shared/utils';
 import { asNum } from 'utils-min';
 import { AuthFailError, clearAuth, extractToken, setAuth } from '../auth';
 import { Ktx } from './koa-utils';
@@ -57,7 +56,7 @@ export async function authRequest(ktx: Ktx): Promise<UserForContext> {
 		const tokenData = parseToken(cookieAuthToken);
 		const { uuid } = tokenData;
 		const { id, tsalt, accesses } = await userDao.getUserCredForAuth(sysCtx, { uuid });
-		const cred: UserCredForToken = freeze({ uuid, tsalt }); // make sure can't be tampered between check and setAuth
+		const cred: UserCredForToken = Object.freeze({ uuid, tsalt }); // make sure can't be tampered between check and setAuth
 		checkToken(tokenData, cred);
 		setAuth(ktx, cred);
 		const wksId = asNum(ktx.query.wksId);

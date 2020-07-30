@@ -106,6 +106,6 @@ async function run(debug = false, serviceName: string, testGrep: string, podName
 }
 
 async function getPodName(serviceName: string) {
-	const podName = (await spawn('kubectl', ['get', 'pods', '-l', `run=bb-${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'], { capture: 'stdout' })).stdout.trim();
+	const podName = (await spawn('kubectl', ['get', 'pods', '-l', `run=bb-${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'], { capture: 'stdout' })).stdout?.trim();
 	return podName;
 }
