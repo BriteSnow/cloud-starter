@@ -10,31 +10,31 @@ export class WksScopedDao<E extends WksScopedEntity, I, Q extends QueryOptions<E
 
 	@AccessRequires('wa_content_view')
 	async get(utx: UserContext, id: I): Promise<E> {
-		this.scopeQuery(utx);
+		this.scopeData(utx);
 		return super.get(utx, id);
 	}
 
 	@AccessRequires('wa_content_create')
 	async create(utx: UserContext, data: Partial<E>): Promise<I> {
-		this.scopeQuery(utx, data);
+		this.scopeData(utx, data);
 		return super.create(utx, data)
 	}
 
 	@AccessRequires('wa_content_edit', "@cid")
 	async update(utx: UserContext, id: I, data: Partial<E>) {
-		this.scopeQuery(utx, data);
+		this.scopeData(utx, data);
 		return super.update(utx, id, data);
 	}
 
 	@AccessRequires('wa_content_edit', "@cid")
 	async list(utx: UserContext, queryOptions?: Q & CustomQuery): Promise<E[]> {
-		this.scopeData(utx, queryOptions);
+		this.scopeQuery(utx, queryOptions);
 		return super.list(utx, queryOptions);
 	}
 
 
 	//#region    ---------- Wks Scoped Helper Methods ---------- 
-	scopeData(utx: UserContext, queryOptions?: Q & CustomQuery) {
+	scopeQuery(utx: UserContext, queryOptions?: Q & CustomQuery) {
 		const wksId = utx.wksId;
 		if (wksId == null) {
 			throw new AppError(`${this.constructor.name}.list - cannot list WksScoped entities, no wksId in utx`);
@@ -45,7 +45,7 @@ export class WksScopedDao<E extends WksScopedEntity, I, Q extends QueryOptions<E
 		wksScopedQueryOptions.matching.wksId = wksId;
 	}
 
-	scopeQuery(utx: UserContext, data?: Partial<WksScopedEntity>) {
+	scopeData(utx: UserContext, data?: Partial<WksScopedEntity>) {
 		const wksId = utx.wksId;
 		if (wksId == null) {
 			throw new AppError(`${this.constructor.name} require UTX to have .wksId, but not found in utx`)
