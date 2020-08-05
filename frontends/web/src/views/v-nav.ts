@@ -1,11 +1,14 @@
 import { pathAt } from 'base/route';
 import { all, customElement, onHub } from 'dom-native';
 import { BaseViewElement } from './v-base';
+import { WksMainView } from './v-wks-main';
 
 const defaultPath = '';
 
 @customElement('v-nav')
 export class NavView extends BaseViewElement {
+
+	get wksId() { return (<WksMainView>this.closest('v-wks-main'))?.wksId }
 
 	//#region    ---------- Element & Hub Events ---------- 
 	@onHub('routeHub', 'CHANGE')
@@ -16,20 +19,18 @@ export class NavView extends BaseViewElement {
 
 	init() {
 		super.init();
-		this.innerHTML = _render();
+		this.innerHTML = _render(this.wksId);
 		this.refresh();
 	}
 
 	refresh() {
-		let path0 = pathAt(0);
-
-		path0 = (!path0) ? defaultPath : path0;
+		const idx = 1; // path ind
+		let urlName = pathAt(idx) ?? 'videos';
 
 		for (const a of all(this, 'a')) {
 			let href = a.getAttribute('href');
-			let linkPath0 = (href) ? href.split('/')[1] : undefined;
-			linkPath0 = (!linkPath0) ? '' : linkPath0;
-			if (linkPath0 === path0) {
+			let linkName = href?.split('/')[idx + 1] ?? ''; // has an extra / at start
+			if (linkName === urlName) {
 				a.classList.add('sel');
 			} else if (a.classList.contains('sel')) {
 				a.classList.remove('sel');
@@ -40,8 +41,7 @@ export class NavView extends BaseViewElement {
 }
 
 //// HTML
-function _render() {
-	return `	<a href="/">
-		<c-ico>home</c-ico><span class='bar'></span> <span class='label'>Home</span>
-	</a>`;
+function _render(wksId: number | null) {
+	return `<a href="/${wksId}/images"><span class='bar'></span><label>Images</label></a>
+			<a href="/${wksId}/videos"><span class='bar'></span><label>Videos</label></a>`;
 }

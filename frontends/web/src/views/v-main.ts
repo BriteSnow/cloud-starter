@@ -1,6 +1,7 @@
-import { getRouteWksId } from 'base/route';
+import { getRouteWksId, pathAt } from 'base/route';
 import { logoff, UserContext } from 'base/user-ctx';
 import { customElement, first, onEvent, onHub, push } from 'dom-native';
+import { isNotEmpty } from 'utils-min';
 import { BaseViewElement } from './v-base';
 
 const defaultPath = "";
@@ -72,19 +73,26 @@ export class MainView extends BaseViewElement {
 	}
 
 	refresh() {
-		// first, try to get the wksId from the route, and if valid, then, show v-wks-main
-		const wksId = getRouteWksId();
-		if (wksId != null) {
-			this.mainEl.innerHTML = `<v-wks-main wks-id="${wksId}"></v-wks-main>`;
-		} else {
-			const newPath = this.hasNewPathAt(0, defaultPath);
+		if (this.hasPathChanged(0)) {
+			// first, try to get the wksId from the route, and if valid, then, show v-wks-main
+			const wksId = getRouteWksId();
+			const newPath = pathAt(0);
+			console.log('->> ', newPath, wksId);
 
-			// update this view/content only if the path has changed
-			if (newPath != null) {
-				const tagName = tagNameByPath[newPath];
+			if (newPath != null && wksId != null) {
+				this.mainEl.innerHTML = `<v-wks-main wks-id="${wksId}"></v-wks-main>`;
+			}
+			else {
+				const name = isNotEmpty(newPath) ? newPath : '';
+
+				const tagName = tagNameByPath[name];
 				this.mainEl.innerHTML = `<${tagName}></${tagName}>`;
 			}
 		}
+
+
+
+
 
 	}
 
@@ -95,7 +103,7 @@ function _render() {
 	return `
 	<header>
 		<d-ico name="ico-menu">menu</d-ico>
-		<h3>CLOUD STARTER</h3>
+		<a href='/'><h3>CLOUD STARTER</h3></a>
 		<aside class="toogle-user-menu">
 			<c-ico>user</c-ico>
 			<div class="dx dx-name">Some name</div>

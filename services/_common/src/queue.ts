@@ -1,24 +1,76 @@
 import IORedis, { Redis } from "ioredis";
 import redstream, { objectDataParser, objectDataSerializer, RedStream } from 'redstream';
-import { MediaMainMp4, MediaNew } from './event/event-types';
+import { StreamEntry, XReadGroupResult } from 'redstream/dist/redstream';
+import { KHOST } from './conf';
+import { EventDic } from './event/event-types';
+import { typify } from './utils';
 
+export * from './event/event-assert';
+export * from './event/event-types';
 
 //#region    ---------- Stream Queues ----------
-type QueueStreamDic = {
-	'media_new': MediaNew,
-	'media_main_mp4': MediaMainMp4
+export interface Queue<N extends keyof EventDic> {
+	next(group: string): Promise<StreamEntry<EventDic[N]>>;
+	add(data: EventDic[N]): Promise<string>;
+	ack(group: string, entryId: string): Promise<number>;
 }
 
-export function getQueueStream<K extends keyof QueueStreamDic>(name: K): RedStream<QueueStreamDic[K]> {
-	const r = redstream(getRedisClient(true), {
+/** 
+ * Contains the application queue semantic apis on top of redis stream.
+ */
+class QueueImpl<N extends keyof EventDic> implements Queue<N>{
+	#stream: RedStream<EventDic[N]>
+	constructor(name: N) {
+		this.#stream = getStream(name);
+	}
+
+	/** Add a new event to the stream */
+	async add(data: EventDic[N]) {
+		return this.#stream.xadd(data);
+	}
+
+	/** 
+	 * Block xreadgroup the next one from a group (KHOST is the consumer) 
+	 **/
+	async next(group: string): Promise<StreamEntry<EventDic[N]>> {
+		let res: XReadGroupResult<EventDic[N]> | null = null;
+
+		for (; ;) {
+			res = await this.#stream.xreadgroup(group, KHOST, { block: true, count: 1 });
+			if (res?.entries[0]?.data != null) {
+				// TODO freeze before return (prevent caller to do any change)
+				return res.entries[0] as StreamEntry<EventDic[N]>;
+			}
+		}
+	}
+
+	/** XACK (remove from pending list) */
+	async ack(group: string, entryId: string) {
+		return this.#stream.xack(group, entryId);
+	}
+}
+
+// export function getQueue<N extends keyof DataEventDic>(name: N, forBlocking?: boolean): Queue<N>
+// export function getQueue<N extends keyof JobEventDic>(name: N, forBlocking?: boolean): Queue<N>
+export function getQueue<N extends keyof EventDic>(name: N, forBlocking = true): Queue<N> {
+	return new QueueImpl(name);
+}
+
+
+
+export function getStream<K extends keyof EventDic>(name: K, forBlocking = true): RedStream<EventDic[K]> {
+	const r = redstream(getRedisClient(forBlocking || 'common'), {
 		key: name,
-		dataParser: function (arr) { return objectDataParser(arr) as QueueStreamDic[K] },
+		dataParser: function (arr) {
+			const obj = objectDataParser(arr);
+			const data = typify(obj, { nums: ['mediaId', 'wksId'] });
+			return data as EventDic[K];
+		},
 		// TODO: needs to assert the obj
 		dataSerializer: function (obj: any) { return objectDataSerializer(obj) }
 	});
 	return r;
 }
-
 //#endregion ---------- /Stream Queues ----------
 
 
@@ -78,7 +130,7 @@ function createRedisClient(name: string) {
 		console.log(`INFO - Redis client for ${name} ready`);
 	});
 
-	return client
+	return client;
 }
 //#endregion ---------- /RedisClient Factory / Cache ----------
 

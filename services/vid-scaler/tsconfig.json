@@ -1,0 +1,63 @@
+/**
+ *   This is the tsconfig.json for the backend services (not for devops or frontends)
+ */
+
+ {
+	"compilerOptions": {
+		// ESNEXT for Node.js 14+
+		"target": "ESNEXT",
+
+    // When ESNEXT target, to use native class field. 
+		"useDefineForClassFields": true,
+
+		// For now, we keep the traditional commonsjs way
+		"module": "commonjs",
+		
+		// This is important to support 3rd party modules
+		"moduleResolution": "node",  
+		
+
+		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
+		"strict": true, 
+
+		// 99.99% of the code will be .ts, and .js files will just be module glue and does not need to be processed by typescript (keep the glue small)
+		"allowJs": false,
+		"checkJs": false,
+
+		"sourceMap": true,  // for debug
+
+		// This will be the code run by the npm run start
+		"outDir": "./dist",
+
+		// Code mapping
+		"rootDir": "../../",
+		"baseUrl": "./src/",  // main service code
+		"paths": {
+			"common/*": ["../../_common/src/*"], // backend services common code
+			"shared/*": ["../../../shared/src/*"] // frontend and backend shared code
+		},
+
+		// decorators for backend service code
+		"experimentalDecorators": true,
+		
+		// Needed to call import default (replaces allowSyntheticDefaultImports)
+		"esModuleInterop": true,
+
+		// Disallow inconsistently-cased references to the same file.
+		"forceConsistentCasingInFileNames": true  		
+	},
+
+	// We want more control about which code we will compile and exclude
+	"include": [
+		"./src/**/*.ts",
+		"./test/**/*.ts", 
+		// Note: shared/ and commont/ts will be compiled as imported by the service .ts code (~ tree shaking)
+		//       However, setup-module-aliases needs to be used (require) in entry file, and therefore explicitly inluded. 
+		"../_common/src/setup-module-aliases.ts"
+	],
+
+	"exclude": [
+		"node_modules",
+		".rpt2_cache" // this folder will be created by the rollup-typescript2, so, need to exlude it, can become confusing.
+	]
+}

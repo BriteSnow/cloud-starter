@@ -3,7 +3,6 @@ import { BaseDco, dcoHub } from './dco-base';
 import { webRequest } from './web-request';
 
 
-//#region    ---------- Create ---------- 
 class MediaDao extends BaseDco<Media, QueryOptions<Media>>{
 	constructor() { super('Media') }
 
@@ -26,8 +25,15 @@ class MediaDao extends BaseDco<Media, QueryOptions<Media>>{
 			return super.create(props);
 		}
 	}
+
+	async listImages(): Promise<Media[]> {
+		return super.list({ matching: { type: 'image' } });
+	}
+
+	async listVideos(): Promise<Media[]> {
+		return super.list({ matching: { type: 'video' } });
+	}
 }
-//#endregion ---------- /Create ----------
 
 
 export const wksDco = new BaseDco<Wks, QueryOptions<Wks>>('Wks');

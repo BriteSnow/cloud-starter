@@ -27,6 +27,8 @@ blocks:
   - queue
   - mock-s3
   - _common  
+  - name: vid-scaler
+    dbuildDependencies: _common    
   - name: vid-init
     dbuildDependencies: _common  
   - name: agent
@@ -44,7 +46,7 @@ blocks:
         rollupOptions:
           globals:
             d3: window.d3
-            handlebars: window.Handlebars        
+            handlebars: window.Handlebars
       - name: css
         entries: ['./pcss/main.pcss', './src/**/*.pcss']
         watch: ['./**/*.pcss','../_common/**/*.pcss'] # Only for watch. Any changes on those folder we trigger a full rebuild

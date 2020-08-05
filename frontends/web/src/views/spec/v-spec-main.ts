@@ -1,5 +1,6 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-main.ts" />
 
+import { pathAt } from 'base/route';
 import { all, customElement, first, onHub } from 'dom-native';
 import { BaseViewElement } from 'views/v-base';
 import { tagNameByName } from './spec-paths';
@@ -26,8 +27,8 @@ export class SpecMainView extends BaseViewElement {
 	}
 
 	refresh() {
-		const newPath = this.hasNewPathAt(1, defaultPath);
-		if (newPath != null) {
+		if (this.hasPathChanged(1)) {
+			const newPath = pathAt(1) ?? 'typo';
 			const tagName = tagNameByName[newPath]!;
 			this.contentEl.innerHTML = `<${tagName}></${tagName}>`;
 
@@ -42,6 +43,7 @@ export class SpecMainView extends BaseViewElement {
 				}
 			}
 		}
+
 	}
 }
 

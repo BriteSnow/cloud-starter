@@ -1,11 +1,11 @@
-import { all, append, attr, customElement, elem } from 'dom-native';
+import { pathAt } from 'base/route';
+import { all, append, attr, customElement, elem, onHub } from 'dom-native';
 import { asNum } from 'utils-min';
 import { BaseViewElement } from '../views/v-base';
 
 export const t = 123;
 
 const subViews: any = {
-	'': 'v-images',
 	'images': 'v-images',
 	'videos': 'v-videos'
 }
@@ -15,6 +15,12 @@ export class WksMainView extends BaseViewElement {
 	//// properties
 	get wksId() { return asNum(attr(this, 'wks-id')) }
 
+	//#region    ---------- Element & Hub Events ---------- 
+	@onHub('routeHub', 'CHANGE')
+	routeChange() {
+		this.refresh();
+	}
+	//#endregion ---------- /Element & Hub Events ----------
 
 	//#endregion ---------- /Data Event ---------- 
 	async init() {
@@ -24,11 +30,15 @@ export class WksMainView extends BaseViewElement {
 	}
 
 	async refresh() {
-		const newPath = this.hasNewPathAt(1, '');
-		if (newPath) {
-			all(this, ':scope > *')[1]?.remove();
-			append(this, elem(subViews[newPath]));
+
+		if (this.hasPathChanged(1)) {
+			const newPath = pathAt(1) ?? 'videos';
+			if (newPath) {
+				all(this, ':scope > *')[1]?.remove();
+				append(this, elem(subViews[newPath]));
+			}
 		}
+
 
 	}
 
@@ -37,10 +47,6 @@ export class WksMainView extends BaseViewElement {
 
 
 function _render(wksId: number | null) {
-	return `<nav>
-			<a href="/${wksId}/images"><label>Images</label></a>
-			<a href="/${wksId}/videos"><label>Videos</label></a>
-		</nav>
-  `
+	return `<v-nav></v-nav>`
 }
 

@@ -25,6 +25,7 @@ async function watch() {
 	// watch services (configure in .vscode/launch.json for debug)
 	watchService('web-server', '9228');
 	watchService('vid-init', '9230');
+	watchService('vid-scaler', '9231');
 	//#endregion ---------- /services watch ---------- 
 
 

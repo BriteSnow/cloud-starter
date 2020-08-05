@@ -41,11 +41,18 @@ export interface WksScopedEntity {
 	wksId: number;
 }
 
+export type MediaType = 'video' | 'image';
+export type MediaResolution = '480p30' | '360p30';
+
 export interface Media extends StampedEntity, WksScopedEntity {
 	id: number;
+	type: MediaType;
 	uuid: string;
 	srcName: string; // the orginal source name
 	name: string; // the name of the main media file (can have different extension as srcName)
 	folderPath: string; // from after the contentRoot
+	sd: MediaResolution;
+
 	url: string; // set by MediaDao.parseRecord
+	sdUrl?: string; // set by MediaDao.parseRecord
 }

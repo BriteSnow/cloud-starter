@@ -19,13 +19,17 @@ v-main{
 			height: 2rem;
 			cursor: pointer;
 		}
-		& > h3 {
-			@mixin typo-h4{};
-			
+		& > a {
 			grid-column: 2;
-			align-self: center;
-			justify-self: left;
-			color: #fff;
+			display: flex;
+			align-items: center;
+			& > h3 {
+				@mixin typo-h3{};
+				align-self: center;
+				justify-self: left;
+				color: #fff;
+			}
+
 		}
 
 		& > aside{

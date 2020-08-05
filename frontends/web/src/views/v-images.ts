@@ -44,7 +44,7 @@ export class ImageView extends BaseViewElement {
 	}
 
 	async refresh() {
-		const mediaList = await mediaDco.list();
+		const mediaList = await mediaDco.listImages();
 		this.contentEl.innerHTML = _renderContent(mediaList);
 	}
 
@@ -56,7 +56,7 @@ function _renderContent(mediaList: Media[] = []) {
 	return `
 		<div class="media-add">
 			<d-ico name="ico-add"></d-ico>
-			<h3>Add Video</h3>
+			<h3>Add Images</h3>
 		</div>
 		${mediaList.map(m => `
 		<div class="card" data-id="${m.id}" data-type="Media">

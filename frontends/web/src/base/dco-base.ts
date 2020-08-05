@@ -28,7 +28,7 @@ export class BaseDco<E, F> {
 	}
 
 	async list(filter?: F): Promise<E[]> {
-		const result = await webGet(`/api/dse/${this._entityType}`, { body: filter });
+		const result = await webGet(`/api/dse/${this._entityType}`, { params: filter });
 		if (result.success) {
 			return result.data as any[];
 		} else {

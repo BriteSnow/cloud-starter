@@ -1,5 +1,8 @@
+import { lookup } from 'mime-types';
+import { MediaType } from 'shared/entities';
+import { isBoolean, isNum, isString } from 'utils-min';
 
-export { asNum } from 'utils-min';
+export { asNum, isNum, isString } from 'utils-min';
 export * from './utils-cloud-starter';
 
 
@@ -32,6 +35,21 @@ export function b64enc(str: string) {
 //#endregion ---------- /base64 encoding ----------
 
 
+//#region    ---------- Section ---------- 
+/** Return the 'image' or 'video' corresponding to mimeType or throw error */
+export function getMediaType(fileName: string): MediaType {
+	const mimeType = lookup(fileName) || '';
+	const [type, subType] = mimeType.split('/');
+	if (type == 'image' || type == 'video') {
+		return type;
+	} else {
+		throw new Error(`File ${fileName} is not of type image or video but ${mimeType}`);
+	}
+
+}
+//#endregion ---------- /Section ---------- 
+
+//#region    ---------- Types ---------- 
 /** 
  * Convert the first level properties to num or bool if property name match the opts.nums or opts.bools 
  * 
@@ -57,3 +75,19 @@ export function typify(obj: any, opts: { nums?: string[], bools?: string[] }): a
 	}
 	return newObj;
 }
+
+export function typecheck(obj: any, opts: { nums?: string[], bools?: string[], strs?: string[] }) {
+
+	opts.nums?.forEach(name => {
+		if (!isNum(obj[name])) throw new Error(`object ${obj}.${name} is not a number`)
+	});
+
+	opts.bools?.forEach(name => {
+		if (!isBoolean(obj[name])) throw new Error(`object ${obj}.${name} is not a boolean`)
+	});
+
+	opts.strs?.forEach(name => {
+		if (!isString(obj[name])) throw new Error(`object ${obj}.${name} is not a string`)
+	});
+}
+//#endregion ---------- /Types ----------

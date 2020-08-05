@@ -19,7 +19,6 @@ class DseGenerics extends ApiRouter {
 		if (ktx.query.matching) {
 			queryOptions.matching = JSON.parse(ktx.query.matching);
 		}
-
 		const entities = await dao.list(ctx, queryOptions);
 
 		return { success: true, data: entities };

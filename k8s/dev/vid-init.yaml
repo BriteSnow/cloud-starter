@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: cstar-vid-init
+  name: cstar-vid-init-dep
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: cstar-vid-init
+  template:
+    metadata:
+      labels:
+        run: cstar-vid-init
+    spec:
+      volumes:
+        # Those volumes are for development, it allow REPL dev from local build
+        - name: cstar-vid-init-src
+          hostPath:
+            path: '{{projectDir}}services/vid-init/src'
+            type: Directory
+        - name: cstar-vid-init-dist
+          hostPath:
+            path: '{{projectDir}}services/vid-init/dist'
+            type: Directory
+      containers:
+        - image: localhost:5000/cstar-vid-init:{{imageTag}}
+          name: cstar-vid-init-ctn
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: cstar-config
+            - secretRef:
+                name: cstar-secret
+          env:
+            - name: service_name
+              value: vid-init                    
+          volumeMounts:
+            - mountPath: /service/src
+              name: cstar-vid-init-src
+            - mountPath: /service/dist
+              name: cstar-vid-init-dist
+      restartPolicy: Always

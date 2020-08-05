@@ -78,6 +78,8 @@ CREATE TABLE "wks" (
 ALTER SEQUENCE wks_id_seq RESTART WITH 1000;
 
 
+CREATE TYPE media_type AS ENUM ('image', 'video');
+CREATE TYPE media_res AS ENUM ('480p30', '360p30');
 CREATE TABLE "media" (
   id bigserial PRIMARY KEY,
   uuid uuid NOT NULL UNIQUE DEFAULT gen_random_uuid(),
@@ -86,9 +88,11 @@ CREATE TABLE "media" (
   mid bigint, 
   mtime timestamp with time zone,
   "wksId" bigint NOT NULL,
+  type media_type NOT NULL,
   "srcName" varchar(64),
   name varchar(64),
   "folderPath" varchar(256),
+  sd media_res, -- the low definition suffix like '480p60' (must be available in s3)
   FOREIGN KEY ("wksId") REFERENCES "wks" (id) on delete cascade
 );
 ALTER SEQUENCE media_id_seq RESTART WITH 1000;

@@ -9,8 +9,8 @@
   "main": "dist/vid-init/src/start.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/services/vid-init/src/start",
-    "dstart": "node --inspect dist/services/vid-init/src/start"
+    "start": "node dist/services/vid-scaler/src/start",
+    "dstart": "node --inspect dist/services/vid-scaler/src/start"
   },
   "author": "",
   "license": "ISC",

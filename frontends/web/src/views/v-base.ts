@@ -5,20 +5,18 @@ type CacheMap = Map<string, HTMLElement | HTMLElement[] | null>;
 
 export class BaseViewElement extends BaseHTMLElement {
 	// current path dic
-	private currentPaths: { [pathIdx: string]: string } = {};
+	private currentPaths: { [pathIdx: string]: string | null } = {};
 
 	/** Returns the path at the index if it has changed from last called. */
-	hasNewPathAt(idx: number, defaultPath: string) {
+	hasPathChanged(idx: number) {
 
-		const path = pathAt(idx) || defaultPath;
-
+		const urlPath = pathAt(idx);
 		const currentPath = this.currentPaths[idx];
-		if (path !== currentPath) {
-			this.currentPaths[idx] = path;
-			return path;
-		} else {
-			return null;
-		}
+
+		// update the path
+		this.currentPaths[idx] = urlPath;
+
+		return currentPath !== urlPath;
 
 	}
 

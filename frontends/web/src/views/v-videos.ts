@@ -13,7 +13,18 @@ export class VideosView extends BaseViewElement {
 	//#region    ---------- Element Events ---------- 
 	@onEvent('dragenter,dragover', '.media-add')
 	enableDrop(evt: DragEvent) {
-		evt.preventDefault()
+		evt.preventDefault();
+		const firstItem = evt.dataTransfer?.items[0];
+		if (firstItem != null) {
+			if (firstItem.type.startsWith('video')) {
+				// we are ok. 
+				console.log('->> adding video');
+				// Note: for this event, evt.dataTransfer?.files[0] is not defined
+			} else {
+				// TODO: we are not
+				console.log(`->> not valid video ${firstItem.type} video`);
+			}
+		}
 	}
 
 	@onEvent('drop', '.media-add')
@@ -21,8 +32,10 @@ export class VideosView extends BaseViewElement {
 		evt.preventDefault();
 		evt.stopPropagation();
 		const file = evt.dataTransfer?.files?.[0];
-		if (file != null) {
+		if (file != null && file.type.startsWith('video')) {
 			await mediaDco.create({ file });
+		} else {
+			// TODO: show message not valid
 		}
 	}
 	//#endregion ---------- /Element Events ----------
@@ -40,7 +53,7 @@ export class VideosView extends BaseViewElement {
 	}
 
 	async refresh() {
-		const mediaList = await mediaDco.list();
+		const mediaList = await mediaDco.listVideos();
 		this.contentEl.innerHTML = _renderContent(mediaList);
 	}
 
@@ -48,7 +61,7 @@ export class VideosView extends BaseViewElement {
 
 
 
-function _renderContent(mediaList: (Media & { isVid?: boolean })[] = []) {
+function _renderContent(mediaList: Media[] = []) {
 	return `
 		<div class="media-add">
 			<d-ico name="ico-add"></d-ico>
@@ -61,13 +74,9 @@ function _renderContent(mediaList: (Media & { isVid?: boolean })[] = []) {
 			<d-ico name="ico-more"></d-ico>
 			</header>
 			<section>
-			${m.url.endsWith('.mp4') ? `
-				<video controls height="75">
-					<source src="${m.url}" type="video/mp4">
+				<video controls>
+					<source src="${m.sdUrl ?? m.url}" type="video/mp4">
 				</video>			
-			` : `
-				<img src="${m.url}" />
-			`}
 			</section>
 		</div>		
 		`).join('\n')}
