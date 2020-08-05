@@ -1,6 +1,7 @@
 
 import { WksAccesses } from './access-types';
 import { StampedEntity } from './entities-base';
+import { JobEventName } from './event-types';
 
 export * from './entities-base';
 
@@ -41,6 +42,7 @@ export interface WksScopedEntity {
 	wksId: number;
 }
 
+//#region    ---------- Media ---------- 
 export type MediaType = 'video' | 'image';
 export type MediaResolution = '480p30' | '360p30';
 
@@ -56,3 +58,33 @@ export interface Media extends StampedEntity, WksScopedEntity {
 	url: string; // set by MediaDao.parseRecord
 	sdUrl?: string; // set by MediaDao.parseRecord
 }
+//#endregion ---------- /Media ---------- 
+
+//#region    ---------- Job ---------- 
+export type JobState = 'new' | 'started' | 'completed' | 'skipped' | 'failed';
+
+export interface Job {
+	id: number,
+	state: JobState,
+
+	event: JobEventName,
+
+	wksId?: number, // can be undefined when not for a workspace
+	onEntity?: string, // the entity type name e.g., "Media"
+	onId?: number, // the entity id (for now support only entity with number as id)
+
+	newTime?: string,
+	startTime?: string,
+	endTime?: string,
+
+	ntd: boolean, // nothing done (when the job was already processed)
+
+	todo?: any, // the ...Todo event (todo: check if we should type generic this one)
+	done?: any, // the ...Done event (todo: check if we should type generic this one)
+	progress?: { [name: string]: number }, // the step progress in (0 to 100) Names are snake format e.g., {framing_generate: 25, framing_upload: 12}
+
+	err_code?: string, // only if state = failed
+	err_msg?: string, // only if state = failed
+}
+
+//#endregion ---------- /Job ---------- 

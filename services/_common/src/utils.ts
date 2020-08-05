@@ -1,5 +1,4 @@
 import { lookup } from 'mime-types';
-import { MediaType } from 'shared/entities';
 import { isBoolean, isNum, isString } from 'utils-min';
 
 export { asNum, isNum, isString } from 'utils-min';
@@ -37,15 +36,8 @@ export function b64enc(str: string) {
 
 //#region    ---------- Section ---------- 
 /** Return the 'image' or 'video' corresponding to mimeType or throw error */
-export function getMediaType(fileName: string): MediaType {
-	const mimeType = lookup(fileName) || '';
-	const [type, subType] = mimeType.split('/');
-	if (type == 'image' || type == 'video') {
-		return type;
-	} else {
-		throw new Error(`File ${fileName} is not of type image or video but ${mimeType}`);
-	}
-
+export function getMimeType(fileName: string): string {
+	return lookup(fileName) || 'unknown';
 }
 //#endregion ---------- /Section ---------- 
 

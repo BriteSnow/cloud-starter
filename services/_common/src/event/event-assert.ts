@@ -1,9 +1,9 @@
+import { AllEventDic } from 'shared/event-types';
 import { typecheck } from '../utils';
-import { EventDic } from './event-types';
 
 
 
-export function assertEvent<N extends keyof EventDic>(event: N, val: any): asserts val is EventDic[N] {
+export function assertEvent<N extends keyof AllEventDic>(event: N, val: any): asserts val is AllEventDic[N] {
 	// basic check for now 
 	// FIXME: Needs to do correct check
 	typecheck(val, { nums: ['mediaId', 'wksId'] });

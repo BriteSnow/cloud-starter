@@ -1,14 +1,13 @@
 import { File } from 'formidable'; // from koa-body
 import * as Path from 'path';
-import { Media, MediaResolution } from 'shared/entities';
+import { Media, MediaResolution, MediaType } from 'shared/entities';
 import { CORE_STORE_CDN_BASE_URL, CORE_STORE_ROOT_DIR } from '../conf';
 import { AppError } from '../error';
-import { getQueue } from '../queue';
+import { getAppQueue } from '../queue';
 import { getCoreBucket } from '../store';
 import { UserContext } from '../user-context';
-import { getMediaType } from '../utils';
+import { getMimeType } from '../utils';
 import { WksScopedDao } from './dao-wks-scoped';
-import { wksDao } from './daos';
 
 
 export class MediaDao extends WksScopedDao<Media, number> {
@@ -33,6 +32,9 @@ export class MediaDao extends WksScopedDao<Media, number> {
 
 	//#region    ---------- Media Specific Methods ---------- 
 	async createWithFile(utx: UserContext, data: Partial<Media> & { file: File }): Promise<number> {
+		// NOTE: Needed to avoid cyclic issues in some cases which makes the MediaDao undefined in export. Investigate if cleaner alternative.
+		const { wksDao } = await import('./daos');
+
 		const wksId = utx.wksId;
 
 		if (wksId == null) {
@@ -47,17 +49,19 @@ export class MediaDao extends WksScopedDao<Media, number> {
 		const srcName = file.name;
 		const name = srcName; // at start same name
 		const type = getMediaType(name);
+
 		const mediaId = await this.create(utx, { srcName, name, type });
 		const media = await this.get(utx, mediaId);
 		const folderPath = `wks/${wks.uuid}/medias/${media.uuid}/`;
 		await coreStore.upload(file.path, CORE_STORE_ROOT_DIR + folderPath + srcName);
 		await this.update(utx, mediaId, { folderPath });
 
-		getQueue('MediaNew').add({
+		const mediaMimeType = getMimeType(name);
+		getAppQueue('MediaNew').add({
 			type: 'MediaNew',
 			wksId,
 			mediaId,
-			name
+			mediaMimeType
 		});
 
 		return mediaId;
@@ -65,6 +69,17 @@ export class MediaDao extends WksScopedDao<Media, number> {
 	//#endregion ---------- /Media Specific Methods ---------- 
 }
 
-export function getResMp4Name(name: string, res: MediaResolution) {
-	return Path.parse(name) + `-${res}.mp4`;
+export function getResMp4Name(fileName: string, res: MediaResolution) {
+	return Path.parse(fileName).name + `-${res}.mp4`;
+}
+
+export function getMediaType(fileName: string): MediaType {
+	const mimeType = getMimeType(fileName);
+	const [type, subType] = mimeType.split('/');
+	if (type == 'image' || type == 'video') {
+		return type;
+	} else {
+		throw new Error(`File ${fileName} is not of type image or video but ${mimeType}`);
+	}
+
 }

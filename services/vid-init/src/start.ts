@@ -2,8 +2,7 @@ require('../../_common/src/setup-module-aliases');
 
 import { CORE_STORE_ROOT_DIR, __version__ } from 'common/conf';
 import { mediaDao } from 'common/da/daos';
-import { vidInitJobbManager } from 'common/job';
-import { getQueue } from 'common/queue';
+import { getAppQueue, getJobQueue } from 'common/queue';
 import { getCoreBucket } from 'common/store';
 import { getSysContext } from 'common/user-context';
 import { mkdirs } from 'fs-extra';
@@ -27,12 +26,16 @@ async function start() {
 
 	new Worker(__dirname + '/wkr-bridge-media-new.js');
 
+	const mediaMainMp4Queue = getAppQueue('MediaMainMp4');
+
+	const vidInitJobQueue = getJobQueue('VidInitJob');
+
 	for (; ;) {
-		const entry = await vidInitJobbManager.next();
+		const entry = await vidInitJobQueue.nextJob();
+
+		const { wksId, mediaId } = entry.data;
 
 		try {
-			const wksId = Number(entry.data.wksId);
-			const mediaId = Number(entry.data.mediaId);
 			console.log('->> entry', entry);
 			const sysUtx = await getSysContext({ wksId });
 			const media = await mediaDao.get(sysUtx, mediaId);
@@ -67,12 +70,15 @@ async function start() {
 			// NOTE: Even if the data was already mp4, then, we still send the event MediaMainMp4 for other to pickup
 			const mediaAfterUpdate = await mediaDao.get(sysUtx, mediaId);
 			if (mediaAfterUpdate.name.endsWith('.mp4')) {
-				const mediaMainMp4Queue = getQueue('MediaMainMp4');
 				await mediaMainMp4Queue.add({ type: 'MediaMainMp4', wksId, mediaId });
 			}
 
-		} catch (ex) {
+			await vidInitJobQueue.done(entry);
 
+		} catch (ex) {
+			const msg = `ERROR - vid-init - Cannot process media ${mediaId} - cause: ${ex} `;
+			await vidInitJobQueue.fail(entry, new Error(msg));
+			console.log(msg)
 		}
 
 

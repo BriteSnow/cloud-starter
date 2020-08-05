@@ -3,8 +3,7 @@ require('../../_common/src/setup-module-aliases');
 import { CORE_STORE_ROOT_DIR, __version__ } from 'common/conf';
 import { getResMp4Name } from 'common/da/dao-media';
 import { mediaDao } from 'common/da/daos';
-import { vidScalerJobbManager } from 'common/job';
-import { getQueue } from 'common/queue';
+import { getAppQueue, getJobQueue } from 'common/queue';
 import { getCoreBucket } from 'common/store';
 import { getSysContext } from 'common/user-context';
 import { mkdirs } from 'fs-extra';
@@ -27,10 +26,12 @@ async function start() {
 
 	new Worker(__dirname + '/wkr-bridge-media-mp4.js');
 
-	const mediaScaledMp4Queue = getQueue('MediaScaledMp4');
+	const mediaScaledMp4Queue = getAppQueue('MediaScaledMp4');
+
+	const vidScalerJobQueue = getJobQueue('VidScalerJob');
 
 	for (; ;) {
-		const entry = await vidScalerJobbManager.next();
+		const entry = await vidScalerJobQueue.nextJob();
 		let ffmpegResult: any = null;
 
 		try {
@@ -78,9 +79,12 @@ async function start() {
 				await mediaDao.update(sysUtx, mediaId, { sd: res });
 			}
 
-			await vidScalerJobbManager.done(entry);
+			await vidScalerJobQueue.done(entry);
+
 		} catch (ex) {
-			console.log(`ERROR - vid-scaler  ${ex} (ffmepg error: ${ffmpegResult?.stderr}) (skip and go next)`, ex);
+			const msg = `ERROR - vid-scaler  ${ex} (ffmepg error: ${ffmpegResult?.stderr}) (skip and go next) - cause: ${ex}`;
+			await vidScalerJobQueue.fail(entry, new Error(msg));
+			console.log(msg, ex);
 		}
 
 	}

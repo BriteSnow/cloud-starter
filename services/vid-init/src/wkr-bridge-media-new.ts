@@ -1,32 +1,35 @@
 require('../../_common/src/setup-module-aliases');
 
-import { assertEvent, getQueue, JobVidInitTodo } from 'common/queue';
+import { assertEvent, getAppQueue, getJobQueue, VidInitJob } from 'common/queue';
 
 
 main();
 
 async function main() {
-	console.log('->> bridge-media-new', getQueue);
+	console.log('->> bridge-media-new');
 
 	// the read stream to bridge from
-	const mediaNewQueue = getQueue('MediaNew');
+	const mediaNewQueue = getAppQueue('MediaNew');
 
 	// the write stream to bridge to
-	const vidInitQueue = getQueue('JobVidInitTodo');
+	const vidInitQueue = getJobQueue('VidInitJob');
 
-	const streamGroup = 'vid-init-bridge';
+	const streamGroup = 'VidInitJobBridge';
 
 	for (; ;) {
 		const entry = await mediaNewQueue.next(streamGroup);
 		assertEvent('MediaNew', entry.data);
-		const { wksId, mediaId, name } = entry.data;
+		const { wksId, mediaId, mediaMimeType } = entry.data;
 
-		console.log('->> worker-bridge read from MediaNew ', entry);
+		if (mediaMimeType.startsWith('video')) {
+			console.log('->> worker-bridge read from MediaNew ', entry);
 
-		const vidInitTodo: JobVidInitTodo = { type: 'JobVidInitTodo', wksId, mediaId };
-		await vidInitQueue.add(vidInitTodo);
+			const vidInitTodo: VidInitJob = { type: 'VidInitJob', wksId, mediaId };
+			await vidInitQueue.add(vidInitTodo);
 
-		console.log('->> worker-bridge sent to JobVidInitTodo', vidInitTodo);
+			console.log('->> worker-bridge sent to VidInitJob', vidInitTodo);
+		}
+
 
 		// acknowledge this stream entry for this group (i.e., mark it as completed, remove from the redis stream group pending)
 		await mediaNewQueue.ack(streamGroup, entry.id);

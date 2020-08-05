@@ -1,45 +1,72 @@
 import IORedis, { Redis } from "ioredis";
 import redstream, { objectDataParser, objectDataSerializer, RedStream } from 'redstream';
 import { StreamEntry, XReadGroupResult } from 'redstream/dist/redstream';
+import { AllEventDic, AppEventDic, JobEventDic } from 'shared/event-types';
 import { KHOST } from './conf';
-import { EventDic } from './event/event-types';
 import { typify } from './utils';
 
+export * from 'shared/event-types';
 export * from './event/event-assert';
-export * from './event/event-types';
 
-//#region    ---------- Stream Queues ----------
-export interface Queue<N extends keyof EventDic> {
-	next(group: string): Promise<StreamEntry<EventDic[N]>>;
-	add(data: EventDic[N]): Promise<string>;
+export interface Queue<N extends keyof D, D = AllEventDic> {
+	next(group: string, timeout: number): Promise<StreamEntry<D[N]> | null>;
+	next(group: string): Promise<StreamEntry<D[N]>>;
+
+	add(data: D[N]): Promise<string>;
 	ack(group: string, entryId: string): Promise<number>;
 }
 
+export interface JobQueue<N extends keyof D, D = JobEventDic> extends Queue<N, D> {
+	nextJob(timeout: number): Promise<StreamEntry<D[N]> | null>;
+	nextJob(): Promise<StreamEntry<D[N]>>;
+
+	done(entry: StreamEntry<D[N]>): Promise<void>;
+	fail(entry: StreamEntry<D[N]>, error: Error): Promise<void>;
+}
+
+// export function getQueue<N extends keyof DataEventDic>(name: N, forBlocking?: boolean): Queue<N>
+// export function getQueue<N extends keyof JobEventDic>(name: N, forBlocking?: boolean): Queue<N>
+export function getAppQueue<N extends keyof AppEventDic>(name: N, forBlocking = true): Queue<N> {
+	return new QueueImpl(name);
+}
+
+export function getJobQueue<N extends keyof JobEventDic>(name: N, forBlocking = true): JobQueue<N> {
+	return new JobQueueImpl(name);
+}
+
+
+//#region    ---------- Stream Queues ----------
 /** 
  * Contains the application queue semantic apis on top of redis stream.
  */
-class QueueImpl<N extends keyof EventDic> implements Queue<N>{
-	#stream: RedStream<EventDic[N]>
+class QueueImpl<N extends keyof AllEventDic> implements Queue<N>{
+	#stream: RedStream<AllEventDic[N]>
 	constructor(name: N) {
 		this.#stream = getStream(name);
 	}
 
 	/** Add a new event to the stream */
-	async add(data: EventDic[N]) {
+	async add(data: AllEventDic[N]) {
 		return this.#stream.xadd(data);
 	}
 
-	/** 
-	 * Block xreadgroup the next one from a group (KHOST is the consumer) 
-	 **/
-	async next(group: string): Promise<StreamEntry<EventDic[N]>> {
-		let res: XReadGroupResult<EventDic[N]> | null = null;
+	/**
+	 * 
+	 * @param group 
+	 * @param timeout 
+	 */
+	async next(group: string, timeout: number): Promise<StreamEntry<AllEventDic[N]> | null>
+	async next(group: string): Promise<StreamEntry<AllEventDic[N]>>
+	async next(group: string, timeout?: number): Promise<StreamEntry<AllEventDic[N]> | null> {
+		let res: XReadGroupResult<AllEventDic[N]> | null = null;
+
+		const block = timeout ?? true;
 
 		for (; ;) {
-			res = await this.#stream.xreadgroup(group, KHOST, { block: true, count: 1 });
+			res = await this.#stream.xreadgroup(group, KHOST, { block, count: 1 });
 			if (res?.entries[0]?.data != null) {
 				// TODO freeze before return (prevent caller to do any change)
-				return res.entries[0] as StreamEntry<EventDic[N]>;
+				return res.entries[0] as StreamEntry<AllEventDic[N]>;
 			}
 		}
 	}
@@ -50,29 +77,45 @@ class QueueImpl<N extends keyof EventDic> implements Queue<N>{
 	}
 }
 
-// export function getQueue<N extends keyof DataEventDic>(name: N, forBlocking?: boolean): Queue<N>
-// export function getQueue<N extends keyof JobEventDic>(name: N, forBlocking?: boolean): Queue<N>
-export function getQueue<N extends keyof EventDic>(name: N, forBlocking = true): Queue<N> {
-	return new QueueImpl(name);
+class JobQueueImpl<N extends keyof JobEventDic> extends QueueImpl<N>{
+	#group: string;
+
+	constructor(name: N) {
+		super(name);
+		this.#group = name + '-JGRP'
+	}
+
+	async nextJob(): Promise<StreamEntry<JobEventDic[N]>>
+	async nextJob(timeout: number): Promise<StreamEntry<JobEventDic[N]> | null>
+	async nextJob(timeout?: number): Promise<StreamEntry<JobEventDic[N]> | null> {
+		return super.next(this.#group, timeout!); // TS-TRICK  otherwise, it say super.next cannot have undefined timeout
+	}
+
+	async done(entry: StreamEntry<JobEventDic[N]>) {
+		await this.ack(this.#group, entry.id);
+	}
+
+	async fail(entry: StreamEntry<JobEventDic[N]>, error: Error) {
+		// TODO: needs to log error in db
+		await this.ack(this.#group, entry.id);
+	}
 }
 
-
-
-export function getStream<K extends keyof EventDic>(name: K, forBlocking = true): RedStream<EventDic[K]> {
+export function getStream<K extends keyof AllEventDic>(name: K, forBlocking = true): RedStream<AllEventDic[K]> {
 	const r = redstream(getRedisClient(forBlocking || 'common'), {
 		key: name,
 		dataParser: function (arr) {
 			const obj = objectDataParser(arr);
 			const data = typify(obj, { nums: ['mediaId', 'wksId'] });
-			return data as EventDic[K];
+			return data as AllEventDic[K];
 		},
 		// TODO: needs to assert the obj
 		dataSerializer: function (obj: any) { return objectDataSerializer(obj) }
 	});
 	return r;
 }
-//#endregion ---------- /Stream Queues ----------
 
+//#endregion ---------- /Stream Queues ----------
 
 //#region    ---------- RedisClient Factory / Cache ---------- 
 const REDIS_MAX_RETRY = 100;

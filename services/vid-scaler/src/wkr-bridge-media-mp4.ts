@@ -1,18 +1,18 @@
 require('../../_common/src/setup-module-aliases');
 
-import { assertEvent, getQueue, JobVidScalerTodo } from 'common/queue';
+import { assertEvent, getAppQueue, getJobQueue, VidScalerJob } from 'common/queue';
 
 
 main();
 
 async function main() {
-	console.log('->> bridge-media-new', getQueue);
+	console.log('->> bridge-media-new');
 
 	// the read stream to bridge from
-	const mediaMp4Queue = getQueue('MediaMainMp4');
+	const mediaMp4Queue = getAppQueue('MediaMainMp4');
 
 	// the write stream to bridge to
-	const vidScalerTodoQueue = getQueue('JobVidScalerTodo');
+	const vidScalerTodoQueue = getJobQueue('VidScalerJob');
 
 	const streamGroup = 'vid-scaler-bgrp';
 
@@ -24,10 +24,10 @@ async function main() {
 
 		console.log('->> worker-bridge read from MediaMainMp4 ', entry);
 
-		const vidScalerTodo: JobVidScalerTodo = { type: 'JobVidScalerTodo', wksId, mediaId, res: '480p30' };
+		const vidScalerTodo: VidScalerJob = { type: 'VidScalerJob', wksId, mediaId, res: '480p30' };
 		await vidScalerTodoQueue.add(vidScalerTodo);
 
-		console.log('->> worker-bridge sent to JobVidScalerTodo', vidScalerTodo);
+		console.log('->> worker-bridge sent to VidScalerJob', vidScalerTodo);
 
 		// acknowledge this stream entry for this group (i.e., mark it as completed, remove from the redis stream group pending)
 		await mediaMp4Queue.ack(streamGroup, entry.id);

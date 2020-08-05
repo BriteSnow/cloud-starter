@@ -19,10 +19,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/uuid": "^8.0.0",
+    "@types/uuid": "^8.0.1",
     "backlib": "^0.2.0",
     "cmdrouter": "^0.3.1",
-    "knex": "^0.21.2",
+    "knex": "^0.21.3",
     "module-alias": "^2.2.2",
     "moment": "^2.27.0",
     "p-spawn": "^0.5.4",
