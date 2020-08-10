@@ -261,3 +261,29 @@ This allows quick full search with `->>` which is unique enough to just show the
 ## Blog posts and articles
 
 - [cjs vs AMD vs UMD vs ESM](https://dev.to/iggredible/what-the-heck-are-cjs-amd-umd-and-esm-ikm)
+
+
+## JavaScript Danger Zone
+
+Things to be aware about javascript hidden danger. 
+
+### Number Parsing
+```js
+// Number() parsing
+v = Number('123'); // OK. === 123 (litteral 123)
+v = Number(''); // DANGER. === 0;
+
+```
+
+### Array Number Sorting
+
+```js
+a = [2, 1,3];
+a.sort(); // OK. [1, 2, 3]
+
+b = [-5, -3];
+b.sort(); // DANGER. [-3, -5] (string ordering)
+
+// GUIDELINE: When sorting number ALWAYS have comparator. 
+b.sort((a, b) => a - b);
+```
