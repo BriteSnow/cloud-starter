@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: cstar-db # we label run: ... all the resources that run a particular service (here cstar-db)
-  name: cstar-db-srv # name will be the -... three letters abbreviation of the Kind
+    run: cba-db # we label run: ... all the resources that run a particular service (here cba-db)
+  name: cba-db-srv # name will be the -... three letters abbreviation of the Kind
   namespace: default
 spec:
   ports:
@@ -11,29 +11,29 @@ spec:
     protocol: TCP
     targetPort: 5432
   selector:
-    run: cstar-db # this will select from the template.spec.metadata.labels (the pod)
+    run: cba-db # this will select from the template.spec.metadata.labels (the pod)
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    run: cstar-db
-  name: cstar-db-dep
+    run: cba-db
+  name: cba-db-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-db
+      run: cba-db
   template:
     metadata:
       labels:
-        run: cstar-db
+        run: cba-db
     spec:
       containers:
-      - image: '{{registry}}cstar-db:{{imageTag}}'
+      - image: '{{registry}}cba-db:{{imageTag}}'
         imagePullPolicy: Always
-        name: cstar-db-ctn
+        name: cba-db-ctn
         ports:
         - containerPort: 5432
           protocol: TCP

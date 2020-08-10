@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/router-auth-google-oauth.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/services/web-server/src/web/router-auth-google-oauth.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { GOOGLE_OAUTH } from 'common/conf';

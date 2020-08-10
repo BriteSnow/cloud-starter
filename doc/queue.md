@@ -1,5 +1,5 @@
 
-The `cloud-starter` Big App pattern is based on a full event-based cloud application architecture, based on [Redis Stream](https://redis.io/topics/streams-intro), which has all services talking to a bus/queue, and avoid any service-to-service direct communication. 
+The `cloud-bigapp` Big App pattern is based on a full event-based cloud application architecture, based on [Redis Stream](https://redis.io/topics/streams-intro), which has all services talking to a bus/queue, and avoid any service-to-service direct communication. 
 
 
 ![](images/arch-queue.png)
@@ -49,7 +49,7 @@ Here are the key points of such architecture:
 
 ## Notes
 
-- Right now, the cloud-starter code create a new `ioredis` client for each `getAppQueue` call, which could be optimized. 
+- Right now, the cloud-bigapp code create a new `ioredis` client for each `getAppQueue` call, which could be optimized. 
 - However, sharing of `ioredis` client will prevent a call to do a redis call (`.xadd`) if before it had a blocking call. Consequently, all queue are safer, for now, to have their own client until we have an API scheme that allows requesting a "add only" queue interface (i.e., without the `.next..` methods)
 
 

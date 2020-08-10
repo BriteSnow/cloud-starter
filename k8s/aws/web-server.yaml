@@ -2,28 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: cstar-web-server
-  name: cstar-web-server-dep
+    run: cba-web-server
+  name: cba-web-server-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-web-server
+      run: cba-web-server
   template:
     metadata:
       labels:
-        run: cstar-web-server
+        run: cba-web-server
     spec:
       containers:
-        - image: '{{registry}}cstar-web-server:{{imageTag}}'
-          name: cstar-web-server-ctn
+        - image: '{{registry}}cba-web-server:{{imageTag}}'
+          name: cba-web-server-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: cstar-config
+                name: cba-config
             - secretRef:
-                name: cstar-secret
+                name: cba-secret
           env:
             - name: service_name
               value: web-server                

@@ -4,7 +4,7 @@ import * as Path from 'path';
 import { sketchdev } from 'sketchdev';
 import { loadBlocks, now, printLog } from 'vdev';
 
-export const SKETCH_FILE = '.design/cstar-design.sketch';
+export const SKETCH_FILE = '.design/cba-design.sketch';
 export const SKETCH_ICO_DIST_DIR = '.sketchdev-ico-dist/';
 export const SKETCH_CIM_DIST_DIR = '.sketchdev-cim-dist/';
 
@@ -21,7 +21,7 @@ export async function sketch() {
 async function style() {
 	if (await fs.pathExists(SKETCH_FILE)) {
 		const start = now();
-		const { web: webDir, admin: adminDir } = await loadWebFolders();
+		const { web: webDir } = await loadWebFolders();
 		const sketch = await sketchdev(SKETCH_FILE);
 		const outFile = Path.join(COMMON_DIR, 'pcss/common-colors.pcss');
 		await sketch.exportStyles({
@@ -40,13 +40,13 @@ async function ico() {
 
 
 	if (await fs.pathExists(SKETCH_FILE)) {
-		const { web: webDir, admin: adminDir } = await loadWebFolders();
+		const { web: webDir } = await loadWebFolders();
 		const start = now();
 
 		// Create icons
 		await fs.saferRemove(SKETCH_ICO_DIST_DIR);
 		const webFolderSvgDir = Path.join(webDir, './svg');
-		const adminFolderSvgDir = Path.join(adminDir, './svg');
+		// const adminFolderSvgDir = Path.join(adminDir, './svg');
 
 		await sketchdev(SKETCH_FILE).exportIcons(SKETCH_ICO_DIST_DIR, {
 			artboardName: 'ico/', // startsWith
@@ -56,24 +56,8 @@ async function ico() {
 
 		await fs.copy(Path.join(SKETCH_ICO_DIST_DIR, 'sprite/'), webFolderSvgDir);
 		const svgFile = Path.join(webFolderSvgDir, 'sprite.svg');
-		await fs.copy(svgFile, Path.join(adminFolderSvgDir, 'sprite.svg')); // add it to the admin dir
+		// await fs.copy(svgFile, Path.join(adminFolderSvgDir, 'sprite.svg')); // add it to the admin dir
 		await printLog("ico", start, Path.join(webFolderSvgDir, 'sprite.svg'));
-
-		// Create cims 
-		await fs.saferRemove(SKETCH_CIM_DIST_DIR);
-		const spriteFile = Path.join(SKETCH_CIM_DIST_DIR, 'sprite/cims-sprite.svg');
-
-		await fs.mkdirs(SKETCH_CIM_DIST_DIR);
-		await sketchdev(SKETCH_FILE).exportArtboards({
-			out: Path.join(SKETCH_CIM_DIST_DIR, 'svg/'),
-			artboardName: 'cim/', // startsWith
-			flatten: '-',
-			sprite: spriteFile
-		});
-
-		await fs.copy(spriteFile, Path.join(webFolderSvgDir, 'cims-sprite.svg'));
-		await printLog("cims", start, Path.join(webFolderSvgDir, 'cims-sprite.svg'));
-
 
 	} else {
 		console.log(`ico - Sketch app file ${SKETCH_FILE} does not exist (skipping)`);
@@ -84,9 +68,9 @@ async function ico() {
 //     Second Pass Design -> Second Pass Impl
 
 
-async function loadWebFolders(): Promise<{ admin: string, web: string }> {
+async function loadWebFolders(): Promise<{ web: string }> {
 	const blocks = await loadBlocks();
-	const admin = blocks.admin.baseDistDir!;
+	// const admin = blocks.admin.baseDistDir!;
 	const web = blocks.web.baseDistDir!;
-	return { admin, web };
+	return { web };
 }

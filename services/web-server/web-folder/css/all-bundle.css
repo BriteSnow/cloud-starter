@@ -1658,6 +1658,8 @@ v-nav a .bar{
 
 v-nav a d-ico{
 			grid-column: 3;
+			fill: var(--ico-dark);
+			opacity: .5;
 			align-self: center; /* vertical center */
   		justify-self: center; /* horizontal center */
 		}
@@ -1677,8 +1679,8 @@ v-nav a.sel .label{
 				font-weight: 600;
 			}
 
-v-nav a.sel c-ico{
-				fill: var(--ico-dark);
+v-nav a.sel d-ico{
+				opacity: 1;
 			}
 
 v-nav a.sel .bar{
@@ -1885,7 +1887,7 @@ v-spec-main > section.content > * .card.tall{
 				grid-row: auto / span 2;
 			}
 
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-check.pcss" /> */
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-check.pcss" /> */
 
 c-check{
 	display: block;
@@ -1908,7 +1910,7 @@ c-check svg.symbol{
 		height: 100%;
 	}
 
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-ico-symbol.pcss" /> */
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-ico-symbol.pcss" /> */
 
 c-ico, c-symbol{
 	/* making sure that parent don't change value case, which is used as asset name */
@@ -1928,7 +1930,7 @@ c-ico svg.symbol,c-symbol svg.symbol{
 		height: 100%;
 	}
 
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-input.pcss" /> */
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-input.pcss" /> */
 
 c-input{
 	
@@ -1977,8 +1979,8 @@ c-input > input{
 	}
 
 c-input.no-label{
-		grid-template-rows: 0 2rem; /* TODO: cstar */		
-		min-height: 2rem;  /* TODO: cstar */
+		grid-template-rows: 0 2rem; /* TODO: cba */		
+		min-height: 2rem;  /* TODO: cba */
 		height: 2rem;
 	}
 
@@ -2003,7 +2005,7 @@ c-input[readonly]{
 		border-bottom: solid 1px var(--bdr-lighter);
 	}
 
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-menu.pcss" /> */
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-menu.pcss" /> */
 
 c-menu{
 	position: absolute;
@@ -2035,7 +2037,7 @@ c-menu > *:hover{
 			background: var(--highlight);
 		}
 
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-options.pcss" /> */
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-options.pcss" /> */
 
 c-options{
 	display: grid;
@@ -2076,7 +2078,7 @@ c-options > div:last-of-type{
 		border-right: none;
 	}
 
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-select.pcss" /> */
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-select.pcss" /> */
 
 c-select{
 	display: block;
@@ -2139,8 +2141,8 @@ c-select c-ico svg.symbol{
 		}
 
 c-select.no-label{
-		height: 2rem;  /* TODO: cstar */
-		grid-template-rows: 0 2rem; /* TODO: cstar */
+		height: 2rem;  /* TODO: cba */
+		grid-template-rows: 0 2rem; /* TODO: cba */
 	}
 
 c-select[disabled]{

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cstar-secret
+  name: cba-secret
 type: Opaque
 data:
   db_password: d2VsY29tZQ==
@@ -14,7 +14,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cstar-config
+  name: cba-config
 data:
   https_mode: 'false'
 
@@ -26,15 +26,15 @@ data:
   core_store_root_dir: core-store-root/
 
   # for dev only (points to kubernetes minio docker image). Comment when on S3
-  core_store_minio_endpoint: http://cstar-mock-s3-srv:9000
+  core_store_minio_endpoint: http://cba-mock-s3-srv:9000
 
   # Note: For dev. In prod, this will be the CDN url that will point to the core bucket backend.
   core_store_cdn_base_url: http://localhost:9000/core-store-bucket/
 
   # Database
-  db_host: cstar-db-srv
-  db_database: cstar_db
-  db_user: cstar_user
+  db_host: cba-db-srv
+  db_database: cba_db
+  db_user: cba_user
 
   # Google
   google_oauth_redirect_url: http://localhost:8080/goauth-redirect

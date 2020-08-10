@@ -1,4 +1,4 @@
-# Cloud-Starter Documentation
+# Cloud-BigApp Documentation
 
 Current documents: 
 

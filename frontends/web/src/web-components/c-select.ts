@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/web-components/c-select.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-select.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { BaseFieldElement } from '@dom-native/ui';

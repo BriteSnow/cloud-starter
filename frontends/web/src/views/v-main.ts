@@ -103,7 +103,7 @@ function _render() {
 	return `
 	<header>
 		<d-ico name="ico-menu">menu</d-ico>
-		<a href='/'><h3>CLOUD STARTER</h3></a>
+		<a href='/'><h3>CLOUD BIGAPP</h3></a>
 		<aside class="toogle-user-menu">
 			<c-ico>user</c-ico>
 			<div class="dx dx-name">Some name</div>

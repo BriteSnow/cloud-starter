@@ -136,7 +136,7 @@ export class LoginView extends BaseViewElement {
 function _render() {
 	return `
 	<div class="dialog">
-		<header>CLOUD-STARTER</header>
+		<header>CLOUD-BIGAPP</header>
 		<section class="content">
 			<d-input name="username" placeholder="username"></d-input>
 			<d-input name="pwd" password placeholder="password" ico-trail="d-ico-visible"></d-input>

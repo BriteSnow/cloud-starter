@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cstar-web-server-srv
+  name: cba-web-server-srv
   labels:
-    run: cstar-web-server
+    run: cba-web-server
   namespace: default
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-west-2:349642121055:certificate/777797eb-a8f6-4673-9f90-9155747d704f
@@ -22,4 +22,4 @@ spec:
       protocol: TCP
       targetPort: 8080      
   selector:
-    run: cstar-web-server
+    run: cba-web-server

@@ -1,8 +1,8 @@
 {
-  "name": "cloud-starter",
+  "name": "cloud-bigapp",
   "version": "0.0.0",
   "__version__": "DROP-002-SNAPSHOT",
-  "description": "Cloud Code that Scale",
+  "description": "Cloud Big App code blueprint. Start to Scale!",
   "main": "start.js",
   "dependencies": {
     "@dom-native/ui": "^0.1.1",
@@ -44,7 +44,7 @@
     "test": "./node_modules/.bin/ts-node scripts/cmd-test.ts test",
     "testw": "./node_modules/.bin/ts-node scripts/cmd-test.ts testw",
     "testd": "./node_modules/.bin/ts-node scripts/cmd-test.ts testd",
-    "ico": "./node_modules/.bin/ts-node scripts/cmd-ico.ts ico",
+    "sketch": "./node_modules/.bin/ts-node scripts/cmd-sketch.ts sketch",
     "watch": "./node_modules/.bin/ts-node scripts/cmd-watch.ts watch",
     "vdev": "./node_modules/.bin/vdev",
     "recreateDb": "./node_modules/.bin/vdev kexec agent npm run recreateDb",

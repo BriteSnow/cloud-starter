@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/error.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/services/common/src/error.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 export const CommonErrorCode = Object.freeze({

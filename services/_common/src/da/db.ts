@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/da/db.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/services/common/src/da/db.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import KnexClient, { QueryBuilder } from 'knex';
@@ -8,7 +8,7 @@ import { Pool } from 'tarn';
 import { isEmpty } from 'utils-min';
 import { DB, KHOST } from '../conf';
 import { UserContext } from '../user-context';
-import { nowTimestamp } from '../utils-cloud-starter';
+import { nowTimestamp } from '../utils';
 export { QueryInterface } from 'knex';
 
 

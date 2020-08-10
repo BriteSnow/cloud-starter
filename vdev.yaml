@@ -1,4 +1,4 @@
-system: cstar
+system: cba
 baseBlockDir: services/ # used as the base dir .dir (as '${baseDir}/${blockName}/'')
 imageTag: '{{__version__}}'
 

@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: cstar-queue
-  name: cstar-queue-srv
+    run: cba-queue
+  name: cba-queue-srv
 spec:
   type: LoadBalancer
   ports:
@@ -11,23 +11,23 @@ spec:
     protocol: TCP
     targetPort: 6379
   selector:
-    run: cstar-queue # this will select from the template.spec.metadata.labels (the pod)
+    run: cba-queue # this will select from the template.spec.metadata.labels (the pod)
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cstar-queue-dep
+  name: cba-queue-dep
   labels:
-    run: cstar-queue
+    run: cba-queue
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-queue
+      run: cba-queue
   template:
     metadata:
       labels:
-        run: cstar-queue
+        run: cba-queue
     spec:
       # The host-sys volume and init containers are to disable the THP for redis. 
       # Will be disabled at the node level, but other services do not need THP to function properly. 
@@ -43,9 +43,9 @@ spec:
               mountPath: /host-sys
           command: ["sh", "-c", "echo never >/host-sys/kernel/mm/transparent_hugepage/enabled"] 
       containers:
-        - image: localhost:5000/cstar-queue:{{imageTag}}
+        - image: localhost:5000/cba-queue:{{imageTag}}
           imagePullPolicy: Always
-          name: cstar-queue-ctn
+          name: cba-queue-ctn
           env:
             - name: service_name
               value: queue              

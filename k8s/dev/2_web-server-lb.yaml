@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: cstar-web-server
-  name: cstar-web-server-srv
+    run: cba-web-server
+  name: cba-web-server-srv
   namespace: default
 spec:
   ports:
@@ -12,5 +12,5 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    run: cstar-web-server
+    run: cba-web-server
   type: LoadBalancer

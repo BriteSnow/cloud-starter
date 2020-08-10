@@ -2,44 +2,44 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: cstar-vid-init
-  name: cstar-vid-init-dep
+    run: cba-vid-init
+  name: cba-vid-init-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-vid-init
+      run: cba-vid-init
   template:
     metadata:
       labels:
-        run: cstar-vid-init
+        run: cba-vid-init
     spec:
       volumes:
         # Those volumes are for development, it allow REPL dev from local build
-        - name: cstar-vid-init-src
+        - name: cba-vid-init-src
           hostPath:
             path: '{{projectDir}}services/vid-init/src'
             type: Directory
-        - name: cstar-vid-init-dist
+        - name: cba-vid-init-dist
           hostPath:
             path: '{{projectDir}}services/vid-init/dist'
             type: Directory
       containers:
-        - image: localhost:5000/cstar-vid-init:{{imageTag}}
-          name: cstar-vid-init-ctn
+        - image: localhost:5000/cba-vid-init:{{imageTag}}
+          name: cba-vid-init-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: cstar-config
+                name: cba-config
             - secretRef:
-                name: cstar-secret
+                name: cba-secret
           env:
             - name: service_name
               value: vid-init                    
           volumeMounts:
             - mountPath: /service/src
-              name: cstar-vid-init-src
+              name: cba-vid-init-src
             - mountPath: /service/dist
-              name: cstar-vid-init-dist
+              name: cba-vid-init-dist
       restartPolicy: Always

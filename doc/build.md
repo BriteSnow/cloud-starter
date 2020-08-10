@@ -20,7 +20,7 @@ Each `block` match to a base block folder, which is typically under `/services/_
     - `_system_` is the `vdev.yaml - system` property (the system prefix in a way)
     - `_service_name_` is usually the name of the folder under `services`
     - `_image_tag_` isuaully the `__version__` (see the Version section below)
-  - For example, given the [] the [vdev.yaml](../vdev.yaml) and [package.json](../package.json) tag will be `http://localhost:5000/cstar-web-server-DROP-001-SNAPSHOT`
+  - For example, given the [] the [vdev.yaml](../vdev.yaml) and [package.json](../package.json) tag will be `http://localhost:5000/cba-web-server-DROP-001-SNAPSHOT`
 
 
 ## Versioning

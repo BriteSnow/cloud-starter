@@ -13,7 +13,7 @@ _[back](README.md)_
 <head></head>
 <body>
 <v-main> <!-- MainView creates children below on init() and put <v-project... based on routing -->
-  <header><h1>CLOUD-STARTER</h1> <c-user>...</c-user></header>
+  <header><h1>CLOUD-BIGAPP</h1> <c-user>...</c-user></header>
   <v-nav>...</v-nav>
   <main>
     <v-project> <!-- ProjectView will create its children below on init() -->

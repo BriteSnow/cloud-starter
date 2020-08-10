@@ -3,49 +3,49 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: cstar-agent
-  name: cstar-agent-dep
+    run: cba-agent
+  name: cba-agent-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-agent
+      run: cba-agent
   template:
     metadata:
       labels:
-        run: cstar-agent
+        run: cba-agent
     spec:
       volumes:
-        - name: cstar-agent-src
+        - name: cba-agent-src
           hostPath:
             path: '{{projectDir}}services/agent/src'
             type: Directory
-        - name: cstar-agent-sql
+        - name: cba-agent-sql
           hostPath:
             path: '{{projectDir}}services/agent/sql'
             type: Directory
-        - name: cstar-agent-dist
+        - name: cba-agent-dist
           hostPath:
             path: '{{projectDir}}services/agent/dist'
             type: Directory            
       containers:
-        - image: 'localhost:5000/cstar-agent:{{imageTag}}'
-          name: cstar-agent-ctn
+        - image: 'localhost:5000/cba-agent:{{imageTag}}'
+          name: cba-agent-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: cstar-config
+                name: cba-config
             - secretRef:
-                name: cstar-secret
+                name: cba-secret
           env:
             - name: service_name
               value: agent          
           volumeMounts:
             - mountPath: /service/src
-              name: cstar-agent-src
+              name: cba-agent-src
             - mountPath: /service/sql
-              name: cstar-agent-sql
+              name: cba-agent-sql
             - mountPath: /service/dist
-              name: cstar-agent-dist              
+              name: cba-agent-dist              
       restartPolicy: Always

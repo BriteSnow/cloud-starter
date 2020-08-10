@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: cstar-mock-s3 # we label run: ... all the resources that run a particular service (here cstar-mock-s3)
-  name: cstar-mock-s3-srv # name will be the -... three letters abbreviation of the Kind
+    run: cba-mock-s3 # we label run: ... all the resources that run a particular service (here cba-mock-s3)
+  name: cba-mock-s3-srv # name will be the -... three letters abbreviation of the Kind
   namespace: default
 spec:
   ports:
@@ -11,30 +11,30 @@ spec:
     protocol: TCP
     targetPort: 9000
   selector:
-    run: cstar-mock-s3 # this will select from the template.spec.metadata.labels (the pod)
+    run: cba-mock-s3 # this will select from the template.spec.metadata.labels (the pod)
   type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: cstar-mock-s3
-  name: cstar-mock-s3-dep
+    run: cba-mock-s3
+  name: cba-mock-s3-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-mock-s3
+      run: cba-mock-s3
   template:
     metadata:
       labels:
-        run: cstar-mock-s3
+        run: cba-mock-s3
     spec:
       containers:
-      - image: localhost:5000/cstar-mock-s3:{{imageTag}}
+      - image: localhost:5000/cba-mock-s3:{{imageTag}}
         imagePullPolicy: Always
-        name: cstar-mock-s3-ctn
+        name: cba-mock-s3-ctn
         env:
           - name: service_name
             value: mock-s3        

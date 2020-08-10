@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-main.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/views/spec/spec-main.ts" />
 
 import { pathAt } from 'base/route';
 import { all, customElement, first, onHub } from 'dom-native';

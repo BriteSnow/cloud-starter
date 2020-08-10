@@ -42,6 +42,6 @@ export class NavView extends BaseViewElement {
 
 //// HTML
 function _render(wksId: number | null) {
-	return `<a href="/${wksId}/images"><span class='bar'></span><label>Images</label></a>
-			<a href="/${wksId}/videos"><span class='bar'></span><label>Videos</label></a>`;
+	return `<a href="/${wksId}/images"><span class='bar'></span><d-ico name="ico-images"></d-ico><label>Images</label></a>
+			<a href="/${wksId}/videos"><span class='bar'></span><d-ico name="ico-videos"></d-ico><label>Videos</label></a>`;
 }

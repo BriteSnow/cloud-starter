@@ -1,7 +1,7 @@
 {
   "name": "web-server",
   "version": "1.0.0",
-  "description": "Cloud Starter main web-server (API and serving html/js/css)",
+  "description": "Cloud Big App",
   "main": "dist/start.js",
   "scripts": {
     "start": "node dist/services/web-server/src/start",
@@ -26,7 +26,7 @@
     "fs-extra-plus": "^0.5.18",
     "googleapis": "^58.0.0",
     "ioredis": "^4.17.3",
-    "knex": "^0.21.2",
+    "knex": "^0.21.4",
     "koa-body": "^4.2.0",
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",

@@ -1,8 +1,7 @@
 (All code & content are [MIT](https://opensource.org/licenses/MIT) licensed.)
 
-**cloud-starter** is a blueprint code starter for building modern and scalable multi-service based cloud application. 
+**cloud-bigapp** is a code blueprint to build highly scalable big application with the minimum complexity. This approach is part of BriteSnow's **Big App, Small Team** approach. 
 
-**NOTE:** The architecture principle and much of the sample codes have been proven and used for real production system, however, the documentation is still in progress. 
 
 Key Documents: [Architecture](doc/arch.md) | [UI Development](doc/ui.md)
 
@@ -39,13 +38,14 @@ The key code structure is as follow:
 
 For more information, see [Architecture - Tech Stack](doc/arch.md#TechStack)
 
-- **Main Docker OS:** `Alpine` (small, well supported)
-  - `Debian/buster[-slim]` For/When Rust and hopefully ML (`Unbutu` for ML if no choice)
-- **Main Backend Runtime/Language:** `Node.js / TypeScript` (see above, mature, robust, scalable, high-productive)
+- **Kubernetes:** For Dev, Test, and Prod.
+- **Main Docker OS:** `Debian-Buster-Slim`
+- **Main Backend Runtime/Language:** `Node.js / TypeScript` (robust and mature runtime and ecosystem, highly typed and expressive language)
+- **Secondary Backend Runtime/Language:**
   - `Rust` When GC based language not appropriate (should be an exception). 
   - `Python` For Machine Learning model scripting.
 - **Database:** `Postgresql` (robust, mature, advanced, with no-sql capability with jsonb)
-- **Web:** `TypeScript`, `PostCss`, `DOM MVC`, [Rollup](https://www.npmjs.com/package/rollup) ([dom-native](https://github.com/dom-native/dom-native) Dom Centric MVC. simple scale better, used right the DOM is a solid foundation for building large application UIs))
+- **Web:** `TypeScript`, `PostCss`, [Rollup](https://www.npmjs.com/package/rollup) ([dom-native](https://github.com/dom-native/dom-native) Dom Centric MVC. simple scale better, used right the DOM is a solid foundation for building large application UIs))
 - **IDE:** `VSCode` (best in class productivity with **TypeScript**, robust, fast, extensible with an amazing community). 
 
 

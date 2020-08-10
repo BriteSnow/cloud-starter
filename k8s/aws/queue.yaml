@@ -2,36 +2,36 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: cstar-queue
-  name: cstar-queue-srv
+    run: cba-queue
+  name: cba-queue-srv
 spec:
   ports:
   - port: 6379
     protocol: TCP
     targetPort: 6379
   selector:
-    run: cstar-queue # this will select from the template.spec.metadata.labels (the pod)
+    run: cba-queue # this will select from the template.spec.metadata.labels (the pod)
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: cstar-queue-dep
+  name: cba-queue-dep
   labels:
-    run: cstar-queue
+    run: cba-queue
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-queue
+      run: cba-queue
   template:
     metadata:
       labels:
-        run: cstar-queue
+        run: cba-queue
     spec:
       containers:
-        - image: '{{registry}}cstar-queue:{{imageTag}}'
+        - image: '{{registry}}cba-queue:{{imageTag}}'
           imagePullPolicy: Always
-          name: cstar-queue-ctn
+          name: cba-queue-ctn
           ports:
             - containerPort: 6379
               protocol: TCP

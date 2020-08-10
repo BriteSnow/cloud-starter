@@ -3,26 +3,26 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: cstar-agent
-  name: cstar-agent-dep
+    run: cba-agent
+  name: cba-agent-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-agent
+      run: cba-agent
   template:
     metadata:
       labels:
-        run: cstar-agent
+        run: cba-agent
     spec:
       containers:
-        - image: '{{registry}}cstar-agent:{{imageTag}}'
-          name: cstar-agent-ctn
+        - image: '{{registry}}cba-agent:{{imageTag}}'
+          name: cba-agent-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: cstar-config
+                name: cba-config
             - secretRef:
-                name: cstar-secret
+                name: cba-secret
       restartPolicy: Always

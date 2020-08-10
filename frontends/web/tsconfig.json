@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/tsconfig.json" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/tsconfig.json" />
 {
 	"compilerOptions": {
 		// For browser client, we target edge and above (es2018 seems to safe https://kangax.github.io/compat-table/es2016plus/)

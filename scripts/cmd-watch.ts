@@ -6,7 +6,7 @@ import { wait } from 'utils-min';
 import { sketch, SKETCH_FILE } from './cmd-sketch';
 import { CallReducer } from './utils';
 
-const IMG_NAME_PREFIX = 'cstar-';
+const IMG_NAME_PREFIX = 'cba-';
 const NOT_RESTART_IF_PATH_HAS = '/test/';
 
 
@@ -60,7 +60,7 @@ async function watch() {
 async function watchService(serviceName: string, debugPort: string) {
 	const serviceDir = `services/${serviceName}`;
 
-	// kubectl port-forward $(kubectl get pods -l run=cstar-web-server --no-headers=true -o custom-columns=:metadata.name) 9229
+	// kubectl port-forward $(kubectl get pods -l run=cba-web-server --no-headers=true -o custom-columns=:metadata.name) 9229
 	const podName = (await spawn('kubectl', ['get', 'pods', '-l', `run=${IMG_NAME_PREFIX}${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'], { capture: 'stdout' })).stdout?.trim();
 	spawn('kubectl', ['port-forward', podName, `${debugPort}:9229`]);
 
