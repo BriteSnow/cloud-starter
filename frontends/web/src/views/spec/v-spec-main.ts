@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/views/spec/spec-main.ts" />
 
-import { pathAt } from 'base/route';
+import { pathAt } from 'common/route';
+import { BaseViewElement } from 'common/v-base';
 import { all, customElement, first, onHub } from 'dom-native';
-import { BaseViewElement } from 'views/v-base';
 import { tagNameByName } from './spec-paths';
 
 const defaultPath = 'typo';

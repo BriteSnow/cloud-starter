@@ -1,6 +1,6 @@
-import { pathAt } from 'base/route';
+import { pathAt } from 'common/route';
+import { BaseViewElement } from 'common/v-base';
 import { all, customElement, onHub } from 'dom-native';
-import { BaseViewElement } from './v-base';
 import { WksMainView } from './v-wks-main';
 
 const defaultPath = '';
@@ -43,5 +43,7 @@ export class NavView extends BaseViewElement {
 //// HTML
 function _render(wksId: number | null) {
 	return `<a href="/${wksId}/images"><span class='bar'></span><d-ico name="ico-images"></d-ico><label>Images</label></a>
-			<a href="/${wksId}/videos"><span class='bar'></span><d-ico name="ico-videos"></d-ico><label>Videos</label></a>`;
+			<a href="/${wksId}/videos"><span class='bar'></span><d-ico name="ico-videos"></d-ico><label>Videos</label></a>
+			<a href="/${wksId}/timelines"><span class='bar'></span><d-ico name="ico-videos"></d-ico><label>Timelines</label></a>
+			`;
 }

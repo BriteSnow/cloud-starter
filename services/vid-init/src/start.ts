@@ -36,7 +36,6 @@ async function start() {
 		const { wksId, mediaId } = entry.data;
 
 		try {
-			console.log('->> entry', entry);
 			const sysUtx = await getSysContext({ wksId });
 			const media = await mediaDao.get(sysUtx, mediaId);
 
@@ -61,7 +60,6 @@ async function start() {
 					//ffmpeg -i input.mp4 -vcodec libx264 -crf 20 output.mp4
 					await spawn('ffmpeg', split(`-i ${tempSrcFile}  -vcodec libx264 -crf 20 ${tempMp4File}`, ' '), { toConsole: false });
 					await coreStore.upload(tempMp4File, remoteMp4File);
-					console.log(`->> DONE - vid-init transcoding ${mediaName} to ${mp4Name} `);
 				}
 				await mediaDao.update(sysUtx, mediaId, { name: mp4Name });
 			}

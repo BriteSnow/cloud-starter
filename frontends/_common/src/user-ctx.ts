@@ -1,4 +1,4 @@
-import { getData, webGet, webPost } from './web-request';
+import { getData, webGet, webPost } from 'common/web-request';
 
 export interface UserContext {
 	id: number;

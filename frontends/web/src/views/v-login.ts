@@ -1,7 +1,7 @@
-import { getGoogleOAuthUrl, login } from 'base/user-ctx';
-import { webPost } from 'base/web-request';
+import { getGoogleOAuthUrl, login } from 'common/user-ctx';
+import { BaseViewElement } from 'common/v-base';
+import { webPost } from 'common/web-request';
 import { customElement, first, onEvent, OnEvent, pull, style } from 'dom-native';
-import { BaseViewElement } from './v-base';
 
 type Mode = 'login' | 'register';
 

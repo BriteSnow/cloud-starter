@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: cba-web-server
+  name: cba-web-server-srv
+  namespace: default
+spec:
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: cba-web-server
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: cba-admin-server
+  name: cba-admin-server-srv
+  namespace: default
+spec:
+  ports:
+  - name: admin
+    port: 8081
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: cba-admin-server
+  type: LoadBalancer  

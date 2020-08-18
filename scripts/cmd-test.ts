@@ -18,7 +18,9 @@ async function test(serviceName: string, testGrep: string) {
 		return;
 	}
 	const podName = await getPodName(serviceName);
-
+	if (podName == null) {
+		throw new Error(`Cannot find podName for ${serviceName}`);
+	}
 	await run(false, serviceName, testGrep, podName);
 }
 
@@ -49,6 +51,9 @@ async function testw(serviceName: string, testGrep: string) {
 
 async function watchAndRun(debug: boolean, serviceName: string, testGrep: string) {
 	const podName = await getPodName(serviceName);
+	if (podName == null) {
+		throw new Error(`Cannot find podName for ${serviceName}`);
+	}
 
 	const serviceDir = `${servicesDir}/${serviceName}`;
 	const serviceDistDir = `${serviceDir}/dist`;

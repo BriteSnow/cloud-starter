@@ -32,7 +32,8 @@
 		// This allow to have relative path in the import, rather than "import ... "../../ts/ajax" we can do "ts/ajax"
 		"baseUrl": "./src/",
 		"paths": {
-			"shared/*": ["../../../shared/src/*"]
+			"shared/*": ["../../../shared/src/*"],
+			"common/*": ["../../_common/src/*"]			
 		},
 
 		"experimentalDecorators": true,
@@ -43,7 +44,8 @@
 
 	// We want more control about which code we will compile and exclude
 	"include": [
-		"./src/**/*.ts"
+		"./src/**/*.ts",
+		"../_common/src/global-types.ts"
 	],
 
 	"exclude": [

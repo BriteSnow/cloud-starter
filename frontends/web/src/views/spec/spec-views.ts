@@ -1,6 +1,6 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/views/spec/spec-views.ts" />
 
-import { render } from 'base/render';
+import { render } from 'common/render';
 import { BaseHTMLElement, customElement, elem, frag, onEvent } from 'dom-native';
 import { BaseDialog } from 'views/dialog/d-base-dialog';
 

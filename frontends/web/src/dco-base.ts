@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/ts/dco-base.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+import { webDelete, webGet, webPatch, webPost } from 'common/web-request';
 import { hub } from 'dom-native';
-import { webDelete, webGet, webPatch, webPost } from './web-request';
 
 
 export const dcoHub = hub('dcoHub');

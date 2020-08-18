@@ -1,4 +1,4 @@
-FROM britesnow/base-media:20-07-31
+FROM britesnow/base-media:20-08-14
 
 RUN mkdir /service
 

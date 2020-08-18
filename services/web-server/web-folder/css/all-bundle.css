@@ -28,7 +28,8 @@
 :root{
 
 	/* google gray palette */
-	--d-clr-gray-50: #FAFAFA;
+	--d-clr-gray-000: #FFFFFF;
+	--d-clr-gray-050: #FAFAFA;
 	--d-clr-gray-100: #F5F5F5;
 	--d-clr-gray-200: #EEEEEE;
 	--d-clr-gray-300: #E0E0E0;
@@ -41,7 +42,7 @@
 
 
 	/* google material light blue palette */
-	--d-clr-50: #E1F5FE;
+	--d-clr-050: #E1F5FE;
 	--d-clr-100: #B3E5FC;
 	--d-clr-200: #81D4FA;
 	--d-clr-300: #4FC3F7;
@@ -58,15 +59,15 @@
 
 	--d-clr-prime: var(--d-clr-700);
 
-
+	--d-field-bkg: var(--d-clr-gray-000);
+	--d-field-bdr: #aaa;
+	--d-field-bdr-focused: var(--d-clr-prime);
 	--d-field-input: var(--d-clr-gray-900);
 	--d-field-label: var(--d-clr-gray-700);
 	--d-field-label-no-value: var(--d-clr-gray-500);
 	--d-field-label-focused: var(--d-clr-800);
 	--d-field-trail-text: var(--d-clr-gray-600);
 
-	--d-field-bdr: #aaa;
-	--d-field-bdr-focused: var(--d-clr-prime);
 
 	--d-field-choice-bdr: var(--d-clr-gray-500);
 	--d-field-choice-bdr-on: var(--d-clr-prime);
@@ -95,7 +96,7 @@
 /* NOTE: for now supports only ico-lead or ico-trail, ico-trail or text-trail */
 
 .d-field{
-	background: var(--bkg);
+	background: var(--d-field-bkg);
 	position: relative;
 	min-height: 3.25rem;
 	display: grid;
@@ -208,8 +209,13 @@
 			}
 
 .d-field[placeholder].no-value{
-		color: var(--d-field-label-no-value);
+		/* color: var(--d-field-label-no-value); */
+		color: red;
 	}
+
+.d-field[placeholder].no-value .d-ipt{
+			color: var(--d-field-input);
+		}
 
 .d-field.no-value[ico-lead]:not([placeholder]):not(.focused) > label{
 			/* padding-left: 2.5rem; */
@@ -234,6 +240,7 @@
 		font-weight: 400;		
 		letter-spacing: .03125em;		
 		color: var(--d-txt-input);;
+		color: var(--d-field-input);
 		box-shadow: none;
 		background: none;
 		outline: none;
@@ -584,276 +591,10 @@ d-options.d-field > div:last-of-type{
 
 /* --------- /SectionName --------- */
 
-*{
-	box-sizing: border-box; /* good best practice for application */
-	/* To allow flex/grid box to shrink smaller than content. 
-		Need to be set to all because of nested issue
-		see: https://stackoverflow.com/a/36247448/686724 */
-	min-width: 0;
-	min-height: 0;	
-}
-
-html, body{
-	height: 100%; /* make sure the canvas is the browser window */
-	
-}
-
-html{
-	overflow: hidden; /* prevent the browser 'bounce' (but will prevent screen scroll as well)*/
-}
-
-body{
-	margin: 0;
-	display: flex;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 1rem;
-}
-
-/* reset the ul and li */
-
-ul, li{
-	margin: 0;
-	padding: 0;
-}
-
-a{ 
-	cursor: pointer; 
-	display: block;
-	text-decoration: none;
-	color: #fff;
-	opacity: .9;
-}
-
-.action{
-	cursor: pointer;
-}
-
-.display-none {
-	display: none !important;
-}
-
-/*#region    Entity Label Element */
-
-.lbl{
-	padding: .5rem 1rem;
-	display: inline-block;
-	border-radius: 5px;
-}
-
-/*#endregion Entity Label Element */
-
-/* #region    Typography Base */
-
-h1{
-	margin: 0;
-	padding: 0;
-	-webkit-font-smoothing: antialiased;
-	text-decoration: inherit;
-	text-transform: inherit;
-	font-size: 2.125rem;
-	line-height: 2.5rem;
-	letter-spacing: .00735em;
-	font-weight: 400;
-}
-
-h2{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: 1.5rem;	
-	line-height: 2rem;	
-	font-weight: 400;	
-	letter-spacing: normal;
-}
-
-h3{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: 1.25rem;	
-	line-height: 2rem;	
-	font-weight: 500;	
-	letter-spacing: .0125em;
-}
-
-h4{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: 1rem;	
-	line-height: 2rem;	
-	font-weight: 500;	
-	letter-spacing: .0075em;
-}
-
-.sub1{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: 1rem;	
-	line-height: 1.75rem;	
-	font-weight: 400;	
-	letter-spacing: .00937em;	
-}
-
-.sub2{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: .875rem;	
-	line-height: 1.375rem;	
-	font-weight: 500;	
-	letter-spacing: .00714em;	
-}
-
-.body1{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: 1rem;	
-	line-height: 1.5rem;	
-	font-weight: 400;	
-	letter-spacing: .03125em;	
-}
-
-.body2{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: .875rem;	
-	letter-spacing: .01786em;	
-	line-height: 1.25rem;	
-	font-weight: 400;	
-}
-
-.caption{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: .75rem;	
-	letter-spacing: .03333em;	
-	line-height: 1.25rem;	
-	font-weight: 400;	
-}
-
-.overline{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: .75rem;	
-	line-height: 2rem;	
-	letter-spacing: .16667em;	
-	font-weight: 500;	
-	text-transform: uppercase;	
-}
-
-.txt-button{
-	margin: 0;
-	padding: 0;	
-	-webkit-font-smoothing: antialiased;	
-	text-decoration: inherit;	
-	text-transform: inherit;	
-	font-size: .875rem;	
-	line-height: 2.25rem;	
-	letter-spacing: .08929em;	
-	font-weight: 500;	
-	text-transform: uppercase;	
-}
-
-/* #endregion Typography Base */
-
-:root{
-	/* palette */
-	--clr-prime: #1976D2;
-	--clr-scnd: #FFA000;
-
-	--clr-prime-900: #0D47A1;
-	--clr-prime-800: #1565C0;
-	--clr-prime-700: #1976D2;
-	--clr-prime-600: #1E88E5;
-	--clr-prime-500: #2196F3;
-	--clr-prime-400: #42A5F5;
-	--clr-prime-300: #64B5F6;
-	--clr-prime-200: #90CAF9;
-	--clr-prime-100: #BBDEFB;
-	--clr-prime-50: #E3F2FD;
-
-
-	/* background colors */
-	--bkg-lightest: #FAFAFA;
-	--bkg-lighter: #EEEEEE;
-	--bkg-light: #E0E0E0;
-	--bkg: #DDDDDD;
-	--bkg-dark: #aaaaaa;
-	--bkg-sel: #E3F2FD;
-	--bkg-header: #474747;
-	--bkg-nav: #eee;
-	--bkg-prime: #65A2DE;
-
-	/* text on prime */
-	--txt-op: rgba(255,255,255,0);
-	--txt-op-med: rgba(255,255,255,.99);
-	--txt-op-low: rgba(255,255,255,.38);
-
-
-	/* text black colors */
-	--txt-white: rgba(0,0,0,.87);
-	--txt-white-med: rgba(0,0,0,.60);
-	--txt-white-low: rgba(0,0,0,.38);
-
-	/* text white colors */
-	--txt: rgba(0,0,0,.87);
-	--txt-med: rgba(0,0,0,.60);
-	--txt-low: rgba(0,0,0,.38);
-
-
-	--txt-alert: red;
-	--txt-action: #336699;
-	--txt-link: #1565C0;
-
-	--txt-prime: var(--clr-prime);
-
-	/* border colors */
-	--bdr-lightest: #f0f0f0;
-	--bdr-lighter: #ddd;
-	--bdr-light: #aaa;	
-	--bdr: #999;
-	--bdr-dark: #555;
-	--bdr-prime: var(--clr-prime);
-	
-	/* highlight */
-	--highlight: #f0f0f0;
-	
-
-	/* icons color */
-	--ico: #323232;
-	--ico-prime: var(--clr-prime);
-	--ico-dark: #242424;
-	--ico-ngv: #fff;
-}
-
 :root{
 	/* this is for the field background */
-	/* @dom-native/ui TODO: need to have this as --d-field-bkg */
-	--bkg: #FFF;
+	/* @dom-native/ui */
+	--d-field-bkg: #FFF;
 }
 
 button {
@@ -1182,6 +923,34 @@ nav a:hover{
 					margin-left: 1rem;
 				}
 
+.card-add{
+	opacity: .2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	background: var(--bdr-lightest);
+
+	border: dashed 3px var(--bdr);
+	justify-content: center;
+}
+
+.card-add h3{
+		color: black;
+	}
+
+.card-add d-ico{
+		width: 3rem;
+		height: 3rem;
+		max-width: 3rem;
+		max-height: 3rem;
+	}
+
+.card-add:hover{
+		opacity: .5;
+	}
+
 .dialog{
 	box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
 		0px 6px 10px 0px rgba(0, 0, 0, 0.14),
@@ -1353,6 +1122,590 @@ main > .screen > header .tab-bar{
 .tab-bar > *.sel{
 			color: var(--clr-scnd);
 			border-bottom: solid 2px var(--clr-scnd);
+		}
+
+*{
+	box-sizing: border-box; /* good best practice for application */
+	/* To allow flex/grid box to shrink smaller than content. 
+		Need to be set to all because of nested issue
+		see: https://stackoverflow.com/a/36247448/686724 */
+	min-width: 0;
+	min-height: 0;	
+}
+
+html, body{
+	height: 100%; /* make sure the canvas is the browser window */
+	
+}
+
+html{
+	overflow: hidden; /* prevent the browser 'bounce' (but will prevent screen scroll as well)*/
+}
+
+body{
+	margin: 0;
+	display: flex;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1rem;
+}
+
+/* reset the ul and li */
+
+ul, li{
+	margin: 0;
+	padding: 0;
+}
+
+a{ 
+	cursor: pointer; 
+	display: block;
+	text-decoration: none;
+	color: #fff;
+	opacity: .9;
+}
+
+.action{
+	cursor: pointer;
+}
+
+.display-none {
+	display: none !important;
+}
+
+/*#region    Entity Label Element */
+
+.lbl{
+	padding: .5rem 1rem;
+	display: inline-block;
+	border-radius: 5px;
+}
+
+/*#endregion Entity Label Element */
+
+/* #region    Typography Base */
+
+h1{
+	margin: 0;
+	padding: 0;
+	-webkit-font-smoothing: antialiased;
+	text-decoration: inherit;
+	text-transform: inherit;
+	font-size: 2.125rem;
+	line-height: 2.5rem;
+	letter-spacing: .00735em;
+	font-weight: 400;
+}
+
+h2{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: 1.5rem;	
+	line-height: 2rem;	
+	font-weight: 400;	
+	letter-spacing: normal;
+}
+
+h3{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: 1.25rem;	
+	line-height: 2rem;	
+	font-weight: 500;	
+	letter-spacing: .0125em;
+}
+
+h4{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: 1rem;	
+	line-height: 2rem;	
+	font-weight: 500;	
+	letter-spacing: .0075em;
+}
+
+.sub1{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: 1rem;	
+	line-height: 1.75rem;	
+	font-weight: 400;	
+	letter-spacing: .00937em;	
+}
+
+.sub2{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: .875rem;	
+	line-height: 1.375rem;	
+	font-weight: 500;	
+	letter-spacing: .00714em;	
+}
+
+.body1{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: 1rem;	
+	line-height: 1.5rem;	
+	font-weight: 400;	
+	letter-spacing: .03125em;	
+}
+
+.body2{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: .875rem;	
+	letter-spacing: .01786em;	
+	line-height: 1.25rem;	
+	font-weight: 400;	
+}
+
+.caption{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: .75rem;	
+	letter-spacing: .03333em;	
+	line-height: 1.25rem;	
+	font-weight: 400;	
+}
+
+.overline{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: .75rem;	
+	line-height: 2rem;	
+	letter-spacing: .16667em;	
+	font-weight: 500;	
+	text-transform: uppercase;	
+}
+
+.txt-button{
+	margin: 0;
+	padding: 0;	
+	-webkit-font-smoothing: antialiased;	
+	text-decoration: inherit;	
+	text-transform: inherit;	
+	font-size: .875rem;	
+	line-height: 2.25rem;	
+	letter-spacing: .08929em;	
+	font-weight: 500;	
+	text-transform: uppercase;	
+}
+
+/* #endregion Typography Base */
+
+:root{
+	/* palette */
+	--clr-prime: #1976D2;
+	--clr-scnd: #FFA000;
+
+	--clr-prime-900: #0D47A1;
+	--clr-prime-800: #1565C0;
+	--clr-prime-700: #1976D2;
+	--clr-prime-600: #1E88E5;
+	--clr-prime-500: #2196F3;
+	--clr-prime-400: #42A5F5;
+	--clr-prime-300: #64B5F6;
+	--clr-prime-200: #90CAF9;
+	--clr-prime-100: #BBDEFB;
+	--clr-prime-50: #E3F2FD;
+
+
+	/* background colors */
+	--bkg-lightest: #FAFAFA;
+	--bkg-lighter: #EEEEEE;
+	--bkg-light: #E0E0E0;
+	--bkg: #DDDDDD;
+	--bkg-dark: #aaaaaa;
+	--bkg-sel: #E3F2FD;
+	--bkg-header: #474747;
+	--bkg-nav: #eee;
+	--bkg-prime: #65A2DE;
+
+	/* text on prime */
+	--txt-op: rgba(255,255,255,0);
+	--txt-op-med: rgba(255,255,255,.99);
+	--txt-op-low: rgba(255,255,255,.38);
+
+
+	/* text black colors */
+	--txt-white: rgba(0,0,0,.87);
+	--txt-white-med: rgba(0,0,0,.60);
+	--txt-white-low: rgba(0,0,0,.38);
+
+	/* text white colors */
+	--txt: rgba(0,0,0,.87);
+	--txt-med: rgba(0,0,0,.60);
+	--txt-low: rgba(0,0,0,.38);
+
+
+	--txt-alert: red;
+	--txt-action: #336699;
+	--txt-link: #1565C0;
+
+	--txt-prime: var(--clr-prime);
+
+	/* border colors */
+	--bdr-lightest: #f0f0f0;
+	--bdr-lighter: #ddd;
+	--bdr-light: #aaa;	
+	--bdr: #999;
+	--bdr-dark: #555;
+	--bdr-prime: var(--clr-prime);
+	
+	/* highlight */
+	--highlight: #f0f0f0;
+	
+
+	/* icons color */
+	--ico: #323232;
+	--ico-prime: var(--clr-prime);
+	--ico-dark: #242424;
+	--ico-ngv: #fff;
+}
+
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-check.pcss" /> */
+
+c-check{
+	display: block;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+	cursor: pointer;
+	width: 1.5rem;
+	height: 1.5rem;
+	line-height: 1;
+}
+
+c-check .ico-check-on {
+		fill: var(--ico-prime);
+	}
+
+c-check svg.symbol{
+		width: 100%;
+		height: 100%;
+	}
+
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-ico-symbol.pcss" /> */
+
+c-ico, c-symbol{
+	/* making sure that parent don't change value case, which is used as asset name */
+	text-transform: none; 
+	padding: 0;
+	margin: 0;
+	width: 1.5rem;
+	height: 1.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	fill: #aaa;
+}
+
+c-ico svg.symbol,c-symbol svg.symbol{
+		width: 100%;
+		height: 100%;
+	}
+
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-input.pcss" /> */
+
+c-input{
+	
+	/* Component Styling Parameters */
+	--bkg: none;
+	/* /Component Styling Parameters */
+
+	background: var(--bkg);
+	border-bottom: solid 1px var(--bdr);
+	position: relative;
+	min-height: 3.25rem;
+	display: grid;
+	grid-template-rows: 1.25rem 1fr;
+	align-items: stretch;	
+}
+
+c-input > label {
+		grid-row: 1;
+		grid-column: 1;
+		-webkit-font-smoothing: antialiased;
+		text-decoration: inherit;
+		text-transform: inherit;
+		font-size: .875rem;
+		letter-spacing: .08929em;
+		line-height: 1;
+		font-weight: 400;
+		color: var(--txt);;
+		display: flex;
+		
+	}
+
+c-input > input{
+		grid-row: 2;
+		grid-column: 1;
+		padding-left: .5rem;
+		z-index: 10;
+		background: none;
+		-webkit-font-smoothing: antialiased;
+		text-decoration: inherit;
+		text-transform: inherit;
+		font-size: 1rem;
+		line-height: 1.5rem;
+		font-weight: 400;
+		letter-spacing: .03125em;
+		color: var(--txt-L0);
+	}
+
+c-input.no-label{
+		grid-template-rows: 0 2rem; /* TODO: cba */		
+		min-height: 2rem;  /* TODO: cba */
+		height: 2rem;
+	}
+
+/* empty for now. no value, no place holder, no focused. Used when we want the label over input (but for now, simple, we don't) */
+
+c-input.no-value:not([placeholder]):not(.focused){
+	}
+
+c-input.focused{
+		border-bottom: solid 1px var(--bdr-prime);
+	}
+
+c-input.focused > label {
+			grid-row: 1;
+		}
+
+c-input[disabled]{
+		opacity: .5;
+	}
+
+c-input[readonly]{
+		border-bottom: solid 1px var(--bdr-lighter);
+	}
+
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-menu.pcss" /> */
+
+c-menu{
+	position: absolute;
+	box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+		0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+		0px 1px 10px 0px rgba(0, 0, 0, 0.12);;
+	background: #fff;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+}
+
+c-menu > * {
+		padding: 1rem;
+		cursor: pointer;
+		color: var(--txt);
+
+	}
+
+c-menu > *:first-child{
+			border-radius: 4px 4px 0 0;
+		}
+
+c-menu > *:last-child{
+			border-radius: 0 0 4px 4px;
+		}
+
+c-menu > *:hover{
+			background: var(--highlight);
+		}
+
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-options.pcss" /> */
+
+c-options{
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: -webkit-max-content;
+	grid-auto-columns: max-content;
+	min-height: auto;
+	align-items: center;
+
+
+}
+
+c-options > div {
+		-webkit-font-smoothing: antialiased;
+		text-decoration: inherit;
+		text-transform: inherit;
+		font-size: 1rem;
+		line-height: 1.5rem;
+		font-weight: 400;
+		letter-spacing: .03125em;;
+		height: 1rem;
+		cursor: pointer;
+		color: var(--txt-L3);
+		padding: 0 1rem;
+		border-right: solid 1px var(--bdr-L4);
+	}
+
+c-options > div.sel{
+			color: var(--txt-prime);
+			font-weight: 700;
+		}
+
+c-options > div:first-of-type{
+		padding-left: 0;
+	}
+
+c-options > div:last-of-type{
+		border-right: none;
+	}
+
+/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-select.pcss" /> */
+
+c-select{
+	display: block;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+	cursor: pointer;
+	line-height: 1;
+	border-bottom: solid 1px var(--bdr);
+	height: 3.25rem; 
+	display: grid;
+	grid-template-rows: 1.25rem 1fr;
+	grid-template-columns: 1fr 2rem;
+	align-items: stretch;
+}
+
+c-select label{
+		-webkit-font-smoothing: antialiased;
+		text-decoration: inherit;
+		text-transform: inherit;
+		font-size: .875rem;
+		letter-spacing: .08929em;
+		line-height: 1;
+		font-weight: 400;
+		color: var(--txt);;
+		grid-row: 1;
+		grid-column: 1 / span 1;
+	}
+
+c-select div{
+		grid-row: 2;
+		grid-column: 1 / span 1;
+		padding-left: .5rem;
+		-webkit-font-smoothing: antialiased;
+		text-decoration: inherit;
+		text-transform: inherit;
+		font-size: 1rem;
+		line-height: 1.5rem;
+		font-weight: 400;
+		letter-spacing: .03125em;
+		color: var(--txt-L0);;
+		display: flex;
+		align-items: center;		
+	}
+
+c-select c-ico{
+		grid-column: 2;
+		grid-row: 2 / 3;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: auto;
+		height: auto;
+	}
+
+c-select c-ico svg.symbol{
+			width: 1rem;
+			height: 1rem;
+		}
+
+c-select.no-label{
+		height: 2rem;  /* TODO: cba */
+		grid-template-rows: 0 2rem; /* TODO: cba */
+	}
+
+c-select[disabled]{
+		opacity: .5;
+	}
+
+/* Note: on Chrome, if visibility hidden on c-ico, we get unwanted horizontal scroll bar */
+
+c-select[readonly] c-ico svg{
+			visibility: hidden;
+		}
+
+c-select[readonly]{
+		border-bottom: solid 1px var(--bdr-lighter);
+}
+
+c-select.no-value > div {
+			color: var(--txt-med);
+		}
+
+c-select-popup{
+	position: absolute;
+	box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+		0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+		0px 1px 18px 0px rgba(0, 0, 0, 0.12);;
+	width: 8rem;
+	/* height: 10rem; */
+	background: #FFF;
+	max-height: 15rem;
+	overflow: auto;
+
+}
+
+c-select-popup li.none{
+		color: red;
+	}
+
+c-select-popup ul, c-select-popup li{
+		margin: 0;
+		padding: 0;
+		color: var(--txt);
+	}
+
+c-select-popup ul > li, c-select-popup ul > a{
+			cursor: pointer;
+			line-height: 1;
+			padding: 1rem 1rem;
+
+		}
+
+c-select-popup ul > li.sel,c-select-popup ul > a.sel{
+				font-weight: 600;
+			}
+
+c-select-popup ul > li:hover,c-select-popup ul > a:hover{
+				background: var(--bkg-lighter);
+			}
+
+c-select-popup ul > li{
+			list-style: none;
 		}
 
 v-home{
@@ -1691,47 +2044,18 @@ v-nav a:hover{
 			background: #fff;
 		}
 
-v-videos{
-	padding: 1rem;
-	
-	display: grid;
-	grid-template-columns: repeat(auto-fill, 16rem);
-	grid-template-rows: repeat(auto-fill, 12rem);
-	grid-gap: 2rem;
-
-}
-
-v-videos .media-add{
-		opacity: .2;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-
-		background: var(--bdr-lightest);
-
-		border: dashed 3px var(--bdr);
-		justify-content: center;
+v-videos section.content{
+		padding: 1rem;
+		
+		display: grid;
+		grid-template-columns: repeat(auto-fill, 16rem);
+		grid-template-rows: repeat(auto-fill, 12rem);
+		grid-gap: 2rem;
 	}
 
-v-videos .media-add h3{
-			color: black;
-		}
-
-v-videos .media-add d-ico{
-			width: 3rem;
-			height: 3rem;
-			max-width: 3rem;
-			max-height: 3rem;
-		}
-
-v-videos .media-add:hover{
-			opacity: .5;
-		}
-
-v-videos .card section > video {
-			width: 100%;
-		}
+v-videos section.content .card section > video {
+				width: 100%;
+			}
 
 v-wks-main{
 	display: grid;
@@ -1747,6 +2071,18 @@ v-wks-main > nav{
 		display: flex;
 		overflow: hidden;
 	}
+
+v-wks-main > .screen{
+		display: flex;
+		flex-direction: column;
+	}
+
+v-wks-main > .screen header{
+			padding-left: 2rem;
+			height: 5rem;
+			display: flex;
+			align-items: center;
+		}
 
 /* NOTE: this is a class selector as it will be added by the d-base-dialog base */
 
@@ -1887,322 +2223,119 @@ v-spec-main > section.content > * .card.tall{
 				grid-row: auto / span 2;
 			}
 
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-check.pcss" /> */
-
-c-check{
-	display: block;
-	-webkit-user-select: none;
-	   -moz-user-select: none;
-	    -ms-user-select: none;
-	        user-select: none;
-	cursor: pointer;
-	width: 1.5rem;
-	height: 1.5rem;
-	line-height: 1;
-}
-
-c-check .ico-check-on {
-		fill: var(--ico-prime);
-	}
-
-c-check svg.symbol{
-		width: 100%;
-		height: 100%;
-	}
-
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-ico-symbol.pcss" /> */
-
-c-ico, c-symbol{
-	/* making sure that parent don't change value case, which is used as asset name */
-	text-transform: none; 
-	padding: 0;
-	margin: 0;
-	width: 1.5rem;
-	height: 1.5rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	fill: #aaa;
-}
-
-c-ico svg.symbol,c-symbol svg.symbol{
-		width: 100%;
-		height: 100%;
-	}
-
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-input.pcss" /> */
-
-c-input{
-	
-	/* Component Styling Parameters */
-	--bkg: none;
-	/* /Component Styling Parameters */
-
-	background: var(--bkg);
-	border-bottom: solid 1px var(--bdr);
-	position: relative;
-	min-height: 3.25rem;
-	display: grid;
-	grid-template-rows: 1.25rem 1fr;
-	align-items: stretch;	
-}
-
-c-input > label {
-		grid-row: 1;
-		grid-column: 1;
-		-webkit-font-smoothing: antialiased;
-		text-decoration: inherit;
-		text-transform: inherit;
-		font-size: .875rem;
-		letter-spacing: .08929em;
-		line-height: 1;
-		font-weight: 400;
-		color: var(--txt);;
-		display: flex;
-		
-	}
-
-c-input > input{
-		grid-row: 2;
-		grid-column: 1;
-		padding-left: .5rem;
-		z-index: 10;
-		background: none;
-		-webkit-font-smoothing: antialiased;
-		text-decoration: inherit;
-		text-transform: inherit;
-		font-size: 1rem;
-		line-height: 1.5rem;
-		font-weight: 400;
-		letter-spacing: .03125em;
-		color: var(--txt-L0);
-	}
-
-c-input.no-label{
-		grid-template-rows: 0 2rem; /* TODO: cba */		
-		min-height: 2rem;  /* TODO: cba */
-		height: 2rem;
-	}
-
-/* empty for now. no value, no place holder, no focused. Used when we want the label over input (but for now, simple, we don't) */
-
-c-input.no-value:not([placeholder]):not(.focused){
-	}
-
-c-input.focused{
-		border-bottom: solid 1px var(--bdr-prime);
-	}
-
-c-input.focused > label {
-			grid-row: 1;
-		}
-
-c-input[disabled]{
-		opacity: .5;
-	}
-
-c-input[readonly]{
-		border-bottom: solid 1px var(--bdr-lighter);
-	}
-
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-menu.pcss" /> */
-
-c-menu{
-	position: absolute;
-	box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
-		0px 4px 5px 0px rgba(0, 0, 0, 0.14),
-		0px 1px 10px 0px rgba(0, 0, 0, 0.12);;
-	background: #fff;
-	border-radius: 4px;
-	display: flex;
-	flex-direction: column;
-}
-
-c-menu > * {
+v-timeline-main > section.content{
+		flex: 1;
 		padding: 1rem;
-		cursor: pointer;
-		color: var(--txt);
-
+		
+		display: grid;
+		grid-template-columns: repeat(auto-fill, 16rem);
+		grid-template-rows: repeat(auto-fill, 12rem);
+		grid-gap: 2rem;
 	}
 
-c-menu > *:first-child{
-			border-radius: 4px 4px 0 0;
+v-timeline-main > section.content .sandbox{
+			grid-area: 1 / 1 / 4 / 6;
+			display: flex;
 		}
 
-c-menu > *:last-child{
-			border-radius: 0 0 4px 4px;
-		}
+v-timeline-main > section.content .sandbox > *{
+				flex: 1;
+			}
 
-c-menu > *:hover{
-			background: var(--highlight);
-		}
+/*#region    tm timeline */
 
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-options.pcss" /> */
+tm-timeline{
+	--tm-bar-clr: #B9B9B9;
+	--tm-bar-clr-active: #509ED4;
+	--tm-head-clr: red;
+	--tm-layer-clr-bkg: #efefef;
+}
 
-c-options{
+tm-timeline{
 	display: grid;
-	grid-auto-flow: column;
-	grid-auto-columns: -webkit-max-content;
-	grid-auto-columns: max-content;
-	min-height: auto;
-	align-items: center;
+	grid-template-rows: 3rem 3rem 1rem repeat(auto-fill, 6rem);
+	grid-template-columns: 8rem 1fr;
+	grid-gap: 1rem;
 
 
 }
 
-c-options > div {
-		-webkit-font-smoothing: antialiased;
-		text-decoration: inherit;
-		text-transform: inherit;
-		font-size: 1rem;
-		line-height: 1.5rem;
-		font-weight: 400;
-		letter-spacing: .03125em;;
-		height: 1rem;
-		cursor: pointer;
-		color: var(--txt-L3);
-		padding: 0 1rem;
-		border-right: solid 1px var(--bdr-L4);
-	}
-
-c-options > div.sel{
-			color: var(--txt-prime);
-			font-weight: 700;
-		}
-
-c-options > div:first-of-type{
-		padding-left: 0;
-	}
-
-c-options > div:last-of-type{
-		border-right: none;
-	}
-
-/* <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/web-components/c-select.pcss" /> */
-
-c-select{
-	display: block;
-	-webkit-user-select: none;
-	   -moz-user-select: none;
-	    -ms-user-select: none;
-	        user-select: none;
-	cursor: pointer;
-	line-height: 1;
-	border-bottom: solid 1px var(--bdr);
-	height: 3.25rem; 
-	display: grid;
-	grid-template-rows: 1.25rem 1fr;
-	grid-template-columns: 1fr 2rem;
-	align-items: stretch;
-}
-
-c-select label{
-		-webkit-font-smoothing: antialiased;
-		text-decoration: inherit;
-		text-transform: inherit;
-		font-size: .875rem;
-		letter-spacing: .08929em;
-		line-height: 1;
-		font-weight: 400;
-		color: var(--txt);;
-		grid-row: 1;
-		grid-column: 1 / span 1;
-	}
-
-c-select div{
-		grid-row: 2;
-		grid-column: 1 / span 1;
-		padding-left: .5rem;
-		-webkit-font-smoothing: antialiased;
-		text-decoration: inherit;
-		text-transform: inherit;
-		font-size: 1rem;
-		line-height: 1.5rem;
-		font-weight: 400;
-		letter-spacing: .03125em;
-		color: var(--txt-L0);;
-		display: flex;
-		align-items: center;		
-	}
-
-c-select c-ico{
+tm-timeline tm-play{
+		position: relative;
 		grid-column: 2;
-		grid-row: 2 / 3;
+		display: grid;
+		grid-template-rows: 2rem 1rem;
+	}
+
+tm-timeline tm-play tm-bar{
+			grid-area: 2 / 1;
+		}
+
+tm-timeline tm-zoom{
+		grid-column: 2;
+		position: relative;
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: auto;
-		height: auto;
+		flex-direction: column;
+		justify-content: center;	
 	}
 
-c-select c-ico svg.symbol{
-			width: 1rem;
-			height: 1rem;
+tm-timeline tm-zoom tm-bar{
+			margin-top: 1rem;
 		}
 
-c-select.no-label{
-		height: 2rem;  /* TODO: cba */
-		grid-template-rows: 0 2rem; /* TODO: cba */
+tm-timeline d-ico{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 2rem;
+		height: 2rem;
+		fill: var(--tm-head-clr);
 	}
 
-c-select[disabled]{
-		opacity: .5;
+tm-timeline tm-bar{
+		position: relative;
+		display: block;
+		background: var(--tm-bar-clr);
+		height: 1rem;
+		border-radius: 1rem;
 	}
 
-/* Note: on Chrome, if visibility hidden on c-ico, we get unwanted horizontal scroll bar */
-
-c-select[readonly] c-ico svg{
-			visibility: hidden;
+tm-timeline tm-bar.active{
+			background: var(--tm-bar-clr-active);
 		}
 
-c-select[readonly]{
-		border-bottom: solid 1px var(--bdr-lighter);
-}
-
-c-select.no-value > div {
-			color: var(--txt-med);
+tm-timeline tm-bar tm-zone{
+			position: absolute;
+			top: 0; bottom: 0;
+			width: 10rem;
+			left: 3rem;
+			background: var(--tm-bar-clr-active);
 		}
 
-c-select-popup{
-	position: absolute;
-	box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-		0px 6px 10px 0px rgba(0, 0, 0, 0.14),
-		0px 1px 18px 0px rgba(0, 0, 0, 0.12);;
-	width: 8rem;
-	/* height: 10rem; */
-	background: #FFF;
-	max-height: 15rem;
-	overflow: auto;
-
-}
-
-c-select-popup li.none{
-		color: red;
+tm-timeline > .spacer{
+		grid-column: span 2;
 	}
 
-c-select-popup ul, c-select-popup li{
-		margin: 0;
-		padding: 0;
-		color: var(--txt);
+tm-timeline tm-layer{
+		grid-column: span 2;
+		display: grid;
+		grid-template-columns: 8rem 1fr;
+		grid-gap: 1rem;
 	}
 
-c-select-popup ul > li, c-select-popup ul > a{
-			cursor: pointer;
-			line-height: 1;
-			padding: 1rem 1rem;
-
+tm-timeline tm-layer tm-header{
+			background: var(--tm-layer-clr-bkg);
+			display: flex;
+			align-items: center;
+			padding-left: 1rem;
 		}
 
-c-select-popup ul > li.sel,c-select-popup ul > a.sel{
-				font-weight: 600;
-			}
-
-c-select-popup ul > li:hover,c-select-popup ul > a:hover{
-				background: var(--bkg-lighter);
-			}
-
-c-select-popup ul > li{
-			list-style: none;
+tm-timeline tm-layer tm-body{
+			background: var(--tm-layer-clr-bkg);
 		}
+
+/*#endregion v-timeline */
+
+
 
 /*# sourceMappingURL=all-bundle.css.map */

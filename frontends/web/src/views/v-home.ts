@@ -1,7 +1,7 @@
-import { wksDco } from 'base/dcos';
+import { BaseViewElement } from 'common/v-base';
+import { wksDco } from 'dcos';
 import { customElement, elem, on, onEvent, onHub } from 'dom-native';
 import { Wks } from 'shared/entities';
-import { BaseViewElement } from './v-base';
 
 @customElement('v-home')
 export class wksListView extends BaseViewElement {

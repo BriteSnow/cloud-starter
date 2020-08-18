@@ -6,7 +6,6 @@ import { assertEvent, getAppQueue, getJobQueue, VidInitJob } from 'common/queue'
 main();
 
 async function main() {
-	console.log('->> bridge-media-new');
 
 	// the read stream to bridge from
 	const mediaNewQueue = getAppQueue('MediaNew');
@@ -22,12 +21,10 @@ async function main() {
 		const { wksId, mediaId, mediaMimeType } = entry.data;
 
 		if (mediaMimeType.startsWith('video')) {
-			console.log('->> worker-bridge read from MediaNew ', entry);
 
 			const vidInitTodo: VidInitJob = { type: 'VidInitJob', wksId, mediaId };
 			await vidInitQueue.add(vidInitTodo);
 
-			console.log('->> worker-bridge sent to VidInitJob', vidInitTodo);
 		}
 
 

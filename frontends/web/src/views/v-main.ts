@@ -1,8 +1,8 @@
-import { getRouteWksId, pathAt } from 'base/route';
-import { logoff, UserContext } from 'base/user-ctx';
+import { getRouteWksId, pathAt } from 'common/route';
+import { logoff, UserContext } from 'common/user-ctx';
+import { BaseViewElement } from 'common/v-base';
 import { customElement, first, onEvent, onHub, push } from 'dom-native';
 import { isNotEmpty } from 'utils-min';
-import { BaseViewElement } from './v-base';
 
 const defaultPath = "";
 
@@ -77,7 +77,6 @@ export class MainView extends BaseViewElement {
 			// first, try to get the wksId from the route, and if valid, then, show v-wks-main
 			const wksId = getRouteWksId();
 			const newPath = pathAt(0);
-			console.log('->> ', newPath, wksId);
 
 			if (newPath != null && wksId != null) {
 				this.mainEl.innerHTML = `<v-wks-main wks-id="${wksId}"></v-wks-main>`;

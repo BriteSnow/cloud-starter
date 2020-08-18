@@ -1,9 +1,8 @@
 import '@dom-native/ui';
 import { defaultIcons } from '@dom-native/ui';
-import { getUserContext } from 'base/user-ctx';
-import { webGet } from 'base/web-request';
-import { first, on, trigger } from 'dom-native';
-import { MainView } from 'views/v-main';
+import { trigger } from 'dom-native';
+import { webGet } from './web-request';
+
 
 window.__version__ = "DROP-002-SNAPSHOT";
 
@@ -32,27 +31,4 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 	});
 });
-//#endregion ---------- /Initialize DOM ---------- 
-
-
-//#region    ---------- Start Application ---------- 
-//// Start the application 
-on(document, 'APP_LOADED', async function () {
-
-	const uc = await getUserContext();
-	// if no UC, we display the LoginView
-
-	if (!uc) {
-		// display(new LoginView(), 'body', 'empty');
-		document.body.innerHTML = '<v-login></v-login>';
-	} else {
-		document.body.innerHTML = '<v-main></v-main>';
-		const mainView = first(document.body) as MainView;
-		mainView.userContext = uc;
-
-	}
-
-});
-//#endregion ---------- /Start Application ----------
-
-
+//#endregion ---------- /Initialize DOM ----------

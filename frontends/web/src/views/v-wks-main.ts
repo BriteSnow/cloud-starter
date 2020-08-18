@@ -1,13 +1,14 @@
-import { pathAt } from 'base/route';
-import { all, append, attr, customElement, elem, onHub } from 'dom-native';
+import { pathAt } from 'common/route';
+import { BaseViewElement } from 'common/v-base';
+import { all, append, attr, className, customElement, elem, onHub } from 'dom-native';
 import { asNum } from 'utils-min';
-import { BaseViewElement } from '../views/v-base';
 
 export const t = 123;
 
 const subViews: any = {
 	'images': 'v-images',
-	'videos': 'v-videos'
+	'videos': 'v-videos',
+	'timelines': 'v-timeline-main'
 }
 @customElement('v-wks-main')
 export class WksMainView extends BaseViewElement {
@@ -35,7 +36,7 @@ export class WksMainView extends BaseViewElement {
 			const newPath = pathAt(1) ?? 'videos';
 			if (newPath) {
 				all(this, ':scope > *')[1]?.remove();
-				append(this, elem(subViews[newPath]));
+				append(this, className(elem(subViews[newPath]), { screen: true }));
 			}
 		}
 

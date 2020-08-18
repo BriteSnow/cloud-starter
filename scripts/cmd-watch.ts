@@ -18,14 +18,17 @@ async function watch() {
 	//#region    ---------- Frontend watch ---------- 
 	// watch the watch for frontends/web
 	spawn('./node_modules/.bin/vdev', ['watch', 'web']);
+	spawn('./node_modules/.bin/vdev', ['watch', 'admin']);
 	//#endregion ---------- /Frontend watch ---------- 
 
 	//#region    ---------- services watch ---------- 
 	// NOTE: the number is the debug port, and we avoid the standard 9229 as chrome tend to automatically ping it which create console noise
 	// watch services (configure in .vscode/launch.json for debug)
-	watchService('web-server', '9228');
-	watchService('vid-init', '9230');
-	watchService('vid-scaler', '9231');
+	watchService('web-server', '9230');
+	watchService('admin-server', '9231');
+
+	watchService('vid-init', '9240');
+	watchService('vid-scaler', '9241');
 	//#endregion ---------- /services watch ---------- 
 
 

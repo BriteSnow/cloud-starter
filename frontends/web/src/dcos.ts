@@ -1,6 +1,6 @@
+import { webRequest } from 'common/web-request';
 import { Media, QueryOptions, Wks } from 'shared/entities';
 import { BaseDco, dcoHub } from './dco-base';
-import { webRequest } from './web-request';
 
 
 class MediaDao extends BaseDco<Media, QueryOptions<Media>>{

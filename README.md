@@ -1,6 +1,6 @@
 (All code & content are [MIT](https://opensource.org/licenses/MIT) licensed.)
 
-**cloud-bigapp** is a code blueprint to build highly scalable big application with the minimum complexity. This approach is part of BriteSnow's **Big App, Small Team** approach. 
+**cloud-bigapp** is a code blueprint to build highly scalable big application with the minimum complexity. This architecture and best practices are part of BriteSnow's **Big App, Small Team** approach. 
 
 
 Key Documents: [Architecture](doc/arch.md) | [UI Development](doc/ui.md)

@@ -1,7 +1,7 @@
-import { mediaDco } from 'base/dcos';
+import { BaseViewElement } from 'common/v-base';
+import { mediaDco } from 'dcos';
 import { customElement, onEvent, OnEvent, onHub } from 'dom-native';
 import { Media } from 'shared/entities';
-import { BaseViewElement } from 'views/v-base';
 
 @customElement('v-videos')
 export class VideosView extends BaseViewElement {
@@ -18,11 +18,9 @@ export class VideosView extends BaseViewElement {
 		if (firstItem != null) {
 			if (firstItem.type.startsWith('video')) {
 				// we are ok. 
-				console.log('->> adding video');
 				// Note: for this event, evt.dataTransfer?.files[0] is not defined
 			} else {
-				// TODO: we are not
-				console.log(`->> not valid video ${firstItem.type} video`);
+				// TODO: we get firstItem.type
 			}
 		}
 	}
@@ -59,26 +57,29 @@ export class VideosView extends BaseViewElement {
 
 }
 
-
-
 function _renderContent(mediaList: Media[] = []) {
 	return `
-		<div class="media-add">
-			<d-ico name="ico-add"></d-ico>
-			<h3>Add Video</h3>
-		</div>
-		${mediaList.map(m => `
-		<div class="card" data-id="${m.id}" data-type="Media">
-			<header>
-			<h2>${m.name}</h2>
-			<d-ico name="ico-more"></d-ico>
-			</header>
-			<section>
-				<video controls>
-					<source src="${m.sdUrl ?? m.url}" type="video/mp4">
-				</video>			
-			</section>
-		</div>		
-		`).join('\n')}
+		<header>
+		<h1>Videos</h1>
+		</header>	
+		<section class="content">
+			<div class="card-add media-add">
+				<d-ico name="ico-add"></d-ico>
+				<h3>Add Video</h3>
+			</div>
+			${mediaList.map(m => `
+				<div class="card" data-id="${m.id}" data-type="Media">
+					<header>
+					<h2>${m.name}</h2>
+					<d-ico name="ico-more"></d-ico>
+					</header>
+					<section>
+						<video controls>
+							<source src="${m.sdUrl ?? m.url}" type="video/mp4">
+						</video>			
+					</section>
+				</div>		
+			`).join('\n')}
+		</section>
 	`
 }

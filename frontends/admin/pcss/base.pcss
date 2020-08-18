@@ -1,0 +1,126 @@
+
+*{
+	box-sizing: border-box; /* good best practice for application */
+	/* To allow flex/grid box to shrink smaller than content. 
+		Need to be set to all because of nested issue
+		see: https://stackoverflow.com/a/36247448/686724 */
+	min-width: 0;
+	min-height: 0;	
+}
+
+html, body{
+	height: 100%; /* make sure the canvas is the browser window */
+	
+}
+
+html{
+	overflow: hidden; /* prevent the browser 'bounce' (but will prevent screen scroll as well)*/
+}
+
+body{
+	margin: 0;
+	display: flex;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1rem;
+}
+
+/* reset the ul and li */
+ul, li{
+	margin: 0;
+	padding: 0;
+}
+
+a{ 
+	cursor: pointer; 
+	display: block;
+	text-decoration: none;
+	color: #fff;
+	opacity: .9;
+}
+
+.action{
+	cursor: pointer;
+}
+
+.display-none {
+	display: none !important;
+}
+
+/*#region    Entity Label Element */
+
+.lbl{
+	padding: .5rem 1rem;
+	display: inline-block;
+	border-radius: 5px;
+}
+
+/*#endregion Entity Label Element */
+
+/* #region    Typography Base */
+h1{
+	margin: 0;
+	padding: 0;
+	@mixin typo-h1{};
+}
+
+h2{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-h2{};
+}
+
+h3{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-h3{};
+}
+
+h4{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-h4{};
+}
+
+.sub1{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-sub1{};	
+}
+
+.sub2{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-sub2{};	
+}
+
+.body1{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-body1{};	
+}
+
+.body2{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-body2{};	
+}
+
+.caption{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-caption{};	
+}
+
+.overline{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-overline{};	
+}
+
+.txt-button{
+	margin: 0;
+	padding: 0;	
+	@mixin typo-button{};	
+}
+/* #endregion Typography Base */
+

@@ -1,8 +1,8 @@
-import { mediaDco } from 'base/dcos';
+import { BaseViewElement } from 'common/v-base';
+import { mediaDco } from 'dcos';
 import { attr, customElement, onEvent, OnEvent, onHub } from 'dom-native';
 import { Media } from 'shared/entities';
 import { asNum } from 'utils-min';
-import { BaseViewElement } from 'views/v-base';
 
 @customElement('v-images')
 export class ImageView extends BaseViewElement {
