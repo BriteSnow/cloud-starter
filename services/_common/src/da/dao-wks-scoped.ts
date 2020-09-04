@@ -32,6 +32,10 @@ export class WksScopedDao<E extends WksScopedEntity, I, Q extends QueryOptions<E
 		return super.list(utx, queryOptions);
 	}
 
+	@AccessRequires('wa_content_edit', "@cid")
+	async remove(utx: UserContext, id: I): Promise<number> {
+		return super.remove(utx, id);
+	}
 
 	//#region    ---------- Wks Scoped Helper Methods ---------- 
 	scopeQuery(utx: UserContext, queryOptions?: Q & CustomQuery) {

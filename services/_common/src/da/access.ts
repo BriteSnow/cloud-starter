@@ -104,7 +104,6 @@ export function AccessRequires(...accessList: Access[]) {
 
 				//// Check AccessList if needed
 				if (!pass) {
-
 					// if needed entity record for the entityId (loaded only if needed)
 					let entity: any;
 

@@ -34,6 +34,7 @@ async function start() {
 		const entry = await vidScalerJobQueue.nextJob();
 		let ffmpegResult: any = null;
 
+
 		try {
 			const { wksId, mediaId, res } = entry.data;
 
@@ -68,6 +69,8 @@ async function start() {
 				// Note: crf 0-51, 23 being default. 17-18 close to lossless
 				// Note: scale -2, to avoid getting (width cannot divide by 2), see https://stackoverflow.com/a/29582287/686724
 				ffmpegResult = await spawn('ffmpeg', split(`-i ${localOriginalFile}  -vcodec libx264 -crf 23 -vf fps=${fps},scale=-2:${h} -y ${localScaledFile}`, ' '), { capture: ['stdout', 'stderr'], toConsole: false });
+
+				await coreStore.upload(localScaledFile, remoteScaledFile);
 
 				// send the data event
 				await mediaScaledMp4Queue.add({ type: 'MediaScaledMp4', mediaId, wksId, res });

@@ -1,6 +1,6 @@
 import { BaseViewElement } from 'common/v-base';
 import { mediaDco } from 'dcos';
-import { attr, customElement, onEvent, OnEvent, onHub } from 'dom-native';
+import { append, attr, closest, customElement, first, on, onEvent, OnEvent, onHub, position } from 'dom-native';
 import { Media } from 'shared/entities';
 import { asNum } from 'utils-min';
 
@@ -29,10 +29,33 @@ export class ImageView extends BaseViewElement {
 			await mediaDco.create({ file });
 		}
 	}
+
+
+	@onEvent('pointerup', '.show-menu')
+	onCardShowMenuUp(evt: PointerEvent & OnEvent) {
+		if (first('#image-card-menu') == null) {
+
+			const [menu] = append(document.body, `
+			<c-menu id='image-card-menu'>
+			<li class="do-delete">Delete</li>
+			</c-menu>`);
+
+			position(menu, evt.selectTarget, { at: 'bottom', align: 'right' });
+
+			const cardEl = closest(evt.selectTarget, '[data-type="Media"]');
+			on(menu, 'pointerup', '.do-delete', async (evt) => {
+				const id = asNum(cardEl?.getAttribute('data-id'));
+				if (id == null) {
+					throw new Error(`UI ERROR - cannot find data-type Media data-id on element ${cardEl}`);
+				}
+				await mediaDco.remove(id);
+			})
+		}
+	}
 	//#endregion ---------- /Element Events ----------
 
 	//#region    ---------- Data Event ---------- 
-	@onHub('dcoHub', 'Media', 'create,update')
+	@onHub('dcoHub', 'Media', 'create,update,remove')
 	onMediaChange() {
 		this.refresh();
 	}
@@ -54,20 +77,25 @@ export class ImageView extends BaseViewElement {
 
 function _renderContent(mediaList: Media[] = []) {
 	return `
-		<div class="media-add">
-			<d-ico name="ico-add"></d-ico>
-			<h3>Add Images</h3>
-		</div>
-		${mediaList.map(m => `
-		<div class="card" data-id="${m.id}" data-type="Media">
-			<header>
-			<h2>${m.name}</h2>
-			<d-ico name="ico-more"></d-ico>
-			</header>
-			<section>
-			<img src="${m.url}" />
-			</section>
-		</div>		
-		`).join('\n')}
+		<header>
+		<h1>Images</h1>
+		</header>	
+		<section class="content">
+			<div class="card-add media-add">
+				<d-ico name="ico-add"></d-ico>
+				<h3>Add Image</h3>
+			</div>
+			${mediaList.map(m => `
+				<div class="card" data-id="${m.id}" data-type="Media">
+					<header>
+					<h2>${m.name}</h2>
+					<c-ico src="#ico-more" class="show-menu"></c-ico>
+					</header>
+					<section>
+						<img src="${m.url}"></img>
+					</section>
+				</div>		
+			`).join('\n')}
+		</section>
 	`
 }

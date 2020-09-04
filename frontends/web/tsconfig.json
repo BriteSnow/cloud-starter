@@ -1,6 +1,14 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/tsconfig.json" />
 {
 	"compilerOptions": {
+    "plugins": [
+      {
+				"name": "typescript-styled-plugin",
+        "tags": [
+          "css"
+        ]				
+      }
+    ],		
 		// For browser client, we target edge and above (es2018 seems to safe https://kangax.github.io/compat-table/es2016plus/)
 		"target": "es2018",
 

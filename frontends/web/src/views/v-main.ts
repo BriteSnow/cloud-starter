@@ -1,7 +1,7 @@
 import { getRouteWksId, pathAt } from 'common/route';
 import { logoff, UserContext } from 'common/user-ctx';
 import { BaseViewElement } from 'common/v-base';
-import { customElement, first, onEvent, onHub, push } from 'dom-native';
+import { append, customElement, first, frag, on, onEvent, onHub, position, push } from 'dom-native';
 import { isNotEmpty } from 'utils-min';
 
 const defaultPath = "";
@@ -11,15 +11,15 @@ const tagNameByPath: { [name: string]: string } = {
 	"_spec": 'v-spec-main',
 };
 
+
 @customElement('v-main')
 export class MainView extends BaseViewElement {
-	private _userMenuShowing = false;
 	private _userContext?: UserContext;
+
 
 	//// Key elements
 	private get mainEl() { return first(this, 'main')! };
 	private get headerAsideEl() { return first(this, 'header aside')! }
-	private get userMenuEl() { return first(this, 'header aside c-menu')! };
 
 	//#region    ---------- Data Setters ---------- 
 	set userContext(v: UserContext) {
@@ -30,35 +30,30 @@ export class MainView extends BaseViewElement {
 
 
 	//#region    ---------- Element & Hub Events ---------- 
-	// TODO: this should be fixed with the when moved to a c-menu-popup
-	@onEvent('click')
-	clickToToggleUserMenuOff(evt: MouseEvent) {
-		const target = evt!.target as HTMLElement;
-		// if the menu is showing, we hide it only if the user is not clicking on the aside again 
-		// ('click; aside' will handle the multi click on 'aside')
-		if (this._userMenuShowing && target.closest('aside') !== this.headerAsideEl) {
-			this.userMenuEl.classList.add("display-none");
-			this._userMenuShowing = false;
+	@onEvent('pointerup', '.toogle-user-menu')
+	showMenu(evt: PointerEvent) {
+		const menuId = 'user-menu-123';
+		if (first(`#user-menu-123`) == null) {
+
+			const [menu] = append(document.body, frag(`
+			<c-menu id='user-menu-123'>
+				<li class="do-logoff">Logoff</li>
+				<li class="show-profile">Profile</li>
+			</c-menu>
+			`));
+
+			position(menu, this.headerAsideEl, { at: 'bottom', align: 'right' });
+
+
+			on(menu, 'pointerup', 'li.do-logoff', async (evt) => {
+				await logoff();
+				window.location.href = '/';
+			});
 		}
+
+
 	}
 
-	@onEvent('click', '.toogle-user-menu')
-	clickToToogleUserMenuOn(evt: MouseEvent) {
-		evt!.cancelBubble = true;
-		if (this.userMenuEl.classList.contains('display-none')) {
-			this.userMenuEl.classList.remove('display-none');
-			this._userMenuShowing = true;
-		} else {
-			this.userMenuEl.classList.add('display-none');
-			this._userMenuShowing = false;
-		}
-	}
-
-	@onEvent('click', '.do-logoff')
-	async clickToLogoff() {
-		await logoff();
-		window.location.href = '/';
-	}
 
 	@onHub('routeHub', 'CHANGE')
 	routChange() {
@@ -106,18 +101,11 @@ function _render() {
 		<aside class="toogle-user-menu">
 			<c-ico>user</c-ico>
 			<div class="dx dx-name">Some name</div>
-			<c-menu class="display-none">
-				<div class="do-logoff">Logoff</div>
-				<a href="#profile">Profile</a>
-			</c-menu>
 		</aside>
 	</header>
 
 	<main>
 	</main>
-	<footer>
-		some footer
-	</footer>
 	<div class="__version__">${window.__version__}</div>
 	`
 }

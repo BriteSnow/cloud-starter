@@ -2,7 +2,7 @@
 
 import { render } from 'common/render';
 import { BaseHTMLElement, customElement, elem, frag, onEvent } from 'dom-native';
-import { BaseDialog } from 'views/dialog/d-base-dialog';
+import { BaseDialog } from 'views/popup/dg-base-dialog';
 
 export class BaseSpecView extends BaseHTMLElement {
 

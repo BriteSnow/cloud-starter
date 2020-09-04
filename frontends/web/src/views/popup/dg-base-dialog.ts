@@ -124,13 +124,12 @@ export class BaseDialog extends BaseHTMLElement {
 
 	init() {
 		super.init();
-		this.classList.add('d-base-dialog');
+		this.classList.add('dg-base-dialog');
 		this.innerHTML = render();
 	}
 
 
 }
-
 
 
 //// HTML

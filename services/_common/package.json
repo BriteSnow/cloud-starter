@@ -15,12 +15,12 @@
   "dependencies": {
     "@backlib/koa": "^0.2.0",
     "@types/ioredis": "^4.17.3",
-    "backlib": "^0.2.0",
-    "cloud-bucket": "^0.3.5",
+    "backlib": "^0.2.1",
+    "cloud-bucket": "^0.3.6",
     "ioredis": "^4.17.3",
     "knex": "^0.21.5",
     "koa-body": "^4.2.0",
-    "pg": "^8.3.2",
+    "pg": "^8.3.3",
     "redstream": "^0.1.9",
     "utils-min": "^0.1.16"
   }

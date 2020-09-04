@@ -1,10 +1,10 @@
 import { customElement, frag, onEvent, pull, trigger } from 'dom-native';
 import { Wks } from 'shared/entities';
-import { BaseDialog } from 'views/dialog/d-base-dialog';
+import { BaseDialog } from 'views/popup/dg-base-dialog';
 
 
 
-@customElement('d-add-wks')
+@customElement('dg-add-wks')
 class AddWksDialog extends BaseDialog {
 
 	//#region    ---------- Element Events ---------- 
