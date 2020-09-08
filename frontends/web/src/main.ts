@@ -2,7 +2,7 @@ import 'common/common-main';
 import { getUserContext } from 'common/user-ctx';
 import { first, on } from 'dom-native';
 import { MainView } from 'views/v-main';
-
+console.log('->> ...',);
 
 //#region    ---------- Start Application ---------- 
 //// Start the application 

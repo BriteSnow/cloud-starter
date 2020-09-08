@@ -1,7 +1,8 @@
+import { position } from '@dom-native/draggable';
 import { getRouteWksId, pathAt } from 'common/route';
 import { logoff, UserContext } from 'common/user-ctx';
 import { BaseViewElement } from 'common/v-base';
-import { append, customElement, first, frag, on, onEvent, onHub, position, push } from 'dom-native';
+import { append, customElement, first, frag, on, onEvent, onHub, push } from 'dom-native';
 import { isNotEmpty } from 'utils-min';
 
 const defaultPath = "";

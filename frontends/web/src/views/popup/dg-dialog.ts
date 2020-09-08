@@ -7,7 +7,15 @@ export class DgDialog extends BaseHTMLElement {
 
 	constructor() {
 		super();
-		this.attachShadow({ mode: 'open' }).append(_renderShadow(this.getAttribute('title') ?? undefined));
+		this.attachShadow({ mode: 'open' }).append(_renderShadow());
+	}
+
+	init() {
+		const title = this.getAttribute('title');
+
+		if (title) {
+			this.innerHTML += `<div slot="title">${title}</div>`;
+		}
 	}
 
 	//#region    ---------- Events ---------- 
@@ -45,7 +53,7 @@ const _compCss = css`
 		background: rgba(0,0,0,.3);
 	}
 
-	:host .dialog{
+	.dialog{
 		position: absolute;
 		width: 25rem;
 		top: 50%;
@@ -60,21 +68,21 @@ const _compCss = css`
 		grid-gap: 1rem;
 	}
 
-	:host header{
+	header{
 		display: contents;
 	}
 	
-	:host .title{
+	.title{
 		align-self: center;
 		grid-area: 1 / 2;		
 	}
 	
 	/* style slot placehold as well */
-	:host .title > *, :host .title > ::slotted(*){
+	.title > *, .title > ::slotted(*){
 		font-size: 1.2rem;
 	}
 
-	:host header c-ico{
+	header c-ico{
 		grid-area: 1 / 3;
 		width: 1.5rem;
 		height: 1.5rem;
@@ -82,10 +90,10 @@ const _compCss = css`
 		align-self: center;
 	}
 
-	:host section{
+	section{
 		grid-area: 2 / 2;
 	}
-	:host footer{
+	footer{
 		grid-area: 4 / 2;
 		display: grid;
 		grid-template-columns: 1fr auto auto;
@@ -96,13 +104,12 @@ const _compCss = css`
 
 //// ShadowRoot render
 let _compStyle: HTMLElement | undefined;
-function _renderShadow(title?: string) {
-	const titleHtml = title ? `<div>${title}</div>` : '';
+function _renderShadow() {
 
 	const content = frag(`
 <div class="dialog" part="dialog">
 	<header>
-		<div class="title"><slot name="title">${titleHtml}</slot></div>
+		<div class="title"><slot name="title"></slot></div>
 		<c-ico class="do-close" src="#ico-close"></c-ico>
 	</header>
 	<section>
@@ -111,7 +118,7 @@ function _renderShadow(title?: string) {
 	<span></span>
 	<footer>
 		<span></span>
-		<slot name="footer">aaa</slot>
+		<slot name="footer"></slot>
 	</footer>
 </div>
 `);
@@ -122,4 +129,13 @@ function _renderShadow(title?: string) {
 
 	return content;
 }
+
+const ex = /*html*/`
+
+<dg-dialog title="Some title">
+	<div>some complex <input value="content"> </div>
+</dg-dialog>
+
+
+`
 

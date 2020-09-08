@@ -22,7 +22,7 @@
     "@types/module-alias": "^2.0.0",
     "@types/useragent": "^2.1.1",
     "backlib": "^0.2.1",
-    "cloud-bucket": "^0.3.6",
+    "cloud-bucket": "^0.3.7",
     "fs-extra-plus": "^0.5.19",
     "googleapis": "^59.0.0",
     "ioredis": "^4.17.3",

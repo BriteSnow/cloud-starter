@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "backlib": "^0.2.1",
-    "cloud-bucket": "^0.3.6",
+    "cloud-bucket": "^0.3.7",
     "ioredis": "^4.17.3",
     "knex": "^0.21.5",
     "module-alias": "^2.2.2",

@@ -1,6 +1,7 @@
+import { position } from '@dom-native/draggable';
 import { BaseViewElement } from 'common/v-base';
 import { mediaDco } from 'dcos';
-import { append, attr, closest, customElement, first, on, onEvent, OnEvent, onHub, position } from 'dom-native';
+import { append, attr, closest, customElement, first, on, onEvent, OnEvent, onHub } from 'dom-native';
 import { Media } from 'shared/entities';
 import { asNum } from 'utils-min';
 

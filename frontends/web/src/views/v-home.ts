@@ -1,6 +1,7 @@
+import { position } from '@dom-native/draggable';
 import { BaseViewElement } from 'common/v-base';
 import { wksDco } from 'dcos';
-import { append, closest, customElement, elem, first, on, OnEvent, onEvent, onHub, position } from 'dom-native';
+import { append, closest, customElement, elem, first, on, OnEvent, onEvent, onHub } from 'dom-native';
 import { Wks } from 'shared/entities';
 import { asNum } from 'utils-min';
 
@@ -67,7 +68,6 @@ export class wksListView extends BaseViewElement {
 		// an async data fetching and therefore will execute later.
 		this.refresh();
 	}
-
 
 	async refresh(wksList?: Wks[]) {
 		// if no wksList, then, fetch the new list

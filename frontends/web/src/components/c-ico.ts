@@ -32,7 +32,7 @@ const _compCss = css`
 		user-select: none;
 	}
 	
-	:host svg{
+	svg{
 		width: 100%;
 		height: 100%;
 		fill: var(--ico-fill);		
