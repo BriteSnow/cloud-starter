@@ -1,9 +1,16 @@
-import { css } from 'common/dom-utils';
-import { customElement, elem, first, onEvent, pull, trigger } from 'dom-native';
-import { DgDialog } from './popup/dg-dialog';
+import { adoptStyleSheet, css, customElement, first, onEvent, pull, trigger } from 'dom-native';
+import { DgDialog } from '../dialog/dg-dialog';
 const { assign } = Object;
 
 
+const _compCss = css`
+	::slotted(.dialog-content) {
+		display: grid;
+		grid-auto-flow: row;
+		grid-auto-rows: min-content; 
+		grid-gap: 1rem;
+	}
+`;
 
 
 @customElement('dg-wks-add')
@@ -11,10 +18,7 @@ export class DgWksAdd extends DgDialog {
 
 	constructor() {
 		super();
-
-		// add extra sub component style
-		_compStyle ??= Object.assign(elem('style'), { innerHTML: _compCss });
-		this.shadowRoot?.append(_compStyle.cloneNode(true));
+		adoptStyleSheet(this, _compCss);
 	}
 
 	@onEvent('pointerup', '.do-ok')
@@ -45,12 +49,3 @@ export class DgWksAdd extends DgDialog {
 }
 
 
-let _compStyle: HTMLElement | undefined;
-const _compCss = css`
-	::slotted(.dialog-content) {
-		display: grid;
-		grid-auto-flow: row;
-		grid-auto-rows: min-content; 
-		grid-gap: 1rem;
-	}
-`

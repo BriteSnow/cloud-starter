@@ -1,23 +1,7 @@
-import { css } from 'common/dom-utils';
-import { BaseHTMLElement, customElement, elem, frag } from 'dom-native';
+import { adoptStyleSheet, BaseHTMLElement, css, customElement, html } from 'dom-native';
 const { assign } = Object;
 
-
-@customElement('c-ico')
-class IcoElement extends BaseHTMLElement {
-	static _BASE_URL_: string = '/svg/sprite.svg';
-
-	get src() { return this.getAttribute('src') ?? '' };
-
-	constructor() {
-		super();
-		this.attachShadow({ mode: 'open' }).append(_renderShadow(this.src));
-	}
-
-}
-
 //// CSS
-let _compStyle: HTMLElement | undefined;
 const _compCss = css`
 	:host{
 		--ico-fill: black;
@@ -39,17 +23,31 @@ const _compCss = css`
 	}
 `;
 
+
+@customElement('c-ico')
+class IcoElement extends BaseHTMLElement {
+	static _BASE_URL_: string = '/svg/sprite.svg';
+
+	get src() { return this.getAttribute('src') ?? '' };
+
+	constructor() {
+		super();
+		this.attachShadow({ mode: 'open' }).append(_renderShadow(this.src));
+		adoptStyleSheet(this, _compCss);
+	}
+
+}
+
+
+
 //// Shadow Render
 function _renderShadow(src: string) {
 
 	const href = src.startsWith('#') ? `${IcoElement._BASE_URL_}${src}` : src;
-	const _shadowFrag = frag(`
+	const content = html`
 	<svg class="symbol">
 	<use xlink:href="${href}" aria-hidden="true"></use>
-	</svg>`);
+	</svg>`;
 
-	_compStyle ??= assign(elem('style'), { innerHTML: _compCss });
-	_shadowFrag.prepend(_compStyle.cloneNode(true));
-
-	return _shadowFrag;
+	return content;
 }

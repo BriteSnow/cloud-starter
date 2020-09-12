@@ -1,48 +1,4 @@
-import { css } from 'common/dom-utils';
-import { BaseHTMLElement, customElement, elem, frag, onEvent, trigger } from 'dom-native';
-
-
-@customElement('dg-dialog')
-export class DgDialog extends BaseHTMLElement {
-
-	constructor() {
-		super();
-		this.attachShadow({ mode: 'open' }).append(_renderShadow());
-	}
-
-	init() {
-		const title = this.getAttribute('title');
-
-		if (title) {
-			this.innerHTML += `<div slot="title">${title}</div>`;
-		}
-	}
-
-	//#region    ---------- Events ---------- 
-	@onEvent('pointerup', '.do-close, .do-cancel')
-	doCloseOrCancel() {
-		this.cancel();
-	}
-
-	@onEvent('pointerup', '.do-ok')
-	doOk() {
-		trigger(this, 'OK');
-		this.close();
-	}
-	//#endregion ---------- /Events ---------- 
-
-	cancel() {
-		trigger(this, 'CANCEL');
-		this.close();
-	}
-
-	close() {
-		this.remove();
-		trigger(this, 'CLOSE');
-	}
-}
-
-
+import { adoptStyleSheet, BaseHTMLElement, css, customElement, html, onEvent, trigger } from 'dom-native';
 
 //// CSS
 const _compCss = css`
@@ -102,11 +58,55 @@ const _compCss = css`
 `;
 
 
+@customElement('dg-dialog')
+export class DgDialog extends BaseHTMLElement {
+
+	constructor() {
+		super();
+		adoptStyleSheet(this.attachShadow({ mode: 'open' }), _compCss).append(_renderShadow());
+	}
+
+	init() {
+		const title = this.getAttribute('title');
+
+		if (title) {
+			this.innerHTML += `<div slot="title">${title}</div>`;
+		}
+	}
+
+	//#region    ---------- Events ---------- 
+	@onEvent('pointerup', '.do-close, .do-cancel')
+	doCloseOrCancel() {
+		this.cancel();
+	}
+
+	@onEvent('pointerup', '.do-ok')
+	doOk() {
+		trigger(this, 'OK');
+		this.close();
+	}
+	//#endregion ---------- /Events ---------- 
+
+	cancel() {
+		trigger(this, 'CANCEL');
+		this.close();
+	}
+
+	close() {
+		this.remove();
+		trigger(this, 'CLOSE');
+	}
+}
+
+
+
+
+
+
 //// ShadowRoot render
-let _compStyle: HTMLElement | undefined;
 function _renderShadow() {
 
-	const content = frag(`
+	const content = html`
 <div class="dialog" part="dialog">
 	<header>
 		<div class="title"><slot name="title"></slot></div>
@@ -121,21 +121,7 @@ function _renderShadow() {
 		<slot name="footer"></slot>
 	</footer>
 </div>
-`);
-
-	// create style only once and reuse
-	_compStyle ??= Object.assign(elem('style'), { innerHTML: _compCss });
-	content.prepend(_compStyle.cloneNode(true));
+`;
 
 	return content;
 }
-
-const ex = /*html*/`
-
-<dg-dialog title="Some title">
-	<div>some complex <input value="content"> </div>
-</dg-dialog>
-
-
-`
-

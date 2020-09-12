@@ -1,7 +1,9 @@
+import { position } from '@dom-native/draggable';
 import { BaseViewElement } from 'common/v-base';
 import { mediaDco } from 'dcos';
-import { customElement, onEvent, OnEvent, onHub } from 'dom-native';
+import { append, closest, customElement, first, on, onEvent, OnEvent, onHub } from 'dom-native';
 import { Media } from 'shared/entities';
+import { asNum } from 'utils-min';
 
 @customElement('v-videos')
 export class VideosView extends BaseViewElement {
@@ -11,6 +13,30 @@ export class VideosView extends BaseViewElement {
 	get mediaAddEl() { return this.cacheFirst('.media-add')! }
 
 	//#region    ---------- Element Events ---------- 
+
+	@onEvent('pointerup', '.show-menu')
+	onCardShowMenuUp(evt: PointerEvent & OnEvent) {
+
+		if (first('#media-card-menue') == null) {
+
+			const [menu] = append(document.body, `
+			<c-menu id='media-card-menue'>
+				<li class="do-delete">Delete</li>
+			</c-menu>`);
+
+			position(menu, evt.selectTarget, { at: 'bottom', align: 'right' });
+
+			const cardEl = closest(evt.selectTarget, '[data-type="Media"]');
+			on(menu, 'pointerup', '.do-delete', async (evt) => {
+				const id = asNum(cardEl?.getAttribute('data-id'));
+				if (id == null) {
+					throw new Error(`UI ERROR - cannot find data-type=Media ${cardEl}`);
+				}
+				await mediaDco.remove(id);
+			})
+		}
+	}
+
 	@onEvent('dragenter,dragover', '.media-add')
 	enableDrop(evt: DragEvent) {
 		evt.preventDefault();
@@ -71,7 +97,7 @@ function _renderContent(mediaList: Media[] = []) {
 				<div class="card" data-id="${m.id}" data-type="Media">
 					<header>
 					<h2>${m.name}</h2>
-					<d-ico name="ico-more"></d-ico>
+					<c-ico src="#ico-more" class="show-menu"></c-ico>
 					</header>
 					<section>
 						<video controls>

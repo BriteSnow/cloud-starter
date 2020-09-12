@@ -1,6 +1,6 @@
 import { customElement, frag, onEvent, pull, trigger } from 'dom-native';
 import { Wks } from 'shared/entities';
-import { BaseDialog } from 'views/popup/dg-base-dialog';
+import { BaseDialog } from '../dialog/dg-base-dialog';
 
 
 

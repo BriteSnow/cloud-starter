@@ -20,12 +20,10 @@ export class TimelineMainView extends BaseViewElement {
 
 		const tmZoomRec = this.tmZoomEl;
 		const tmZoneRec = tmZoneEl.getBoundingClientRect();
-		console.log('->> ...',);
 		activateDrag(tmZoneEl, evt, {
 			drag: 'none',
 			onDrag: (evt) => {
 				const pointerEvent = evt.detail.pointerEvent;
-				console.log('->> ', `tm-zone onDrag ${pointerEvent.clientX}`);
 			}
 		});
 
