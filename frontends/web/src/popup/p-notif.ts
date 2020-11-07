@@ -1,4 +1,4 @@
-import { adoptStyleSheet, BaseHTMLElement, css, customElement, html, onEvent } from 'dom-native';
+import { adoptStyleSheets, BaseHTMLElement, css, customElement, html, onEvent } from 'dom-native';
 
 
 const _compCss = css`
@@ -61,7 +61,7 @@ class NotificationPopup extends BaseHTMLElement {
 			</div>
 		`;
 
-		adoptStyleSheet(this.attachShadow({ mode: 'open' }), _compCss).append(content);
+		adoptStyleSheets(this.attachShadow({ mode: 'open' }), _compCss).append(content);
 	}
 
 	@onEvent('pointerup', '.action-close')

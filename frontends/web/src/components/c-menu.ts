@@ -1,4 +1,4 @@
-import { adoptStyleSheet, BaseHTMLElement, css, customElement, html, onDoc, onEvent, trigger } from 'dom-native';
+import { adoptStyleSheets, BaseHTMLElement, css, customElement, html, onDoc, onEvent, trigger } from 'dom-native';
 const { assign } = Object;
 
 //// CSS
@@ -43,7 +43,7 @@ class MenuElement extends BaseHTMLElement {
 
 	constructor() {
 		super();
-		adoptStyleSheet(this.attachShadow({ mode: 'open' }), _compCss);
+		adoptStyleSheets(this.attachShadow({ mode: 'open' }), _compCss);
 		this.shadowRoot!.append(html`<slot></slot>`);
 	}
 

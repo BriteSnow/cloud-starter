@@ -1,4 +1,4 @@
-import { adoptStyleSheet, BaseHTMLElement, css, customElement, html, onEvent, trigger } from 'dom-native';
+import { adoptStyleSheets, BaseHTMLElement, css, customElement, html, onEvent, trigger } from 'dom-native';
 
 //// CSS
 const _compCss = css`
@@ -63,7 +63,7 @@ export class DgDialog extends BaseHTMLElement {
 
 	constructor() {
 		super();
-		adoptStyleSheet(this.attachShadow({ mode: 'open' }), _compCss).append(_renderShadow());
+		adoptStyleSheets(this.attachShadow({ mode: 'open' }), _compCss).append(_renderShadow());
 	}
 
 	init() {

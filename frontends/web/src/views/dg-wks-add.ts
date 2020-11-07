@@ -1,4 +1,4 @@
-import { adoptStyleSheet, css, customElement, first, onEvent, pull, trigger } from 'dom-native';
+import { adoptStyleSheets, css, customElement, first, onEvent, pull, trigger } from 'dom-native';
 import { DgDialog } from '../dialog/dg-dialog';
 const { assign } = Object;
 
@@ -18,7 +18,7 @@ export class DgWksAdd extends DgDialog {
 
 	constructor() {
 		super();
-		adoptStyleSheet(this, _compCss);
+		adoptStyleSheets(this, _compCss);
 	}
 
 	@onEvent('pointerup', '.do-ok')

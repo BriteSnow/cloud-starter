@@ -1,4 +1,4 @@
-import { adoptStyleSheet, BaseHTMLElement, css, customElement, html } from 'dom-native';
+import { adoptStyleSheets, BaseHTMLElement, css, customElement, html } from 'dom-native';
 const { assign } = Object;
 
 //// CSS
@@ -33,7 +33,7 @@ class IcoElement extends BaseHTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({ mode: 'open' }).append(_renderShadow(this.src));
-		adoptStyleSheet(this, _compCss);
+		adoptStyleSheets(this, _compCss);
 	}
 
 }
