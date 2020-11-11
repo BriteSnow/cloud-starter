@@ -1,4 +1,4 @@
-system: cba
+system: cstar
 baseBlockDir: services/ # used as the base dir .dir (as '${baseDir}/${blockName}/'')
 imageTag: '{{__version__}}'
 
@@ -35,47 +35,13 @@ blocks:
     dbuildDependencies: _common
   - name: web
     dir: frontends/web/
-    baseDistDir: services/web-server/web-folder
-    webBundles:
-      - name: lib
-        entries: ./src/lib-bundle.js
-        dist: ./js/lib-bundle.js
-      - name: app
-        entries: ./src/**/*.ts
-        dist: ./js/app-bundle.js
-        rollupOptions:
-          globals:
-            d3: window.d3
-            handlebars: window.Handlebars
-      - name: css
-        entries: ['./pcss/main.pcss', './src/**/*.pcss']
-        watch: ['./**/*.pcss','../_common/**/*.pcss'] # Only for watch. Any changes on those folder we trigger a full rebuild
-        dist: ./css/all-bundle.css
-      - name: tmpl
-        entries: ./src/**/*.tmpl
-        dist: ./js/templates.js
   - name: web-server
     dbuildDependencies: ['_common','web'] # build dependency for when running dbuild (no effect on build).
   - name: admin
     dir: frontends/admin/
-    baseDistDir: services/admin-server/web-folder
-    webBundles:
-      - name: app
-        entries: ./src/**/*.ts
-        dist: ./js/app-bundle.js
-        rollupOptions:
-          globals:
-            d3: window.d3
-            handlebars: window.Handlebars
-      - name: css
-        entries: ['./pcss/main.pcss', './src/**/*.pcss']
-        watch: ['./**/*.pcss','../_common/**/*.pcss'] # Only for watch. Any changes on those folder we trigger a full rebuild
-        dist: ./css/all-bundle.css
-      - name: tmpl
-        entries: ./src/**/*.tmpl
-        dist: ./js/templates.js
   - name: admin-server
     dbuildDependencies: ['_common','admin'] # build dependency for when running dbuild (no effect on build). 
+
 version: 
   files:
     - frontends/_common/src/common-main.ts

@@ -2,50 +2,50 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: cba-admin-server
-  name: cba-admin-server-dep
+    run: cstar-admin-server
+  name: cstar-admin-server-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cba-admin-server
+      run: cstar-admin-server
   template:
     metadata:
       labels:
-        run: cba-admin-server
+        run: cstar-admin-server
     spec:
       volumes:
         # Those volumes are for development, it allow REPL dev from local build
-        - name: cba-admin-server-web-folder
+        - name: cstar-admin-server-web-folder
           hostPath:
             path: '{{projectDir}}services/admin-server/web-folder'
             type: Directory
-        - name: cba-admin-server-src
+        - name: cstar-admin-server-src
           hostPath:
             path: '{{projectDir}}services/admin-server/src'
             type: Directory
-        - name: cba-admin-server-dist
+        - name: cstar-admin-server-dist
           hostPath:
             path: '{{projectDir}}services/admin-server/dist'
             type: Directory
       containers:
-        - image: localhost:5000/cba-admin-server:{{imageTag}}
-          name: cba-admin-server-ctn
+        - image: localhost:5000/cstar-admin-server:{{imageTag}}
+          name: cstar-admin-server-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: cba-config
+                name: cstar-config
             - secretRef:
-                name: cba-secret
+                name: cstar-secret
           env:
             - name: service_name
               value: admin-server                    
           volumeMounts:
             - mountPath: /service/web-folder
-              name: cba-admin-server-web-folder
+              name: cstar-admin-server-web-folder
             - mountPath: /service/src
-              name: cba-admin-server-src
+              name: cstar-admin-server-src
             - mountPath: /service/dist
-              name: cba-admin-server-dist
+              name: cstar-admin-server-dist
       restartPolicy: Always

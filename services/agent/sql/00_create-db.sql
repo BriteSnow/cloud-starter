@@ -1,2 +1,2 @@
-CREATE USER cba_user PASSWORD 'welcome' SUPERUSER;
-CREATE DATABASE cba_db owner cba_user ENCODING = 'UTF-8';
+CREATE USER cstar_user PASSWORD 'welcome' SUPERUSER;
+CREATE DATABASE cstar_db owner cstar_user ENCODING = 'UTF-8';

@@ -2,44 +2,44 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: cba-vid-scaler
-  name: cba-vid-scaler-dep
+    run: cstar-vid-scaler
+  name: cstar-vid-scaler-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cba-vid-scaler
+      run: cstar-vid-scaler
   template:
     metadata:
       labels:
-        run: cba-vid-scaler
+        run: cstar-vid-scaler
     spec:
       volumes:
         # Those volumes are for development, it allow REPL dev from local build
-        - name: cba-vid-scaler-src
+        - name: cstar-vid-scaler-src
           hostPath:
             path: '{{projectDir}}services/vid-scaler/src'
             type: Directory
-        - name: cba-vid-scaler-dist
+        - name: cstar-vid-scaler-dist
           hostPath:
             path: '{{projectDir}}services/vid-scaler/dist'
             type: Directory
       containers:
-        - image: localhost:5000/cba-vid-scaler:{{imageTag}}
-          name: cba-vid-scaler-ctn
+        - image: localhost:5000/cstar-vid-scaler:{{imageTag}}
+          name: cstar-vid-scaler-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: cba-config
+                name: cstar-config
             - secretRef:
-                name: cba-secret
+                name: cstar-secret
           env:
             - name: service_name
               value: vid-scaler
           volumeMounts:
             - mountPath: /service/src
-              name: cba-vid-scaler-src
+              name: cstar-vid-scaler-src
             - mountPath: /service/dist
-              name: cba-vid-scaler-dist
+              name: cstar-vid-scaler-dist
       restartPolicy: Always

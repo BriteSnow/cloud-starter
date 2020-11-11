@@ -119,7 +119,7 @@ export function getStream<K extends keyof AllEventDic>(name: K, forBlocking = tr
 
 //#region    ---------- RedisClient Factory / Cache ---------- 
 const REDIS_MAX_RETRY = 100;
-const QUEUE_HOST = 'cba-queue-srv';
+const QUEUE_HOST = 'cstar-queue-srv';
 let newSeq = 1; // the sequence id for anonymous redisClient (when getRedisClient(true))
 
 interface Clients {

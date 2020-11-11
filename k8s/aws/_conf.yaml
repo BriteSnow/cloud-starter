@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cba-secret
+  name: cstar-secret
 type: Opaque
 data:
   db-password: d2VsY29tZQ==
@@ -12,9 +12,9 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cba-config
+  name: cstar-config
 data:
-  db-host: cba-db-srv
-  db-database: cba_db
-  db-user: cba_user
+  db-host: cstar-db-srv
+  db-database: cstar_db
+  db-user: cstar_user
   google_oauth-redirect_url: http://localhost:8080/goauth-redirect

@@ -12,7 +12,7 @@ import { download, list, pgStatus, pgTest, psqlImport } from 'vdev';
 
 
 const sqlDir = 'sql/';
-const host = 'cba-db-srv';
+const host = 'cstar-db-srv';
 
 const DEV_PWD = 'welcome';
 

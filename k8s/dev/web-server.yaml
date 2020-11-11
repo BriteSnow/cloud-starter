@@ -2,50 +2,50 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: cba-web-server
-  name: cba-web-server-dep
+    run: cstar-web-server
+  name: cstar-web-server-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cba-web-server
+      run: cstar-web-server
   template:
     metadata:
       labels:
-        run: cba-web-server
+        run: cstar-web-server
     spec:
       volumes:
         # Those volumes are for development, it allow REPL dev from local build
-        - name: cba-web-server-web-folder
+        - name: cstar-web-server-web-folder
           hostPath:
             path: '{{projectDir}}services/web-server/web-folder'
             type: Directory
-        - name: cba-web-server-src
+        - name: cstar-web-server-src
           hostPath:
             path: '{{projectDir}}services/web-server/src'
             type: Directory
-        - name: cba-web-server-dist
+        - name: cstar-web-server-dist
           hostPath:
             path: '{{projectDir}}services/web-server/dist'
             type: Directory
       containers:
-        - image: localhost:5000/cba-web-server:{{imageTag}}
-          name: cba-web-server-ctn
+        - image: localhost:5000/cstar-web-server:{{imageTag}}
+          name: cstar-web-server-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: cba-config
+                name: cstar-config
             - secretRef:
-                name: cba-secret
+                name: cstar-secret
           env:
             - name: service_name
               value: web-server                    
           volumeMounts:
             - mountPath: /service/web-folder
-              name: cba-web-server-web-folder
+              name: cstar-web-server-web-folder
             - mountPath: /service/src
-              name: cba-web-server-src
+              name: cstar-web-server-src
             - mountPath: /service/dist
-              name: cba-web-server-dist
+              name: cstar-web-server-dist
       restartPolicy: Always
