@@ -59,7 +59,7 @@ export async function authRequest(ktx: Ktx): Promise<UserForContext> {
 		const cred: UserCredForToken = Object.freeze({ uuid, tsalt }); // make sure can't be tampered between check and setAuth
 		checkToken(tokenData, cred);
 		setAuth(ktx, cred);
-		const wksId = asNum(ktx.query.wksId);
+		const wksId = asNum(ktx.query.wksId as string) ?? undefined;
 
 		return { id, accesses, wksId };
 

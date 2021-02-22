@@ -16,7 +16,7 @@ class DseGenerics extends ApiRouter {
 		const dao = daoByEntity[type];
 
 		let queryOptions: any = {};
-		if (ktx.query.matching) {
+		if (typeof ktx.query.matching == 'string') {
 			queryOptions.matching = JSON.parse(ktx.query.matching);
 		}
 		const entities = await dao.list(ctx, queryOptions);

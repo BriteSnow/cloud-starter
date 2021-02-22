@@ -32,12 +32,12 @@ class GoogleOAuthRouter extends AppRouter {
 	* Will check if the user for this google email address exist in the db.
 	* - If user not found in db, auto create with access_token as password (should not be used anyway).
 	* - Then, autenticate the user (set auth cookies) and return success.
-  *
+	*
 	* @throws exception if any issue.
 	*/
 	@routeGet('/goauth-redirect')
 	async oauthRedirect(ktx: Ktx) {
-		const code = ktx.query.code;
+		const code = ktx.query.code as string;
 
 		//// Get OAuth User Information
 		const oauthClient = await getOAuth2Client();

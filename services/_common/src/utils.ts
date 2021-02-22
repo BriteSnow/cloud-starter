@@ -32,6 +32,17 @@ export function b64dec(str_b64: string) {
 export function b64enc(str: string) {
 	return Buffer.from(str).toString('base64');
 }
+
+const BASE64_REPLACE = { '+': '-', '/': '~', '=': '_' };
+function b64_to_urlb64(val: string) {
+	return val.replace(/[+/=]/g, c => (<any>BASE64_REPLACE)[c]);
+}
+
+const URLBASE64_REPLACE = Object.entries(BASE64_REPLACE)
+	.reduce((acc, entry) => { acc[entry[1]] = entry[0]; return acc }, {} as any);
+function urlb64_to_b64(val: string) {
+	return val.replace(/[-~_]/g, c => (<any>URLBASE64_REPLACE)[c]);
+}
 //#endregion ---------- /base64 encoding ----------
 
 

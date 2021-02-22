@@ -1,2 +1,0 @@
---require dist/services/_common/src/setup-module-aliases.js
-dist/services/web-server/test/test-*.js

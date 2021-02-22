@@ -1,5 +1,6 @@
 import * as child_process from 'child_process';
 import { router } from 'cmdrouter';
+import execa from 'execa';
 import * as fs from 'fs-extra-plus';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
@@ -20,11 +21,15 @@ async function pupdate() {
 
 		if (await fs.pathExists(Path.join(dir, 'package.json'))) {
 			try {
-				const result = await spawn('npm', ['outdated'], { cwd: dir, ignoreFail: true });
-				const code = result.code;
-				if (code !== 0) { // npm outated exist with 1 if some dependencies need update
+				console.log(`-- npm outdated for ${dir}`)
+				const proc = execa('npm', ['outdated'], { cwd: dir, buffer: true, reject: false });
+				const { stdout: stdoutStream } = proc;
+				stdoutStream?.pipe(process.stdout);
+				const { stdout } = await proc;
+				if (stdout.includes('Wanted')) {
 					dirNamesToUpdate.push(dirName);
 				}
+				console.log();
 			} catch (ex) {
 				console.log('ERROR', ex)
 			}

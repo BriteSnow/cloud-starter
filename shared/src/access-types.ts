@@ -8,6 +8,7 @@ const GLOBAL_ACCESSES = freeze([
 	'a_ui', // ui web interface access (web login). Can be negated in user.accesses modifiers
 	'a_api', // for API access. Can bee added in user.accesses modifiers
 	'a_admin', // all basic admin tasks
+	'a_pwd_reset', // password reset
 	'a_admin_edit_user' // ability to reset user information
 ] as const);
 
@@ -25,7 +26,7 @@ export function isAccess(name: string): name is GlobalAccess {
 // By default r_user have the web ui access.
 // Also all users have the special '#user' access (any user)
 const r_user: Readonly<GlobalAccess[]> = freeze(['#user', 'a_ui']);
-const r_admin: Readonly<GlobalAccess[]> = freeze([...r_user, 'a_admin', 'a_admin_edit_user']);
+const r_admin: Readonly<GlobalAccess[]> = freeze([...r_user, 'a_admin', 'a_admin_edit_user', 'a_pwd_reset']);
 
 const _GLOBAL_ROLES = freeze({
 	r_user,

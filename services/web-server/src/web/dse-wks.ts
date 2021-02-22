@@ -18,7 +18,7 @@ class WksDse extends ApiRouter {
 		let queryOptions: WksQueryOptions = { access: 'wa_content_view' };
 
 		// TODO need to validate
-		if (ktx.query.matching) {
+		if (typeof ktx.query.matching == 'string') {
 			queryOptions.matching = JSON.parse(ktx.query.matching);
 		}
 

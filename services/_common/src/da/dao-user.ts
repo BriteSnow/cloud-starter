@@ -32,6 +32,7 @@ export interface UserCredForLogin extends UserCredForAuth {
 interface CreateUserData {
 	username: string;
 	clearPwd: string;
+	role?: GlobalRoleName
 }
 
 // To allow checking or deleting these properties for regular apis
@@ -98,13 +99,16 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 
 	//#region    ---------- Credential Methods ---------- 
 	async createUser(utx: UserContext, data: CreateUserData) {
-		const { username, clearPwd } = data;
+		const { username, clearPwd, role } = data;
 
 		// first we create the new user
-		const userId = await super.create(utx, { username });
+		const { query } = await knexQuery({ utx, tableName: this.table });
+		// stamp manually since the 'role' is not part of the User type (by design, not needed, need to make sure accesses is used)
+		const dataUser = BaseDao.Stamp(utx, { username, role }, true);
+		const userId = (await query.insert(dataUser).returning(this.idNames))[0] as number;
+
 		// then we set the new password (for create, no need to reset psalt or tsalt)
 		await this.setPwd(utx, { id: userId }, clearPwd, false, false);
-
 		// return the userId
 		return userId;
 	}
@@ -123,13 +127,11 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 	@AccessRequires('a_admin_edit_user', '@id')
 	async setPwd(utx: UserContext, userKey: UserKey, clearPwd: string, resetTSalt = true, resetPSalt = true) {
 		checkUserKey(userKey);
-
 		//// reset psalt if set to reset
 		if (resetPSalt) {
 			const { query } = await knexQuery({ utx, tableName: this.table });
 			await query.update({ psalt: query.client.raw('gen_random_uuid()') }).where(userKey);
 		}
-
 		//// get user credential for create, and create new password
 		const userCred = await this.getUserCredForCreate(utx, userKey);
 		const { uuid, psalt } = userCred;
@@ -146,19 +148,19 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 
 
 
-	@AccessRequires() // here only sys context should be able to call this one
+	@AccessRequires() // only allow sysCtx
 	async getUserCredForAuth(utx: UserContext, key: UserKey): Promise<UserCredForAuth> {
 		// Note: can force the return type as per columns
 		return this.getUserCred(utx, USER_COLUMNS_FOR_AUTH, key) as Promise<UserCredForAuth>;
 	}
 
-	@AccessRequires() // here only sys context should be able to call this one
+	@AccessRequires() // only allow sysCtx
 	async getUserCredForLogin(utx: UserContext, key: UserKey): Promise<UserCredForLogin> {
 		// Note: can force the return type as per columns
 		return this.getUserCred(utx, USER_COLUMNS_FOR_LOGIN, key) as Promise<UserCredForLogin>;
 	}
 
-	@AccessRequires() // here only sys context should be able to call this one
+	@AccessRequires() // only allow sysCtx
 	async getUserCredForCreate(utx: UserContext, key: UserKey): Promise<UserCredForLogin> {
 		// Note: can force the return type as per columns
 		return this.getUserCred(utx, USER_COLUMNS_FOR_LOGIN, key) as Promise<UserCredForLogin>;

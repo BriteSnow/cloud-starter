@@ -4,8 +4,6 @@ import { on, trigger } from 'dom-native';
 
 // NOT IMPLEMENTED YET, JUST SKELETON. 
 
-console.log('->> admin main.ts!!!',);
-
 on(document, 'DOMContentLoaded', function () {
 	trigger(document, 'APP_LOADED');
 });

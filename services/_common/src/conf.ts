@@ -19,6 +19,7 @@ export const SERVICE_NAME = env.service_name ?? 'no-service';
 export const HTTPS_MODE = (env.https_mode === 'true') ? true : false;
 export const PWD_SCHEME_01_SALT = env.pwd_scheme_01_salt;
 export const PWD_SCHEME_02_SALT = env.pwd_scheme_02_salt;
+export const PWD_PRLINK_SALT = env.pwd_prlink_salt;
 export const WEB_TOKEN_SALT = PWD_SCHEME_02_SALT;
 export const WEB_TOKEN_DURATION = 3600; // in sec (this could come from a env/config)
 
@@ -57,3 +58,4 @@ export const LOG = freeze({ maxCount: LOG_MAX_COUNT, maxTime: LOG_MAX_TIME });
 
 //// OTHERS
 export const PERF_LOG_THRESHOLD_WEB = 1000; // in ms. Threshold when utx.perfContext.items should be logged
+

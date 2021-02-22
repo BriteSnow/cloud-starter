@@ -34,7 +34,7 @@
     "moment": "^2.29.1",
     "pg": "^8.5.1",
     "redis": "^3.0.2",
-    "redstream": "^0.1.9",
+    "redstream": "^0.1.11",
     "useragent": "^2.3.0",
     "utils-min": "^0.1.17",
     "uuid": "^8.3.2"

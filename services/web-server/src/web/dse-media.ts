@@ -14,7 +14,7 @@ class MediaDse extends ApiRouter {
 		const utx = ktx.state.utx;
 		// ctx.router available
 		const file = ktx.request.files?.file; // 'file' is the formData name for the first file
-		if (file) {
+		if (file && !(file instanceof Array)) {
 			const id = await mediaDao.createWithFile(utx, { file });
 			const media = await mediaDao.get(utx, id);
 			return success(media);

@@ -27,8 +27,9 @@ CREATE TABLE "user" (
   -- access modifiers
   accesses user_access[],
   -- password salt for password encryption
-  psalt uuid NOT NULL UNIQUE DEFAULT gen_random_uuid (),
+  psalt uuid NOT NULL UNIQUE DEFAULT gen_random_uuid(),
   pwd varchar(128),
+  "pwdHistory" varchar(128)[],
   -- token salt for session cookie
   tsalt uuid NOT NULL UNIQUE DEFAULT gen_random_uuid (),
   cid bigint,
@@ -40,6 +41,21 @@ CREATE TABLE "user" (
 -- reserving for 1000 for dev, test, and administrative purproses.
 ALTER SEQUENCE user_id_seq
   RESTART WITH 1000;
+
+
+
+CREATE TABLE "prlink" (
+  id bigserial,
+  "userId" bigint NOT NULL UNIQUE,
+  cid bigint,
+  ctime timestamp with time zone,
+  code uuid NOT NULL UNIQUE DEFAULT gen_random_uuid(),
+  "clickFirst" timestamp with time zone,
+  "clickLast" timestamp with time zone,
+  "clickCount" int,
+  FOREIGN KEY ("userId") REFERENCES "user" (id) ON DELETE CASCADE
+);
+
 
 CREATE TYPE oauth_type AS ENUM (
   'google'

@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node dist/services/web-server/src/start",
     "dstart": "node --inspect dist/services/web-server/src/start",
-    "dtest": "node --inspect-brk --inspect ./node_modules/.bin/mocha  --opts mocha.opts ",
-    "test": "./node_modules/.bin/mocha --opts mocha.opts"
+    "dtest": "node --inspect-brk --inspect ./node_modules/.bin/mocha  ",
+    "test": "./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "moment": "^2.29.1",
     "pg": "^8.5.1",
     "redis": "^3.0.2",
-    "redstream": "^0.1.9",
+    "redstream": "^0.1.11",
     "ts-node": "^9.1.1",
     "useragent": "^2.3.0",
     "utils-min": "^0.1.17",

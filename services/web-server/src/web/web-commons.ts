@@ -1,12 +1,13 @@
 import { wksDao } from 'common/da/daos';
 import { Wks } from 'shared/entities';
+import { asNum } from 'utils-min';
 import { ApiKtx } from './koa-utils';
 
 /** Get the wksId from reques, and get the Wks object */
 export async function getWksFromReq(ktx: ApiKtx): Promise<Partial<Wks>> {
 	const ctx = ktx.state.utx;
-
-	const wksId = ktx.query.wksId;
+	const qWksId = ktx.query.wksId;
+	const wksId = asNum((typeof qWksId == 'string') ? qWksId : null);
 
 	// guard if no wks id
 	if (wksId == null) {

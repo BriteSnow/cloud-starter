@@ -92,21 +92,23 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 
 		if (this.stamped) {
 			// Force casting. We can assume this, might have a more elegant way (but should not need StampedDao though)
-			const stampedData: Partial<E> & StampedEntity = data;
-			const now = nowTimestamp();
-			if (forCreate) {
-				stampedData.cid = utx.userId;
-				stampedData.ctime = now;
-			}
-			stampedData.mid = utx.userId;
-			stampedData.mtime = now;
-			return stampedData;
+			return BaseDao.Stamp(utx, data, forCreate);
 		} else {
 			return data;
 		}
 
+	}
 
-
+	protected static Stamp<T>(utx: UserContext, data: T, forCreate?: boolean) {
+		const stampedData: Partial<T> & StampedEntity = data;
+		const now = nowTimestamp();
+		if (forCreate) {
+			stampedData.cid = utx.userId;
+			stampedData.ctime = now;
+		}
+		stampedData.mid = utx.userId;
+		stampedData.mtime = now;
+		return stampedData;
 	}
 	//#endregion ---------- /Data Entity Processing ---------- 
 

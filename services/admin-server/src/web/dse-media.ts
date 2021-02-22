@@ -3,6 +3,7 @@
 
 import { mediaDao } from 'common/da/daos';
 import { AppError } from 'common/error';
+import { File } from 'formidable';
 import { ApiKtx, ApiRouter, routePost, success } from './koa-utils';
 
 
@@ -13,7 +14,7 @@ class MediaDse extends ApiRouter {
 	async create(ktx: ApiKtx) {
 		const utx = ktx.state.utx;
 		// ctx.router available
-		const file = ktx.request.files?.file; // 'file' is the formData name for the first file
+		const file = ktx.request.files?.file as File | undefined; // 'file' is the formData name for the first file
 		if (file) {
 			const id = await mediaDao.createWithFile(utx, { file });
 			const media = await mediaDao.get(utx, id);
