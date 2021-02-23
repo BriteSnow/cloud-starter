@@ -14,7 +14,7 @@ export interface PRLinkUserInfo {
  * Build the 'prp' URL param for the password reset link
  * _short_code_uuid_._sig_, where  _sig_ = sha256( rlink_salt + code_uuid + user_uuid + ctime).hex
  * Note:
- * 	- The rest link will be like `https://server/prlink?prp=_prp_value_
+ * 	- The rest link will be like `https://server/pwdreset?prp=_prp_value_
  * @param rplinkInfo 
  */
 export function urlPrparam(info: PRLinkUserInfo) {

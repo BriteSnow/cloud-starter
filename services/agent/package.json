@@ -22,7 +22,7 @@
     "@types/uuid": "^8.3.0",
     "backlib": "^0.3.0",
     "cmdrouter": "^0.3.1",
-    "knex": "^0.21.17",
+    "knex": "^0.21.18",
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "p-spawn": "^0.5.5",

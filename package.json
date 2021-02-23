@@ -40,9 +40,12 @@
     "@types/csvtojson": "^1.1.5",
     "@types/qs": "^6.9.5",
     "@types/redis": "^2.8.28",
+    "@types/supports-color": "^7.2.0",
+    "chalk": "^4.1.0",
     "chokidar": "^3.5.1",
     "cmdrouter": "^0.3.1",
     "module-alias": "^2.2.2",
+    "supports-color": "^8.1.1",
     "ts-json-schema-generator": "^0.86.1",
     "typescript-styled-plugin": "^0.15.0"
   },

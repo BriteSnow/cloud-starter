@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import * as child_process from 'child_process';
 import { router } from 'cmdrouter';
 import execa from 'execa';
@@ -21,14 +22,21 @@ async function pupdate() {
 
 		if (await fs.pathExists(Path.join(dir, 'package.json'))) {
 			try {
-				console.log(`-- npm outdated for ${dir}`)
-				const proc = execa('npm', ['outdated'], { cwd: dir, buffer: true, reject: false });
-				const { stdout: stdoutStream } = proc;
-				stdoutStream?.pipe(process.stdout);
+				console.log(`-- npm outdated for ${chalk.cyan(dir)}`);
+
+				// NOTE: Finally found a way to preserve color with pipe using --color=always (works with npm ... commands)
+				//       see: https://stackoverflow.com/questions/7725809/preserve-color-when-executing-child-process-spawn
+				//            https://programmersought.com/article/53811228083/
+				const proc = execa('npm', ['outdated', '--color=always'], { cwd: dir, stdout: 'pipe', reject: false });
+				proc.stdout?.pipe(process.stdout);
+
+				// NOTE: npm 6.x returns exitCode 1 when there some outdated libs. npm 7.x does not (return 0, success)
+				//       but both output to stdout, so between the reject: false above and looking for wanted below, this works on both version.
 				const { stdout } = await proc;
 				if (stdout.includes('Wanted')) {
 					dirNamesToUpdate.push(dirName);
 				}
+
 				console.log();
 			} catch (ex) {
 				console.log('ERROR', ex)
