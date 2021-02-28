@@ -20,7 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/uuid": "^8.3.0",
-    "backlib": "^0.3.0",
+    "backlib": "^0.3.2",
     "cmdrouter": "^0.3.1",
     "knex": "^0.21.18",
     "module-alias": "^2.2.2",

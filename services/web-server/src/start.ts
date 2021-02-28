@@ -3,6 +3,8 @@ require('../../_common/src/setup-module-aliases');
 import { PERF_LOG_THRESHOLD_WEB, __version__ } from 'common/conf';
 import { AppError } from 'common/error';
 import { web_log } from 'common/log/logger';
+import { buildWebLogRecord, initKtx, KCustom, KState, Ktx } from 'common/web/koa-utils';
+import { owaspHeadersMdwBuilder } from 'common/web/owasp-headers';
 import Koa, { Next } from 'koa';
 import koaBody from 'koa-body';
 import koaSend from 'koa-send';
@@ -12,7 +14,6 @@ import { AuthFailError, clearAuth } from './auth';
 import dseGenerics from './web/dse-generics';
 import dseMedia from './web/dse-media';
 import dseWks from './web/dse-wks';
-import { buildWebLogRecord, initKtx, KCustom, KState, Ktx } from './web/koa-utils';
 import authRequestMiddleware from './web/middleware-auth-request';
 import routerApiUserContext from './web/router-api-user-context';
 import routerAuthGoogleOAuth from './web/router-auth-google-oauth';
@@ -20,6 +21,8 @@ import routerAuthLoginAndRegister from './web/router-auth-login-register';
 
 const PORT = 8080;
 const COOKIE__VERSION__ = '__version__';
+// will be used for the static file fall back (APIs will take precedence) 
+const WEB_FOLDER = 'web-folder/'
 
 main();
 
@@ -29,8 +32,7 @@ async function main() {
 	// upgrade the koa context to Ktx wich is ParameterizedContext<KState, KCustom>
 	app.use(initKtx);
 
-	// will be used for the static file fall back (APIs will take precedence) 
-	const webDir = 'web-folder/'
+	app.use(owaspHeadersMdwBuilder());
 
 	// set proxy to true to have x-forwarded-for, https://expressjs.com/en/guide/behind-proxies.html
 	app.proxy = true;
@@ -99,7 +101,7 @@ async function main() {
 
 		// Assumption: if we are here, all API handlers took the request, and we just have a page render or static file (with extension)
 		if (!extname(ktx.path)) {
-			await koaSend(ktx, webDir + '/index.html');
+			await koaSend(ktx, WEB_FOLDER + '/index.html');
 		} else {
 			return next();
 		}
@@ -107,7 +109,7 @@ async function main() {
 
 	//// fall back on the static for path with extensions
 	// This allows to have static files if they have not be bound above (images, .svg, .css, .js, ...)
-	app.use(koaStatic(webDir));
+	app.use(koaStatic(WEB_FOLDER));
 
 	// start the server
 	app.listen(PORT);

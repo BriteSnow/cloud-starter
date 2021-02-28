@@ -27,7 +27,7 @@ async function pupdate() {
 				// NOTE: Finally found a way to preserve color with pipe using --color=always (works with npm ... commands)
 				//       see: https://stackoverflow.com/questions/7725809/preserve-color-when-executing-child-process-spawn
 				//            https://programmersought.com/article/53811228083/
-				const proc = execa('npm', ['outdated', '--color=always'], { cwd: dir, stdout: 'pipe', reject: false });
+				const proc = execa('npm', ['outdated', '--color=always'], { cwd: dir, reject: false });
 				proc.stdout?.pipe(process.stdout);
 
 				// NOTE: npm 6.x returns exitCode 1 when there some outdated libs. npm 7.x does not (return 0, success)

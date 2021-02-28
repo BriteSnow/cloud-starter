@@ -16,15 +16,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@backlib/koa": "^0.3.3",
+    "@backlib/koa": "^0.3.4",
     "@types/koa-static": "^4.0.1",
     "@types/mocha": "^8.2.1",
     "@types/module-alias": "^2.0.0",
     "@types/useragent": "^2.3.0",
-    "backlib": "^0.3.1",
-    "cloud-bucket": "^0.3.12",
+    "backlib": "^0.3.2",
+    "cloud-bucket": "^0.3.13",
     "fs-extra-plus": "^0.5.21",
-    "ioredis": "^4.22.0",
+    "ioredis": "^4.23.0",
     "knex": "^0.21.18",
     "koa-body": "^4.2.0",
     "koa-send": "^5.0.1",
@@ -36,7 +36,7 @@
     "redis": "^3.0.2",
     "redstream": "^0.1.11",
     "useragent": "^2.3.0",
-    "utils-min": "^0.1.17",
+    "utils-min": "^0.1.18",
     "uuid": "^8.3.2"
   }
 }

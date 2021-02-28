@@ -13,15 +13,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@backlib/koa": "^0.3.3",
-    "@types/ioredis": "^4.19.4",
-    "backlib": "^0.3.1",
-    "cloud-bucket": "^0.3.12",
-    "ioredis": "^4.22.0",
+    "@backlib/koa": "^0.3.4",
+    "@types/ioredis": "^4.22.0",
+    "backlib": "^0.3.2",
+    "cloud-bucket": "^0.3.13",
+    "ioredis": "^4.23.0",
     "knex": "^0.21.18",
     "koa-body": "^4.2.0",
     "pg": "^8.5.1",
     "redstream": "^0.1.11",
-    "utils-min": "^0.1.17"
+    "useragent": "^2.3.0",
+    "utils-min": "^0.1.18"
+  },
+  "devDependencies": {
+    "@types/useragent": "^2.3.0"
   }
 }

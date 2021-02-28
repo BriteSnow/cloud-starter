@@ -3,7 +3,7 @@
 
 import { WksQueryOptions } from 'common/da/dao-wks';
 import { wksDao } from 'common/da/daos';
-import { ApiKtx, ApiRouter, routeGet } from './koa-utils';
+import { ApiKtx, ApiRouter, routeGet } from 'common/web/koa-utils';
 
 
 

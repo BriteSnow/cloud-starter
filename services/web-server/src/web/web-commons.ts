@@ -1,7 +1,7 @@
 import { wksDao } from 'common/da/daos';
+import { ApiKtx } from 'common/web/koa-utils';
 import { Wks } from 'shared/entities';
 import { asNum } from 'utils-min';
-import { ApiKtx } from './koa-utils';
 
 /** Get the wksId from reques, and get the Wks object */
 export async function getWksFromReq(ktx: ApiKtx): Promise<Partial<Wks>> {

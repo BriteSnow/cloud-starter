@@ -15,16 +15,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "backlib": "^0.3.0",
-    "cloud-bucket": "^0.3.11",
-    "ioredis": "^4.19.4",
+    "backlib": "^0.3.2",
+    "cloud-bucket": "^0.3.13",
+    "ioredis": "^4.23.0",
     "knex": "^0.21.18",
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "p-spawn": "^0.5.5",
     "pg": "^8.5.1",
     "redstream": "^0.1.11",
-    "utils-min": "^0.1.17",
+    "utils-min": "^0.1.18",
     "uuid": "^8.3.2"
   }
 }

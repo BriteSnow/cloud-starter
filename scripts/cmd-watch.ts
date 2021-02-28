@@ -66,7 +66,7 @@ async function watchService(serviceName: string, debugPort: string) {
 	spawn('kubectl', ['port-forward', podName, `${debugPort}:9229`]);
 
 
-	// spawn('tsc', ['-w'], { cwd: serviceDir }); // this will create a new restart
+	spawn('tsc', ['-w'], { cwd: serviceDir }); // this will create a new restart
 
 	console.log('waiting for tsc -w');
 	await wait(2000);

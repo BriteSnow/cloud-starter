@@ -1,6 +1,6 @@
 import { userDao } from 'common/da/daos';
 import { getSysContext } from 'common/user-context';
-import { AppRouter, assertApiKtx, Ktx, routeGet } from './koa-utils';
+import { AppRouter, assertApiKtx, Ktx, routeGet } from 'common/web/koa-utils';
 
 /**
  * Note: since we do not know if this request is auth or not, just use AppRouter and then, assert ktx for ApiKtx

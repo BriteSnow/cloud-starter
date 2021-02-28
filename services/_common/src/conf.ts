@@ -36,6 +36,10 @@ export const CORE_STORE_ROOT_DIR = env.core_store_root_dir!;
 // Note: For dev, we assume localhost:9000/_bucket_name_/. For prod, it will be the cdn base url to the core store bucket backend.
 export const CORE_STORE_CDN_BASE_URL = env.core_store_cdn_base_url!;
 
+//// Services ssl 
+export const SERVICE_SSL_KEY = env.service_ssl_key!;
+export const SERVICE_SSL_CERT = env.service_ssl_cert!;
+
 //// Database
 export const DB_PASSWORD = env.db_password!;
 export const DB_HOST = env.db_host!;
@@ -49,7 +53,6 @@ export const GOOGLE_OAUTH_CLIENT_ID = env.google_oauth_client_id!;
 export const GOOGLE_OAUTH_CLIENT_SECRET = env.google_oauth_client_secret!;
 export const GOOGLE_OAUTH = GOOGLE_OAUTH_CLIENT_ID ? freeze({ client_id: GOOGLE_OAUTH_CLIENT_ID, redirect_url: GOOGLE_OAUTH_REDIRECT_URL, client_secret: GOOGLE_OAUTH_CLIENT_SECRET }) : null;
 
-
 //// LOG
 export const LOG_DIR = './logs/';
 export const LOG_MAX_COUNT = Number(env.log_max_count!);
@@ -58,4 +61,6 @@ export const LOG = freeze({ maxCount: LOG_MAX_COUNT, maxTime: LOG_MAX_TIME });
 
 //// OTHERS
 export const PERF_LOG_THRESHOLD_WEB = 1000; // in ms. Threshold when utx.perfContext.items should be logged
+
+export const CDN_BASE_URL = 'http://localhost:9000/';
 

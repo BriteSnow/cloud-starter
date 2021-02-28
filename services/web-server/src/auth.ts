@@ -8,7 +8,7 @@
 import { HTTPS_MODE, WEB_TOKEN_DURATION } from 'common/conf';
 import { AppError } from 'common/error';
 import { createToken, newExpiration, UserCredForToken } from 'common/security/token';
-import { Ktx } from 'web/koa-utils';
+import { Ktx } from 'common/web/koa-utils';
 
 
 const COOKIE_WTOKEN = 'token';
