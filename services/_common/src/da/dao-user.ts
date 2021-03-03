@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/da/dao-user.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/da/dao-user.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 /////////////////////
