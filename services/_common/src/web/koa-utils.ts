@@ -25,6 +25,8 @@ export interface KState {
 }
 
 export interface KCustom {
+	token_name: string;
+
 	clearCookie(name: string): void
 	/**
 	 * Add some properties to the log.info object. 
@@ -38,30 +40,36 @@ export interface KCustom {
 
 export interface Ktx extends ParameterizedContext<KState, KCustom> { }
 
+export interface InitKtxMdwOpts {
+	token_name: string;
+}
 
-/** First middleware to be called to init */
-export function initKtx(koaCtx: ParameterizedContext, next: Next) {
-	//// upgrade the koaCtx to Ktx
-	koaCtx.clearCookie = function (name: string) {
-		koaCtx.cookies.set(name, '', { expires: new Date(2000, 1) });
-	}
-	koaCtx.addWebLogInfo = function (props: any) {
-		if (koaCtx.state.webLogState.info == null) {
-			koaCtx.state.webLogState.info = {};
+/** Init the Ktx  */
+export function initKtxMdw(opts: InitKtxMdwOpts) {
+	return function (koaCtx: ParameterizedContext, next: Next) {
+		koaCtx.token_name = opts.token_name;
+		//// upgrade the koaCtx to Ktx
+		koaCtx.clearCookie = function (name: string) {
+			koaCtx.cookies.set(name, '', { expires: new Date(2000, 1) });
 		}
-		// NOTE: Important, where we do a shallow assign, not a deep merge. 
-		Object.assign(koaCtx.state.webLogState.info, props);
+		koaCtx.addWebLogInfo = function (props: any) {
+			if (koaCtx.state.webLogState.info == null) {
+				koaCtx.state.webLogState.info = {};
+			}
+			// NOTE: Important, where we do a shallow assign, not a deep merge. 
+			Object.assign(koaCtx.state.webLogState.info, props);
+		}
+
+		//// Upgrade the State to KState
+		const ip = (koaCtx.ips && koaCtx.ips.length > 0) ? koaCtx.ips.join(',') : koaCtx.ip;
+		const webLogState: KState['webLogState'] = {
+			ip,
+			startTime: Date.now()
+		};
+		(<KState>koaCtx.state) = Object.assign(koaCtx.state ?? {}, { webLogState });
+
+		return next();
 	}
-
-	//// Upgrade the State to KState
-	const ip = (koaCtx.ips && koaCtx.ips.length > 0) ? koaCtx.ips.join(',') : koaCtx.ip;
-	const webLogState: KState['webLogState'] = {
-		ip,
-		startTime: Date.now()
-	};
-	(<KState>koaCtx.state) = Object.assign(koaCtx.state ?? {}, { webLogState });
-
-	return next();
 }
 
 /**

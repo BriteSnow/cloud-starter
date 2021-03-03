@@ -1,9 +1,24 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/services/web-server/src/web/router-dse-generics.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/dse-generics.ts" />
+
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { daoByEntity } from 'common/da/daos';
+import { BaseDao } from 'common/da/dao-base';
+import { mediaDao, userDao, wksDao } from 'common/da/daos';
 import { ApiKtx, ApiRouter, routeDelete, routeGet, routePatch, routePost } from 'common/web/koa-utils';
 
+
+/** 
+ * Dao Registory per entity name exposed for this DseGenerics
+ * 
+ * Note 1: This makes sure only explicitly exposed Dao are avaiable vias web API. 
+ * Note 2: Eventually, for production, the DseGenerics might be removed and all DSEs could be 
+ * Note: eventually, for production application, the dse-
+ */
+const daoByEntity: { [type: string]: BaseDao<any, any> } = {
+	User: userDao,
+	Wks: wksDao,
+	Media: mediaDao
+}
 
 
 class DseGenerics extends ApiRouter {

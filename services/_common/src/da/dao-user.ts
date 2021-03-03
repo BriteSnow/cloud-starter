@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/services/common/src/da/dao-user.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/da/dao-user.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 /////////////////////
@@ -7,14 +7,17 @@
 
 import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ROLES, isAccess } from 'shared/access-types';
 import { QueryOptions, User, USER_COLUMNS } from "shared/entities";
-import { AppError, CommonErrorCode } from '../error';
+import { AppErr, AppError, CommonErrorCode } from '../error';
 import { pwdEncrypt } from '../security/password';
 import { UserContext } from "../user-context";
+import { symbolDic } from '../utils';
 import { AccessRequires } from "./access";
 import { BaseDao } from "./dao-base";
 import { knexQuery } from './db';
 
-
+const ERROR = symbolDic(
+	'NO_USER_FOUND'
+);
 
 /* Data needed for authentication */
 export interface UserCredForAuth extends Pick<User, 'id' | 'username'> {
@@ -178,6 +181,10 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		query.columns(columns);
 		query.where(key);
 		const result = await query;
+
+		if (result.length == 0) {
+			throw new AppErr(ERROR.NO_USER_FOUND)
+		}
 
 		const rawUserObj = result[0];
 		rawUserObj.accesses = UserDao.parseAccess(rawUserObj);

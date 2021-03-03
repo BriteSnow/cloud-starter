@@ -1,17 +1,18 @@
-import { userDao } from 'common/da/daos';
-import { checkToken, parseToken, UserCredForToken } from 'common/security/token';
-import { getSysContext, newUserContext, UserForContext } from 'common/user-context';
-import { Ktx } from 'common/web/koa-utils';
 import { Next } from 'koa';
 import { extname } from 'path';
 import { asNum } from 'utils-min';
-import { AuthFailError, clearAuth, extractToken, setAuth } from '../auth';
+import { userDao } from '../da/daos';
+import { checkToken, parseToken, UserCredForToken } from '../security/token';
+import { getSysContext, newUserContext, UserForContext } from '../user-context';
+import { symbolDic } from '../utils';
+import { AuthFailErr, clearAuth, extractToken, setAuth } from './auth';
+import { Ktx } from './koa-utils';
 
-//#region    ---------- ERROR ---------- 
-const ERROR_INVALID_AUTH = 'INVALID_AUTH';
-//#endregion ---------- /ERROR ---------- 
+const ERROR = symbolDic(
+	'INVALID_AUTH'
+);
 
-export default async function authRequestMiddleware(ktx: Ktx, next: Next) {
+export default async function authRequestMdw(ktx: Ktx, next: Next) {
 	// for now, if no extension, then assume it is an API, so, authenticate
 	if (!extname(ktx.path) && !ktx.path.endsWith('/')) {
 		try {
@@ -28,7 +29,7 @@ export default async function authRequestMiddleware(ktx: Ktx, next: Next) {
 		} catch (ex) {
 			// '/api/user-context' when no user is not an error, just returns success false
 			if (ktx.path === '/api/user-context') {
-				if (ex instanceof AuthFailError) {
+				if (ex instanceof AuthFailErr) {
 					clearAuth(ktx);
 				}
 				ktx.body = { success: false };
@@ -44,7 +45,7 @@ export default async function authRequestMiddleware(ktx: Ktx, next: Next) {
 }
 
 
-export async function authRequest(ktx: Ktx): Promise<UserForContext> {
+async function authRequest(ktx: Ktx): Promise<UserForContext> {
 	const sysCtx = await getSysContext();
 	const cookieAuthToken = extractToken(ktx);
 
@@ -64,7 +65,7 @@ export async function authRequest(ktx: Ktx): Promise<UserForContext> {
 		return { id, accesses, wksId };
 
 	} catch {
-		throw new AuthFailError(ERROR_INVALID_AUTH);
+		throw new AuthFailErr(ERROR.INVALID_AUTH);
 	}
 
 }

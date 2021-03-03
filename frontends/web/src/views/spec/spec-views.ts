@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/views/spec/spec-views.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-views.ts" />
 
 import { render } from 'common/render';
 import { BaseHTMLElement, customElement, elem, frag, onEvent } from 'dom-native';

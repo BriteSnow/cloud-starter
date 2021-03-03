@@ -25,7 +25,7 @@
     "cloud-bucket": "^0.3.13",
     "fs-extra-plus": "^0.5.21",
     "ioredis": "^4.23.0",
-    "knex": "^0.21.18",
+    "knex": "^0.21.19",
     "koa-body": "^4.2.0",
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",

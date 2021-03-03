@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/frontends/web/src/views/spec/spec-controls.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-controls.ts" />
 
 import { addOnEvents, customElement, pull, push } from 'dom-native';
 import { wait } from 'utils-min';

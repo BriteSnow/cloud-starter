@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/services/common/src/security/password.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/common/src/security/password.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 /////////////////////
@@ -6,11 +6,14 @@
 // Note: This is a good idea to have it attached as it is more of a boilerplate code.
 ////
 
-import { AppError } from '../error';
+import { AppErr } from '../error';
+import { symbolDic } from '../utils';
 import { schemes } from './password-schemes';
 import { PwdCheckData, PwdEncryptData } from './password-types';
 
-const ERROR_PWD_CHECK_FAIL = 'PWD_CHECK_FAIL';
+const ERROR = symbolDic(
+	'PWD_CHECK_FAIL',
+)
 
 type SchemeId = keyof typeof schemes;
 
@@ -31,7 +34,7 @@ export function pwdCheck(clearPwd: string, data: PwdCheckData): { scheme_outdate
 	const clearPwdEncrypted = scheme.encrypt({ uuid, psalt, clearPwd });
 	// build the response
 	if (pwd !== clearPwdEncrypted) {
-		throw new AppError(ERROR_PWD_CHECK_FAIL, `Authentication Fail`); // IMPORTANT: Never put either password in ANY log
+		throw new AppErr(ERROR.PWD_CHECK_FAIL); // IMPORTANT: Never put either password in ANY log
 	}
 	const scheme_outdated = schemeId !== defaultSchemeId;
 	return { scheme_outdated };

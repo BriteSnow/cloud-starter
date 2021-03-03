@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-bigapp/master/shared/src/entities-base.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/shared/src/entities-base.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 /**

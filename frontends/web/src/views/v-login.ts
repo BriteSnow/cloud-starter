@@ -109,11 +109,11 @@ export class LoginView extends BaseViewElement {
 				window.location.href = '/';
 				return;
 			} else {
-				this.message = result.error.message;
+				this.message = result.error.code;
 			}
 
 		} catch (ex) {
-			this.message = ex.error.message;
+			this.message = ex.error.code;
 		}
 	}
 

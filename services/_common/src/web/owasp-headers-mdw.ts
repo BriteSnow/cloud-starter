@@ -8,16 +8,16 @@ import { Ktx, Next } from './koa-utils';
  * 	- Access-Control-Allow-Origin
  * 	- CSP - content security policy - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
  * 	- X-Frame-Options
- * 	- X-XSS-Protection
  * 	- X-Content-Type-Options
  * 	- Referrer-Policy
+ * 	- X-XSS-Protection (not really needed since CSP)
  *
  * N/A controls:
  * 	- expires          - N/A - MDN: If there is a Cache-Control header with the max-age or 
  * 												     s-maxage directive in the response, the Expires header is ignored.
  * 	- feature-policy   - N/A - This is more for web site that have external javascript plugins (e.g., wordpress). 
  * 													   This will be a Web App where the code only comes from 'self'.
- * 	- WWW-Authenticate - N/A - We do not use basic http authentication. 
+ * 	- WWW-Authenticate - N/A - We do not use basic http authentication for these web applications authentication.
  *                             (we use high-entropy signed token in single http-only cookie)
  */
 
@@ -28,12 +28,13 @@ const SEC_1YEAR = 3600 * 24 * 365;
 const SEC_1DAY = 3600 * 24;
 
 const CSP_TXT = `default-src 'self' ${CDN_BASE_URL};
-		font-src 'self' https://fonts.gstatic.com/;
-		style-src 'self' fonts.googleapis.com;
+		font-src  'self' https://fonts.gstatic.com/;
+		style-src 'self' https://fonts.googleapis.com 'sha256-A6vjruJejruUybf2VEMoknqUi70/IHAxt4bLAt4TK0Q=';
 `;
+
 const CSP_STRING = CSP_TXT.split(';').map(s => s.trim()).join('; ');
 
-export function owaspHeadersMdwBuilder() {
+export function owaspHeadersMdw() {
 
 	return function (ktx: Ktx, next: Next) {
 		const pathInfo = Path.parse(ktx.path);

@@ -24,6 +24,31 @@ export function removeProps(obj: any, names: string[]) {
 }
 //#endregion ---------- /Object ---------- 
 
+
+//#region    ---------- Symbol ---------- 
+/**
+ * Turn a list of readonly string arguments into a JS Object .name = Symbol(name)
+ * 
+ * ```
+ * const dic = symbolDic('ERROR_1', 'ERROR_2');
+ * dic.ERROR_1; // Symbol(ERROR_1)
+ * dic.ERROR_2; // Symbol(ERROR_2)
+ * ```
+ * @param names realonly string array arguments
+ */
+export function symbolDic<A extends readonly string[]>(...names: A): { [name in A[number]]: Symbol } {
+	type Names = A[number];
+	type SymbolDic = { [name in Names]: Symbol }
+	const result = names.reduce((obj: SymbolDic, v: Names) => (obj[v] = Symbol(v), obj), {} as any);
+	return Object.freeze(result);
+}
+
+export function symToStr(sym: Symbol) {
+	return sym.toString().slice(7, -1);
+}
+//#endregion ---------- /Symbol ---------- 
+
+
 //#region    ---------- base64 encoding ---------- 
 export function b64dec(str_b64: string) {
 	return Buffer.from(str_b64, 'base64').toString('ascii');

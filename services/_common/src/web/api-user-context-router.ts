@@ -1,6 +1,6 @@
-import { userDao } from 'common/da/daos';
-import { getSysContext } from 'common/user-context';
-import { AppRouter, assertApiKtx, Ktx, routeGet } from 'common/web/koa-utils';
+import { userDao } from '../da/daos';
+import { getSysContext } from '../user-context';
+import { AppRouter, assertApiKtx, Ktx, routeGet } from './koa-utils';
 
 /**
  * Note: since we do not know if this request is auth or not, just use AppRouter and then, assert ktx for ApiKtx
@@ -22,4 +22,4 @@ class ApiUserContextRouter extends AppRouter {
 }
 
 
-export default function apiRouter(prefix?: string) { return new ApiUserContextRouter(prefix) };
+export default function apiUtxRouter(prefix?: string) { return new ApiUserContextRouter(prefix) };
