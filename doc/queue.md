@@ -1,5 +1,8 @@
+_[home](../README.md)_
 
-The `cloud-bigapp` Big App pattern is based on a full event-based cloud application architecture, based on [Redis Stream](https://redis.io/topics/streams-intro), which has all services talking to a bus/queue, and avoid any service-to-service direct communication. 
+# Queue 
+
+The `cloud-starter` Big App pattern is based on a full event-based cloud application architecture, based on [Redis Stream](https://redis.io/topics/streams-intro), which has all services talking to a bus/queue, and avoid any service-to-service direct communication. 
 
 
 ![](images/arch-queue.png)

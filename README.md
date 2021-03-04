@@ -1,9 +1,25 @@
 (All code & content are [MIT](https://opensource.org/licenses/MIT) licensed.)
 
-**cloud-bigapp** is a code blueprint to build highly scalable big application with the minimum complexity. This architecture and best practices are part of BriteSnow's **Big App, Small Team** approach. 
+**cloud-stater** is a code blueprint to build highly scalable big application with the minimum complexity. This architecture and best practices are part of BriteSnow's **Big App, Small Team** approach. 
 
-
-Key Documents: [Architecture](doc/arch.md) | [UI Development](doc/ui.md)
+- [Approach](#Approach)
+- [Code Structure](#Code-Structure)
+- [Architecture](doc/arch.md) Top down architecture, overall code structure. 
+- **Code Design**
+  - [Request Flow](doc/request-flow.md) Web application request flow, with authentication, authorization, and data layer. 
+  - [UI](doc/ui.md) Native Web UI Application Component Model, approach, code structured, and best practices.
+  - [Error Handling](doc/error.md) Simple, safe, and scalable way to handle exception/error in JS/TS.
+- **Best Practices**
+  - [Comments](doc/comments.md) Short conventions and best practices about commenting.
+  - [TypeScript](doc/typescrip.md) Best practices
+  - [Postgresql](doc/postgres.md) Best practices
+  - [Css](doc/css.md) Css/PostCSS best practices, technics, and links.
+  - [Css](doc/css.md) Css/PostCSS best practices, technics, and links.
+- **DevOps**
+  - [build](doc/build.md) Build flow and documentation.
+  - [Dev](doc/dev.md) Kuberenetes centric development workflow and technics.
+  - [Test](doc/test.md) Test setup, running, best practices, technics, and links.
+  - [kubectl](doc/kubectl.md) useful commands in the context of this architecture.
 
 ## Approach
 

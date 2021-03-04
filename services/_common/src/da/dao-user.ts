@@ -7,7 +7,8 @@
 
 import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ROLES, isAccess } from 'shared/access-types';
 import { QueryOptions, User, USER_COLUMNS } from "shared/entities";
-import { AppErr, AppError, CommonErrorCode } from '../error';
+import { Err } from '../error';
+import { CODE_ERROR } from '../error-common';
 import { pwdEncrypt } from '../security/password';
 import { UserContext } from "../user-context";
 import { symbolDic } from '../utils';
@@ -66,7 +67,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 
 	//#region    ---------- BaseDao Overrides ---------- 
 	async create(utx: UserContext, data: Partial<User>) {
-		throw new Error('UserDao.create NOT AVAILABLE, use UserDao.createUser');
+		throw new Err(CODE_ERROR, 'UserDao.create not implemented by design. Use UserDao.createUser');
 		return -1; // for TS.
 	}
 
@@ -183,7 +184,7 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		const result = await query;
 
 		if (result.length == 0) {
-			throw new AppErr(ERROR.NO_USER_FOUND)
+			throw new Err(ERROR.NO_USER_FOUND)
 		}
 
 		const rawUserObj = result[0];
@@ -244,13 +245,13 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 function checkUserKey(key: UserKey) {
 	const keys = Object.keys(key);
 	if (keys.length != 1) {
-		throw new AppError(CommonErrorCode.CODE_ERROR, `getUserCred key has too many properties ${Object.keys(key).length}`)
+		throw new Err(CODE_ERROR, `getUserCred key has too many properties ${Object.keys(key).length}`)
 	}
 
 	// NOTE: downcast here to be able to do the hard check
 	const user_keys = (<unknown>USER_KEYS) as string[];
 	if (!user_keys.includes(keys[0])) {
-		throw new AppError(CommonErrorCode.CODE_ERROR, `invalid user key ${keys[0]} should be one of ${USER_KEYS}`);
+		throw new Err(CODE_ERROR, `invalid user key ${keys[0]} should be one of ${USER_KEYS}`);
 	}
 }
 //#endregion ---------- /Utils ----------

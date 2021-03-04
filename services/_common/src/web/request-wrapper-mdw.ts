@@ -1,5 +1,8 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/request-wrapper-mdw.ts" />
+// (c) 2021 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import { PERF_LOG_THRESHOLD_WEB } from '../conf';
-import { AppErr, AppErrRec } from '../error';
+import { Err, ErrRec } from '../error';
 import { web_log } from '../log/logger';
 import { symbolDic, symToStr } from '../utils';
 import { AuthFailErr, clearAuth } from './auth';
@@ -31,10 +34,10 @@ export async function handleRequestWrapperMdw(ktx: Ktx, next: Next) {
 		}
 
 	} catch (ex) {
-		let errRec: AppErrRec;
+		let errRec: ErrRec;
 
 		//// extract/build the errRec
-		if (ex instanceof AppErr) {
+		if (ex instanceof Err) {
 			errRec = ex.rec;
 		} else if (ex instanceof Error) {
 			errRec = {

@@ -1,6 +1,8 @@
 import { HTTPS_MODE } from '../conf';
-import { AppError } from '../error';
+import { Err } from '../error';
+import { HTTP_404 } from '../error-common';
 import { Ktx, Next } from './koa-utils';
+
 
 export async function httpsGuardMdw(ktx: Ktx, next: Next) {
 
@@ -21,7 +23,7 @@ export async function httpsGuardMdw(ktx: Ktx, next: Next) {
 				ktx.redirect(httpsUrl); // temporary by default to allow changing later, but can be ktx.status = 301; to make it permanent
 				return;
 			} else {
-				throw new AppError('NO_ACCESS');
+				throw new Err(HTTP_404);
 			}
 		}
 	}

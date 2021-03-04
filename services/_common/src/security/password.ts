@@ -6,7 +6,7 @@
 // Note: This is a good idea to have it attached as it is more of a boilerplate code.
 ////
 
-import { AppErr } from '../error';
+import { Err } from '../error';
 import { symbolDic } from '../utils';
 import { schemes } from './password-schemes';
 import { PwdCheckData, PwdEncryptData } from './password-types';
@@ -34,7 +34,7 @@ export function pwdCheck(clearPwd: string, data: PwdCheckData): { scheme_outdate
 	const clearPwdEncrypted = scheme.encrypt({ uuid, psalt, clearPwd });
 	// build the response
 	if (pwd !== clearPwdEncrypted) {
-		throw new AppErr(ERROR.PWD_CHECK_FAIL); // IMPORTANT: Never put either password in ANY log
+		throw new Err(ERROR.PWD_CHECK_FAIL); // IMPORTANT: Never put either password in ANY log
 	}
 	const scheme_outdated = schemeId !== defaultSchemeId;
 	return { scheme_outdated };

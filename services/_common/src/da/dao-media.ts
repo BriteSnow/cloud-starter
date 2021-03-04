@@ -2,13 +2,16 @@ import { File } from 'formidable'; // from koa-body
 import * as Path from 'path';
 import { Media, MediaResolution, MediaType } from 'shared/entities';
 import { CORE_STORE_CDN_BASE_URL, CORE_STORE_ROOT_DIR } from '../conf';
-import { AppError } from '../error';
+import { Err } from '../error';
 import { getAppQueue } from '../queue';
 import { getCoreBucket } from '../store';
 import { UserContext } from '../user-context';
-import { getMimeType } from '../utils';
+import { getMimeType, symbolDic } from '../utils';
 import { WksScopedDao } from './dao-wks-scoped';
 
+const ERROR = symbolDic(
+	'MEDIA_UPLOAD_FAIL_NO_WKSID',
+)
 
 export class MediaDao extends WksScopedDao<Media, number> {
 
@@ -38,7 +41,7 @@ export class MediaDao extends WksScopedDao<Media, number> {
 		const wksId = utx.wksId;
 
 		if (wksId == null) {
-			throw new AppError(`media.uploadNewMedia cannot process, no utx.wksId`);
+			throw new Err(ERROR.MEDIA_UPLOAD_FAIL_NO_WKSID);
 		}
 
 		// TODO: For now, ignore any other data properties (infer all from name);

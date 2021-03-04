@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/error.ts" />
+// (c) 2021 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import Koa from 'koa';
 import koaBody from 'koa-body';
 import koaSend from 'koa-send';

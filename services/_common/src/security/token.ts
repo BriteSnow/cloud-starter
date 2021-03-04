@@ -9,16 +9,15 @@
 import crypto from 'crypto';
 import moment from 'moment';
 import { WEB_TOKEN_DURATION, WEB_TOKEN_SALT } from '../conf';
-import { AppError } from '../error';
-import { b64dec, b64enc } from '../utils';
-
-
+import { Err } from '../error';
+import { b64dec, b64enc, symbolDic } from '../utils';
 
 //// Error codes for this module
-const ERROR_TOKEN_WRONG = 'WRONG_TOKEN';
-const ERROR_TOKEN_WRONG_FORMAT = 'WRONG_TOKEN_FORMAT';
-const ERROR_TOKEN_EXPIRED = 'TOKENT_EXPIRED';
-
+const ERROR = symbolDic(
+	'WRONG_TOKEN',
+	'WRONG_TOKEN_FORMAT',
+	'TOKEN_EXPIRED'
+);
 
 //// Types
 /** Token data from token string */
@@ -51,7 +50,7 @@ export function parseToken(token_string: string): TokenData {
 		return Object.freeze({ uuid, exp, sign_b64 });
 
 	} catch {
-		throw new Error(ERROR_TOKEN_WRONG_FORMAT);
+		throw new Err(ERROR.WRONG_TOKEN_FORMAT);
 	}
 }
 
@@ -62,7 +61,7 @@ export function checkToken(token: TokenData, data: UserCredForToken) {
 		const now = moment();
 		const tokenExpMoment = moment(token.exp);
 		if (now.isAfter(tokenExpMoment)) {
-			throw new AppError(ERROR_TOKEN_EXPIRED);
+			throw new Err(ERROR.TOKEN_EXPIRED);
 		}
 
 		// check that token uuid match data.uuid
@@ -73,12 +72,12 @@ export function checkToken(token: TokenData, data: UserCredForToken) {
 		const actual_sign_b64 = token.sign_b64;
 		const expected_sign_b64 = sign(data, token.exp);
 		if (actual_sign_b64 !== expected_sign_b64) {
-			throw new AppError(ERROR_TOKEN_WRONG);
+			throw new Err(ERROR.WRONG_TOKEN);
 		}
 	}
 	// Note: By design, minimum info.
 	catch {
-		throw new AppError(ERROR_TOKEN_WRONG);
+		throw new Err(ERROR.WRONG_TOKEN);
 	}
 
 }

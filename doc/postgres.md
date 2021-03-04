@@ -1,4 +1,13 @@
+_[home](../README.md)_
+
 # Postgresql Best Practices 
+
+## Access from node.js
+
+- Use `knex` library to build the sql queries.
+- Restrain to use `knex.raw`
+- **IMPORTANT SQL INJECTION PREVENTION PATTERN** - When using `knex.raw` make **SURE** to still use **parameterized `knex.raw`** and **NOT encode stored values or user values in the raw string**. This simple approach will avoid any sql injection issue. 
+
 
 ## uuid v4
 

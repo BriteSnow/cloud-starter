@@ -1,3 +1,6 @@
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/web/owasp-headers-mdw.ts" />
+// (c) 2021 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
+
 import * as Path from 'path';
 import { CDN_BASE_URL } from '../conf';
 import { Ktx, Next } from './koa-utils';
@@ -60,13 +63,7 @@ export function owaspHeadersMdw() {
 			ktx.res.setHeader('X-Frame-Options', 'DENY');
 			ktx.res.setHeader('Referrer-Policy', 'no-referrer')
 
-			let csp_string = CSP_STRING;
-
-			// only for the sprite-demo page
-			if (ktx.path == '/svg/sprite-demo.html')
-				csp_string += " script-src 'self' https://demo.dom-native.org/";
-
-			ktx.res.setHeader('Content-Security-Policy', csp_string);
+			ktx.res.setHeader('Content-Security-Policy', CSP_STRING);
 
 			// kind of unnecessary given CSP (older browsers)
 			ktx.res.setHeader('X-XSS-Protection', '1; mode=block');

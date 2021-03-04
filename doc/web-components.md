@@ -1,7 +1,8 @@
+_[home](../README.md)_
+
+# Web Components
 
 This is a summary of the internal of the browser base HTMLElement lifecycle and apis. 
-
-### Web Components
 
 With the deprecation of IE11 and Edge move to Google Chrome, Native **WebComponents**, without heavy frameworks (e.g., Angular, React), are now a reality, and can be added to rich **DOM Centric** application development.
 

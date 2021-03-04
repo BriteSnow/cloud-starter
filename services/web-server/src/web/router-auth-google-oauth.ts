@@ -3,18 +3,19 @@
 
 import { GOOGLE_OAUTH } from 'common/conf';
 import { oauthDao, userDao } from 'common/da/daos';
-import { AppError } from 'common/error';
+import { Err } from 'common/error';
 import { getSysContext } from 'common/user-context';
+import { symbolDic } from 'common/utils';
+import { setAuth } from 'common/web/auth';
 import { AppRouter, Ktx, routeGet, success } from 'common/web/koa-utils';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'googleapis-common';
-import { setAuth } from '../../../_common/src/web/auth';
 
 
 // Module Error Code
-const ErrorCode = Object.freeze({
-	NO_GOOGLE_BACKEND_CREDENTIALS: 'NO_GOOGLE_BACKEND_CREDENTIALS'
-})
+const ERROR = symbolDic(
+	'NO_GOOGLE_BACKEND_CREDENTIALS'
+)
 
 
 class GoogleOAuthRouter extends AppRouter {
@@ -43,7 +44,7 @@ class GoogleOAuthRouter extends AppRouter {
 		const oauthClient = await getOAuth2Client();
 		// Should not happen since this comes after we get the oauth_url
 		if (oauthClient === null) {
-			throw new AppError(ErrorCode.NO_GOOGLE_BACKEND_CREDENTIALS);
+			throw new Err(ERROR.NO_GOOGLE_BACKEND_CREDENTIALS);
 		}
 		// This will provide an object with the access_token and refresh_token.
 		// Save these somewhere safe so they can be used at a later time.

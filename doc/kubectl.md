@@ -1,6 +1,6 @@
+_[home](../README.md)_
 
 # `kubectl`
-_[back](README.md)_
 
 #### Kubectl 
 

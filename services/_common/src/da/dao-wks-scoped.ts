@@ -1,10 +1,14 @@
 import { QueryOptions, WksScopedEntity } from 'shared/entities';
-import { AppError } from '../error';
+import { Err } from '../error';
 import { UserContext } from '../user-context';
+import { symbolDic } from '../utils';
 import { AccessRequires } from './access';
 import { BaseDao, CustomQuery } from './dao-base';
 
-
+const ERROR = symbolDic(
+	'NO_WKSID_IN_UTX',
+	'NO_MATCHING_WKSID_UTX_DATA'
+)
 
 export class WksScopedDao<E extends WksScopedEntity, I, Q extends QueryOptions<E> = QueryOptions<E>> extends BaseDao<E, I, Q>  {
 
@@ -41,7 +45,7 @@ export class WksScopedDao<E extends WksScopedEntity, I, Q extends QueryOptions<E
 	scopeQuery(utx: UserContext, queryOptions?: Q & CustomQuery) {
 		const wksId = utx.wksId;
 		if (wksId == null) {
-			throw new AppError(`${this.constructor.name}.list - cannot list WksScoped entities, no wksId in utx`);
+			throw new Err(ERROR.NO_WKSID_IN_UTX, `${this.constructor.name}.list`);
 		}
 		// TS NOTE: Here, cannot use Q, TS can't infer correctly.
 		const wksScopedQueryOptions: QueryOptions<E> & CustomQuery = queryOptions ?? {};
@@ -52,13 +56,13 @@ export class WksScopedDao<E extends WksScopedEntity, I, Q extends QueryOptions<E
 	scopeData(utx: UserContext, data?: Partial<WksScopedEntity>) {
 		const wksId = utx.wksId;
 		if (wksId == null) {
-			throw new AppError(`${this.constructor.name} require UTX to have .wksId, but not found in utx`)
+			throw new Err(ERROR.NO_WKSID_IN_UTX, `${this.constructor.name}.scopeData`);
 		}
 
 		// If we have a data id make sure the wksId match, and if not present in data, set it
 		if (data != null) {
 			if (data.wksId != null && data.wksId !== wksId) {
-				throw new AppError(`${this.constructor.name} UTX.wksId ${wksId} does not match data.wksId ${data.wksId}`);
+				throw new Err(ERROR.NO_MATCHING_WKSID_UTX_DATA, `${this.constructor.name}.scopeData UTX.wksId ${wksId} does not match data.wksId ${data.wksId}`);
 			}
 			// set the wks
 			data.wksId = wksId;

@@ -2,8 +2,13 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { mediaDao } from 'common/da/daos';
-import { AppError } from 'common/error';
+import { Err } from 'common/error';
 import { ApiKtx, ApiRouter, routePost, success } from 'common/web/koa-utils';
+import { symbolDic } from '../../../_common/src/utils';
+
+const ERROR = symbolDic(
+	'FILE_NOT_FOUND'
+);
 
 
 
@@ -19,7 +24,7 @@ class MediaDse extends ApiRouter {
 			const media = await mediaDao.get(utx, id);
 			return success(media);
 		} else {
-			throw new AppError(`Cannot create media, file not found`);
+			throw new Err(ERROR.FILE_NOT_FOUND, `Cannot create media, file not found`);
 		}
 	}
 

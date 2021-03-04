@@ -1,12 +1,18 @@
 import { assertWksAccess, WksAccess, WKS_ROLES, WKS_ROLES_BY_ACCESS } from 'shared/access-types';
 import { QueryOptions, User, Wks } from 'shared/entities';
-import { AppError } from '../error';
+import { Err } from '../error';
 import { Monitor } from '../perf';
 import { UserContext } from '../user-context';
+import { symbolDic } from '../utils';
 import { AccessRequires } from './access';
 import { saveWksRole } from './access-wks';
 import { BaseDao } from './dao-base';
 import { knexQuery } from './db';
+
+
+const ERROR = symbolDic(
+	'LIST_FAIL_NO_WKS_ROLE'
+);
 
 export const WKS_COLUMNS = Object.freeze(['id', 'cid', 'ctime', 'mid', 'mtime', 'name'] as const);
 
@@ -92,7 +98,7 @@ export class WksDao extends BaseDao<Wks, number, WksQueryOptions> {
 		}
 		//// otheriwise, throw error
 		else {
-			throw new AppError(`Cannot do productDao.list for user ${utx.userId} - No wks role found for access ${queryAccess}`);
+			throw new Err(ERROR.LIST_FAIL_NO_WKS_ROLE, `Cannot do productDao.list for user ${utx.userId} - No wks role found for access ${queryAccess}`);
 		}
 
 	}

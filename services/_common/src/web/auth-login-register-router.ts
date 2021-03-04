@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { userDao } from '../da/daos';
-import { AppErr } from '../error';
+import { Err } from '../error';
 import { pwdCheck } from '../security/password';
 import { getSysContext } from '../user-context';
 import { symbolDic } from '../utils';
@@ -45,7 +45,7 @@ class AuthLoginRegisterRouter extends AppRouter {
 				throw ex;
 			}
 			// if AppErr, then, we create a AuthFailErr with same rec
-			else if (ex instanceof AppErr) {
+			else if (ex instanceof Err) {
 				throw new AuthFailErr(ex.rec)
 			}
 			// otherwise, we careate a new AuthFailErr with generic LOGIN_FAIL error
