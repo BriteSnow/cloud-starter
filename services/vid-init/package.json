@@ -17,8 +17,8 @@
   "dependencies": {
     "backlib": "^0.3.2",
     "cloud-bucket": "^0.3.13",
-    "ioredis": "^4.23.0",
-    "knex": "^0.21.19",
+    "ioredis": "^4.24.2",
+    "knex": "^0.95.2",
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "p-spawn": "^0.5.5",

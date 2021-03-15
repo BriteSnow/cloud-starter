@@ -1,7 +1,7 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/da/db.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import KnexClient, { QueryBuilder } from 'knex';
+import { Knex, knex } from 'knex';
 import { types } from 'pg';
 import { parse as pgArrayParse } from 'postgres-array';
 import { Pool } from 'tarn';
@@ -9,8 +9,9 @@ import { isEmpty } from 'utils-min';
 import { DB, KHOST } from '../conf';
 import { UserContext } from '../user-context';
 import { nowTimestamp } from '../utils';
-export { QueryInterface } from 'knex';
 
+type QueryInterface = Knex.QueryInterface;
+type QueryBuilder = Knex.QueryBuilder;
 
 //#region    ---------- PG Type Parsers ---------- 
 // To get list - select oid, typname, typarray from pg_type;
@@ -28,7 +29,7 @@ types.setTypeParser(1016, function (val: string) {
 //#endregion ---------- /PG Type Parsers ---------- 
 
 // KnexClient for the application (will be set by getKnexClient())
-let _knex: KnexClient | undefined;
+let _knex: Knex | undefined;
 
 
 
@@ -90,7 +91,7 @@ export async function getKnexClient() {
 			let longestQuery = 0;
 
 			// create the new knex knex
-			_knex = await KnexClient({
+			_knex = await knex({
 				client: 'pg',
 				connection: dbOpts,
 				pool: {

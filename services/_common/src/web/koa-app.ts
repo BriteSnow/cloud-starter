@@ -1,4 +1,4 @@
-// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/error.ts" />
+// <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/web/koa-app.ts" />
 // (c) 2021 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import Koa from 'koa';

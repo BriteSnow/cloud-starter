@@ -30,10 +30,7 @@ const SEC_1YEAR = 3600 * 24 * 365;
 // other static files
 const SEC_1DAY = 3600 * 24;
 
-const CSP_TXT = `default-src 'self' ${CDN_BASE_URL};
-		font-src  'self' https://fonts.gstatic.com/;
-		style-src 'self' https://fonts.googleapis.com 'sha256-A6vjruJejruUybf2VEMoknqUi70/IHAxt4bLAt4TK0Q=';
-`;
+const CSP_TXT = `default-src 'self' ${CDN_BASE_URL};`;
 
 const CSP_STRING = CSP_TXT.split(';').map(s => s.trim()).join('; ');
 

@@ -15,7 +15,6 @@ defaultIcons.load();
 const svgSymbolsPromise = webGet("/svg/sprite.svg", { contentType: "application/xml" });
 
 document.addEventListener("DOMContentLoaded", function (event) {
-
 	// we make sure the the ajax for the svg/sprites.svg returns
 	svgSymbolsPromise.then(function (xmlDoc) {
 		// add the symbols to the head (external linking works but has issues - styling, and caching -)

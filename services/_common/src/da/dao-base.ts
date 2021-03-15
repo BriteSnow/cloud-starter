@@ -1,7 +1,7 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/da/dao-base.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { QueryBuilder } from 'knex';
+import { Knex } from 'knex';
 import { OpVal, QueryFilter, QueryOptions, StampedEntity, Val } from 'shared/entities';
 import { Monitor } from '../perf';
 import { UserContext } from '../user-context';
@@ -10,7 +10,7 @@ import { AccessRequires } from './access';
 import { knexQuery } from './db';
 
 export interface CustomQuery {
-	custom?: (q: QueryBuilder<any, any>) => void;
+	custom?: (q: Knex.QueryBuilder) => void;
 }
 
 export interface BaseDaoOptions {
@@ -248,7 +248,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 	}
 
 	@AccessRequires() // will force #sys only for baseDao
-	async updateBulk(utx: UserContext, fn: (k: QueryBuilder<any, any>) => void, data: Partial<E>) {
+	async updateBulk(utx: UserContext, fn: (k: Knex.QueryBuilder) => void, data: Partial<E>) {
 		const { query } = await knexQuery({ utx, tableName: this.table });
 
 		query.update(data);
@@ -307,7 +307,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 
 
 	//#region    ---------- Query Processors ---------- 
-	protected completeQueryBuilder(utx: UserContext, query: QueryBuilder<any, any>, queryOptions?: Q & CustomQuery) {
+	protected completeQueryBuilder(utx: UserContext, query: Knex.QueryBuilder, queryOptions?: Q & CustomQuery) {
 		// if this dao has a fixed column. 
 		if (this.columns) {
 			query.columns(this.columns);
@@ -393,7 +393,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 
 }
 
-function completeQueryFilter(query: QueryBuilder<any, any>, filter: QueryFilter) {
+function completeQueryFilter(query: Knex.QueryBuilder, filter: QueryFilter) {
 	// key can be 'firstName' or 'age;>'
 	for (const column in filter) {
 
