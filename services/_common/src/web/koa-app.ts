@@ -94,7 +94,7 @@ export class KoaApp extends Koa<KState, KCustom>{
 		}
 
 
-		//// STATAIC Path with no extension and not yet bound to API are assumed to be app state, and load the same index.html application
+		//// STATIC Path with no extension and not yet bound to API are assumed to be app state, and load the same index.html application
 		// This allows the user to hit reload anytime and get the same application.
 		app.use(async (ktx, next) => {
 			// Assumption: if we are here, all API handlers took the request, and we just have a page render or static file (with extension)
