@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    run: cstar-admin-server
   name: cstar-admin-server-dep
   namespace: default
+  labels:
+    run: cstar-admin-server
 spec:
   replicas: 1
   selector:
@@ -16,21 +16,21 @@ spec:
         run: cstar-admin-server
     spec:
       volumes:
-        # Those volumes are for development, it allow REPL dev from local build
+        # Those volumes are for development, it allow REPL dev from local build {{dir}}
         - name: cstar-admin-server-web-folder
           hostPath:
-            path: '{{projectDir}}services/admin-server/web-folder'
+            path: '{{dir_abs}}/services/admin-server/web-folder'
             type: Directory
         - name: cstar-admin-server-src
           hostPath:
-            path: '{{projectDir}}services/admin-server/src'
+            path: '{{dir_abs}}/services/admin-server/src'
             type: Directory
         - name: cstar-admin-server-dist
           hostPath:
-            path: '{{projectDir}}services/admin-server/dist'
+            path: '{{dir_abs}}/services/admin-server/dist'
             type: Directory
       containers:
-        - image: localhost:5000/cstar-admin-server:{{imageTag}}
+        - image: "localhost:5000/cstar-admin-server:{{image_tag}}"
           name: cstar-admin-server-ctn
           imagePullPolicy: Always
           envFrom:

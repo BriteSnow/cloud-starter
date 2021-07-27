@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    run: cstar-mock-s3 # we label run: ... all the resources that run a particular service (here cstar-mock-s3)
   name: cstar-mock-s3-srv # name will be the -... three letters abbreviation of the Kind
   namespace: default
+  labels:
+    run: cstar-mock-s3 # we label run: ... all the resources that run a particular service (here cstar-mock-s3)
 spec:
   ports:
   - port: 9000
@@ -17,10 +17,10 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    run: cstar-mock-s3
   name: cstar-mock-s3-dep
   namespace: default
+  labels:
+    run: cstar-mock-s3
 spec:
   replicas: 1
   selector:
@@ -32,7 +32,7 @@ spec:
         run: cstar-mock-s3
     spec:
       containers:
-      - image: localhost:5000/cstar-mock-s3:{{imageTag}}
+      - image: "localhost:5000/cstar-mock-s3:{{image_tag}}"
         imagePullPolicy: Always
         name: cstar-mock-s3-ctn
         env:

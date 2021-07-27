@@ -2,10 +2,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    run: cstar-agent
   name: cstar-agent-dep
   namespace: default
+  labels:
+    run: cstar-agent
 spec:
   replicas: 1
   selector:
@@ -19,18 +19,18 @@ spec:
       volumes:
         - name: cstar-agent-src
           hostPath:
-            path: '{{projectDir}}services/agent/src'
+            path: '{{dir_abs}}/services/agent/src'
             type: Directory
         - name: cstar-agent-sql
           hostPath:
-            path: '{{projectDir}}services/agent/sql'
+            path: '{{dir_abs}}/services/agent/sql'
             type: Directory
         - name: cstar-agent-dist
           hostPath:
-            path: '{{projectDir}}services/agent/dist'
+            path: '{{dir_abs}}/services/agent/dist'
             type: Directory            
       containers:
-        - image: 'localhost:5000/cstar-agent:{{imageTag}}'
+        - image: "localhost:5000/cstar-agent:{{image_tag}}"
           name: cstar-agent-ctn
           imagePullPolicy: Always
           envFrom:

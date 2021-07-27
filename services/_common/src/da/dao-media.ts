@@ -17,7 +17,6 @@ export class MediaDao extends WksScopedDao<Media, number> {
 
 	constructor() { super({ table: 'media', stamped: true }) }
 
-
 	//#region    ---------- Data Entity Processing Override ---------- 
 	parseRecord(dbRec: any): Media {
 		dbRec.url = `${CORE_STORE_CDN_BASE_URL}${CORE_STORE_ROOT_DIR}${dbRec.folderPath}${dbRec.name ?? dbRec.srcName}`;
@@ -49,7 +48,7 @@ export class MediaDao extends WksScopedDao<Media, number> {
 		const coreStore = await getCoreBucket();
 
 		const wks = await wksDao.get(utx, wksId);
-		const srcName = file.name;
+		const srcName = file.name!;
 		const name = srcName; // at start same name
 		const type = getMediaType(name);
 

@@ -12,7 +12,7 @@ spec:
   selector:
     run: cstar-queue # this will select from the template.spec.metadata.labels (the pod)
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cstar-queue-dep
@@ -29,7 +29,7 @@ spec:
         run: cstar-queue
     spec:
       containers:
-        - image: '{{registry}}cstar-queue:{{imageTag}}'
+        - image: '{{registry}}cstar-queue:{{image_tag}}'
           imagePullPolicy: Always
           name: cstar-queue-ctn
           ports:

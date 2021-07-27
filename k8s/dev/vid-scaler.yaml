@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    run: cstar-vid-scaler
   name: cstar-vid-scaler-dep
   namespace: default
+  labels:
+    run: cstar-vid-scaler
 spec:
   replicas: 1
   selector:
@@ -19,14 +19,14 @@ spec:
         # Those volumes are for development, it allow REPL dev from local build
         - name: cstar-vid-scaler-src
           hostPath:
-            path: '{{projectDir}}services/vid-scaler/src'
+            path: '{{dir_abs}}/services/vid-scaler/src'
             type: Directory
         - name: cstar-vid-scaler-dist
           hostPath:
-            path: '{{projectDir}}services/vid-scaler/dist'
+            path: '{{dir_abs}}/services/vid-scaler/dist'
             type: Directory
       containers:
-        - image: localhost:5000/cstar-vid-scaler:{{imageTag}}
+        - image: "localhost:5000/cstar-vid-scaler:{{image_tag}}"
           name: cstar-vid-scaler-ctn
           imagePullPolicy: Always
           envFrom:

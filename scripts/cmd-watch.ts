@@ -1,9 +1,8 @@
-import * as chokidar from 'chokidar';
+import chokidar from 'chokidar';
 import { router } from 'cmdrouter';
 import execa from 'execa';
 import debounce from 'lodash.debounce';
-import { spawn } from 'p-spawn';
-import { join as joinPath } from 'path';
+import * as Path from 'path';
 import { wait } from 'utils-min';
 
 const IMG_NAME_PREFIX = 'cstar-';
@@ -19,8 +18,8 @@ async function watch() {
 
 	//#region    ---------- Frontend watch ---------- 
 	// watch the watch for frontends/web
-	spawn('./node_modules/.bin/vdev', ['watch', 'web']);
-	spawn('./node_modules/.bin/vdev', ['watch', 'admin']);
+	execa('kdd', ['watch', 'web'], execaOpts);
+	execa('kdd', ['watch', 'admin'], execaOpts);
 	//#endregion ---------- /Frontend watch ---------- 
 
 	//#region    ---------- services watch ---------- 
@@ -31,12 +30,12 @@ async function watch() {
 
 	watchService('vid-init', '9240');
 	watchService('vid-scaler', '9241');
-	//#endregion ---------- /services watch ---------- 
+	// //#endregion ---------- /services watch ---------- 
 
 
-	//#region    ---------- agent sql watch ---------- 
+	// //#region    ---------- agent sql watch ---------- 
 	const createDbDebounced = debounce(() => {
-		spawn('npm', ['run', 'vdev', 'kexec', 'agent', 'npm', 'run', 'recreateDb']);
+		execa('kdd', ['kexec', 'agent', 'npm', 'run', 'recreateDb']);
 	}, 500)
 
 	const sqlWatcher = chokidar.watch('services/agent/sql', { depth: 99, ignoreInitial: true, persistent: true });
@@ -50,11 +49,11 @@ async function watch() {
 		console.log(`services/agent/sql add: ${filePath}`);
 		createDbDebounced();
 	});
-	//#endregion ---------- /agent sql watch ---------- 
+	// //#endregion ---------- /agent sql watch ---------- 
 
-	//#region    ---------- ico watch ---------- 
+	// //#region    ---------- ico watch ---------- 
 	execa('npm', ['run', 'sketchdev', '--', '-w'], execaOpts);
-	//#endregion ---------- /ico watch ---------- 
+	// //#endregion ---------- /ico watch ---------- 
 }
 
 
@@ -62,21 +61,28 @@ async function watchService(serviceName: string, debugPort: string) {
 	const serviceDir = `services/${serviceName}`;
 
 	// kubectl port-forward $(kubectl get pods -l run=cstar-web-server --no-headers=true -o custom-columns=:metadata.name) 9229
-	const podName = (await spawn('kubectl', ['get', 'pods', '-l', `run=${IMG_NAME_PREFIX}${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'], { capture: 'stdout' })).stdout?.trim();
-	spawn('kubectl', ['port-forward', podName, `${debugPort}:9229`]);
+	const podNameArgs = ['get', 'pods', '-l', `run=${IMG_NAME_PREFIX}${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'];
+	const podName = (await execa('kubectl', podNameArgs)).stdout?.trim();
+	console.log(`->> ${podName}`);
 
 
-	spawn('tsc', ['-w'], { cwd: serviceDir }); // this will create a new restart
+	// spawn('kubectl', ['port-forward', podName, `${debugPort}:9229`]);
+	execa('kubectl', ['port-forward', podName, `${debugPort}:9229`]);
 
-	console.log('waiting for tsc -w');
+	// make sure it listen to port
 	await wait(2000);
 
-	const distDir = joinPath(serviceDir, '/dist/');
+	// spawn('tsc', ['-w'], { cwd: serviceDir }); // this will create a new restart
+	execa('tsc', ['-w'], { cwd: serviceDir });
 
+	// console.log('waiting for tsc -w');
+	await wait(2000);
+
+	const distDir = Path.join(serviceDir, '/dist/');
 	const watcher = chokidar.watch(distDir, { depth: 99, ignoreInitial: true, persistent: true });
 
 	const cr = debounce(() => {
-		spawn('npm', ['run', 'vdev', 'krestart', serviceName]);
+		execa('kdd', ['kexec', serviceName, '--', '/service/restart.sh']);
 	}, 500)
 
 	watcher.on('change', async function (filePath: string) {
@@ -85,7 +91,6 @@ async function watchService(serviceName: string, debugPort: string) {
 		} else {
 			cr();
 		}
-
 	});
 
 	watcher.on('add', async function (filePath: string) {

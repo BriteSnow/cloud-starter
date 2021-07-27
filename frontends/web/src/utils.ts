@@ -1,7 +1,7 @@
 import { attr, closest } from 'dom-native';
 import { asNum } from 'utils-min';
 
-
+//
 export function guard<U>(val: U | null | undefined, message: string): U {
 	if (val == null) {
 		throw new Error(message);

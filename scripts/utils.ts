@@ -1,4 +1,7 @@
-import { now } from 'vdev';
+export function now() {
+	var hrTime = process.hrtime();
+	return hrTime[0] * 1000 + hrTime[1] / 1000000;
+}
 
 // --------- CallReducer --------- //
 type Fn = (item: any) => any;

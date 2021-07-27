@@ -1,10 +1,12 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cstar-secret
+  name: "{{system}}-secret"
 type: Opaque
 data:
   db-password: d2VsY29tZQ==
+  # {{system}} {{image_tag}} {{__version__}} {{block_base_dir}}
+  # {{context}} - {{base_stuff}} - {{aws_stuff}} - {{dev_stuff}} 
   # For google OAuth, uncomment values below and set the value (base64 encoded)
   # google_oauth-client_id: __BASE64_ENCODEC_GOOGLE_CLIENT_ID__
   # google_oauth-client_secret: __BASE64_ENCODEC_GOOGLE_CLIENT_SECRET__

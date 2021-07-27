@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@backlib/koa": "^0.3.5",
+    "@backlib/koa": "0.3.6-SNAPSHOT.1",
     "@types/ioredis": "^4.26.0",
     "backlib": "^0.3.2",
     "cloud-bucket": "^0.3.13",

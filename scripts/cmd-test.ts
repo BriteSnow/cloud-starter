@@ -58,8 +58,6 @@ async function watchAndRun(debug: boolean, serviceName: string, testGrep: string
 	const serviceDir = `${servicesDir}/${serviceName}`;
 	const serviceDistDir = `${serviceDir}/dist`;
 
-	// TODO: need to use the vdev to get the real dir
-
 	// start the building
 	spawn('tsc', ['-w'], { cwd: serviceDir }); // this will create a new restart
 
@@ -95,7 +93,7 @@ async function run(debug = false, serviceName: string, testGrep: string, podName
 		await spawn('kubectl', args, { ignoreFail: true });
 	}
 
-	const args = ['run', 'vdev', 'kexec', serviceName];
+	const args = ['kdd', 'kexec', serviceName];
 	args.push('--', 'npm', 'run');
 
 	if (debug) {

@@ -17,7 +17,7 @@ spec:
         run: cstar-agent
     spec:
       containers:
-        - image: '{{registry}}cstar-agent:{{imageTag}}'
+        - image: '{{registry}}cstar-agent:{{image_tag}}'
           name: cstar-agent-ctn
           imagePullPolicy: Always
           envFrom:
