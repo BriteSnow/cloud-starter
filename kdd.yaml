@@ -36,6 +36,7 @@ blocks:
   - db
   - queue
   - mock-s3
+  - agent2
   - _common  
   - name: vid-scaler
     dependencies: _common    

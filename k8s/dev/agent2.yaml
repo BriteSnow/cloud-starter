@@ -1,0 +1,45 @@
+# Note: here we do not need a k8s service since this service does not have any web/socket API (it connects to redis, but nobody connects to it)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cstar-agent2-dep
+  namespace: default
+  labels:
+    run: cstar-agent2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: cstar-agent2
+  template:
+    metadata:
+      labels:
+        run: cstar-agent2
+    spec:
+      # volumes:
+      #   - name: cstar-agent2-src
+      #     hostPath:
+      #       path: '{{dir_abs}}/services/agent2/src'
+      #       type: Directory
+      #   - name: cstar-agent2-cargo-toml
+      #     hostPath:
+      #       path: '{{dir_abs}}/services/agent2/Cargo.toml'
+      #       type: File            
+      containers:
+        - image: "localhost:5000/cstar-agent2:{{image_tag}}"
+          name: cstar-agent2-ctn
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: cstar-config
+            - secretRef:
+                name: cstar-secret
+          env:
+            - name: service_name
+              value: agent2          
+          # volumeMounts:
+          #   - mountPath: /service/src
+          #     name: cstar-agent2-src
+          #   - mountPath: /service/Cargo.toml
+          #     name: cstar-agent2-cargo-toml
+      restartPolicy: Always

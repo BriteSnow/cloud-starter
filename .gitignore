@@ -11,6 +11,9 @@
 node_modules/
 npm-debug.log
 
+# Ignore rust target
+target/
+
 # handpick with kubernetes file we would want to key
 k8s/*
 !k8s/
