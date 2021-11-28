@@ -112,7 +112,7 @@ export class LoginView extends BaseViewElement {
 				this.message = result.error.code;
 			}
 
-		} catch (ex) {
+		} catch (ex: any) {
 			this.message = ex.error.code;
 		}
 	}
@@ -122,7 +122,7 @@ export class LoginView extends BaseViewElement {
 
 		try {
 			const result = await webPost('/api/register', { body: data });
-		} catch (ex) {
+		} catch (ex: any) {
 			console.log('error register', ex);
 			this.footerMessage.textContent = ex.error || ex.message;
 		}

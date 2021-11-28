@@ -2,7 +2,7 @@ vars:
   - from_file: package.json
     extract: ["__version__"]
   - from_env: ["USER"]
-files: 
+overlays: 
   - .prod/kdd-prod.yaml
 ---
 system: cstar
@@ -77,3 +77,16 @@ builders:
     exec:
       cmd: node_modules/.bin/pcss
       watch_args: ["-w"]        
+
+versions:
+  - val: __version__\s*[=:]\s*["](.*)['"]
+    replace: (.*__version__\s*[=:]\s*["']).*(['"].*)
+    by: ${1}{{__version__}}${2}
+    in: 
+      - frontends/_common/src/common-main.ts
+      - services/_common/src/conf.ts
+  - val: <.*(?:href|src).*?v=(.*?)(?:"|\&)
+    replace: (<.*(?:href|src).*?v=).*("|&.*)
+    by: ${1}{{__version__}}${2}
+    in: 
+      - services/web-server/web-folder/index.html

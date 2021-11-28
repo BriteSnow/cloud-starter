@@ -214,7 +214,7 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		let id: I;
 		try {
 			id = await this.create(utx, data);
-		} catch (ex) {
+		} catch (ex: any) {
 			// for now,  we will assume it is on on conflict with the uniqueProp
 			const { query } = await knexQuery({ utx, tableName: this.table });
 

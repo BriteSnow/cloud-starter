@@ -1,6 +1,6 @@
 import chokidar from 'chokidar';
 import { router } from 'cmdrouter';
-import execa from 'execa';
+import { execa } from 'execa';
 import debounce from 'lodash.debounce';
 import * as Path from 'path';
 import { wait } from 'utils-min';

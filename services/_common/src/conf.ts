@@ -8,7 +8,7 @@
 const { freeze } = Object;
 const { env } = process;
 
-export const __version__ = "DROP-002-SNAPSHOT";
+export const __version__ = "DROP-003-SNAPSHOT";
 
 // should HOST environment should be set by kuberenetes.
 export const KHOST = env.HOSTNAME ?? 'no-host';

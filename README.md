@@ -80,6 +80,8 @@ The development environment has been tested on Mac, but it should work on Window
 ```sh
 docker run -d -p 5000:5000 --restart=unless-stopped --name registry registry
 ```
+> Note: On Mac Monterey, AirPlay (proc: ControlCe) is using 5000. Must be turned off. System > Sharing checkout off AirPlay https://developer.apple.com/forums/thread/682332
+> Needs to send port
 
 ### Build, run, and code
 

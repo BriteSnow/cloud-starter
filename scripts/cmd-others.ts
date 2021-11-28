@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import * as child_process from 'child_process';
 import { router } from 'cmdrouter';
-import execa from 'execa';
+import { execa } from 'execa';
 import * as fs from 'fs-extra-plus';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
