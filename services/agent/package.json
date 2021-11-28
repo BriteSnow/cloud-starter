@@ -1,5 +1,6 @@
 {
   "name": "agent",
+  "type": "module",
   "version": "1.0.0",
   "description": "none",
   "repository": {
@@ -30,6 +31,6 @@
     "redis": "^3.1.2",
     "ts-node": "^10.0.0",
     "uuid": "^8.3.2",
-    "vdev": "^0.13.2"
+    "vdev": "^0.13.3"
   }
 }

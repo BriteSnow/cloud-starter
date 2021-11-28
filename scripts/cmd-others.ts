@@ -2,10 +2,11 @@ import chalk from 'chalk';
 import * as child_process from 'child_process';
 import { router } from 'cmdrouter';
 import { execa } from 'execa';
-import * as fs from 'fs-extra-plus';
+// import * as fs from 'fs-extra-plus';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
-import { prompt } from './utils';
+import { prompt } from './utils.js';
+const { readdir, pathExists } = (await import('fs-extra')).default;
 
 const SERVICES_DIR = './services/';
 
@@ -14,13 +15,13 @@ router({ pupdate, dclean, runTest }).route();
 async function pupdate() {
 	const dirPath = (dirName: string) => Path.join(SERVICES_DIR, dirName + '/');
 
-	const list = await fs.readdir(SERVICES_DIR);
+	const list = await readdir(SERVICES_DIR);
 	const dirNamesToUpdate: string[] = [];
 
 	for (const dirName of list) {
 		const dir = dirPath(dirName);
 
-		if (await fs.pathExists(Path.join(dir, 'package.json'))) {
+		if (await pathExists(Path.join(dir, 'package.json'))) {
 			try {
 				console.log(`-- npm outdated for ${chalk.cyan(dir)}`);
 

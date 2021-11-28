@@ -1,5 +1,6 @@
 {
   "name": "cloud-bigapp",
+  "type": "module",
   "version": "0.0.0",
   "__version__": "DROP-003-SNAPSHOT",
   "description": "Cloud Big App code blueprint. Start to Scale!",
@@ -27,7 +28,7 @@
     "mocha": "^9.1.3",
     "moment": "^2.29.1",
     "p-spawn": "^0.5.5",
-    "pcss-cli": "^0.1.7",
+    "pcss-cli": "file:../../node-pcss-cli_src/pcss-cli-0.2.0-SNAPSHOT.tgz",
     "postcss-mixins": "^8.1.0",
     "postgres-array": "^3.0.1",
     "qs": "^6.10.1",
@@ -56,16 +57,16 @@
   },
   "scripts": {
     "sketchdev": "./node_modules/.bin/sketchdev",
-    "test": "./node_modules/.bin/ts-node scripts/cmd-test.ts test",
-    "testw": "./node_modules/.bin/ts-node scripts/cmd-test.ts testw",
-    "testd": "./node_modules/.bin/ts-node scripts/cmd-test.ts testd",
-    "watch": "./node_modules/.bin/ts-node scripts/cmd-watch.ts watch",
+    "test": "node --loader ts-node/esm scripts/cmd-test.ts test",
+    "testw": "node --loader ts-node/esm scripts/cmd-test.ts testw",
+    "testd": "node --loader ts-node/esm scripts/cmd-test.ts testd",
+    "watch": "node --loader ts-node/esm scripts/cmd-watch.ts watch",
     "recreateDb": "kdd kexec agent npm run recreateDb",
     "credential": "kdd kexec agent npm run credential",
     "makeCredential": "kdd kexec agent npm run makeCredential",
     "createUser": "kdd kexec agent npm run createUser",
     "setPwd": "kdd kexec agent npm run setPwd",
-    "pupdate": "./node_modules/.bin/ts-node scripts/cmd-others.ts pupdate",
+    "pupdate": "node --loader ts-node/esm scripts/cmd-others.ts pupdate",
     "sf": "node ./node_modules/source-fetcher/dist/bin-sf.js"
   },
   "engines": {

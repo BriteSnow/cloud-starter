@@ -5,19 +5,17 @@
 
 {
 	"compilerOptions": {
-		// ESNEXT for Node.js 14+
-		"target": "ESNEXT",
+		// ES2021 for Node.js 16+
+		"target": "ES2021",
+		// Now, we have updated package.json to type = "module"
+		"module": "ESNext",
 
-    // When ESNEXT target, to use native class field. 
+    // to use native class field. 
 		"useDefineForClassFields": true,
-
-		// For now, we keep the traditional commonsjs way
-		"module": "commonjs",
 		
 		// This is important to support 3rd party modules
 		"moduleResolution": "node", 
 		
-
 		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
 		"strict": true, 
 

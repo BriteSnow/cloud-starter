@@ -71,7 +71,7 @@ export class LoginView extends BaseViewElement {
 				this.message = result.error.message;
 			}
 
-		} catch (ex) {
+		} catch (ex: any) {
 			this.message = ex.error.message;
 		}
 	}
@@ -81,7 +81,7 @@ export class LoginView extends BaseViewElement {
 
 		try {
 			const result = await webPost('/api/register', { body: data });
-		} catch (ex) {
+		} catch (ex: any) {
 			console.log('error register', ex);
 			this.footerMessage.textContent = ex.error || ex.message;
 		}

@@ -55,6 +55,7 @@ export class Err extends Error {
 	constructor(svrCode: Symbol, svr_msg?: string)
 	constructor(rec: ErrRec)
 	constructor(svrCode_or_rec: Symbol | ErrRec, svr_msg?: string) {
+		super();
 		let rec: ErrRec;
 		if (typeof svrCode_or_rec === 'symbol') {
 			rec = { svrCode: svrCode_or_rec };

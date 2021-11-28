@@ -5,7 +5,7 @@
 		"target": "es2018",
 
 		// For browser client, since we are using rollup to package, we target the es6/es2015 module
-		"module": "es2015",
+		"module": "ESNext",
 
 		// This is important to support 3rd party modules that are still in a node.js/commonjs way
 		"moduleResolution": "node", 

@@ -1,5 +1,6 @@
 {
   "name": "web-server",
+  "type": "module",
   "version": "1.0.0",
   "description": "Cloud Big App",
   "main": "dist/start.js",

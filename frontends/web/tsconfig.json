@@ -10,10 +10,10 @@
       }
     ],		
 		// For browser client, we target edge and above (es2018 seems to safe https://kangax.github.io/compat-table/es2016plus/)
-		"target": "es2018",
+		"target": "ES2018",
 
 		// For browser client, since we are using rollup to package, we target the es6/es2015 module
-		"module": "es2015",
+		"module": "ESNext",
 
 		// This is important to support 3rd party modules that are still in a node.js/commonjs way
 		"moduleResolution": "node", 

@@ -1,5 +1,6 @@
 {
   "name": "services_common",
+  "type": "module",
   "version": "0.0.0",
   "description": "common code for backend services",
   "main": "index.js",
