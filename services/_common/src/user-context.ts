@@ -1,5 +1,5 @@
-import { GlobalAccess, GlobalAccesses } from 'shared/access-types.js';
-import { User } from 'shared/entities.js';
+import { GlobalAccess, GlobalAccesses } from '#shared/access-types.js';
+import { User } from '#shared/entities.js';
 import { getWksAccesses } from './da/access-wks.js';
 import { PerfContext } from './perf.js';
 

@@ -1,4 +1,4 @@
-import { QueryOptions, WksScopedEntity } from 'shared/entities.js';
+import { QueryOptions, WksScopedEntity } from '#shared/entities.js';
 import { Err } from '../error.js';
 import { UserContext } from '../user-context.js';
 import { symbolDic } from '../utils.js';
@@ -71,4 +71,3 @@ export class WksScopedDao<E extends WksScopedEntity, I, Q extends QueryOptions<E
 	//#endregion ---------- /Wks Scoped Helper Methods ---------- 
 
 }
-

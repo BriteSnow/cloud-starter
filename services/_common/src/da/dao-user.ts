@@ -5,10 +5,10 @@
 // User DAO. Advanced DAO to manage the security aspect of the user. 
 ////
 
-import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ROLES, isAccess } from 'shared/access-types.js';
-import { QueryOptions, User, USER_COLUMNS } from "shared/entities.js";
-import { Err } from '../error.js';
+import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ROLES, isAccess } from '#shared/access-types.js';
+import { QueryOptions, User, USER_COLUMNS } from "#shared/entities.js";
 import { CODE_ERROR } from '../error-common.js';
+import { Err } from '../error.js';
 import { pwdEncrypt } from '../security/password.js';
 import { UserContext } from "../user-context.js";
 import { symbolDic } from '../utils.js';

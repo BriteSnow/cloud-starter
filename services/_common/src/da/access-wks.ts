@@ -1,5 +1,5 @@
 
-import { WksRoleName, WKS_ROLES } from 'shared/access-types.js';
+import { WksRoleName, WKS_ROLES } from '#shared/access-types.js';
 import { getKnexClient } from './db.js';
 
 

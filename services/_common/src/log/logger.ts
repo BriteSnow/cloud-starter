@@ -1,8 +1,8 @@
 
+import { ServiceLogRecord, WebLogRecord } from '#shared/log-types.js';
 import { BaseLog, LogWriter } from 'backlib';
 import redstream, { RedStream } from 'redstream';
 import { objectDataParser } from 'redstream/dist/utils.js';
-import { ServiceLogRecord, WebLogRecord } from 'shared/log-types.js';
 import { KHOST, LOG, LOG_DIR } from '../conf.js';
 import { getRedisClient } from '../queue.js';
 import { nowTimestamp, typify } from '../utils.js';

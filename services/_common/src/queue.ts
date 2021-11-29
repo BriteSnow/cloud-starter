@@ -1,7 +1,7 @@
+import { AllEventDic, AppEventDic, JobEventDic } from '#shared/event-types.js';
 import IORedis, { Redis } from "ioredis";
 import redstream, { objectDataParser, objectDataSerializer, RedStream } from 'redstream';
 import { StreamEntry, XReadGroupResult } from 'redstream/dist/redstream.js';
-import { AllEventDic, AppEventDic, JobEventDic } from 'shared/event-types.js';
 import { KHOST } from './conf.js';
 import { typify } from './utils.js';
 
@@ -176,7 +176,6 @@ function createRedisClient(name: string) {
 	return client;
 }
 //#endregion ---------- /RedisClient Factory / Cache ----------
-
 
 
 

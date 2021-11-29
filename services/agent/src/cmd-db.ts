@@ -1,10 +1,10 @@
 // require('../../_common/src/setup-module-aliases');
 
+import { DB } from '#common/conf.js';
+import { UserCredForLogin, USER_COLUMNS_FOR_LOGIN } from '#common/da/dao-user.js';
+import { closeKnexClient, getKnexClient } from '#common/da/db.js';
+import { pwdEncrypt } from '#common/security/password.js';
 import { router } from 'cmdrouter';
-import { DB } from 'common/conf.js';
-import { UserCredForLogin, USER_COLUMNS_FOR_LOGIN } from 'common/da/dao-user.js';
-import { closeKnexClient, getKnexClient } from 'common/da/db.js';
-import { pwdEncrypt } from 'common/security/password.js';
 import * as fs from 'fs-extra-plus';
 import { ensureDir } from 'fs-extra-plus';
 import { basename, join as joinPath } from 'path';

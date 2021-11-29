@@ -1,8 +1,8 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/da/dao-base.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
+import { OpVal, QueryFilter, QueryOptions, StampedEntity, Val } from '#shared/entities.js';
 import { Knex } from 'knex';
-import { OpVal, QueryFilter, QueryOptions, StampedEntity, Val } from 'shared/entities.js';
 import { Monitor } from '../perf.js';
 import { UserContext } from '../user-context.js';
 import { nowTimestamp, removeProps } from '../utils.js';

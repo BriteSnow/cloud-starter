@@ -1,7 +1,7 @@
+import { ApiResponse } from '#shared/api-types.js';
+import { WebLogRecord } from '#shared/log-types.js';
 import { BaseRouter } from '@backlib/koa';
 import { Next, ParameterizedContext } from 'koa';
-import { ApiResponse } from 'shared/api-types.js';
-import { WebLogRecord } from 'shared/log-types.js';
 import useragent from 'useragent';
 import { pruneEmpty } from 'utils-min';
 import { SERVICE_NAME } from '../conf.js';

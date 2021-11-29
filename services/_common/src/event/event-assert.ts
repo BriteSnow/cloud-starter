@@ -1,4 +1,4 @@
-import { AllEventDic } from 'shared/event-types.js';
+import { AllEventDic } from '#shared/event-types.js';
 import { typecheck } from '../utils.js';
 
 

@@ -1,11 +1,11 @@
 // require('../../_common/src/setup-module-aliases');
 
+import { userDao } from '#common/da/daos.js';
+import { closeKnexClient } from '#common/da/db.js';
+import { PwdEncryptData } from '#common/security/password-types.js';
+import { pwdCheck, pwdEncrypt } from '#common/security/password.js';
+import { getSysContext } from '#common/user-context.js';
 import { router } from 'cmdrouter';
-import { userDao } from 'common/da/daos.js';
-import { closeKnexClient } from 'common/da/db.js';
-import { PwdEncryptData } from 'common/security/password-types.js';
-import { pwdCheck, pwdEncrypt } from 'common/security/password.js';
-import { getSysContext } from 'common/user-context.js';
 import { v4 as uuidV4 } from 'uuid';
 
 

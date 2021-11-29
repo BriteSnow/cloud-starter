@@ -1,6 +1,6 @@
+import { Media, MediaResolution, MediaType } from '#shared/entities.js';
 import { File } from 'formidable'; // from koa-body
 import * as Path from 'path';
-import { Media, MediaResolution, MediaType } from 'shared/entities.js';
 import { CORE_STORE_CDN_BASE_URL, CORE_STORE_ROOT_DIR } from '../conf.js';
 import { Err } from '../error.js';
 import { getAppQueue } from '../queue.js';
