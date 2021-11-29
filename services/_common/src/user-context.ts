@@ -1,7 +1,7 @@
-import { GlobalAccess, GlobalAccesses } from 'shared/access-types';
-import { User } from 'shared/entities';
-import { getWksAccesses } from './da/access-wks';
-import { PerfContext } from './perf';
+import { GlobalAccess, GlobalAccesses } from 'shared/access-types.js';
+import { User } from 'shared/entities.js';
+import { getWksAccesses } from './da/access-wks.js';
+import { PerfContext } from './perf.js';
 
 
 /**

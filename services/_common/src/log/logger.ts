@@ -1,11 +1,11 @@
 
 import { BaseLog, LogWriter } from 'backlib';
 import redstream, { RedStream } from 'redstream';
-import { objectDataParser } from 'redstream/dist/utils';
-import { ServiceLogRecord, WebLogRecord } from 'shared/log-types';
-import { KHOST, LOG, LOG_DIR } from '../conf';
-import { getRedisClient } from '../queue';
-import { nowTimestamp, typify } from '../utils';
+import { objectDataParser } from 'redstream/dist/utils.js';
+import { ServiceLogRecord, WebLogRecord } from 'shared/log-types.js';
+import { KHOST, LOG, LOG_DIR } from '../conf.js';
+import { getRedisClient } from '../queue.js';
+import { nowTimestamp, typify } from '../utils.js';
 
 const BASE_LOG_WRITER_OPTIONS = { ...LOG, dir: LOG_DIR };
 
@@ -130,4 +130,3 @@ export function getServiceLogStream(): RedStream<ServiceLogRecord> {
 	return _serviceLogStream;
 }
 //#endregion ---------- /Log Streams ----------
-

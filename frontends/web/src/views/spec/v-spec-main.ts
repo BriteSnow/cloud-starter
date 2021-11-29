@@ -1,9 +1,9 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/frontends/web/src/views/spec/spec-main.ts" />
 
-import { pathAt } from 'common/route';
-import { BaseViewElement } from 'common/v-base';
+import { pathAt } from 'common/route.js';
+import { BaseViewElement } from 'common/v-base.js';
 import { all, customElement, first, onHub } from 'dom-native';
-import { tagNameByName } from './spec-paths';
+import { tagNameByName } from './spec-paths.js';
 
 const defaultPath = 'typo';
 

@@ -5,16 +5,16 @@
 // User DAO. Advanced DAO to manage the security aspect of the user. 
 ////
 
-import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ROLES, isAccess } from 'shared/access-types';
-import { QueryOptions, User, USER_COLUMNS } from "shared/entities";
-import { Err } from '../error';
-import { CODE_ERROR } from '../error-common';
-import { pwdEncrypt } from '../security/password';
-import { UserContext } from "../user-context";
-import { symbolDic } from '../utils';
-import { AccessRequires } from "./access";
-import { BaseDao } from "./dao-base";
-import { knexQuery } from './db';
+import { GlobalAccess, GlobalAccesses, GlobalRoleName, GLOBAL_ROLES, isAccess } from 'shared/access-types.js';
+import { QueryOptions, User, USER_COLUMNS } from "shared/entities.js";
+import { Err } from '../error.js';
+import { CODE_ERROR } from '../error-common.js';
+import { pwdEncrypt } from '../security/password.js';
+import { UserContext } from "../user-context.js";
+import { symbolDic } from '../utils.js';
+import { AccessRequires } from "./access.js";
+import { BaseDao } from "./dao-base.js";
+import { knexQuery } from './db.js';
 
 const ERROR = symbolDic(
 	'NO_USER_FOUND'

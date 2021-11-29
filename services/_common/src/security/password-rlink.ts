@@ -1,7 +1,7 @@
 
 import crypto from 'crypto';
 import { shortUuid } from 'utils-min';
-import { PWD_PRLINK_SALT } from '../conf';
+import { PWD_PRLINK_SALT } from '../conf.js';
 
 export interface PRLinkUserInfo {
 	code: string; // rplink code uuid format

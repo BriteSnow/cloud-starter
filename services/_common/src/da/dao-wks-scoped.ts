@@ -1,9 +1,9 @@
-import { QueryOptions, WksScopedEntity } from 'shared/entities';
-import { Err } from '../error';
-import { UserContext } from '../user-context';
-import { symbolDic } from '../utils';
-import { AccessRequires } from './access';
-import { BaseDao, CustomQuery } from './dao-base';
+import { QueryOptions, WksScopedEntity } from 'shared/entities.js';
+import { Err } from '../error.js';
+import { UserContext } from '../user-context.js';
+import { symbolDic } from '../utils.js';
+import { AccessRequires } from './access.js';
+import { BaseDao, CustomQuery } from './dao-base.js';
 
 const ERROR = symbolDic(
 	'NO_WKSID_IN_UTX',
@@ -71,5 +71,4 @@ export class WksScopedDao<E extends WksScopedEntity, I, Q extends QueryOptions<E
 	//#endregion ---------- /Wks Scoped Helper Methods ---------- 
 
 }
-
 

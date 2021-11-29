@@ -1,7 +1,7 @@
 import '@dom-native/ui';
 import { defaultIcons } from '@dom-native/ui';
 import { trigger } from 'dom-native';
-import { webGet } from './web-request';
+import { webGet } from './web-request.js';
 
 
 window.__version__ = "DROP-003-SNAPSHOT";

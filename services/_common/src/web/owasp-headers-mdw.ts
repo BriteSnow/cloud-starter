@@ -2,8 +2,8 @@
 // (c) 2021 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import * as Path from 'path';
-import { CDN_BASE_URL } from '../conf';
-import { Ktx, Next } from './koa-utils';
+import { CDN_BASE_URL } from '../conf.js';
+import { Ktx, Next } from './koa-utils.js';
 
 /**
  * DONE:

@@ -1,7 +1,7 @@
 import { position } from '@dom-native/draggable';
-import { getRouteWksId, pathAt } from 'common/route';
-import { logoff, UserContext } from 'common/user-ctx';
-import { BaseViewElement } from 'common/v-base';
+import { getRouteWksId, pathAt } from 'common/route.js';
+import { logoff, UserContext } from 'common/user-ctx.js';
+import { BaseViewElement } from 'common/v-base.js';
 import { append, customElement, first, frag, on, onEvent, onHub, push } from 'dom-native';
 import { isNotEmpty } from 'utils-min';
 

@@ -6,9 +6,9 @@ import { types } from 'pg';
 import { parse as pgArrayParse } from 'postgres-array';
 import { Pool } from 'tarn';
 import { isEmpty } from 'utils-min';
-import { DB, KHOST } from '../conf';
-import { UserContext } from '../user-context';
-import { nowTimestamp } from '../utils';
+import { DB, KHOST } from '../conf.js';
+import { UserContext } from '../user-context.js';
+import { nowTimestamp } from '../utils.js';
 
 type QueryInterface = Knex.QueryInterface;
 type QueryBuilder = Knex.QueryBuilder;

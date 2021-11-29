@@ -1,13 +1,13 @@
 import { File } from 'formidable'; // from koa-body
 import * as Path from 'path';
-import { Media, MediaResolution, MediaType } from 'shared/entities';
-import { CORE_STORE_CDN_BASE_URL, CORE_STORE_ROOT_DIR } from '../conf';
-import { Err } from '../error';
-import { getAppQueue } from '../queue';
-import { getCoreBucket } from '../store';
-import { UserContext } from '../user-context';
-import { getMimeType, symbolDic } from '../utils';
-import { WksScopedDao } from './dao-wks-scoped';
+import { Media, MediaResolution, MediaType } from 'shared/entities.js';
+import { CORE_STORE_CDN_BASE_URL, CORE_STORE_ROOT_DIR } from '../conf.js';
+import { Err } from '../error.js';
+import { getAppQueue } from '../queue.js';
+import { getCoreBucket } from '../store.js';
+import { UserContext } from '../user-context.js';
+import { getMimeType, symbolDic } from '../utils.js';
+import { WksScopedDao } from './dao-wks-scoped.js';
 
 const ERROR = symbolDic(
 	'MEDIA_UPLOAD_FAIL_NO_WKSID',

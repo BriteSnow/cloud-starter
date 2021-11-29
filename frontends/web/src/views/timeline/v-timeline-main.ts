@@ -1,5 +1,5 @@
 import { activateDrag, draggable } from '@dom-native/draggable';
-import { BaseViewElement } from 'common/v-base';
+import { BaseViewElement } from 'common/v-base.js';
 import { customElement, OnEvent, onEvent } from 'dom-native';
 
 

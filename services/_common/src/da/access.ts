@@ -1,10 +1,10 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { newLeafTracer } from 'backlib';
-import { GlobalAccess, isAccess, isWksAccess, WksAccess } from 'shared/access-types';
+import { GlobalAccess, isAccess, isWksAccess, WksAccess } from 'shared/access-types.js';
 import { isFunction } from 'util';
 import { asNum } from 'utils-min';
-import { assertUserContext, getSysContext, UserContext } from '../user-context';
+import { assertUserContext, getSysContext, UserContext } from '../user-context.js';
 
 const leafTracer = newLeafTracer();
 

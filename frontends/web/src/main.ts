@@ -1,7 +1,7 @@
 import 'common/common-main';
-import { getUserContext } from 'common/user-ctx';
+import { getUserContext } from 'common/user-ctx.js';
 import { first, on } from 'dom-native';
-import { MainView } from 'views/v-main';
+import { MainView } from 'views/v-main.js';
 
 //#region    ---------- Start Application ---------- 
 //// Start the application 
@@ -22,5 +22,4 @@ on(document, 'APP_LOADED', async function () {
 
 });
 //#endregion ---------- /Start Application ----------
-
 

@@ -1,8 +1,8 @@
 import { position } from '@dom-native/draggable';
-import { BaseViewElement } from 'common/v-base';
+import { BaseViewElement } from 'common/v-base.js';
 import { wksDco } from 'dcos';
 import { append, closest, customElement, elem, first, on, OnEvent, onEvent, onHub } from 'dom-native';
-import { Wks } from 'shared/entities';
+import { Wks } from 'shared/entities.js';
 import { asNum } from 'utils-min';
 
 @customElement('v-home')

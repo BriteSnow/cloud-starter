@@ -5,10 +5,10 @@
 // Module responsible to set and get the auth data from the web request context (ktx)
 ////
 
-import { HTTPS_MODE, WEB_TOKEN_DURATION } from '../conf';
-import { Err } from '../error';
-import { createToken, newExpiration, UserCredForToken } from '../security/token';
-import { Ktx } from './koa-utils';
+import { HTTPS_MODE, WEB_TOKEN_DURATION } from '../conf.js';
+import { Err } from '../error.js';
+import { createToken, newExpiration, UserCredForToken } from '../security/token.js';
+import { Ktx } from './koa-utils.js';
 
 
 const COOKIE_SECURE = HTTPS_MODE; // for local dev this will be false

@@ -1,7 +1,7 @@
-import { userDao } from 'common/da/daos';
-import { closeKnexClient, getKnexClient } from "common/da/db";
-import { getSysContext, newUserContext, UserContext as CommonContext, UserContext } from 'common/user-context';
-import { GlobalRoleName } from '../../../shared/src/access-types';
+import { userDao } from 'common/da/daos.js';
+import { closeKnexClient, getKnexClient } from "common/da/db.js";
+import { getSysContext, newUserContext, UserContext as CommonContext, UserContext } from 'common/user-context.js';
+import { GlobalRoleName } from '../../../shared/src/access-types.js';
 
 
 // Note: need to rename Context CommonContext because Mocha has it own Context

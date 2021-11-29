@@ -6,14 +6,14 @@ import koaBody from 'koa-body';
 import koaSend from 'koa-send';
 import koaStatic from 'koa-static';
 import { extname } from 'path';
-import { __version__ } from '../conf';
-import routerApiUserContext from './api-user-context-router';
-import authLoginAndRegisterRouter from './auth-login-register-router';
-import authRequestMdw from './auth-request-mdw';
-import { httpsGuardMdw } from './https-guard-mdw';
-import { initKtxMdw, KCustom, KState } from './koa-utils';
-import { owaspHeadersMdw } from './owasp-headers-mdw';
-import { handleRequestWrapperMdw } from './request-wrapper-mdw';
+import { __version__ } from '../conf.js';
+import routerApiUserContext from './api-user-context-router.js';
+import authLoginAndRegisterRouter from './auth-login-register-router.js';
+import authRequestMdw from './auth-request-mdw.js';
+import { httpsGuardMdw } from './https-guard-mdw.js';
+import { initKtxMdw, KCustom, KState } from './koa-utils.js';
+import { owaspHeadersMdw } from './owasp-headers-mdw.js';
+import { handleRequestWrapperMdw } from './request-wrapper-mdw.js';
 
 
 const COOKIE__VERSION__ = '__version__';

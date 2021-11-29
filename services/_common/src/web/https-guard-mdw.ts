@@ -1,7 +1,7 @@
-import { HTTPS_MODE } from '../conf';
-import { Err } from '../error';
-import { HTTP_404 } from '../error-common';
-import { Ktx, Next } from './koa-utils';
+import { HTTPS_MODE } from '../conf.js';
+import { Err } from '../error.js';
+import { HTTP_404 } from '../error-common.js';
+import { Ktx, Next } from './koa-utils.js';
 
 
 export async function httpsGuardMdw(ktx: Ktx, next: Next) {

@@ -1,11 +1,11 @@
 import { BaseRouter } from '@backlib/koa';
 import { Next, ParameterizedContext } from 'koa';
-import { ApiResponse } from 'shared/api-types';
-import { WebLogRecord } from 'shared/log-types';
+import { ApiResponse } from 'shared/api-types.js';
+import { WebLogRecord } from 'shared/log-types.js';
 import useragent from 'useragent';
 import { pruneEmpty } from 'utils-min';
-import { SERVICE_NAME } from '../conf';
-import { UserContext } from '../user-context';
+import { SERVICE_NAME } from '../conf.js';
+import { UserContext } from '../user-context.js';
 
 export { routeDelete, routeGet, routePatch, routePost, routeUse } from '@backlib/koa';
 export { Next } from 'koa';
@@ -164,4 +164,3 @@ export function buildWebLogRecord(ktx: ParameterizedContext<KState & Partial<Api
 	return rec;
 }
 //#endregion ---------- /WebLog ----------
-

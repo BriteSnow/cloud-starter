@@ -8,9 +8,9 @@
 
 import crypto from 'crypto';
 import moment from 'moment';
-import { WEB_TOKEN_DURATION, WEB_TOKEN_SALT } from '../conf';
-import { Err } from '../error';
-import { b64dec, b64enc, symbolDic } from '../utils';
+import { WEB_TOKEN_DURATION, WEB_TOKEN_SALT } from '../conf.js';
+import { Err } from '../error.js';
+import { b64dec, b64enc, symbolDic } from '../utils.js';
 
 //// Error codes for this module
 const ERROR = symbolDic(
@@ -96,4 +96,3 @@ function sign(data: UserCredForToken, exp: string) {
 	hash.update(data.uuid + exp);
 	return hash.digest('base64');
 }
-

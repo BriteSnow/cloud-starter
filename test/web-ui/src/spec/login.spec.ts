@@ -1,6 +1,6 @@
 
 
-import { doLogin, initSuite } from '../suite-utils';
+import { doLogin, initSuite } from '../suite-utils.js';
 
 describe('login', function () {
 

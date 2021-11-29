@@ -1,7 +1,7 @@
 require('../../_common/src/setup-module-aliases');
 
-import { __version__ } from 'common/conf';
-import { KoaApp } from 'common/web/koa-app';
+import { __version__ } from 'common/conf.js';
+import { KoaApp } from 'common/web/koa-app.js';
 
 const PORT = 8081;
 
@@ -19,6 +19,5 @@ async function main() {
 
 	console.log(`--> admin-server (${__version__}) - listening at ${PORT}`);
 }
-
 
 

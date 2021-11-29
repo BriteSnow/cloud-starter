@@ -2,7 +2,7 @@
 
 import { addOnEvents, customElement, pull, push } from 'dom-native';
 import { wait } from 'utils-min';
-import { BaseSpecView } from './spec-views';
+import { BaseSpecView } from './spec-views.js';
 
 @customElement('spec-controls')
 class SpecControlsView extends BaseSpecView {

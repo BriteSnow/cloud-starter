@@ -1,7 +1,7 @@
-import { pathAt } from 'common/route';
-import { BaseViewElement } from 'common/v-base';
+import { pathAt } from 'common/route.js';
+import { BaseViewElement } from 'common/v-base.js';
 import { all, customElement, onHub } from 'dom-native';
-import { WksMainView } from './v-wks-main';
+import { WksMainView } from './v-wks-main.js';
 
 const defaultPath = '';
 

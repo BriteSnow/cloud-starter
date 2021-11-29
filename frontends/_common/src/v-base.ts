@@ -1,5 +1,5 @@
 import { all, BaseHTMLElement, first } from 'dom-native';
-import { pathAt } from './route';
+import { pathAt } from './route.js';
 
 type CacheMap = Map<string, HTMLElement | HTMLElement[] | null>;
 

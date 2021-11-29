@@ -1,6 +1,6 @@
-import { UserContext } from '../user-context';
-import { AccessRequires } from './access';
-import { BaseDao } from './dao-base';
+import { UserContext } from '../user-context.js';
+import { AccessRequires } from './access.js';
+import { BaseDao } from './dao-base.js';
 
 export interface Prlink {
 	id: number;
@@ -22,4 +22,3 @@ export class PrlinkDao extends BaseDao<Prlink, number>{
 		return super.create(utx, data);
 	}
 }
-

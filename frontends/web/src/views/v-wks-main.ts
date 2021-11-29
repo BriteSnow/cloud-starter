@@ -1,5 +1,5 @@
-import { pathAt } from 'common/route';
-import { BaseViewElement } from 'common/v-base';
+import { pathAt } from 'common/route.js';
+import { BaseViewElement } from 'common/v-base.js';
 import { all, append, attr, className, customElement, elem, onHub } from 'dom-native';
 import { asNum } from 'utils-min';
 
@@ -50,4 +50,3 @@ export class WksMainView extends BaseViewElement {
 function _render(wksId: number | null) {
 	return `<v-nav></v-nav>`
 }
-

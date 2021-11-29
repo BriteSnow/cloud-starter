@@ -1,7 +1,7 @@
 
 
 import { deepStrictEqual as equal } from 'assert';
-import { HOME_URL, initSuite, textContent } from '../suite-utils';
+import { HOME_URL, initSuite, textContent } from '../suite-utils.js';
 
 
 describe('nav', function () {

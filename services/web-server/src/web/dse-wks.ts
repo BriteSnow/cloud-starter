@@ -1,9 +1,9 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/router-dse-generics.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { WksQueryOptions } from 'common/da/dao-wks';
-import { wksDao } from 'common/da/daos';
-import { ApiKtx, ApiRouter, routeGet } from 'common/web/koa-utils';
+import { WksQueryOptions } from 'common/da/dao-wks.js';
+import { wksDao } from 'common/da/daos.js';
+import { ApiKtx, ApiRouter, routeGet } from 'common/web/koa-utils.js';
 
 
 

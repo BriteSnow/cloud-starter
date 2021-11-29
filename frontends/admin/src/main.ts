@@ -1,5 +1,5 @@
 import 'common/common-main';
-import { getUserContext } from 'common/user-ctx';
+import { getUserContext } from 'common/user-ctx.js';
 import { on, trigger } from 'dom-native';
 
 // NOT IMPLEMENTED YET, JUST SKELETON. 
@@ -23,5 +23,4 @@ on(document, 'APP_LOADED', async function () {
 
 });
 //#endregion ---------- /Start Application ----------
-
 

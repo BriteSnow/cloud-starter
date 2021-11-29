@@ -1,5 +1,5 @@
-import { AllEventDic } from 'shared/event-types';
-import { typecheck } from '../utils';
+import { AllEventDic } from 'shared/event-types.js';
+import { typecheck } from '../utils.js';
 
 
 

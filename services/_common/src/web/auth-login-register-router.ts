@@ -1,13 +1,13 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/router-auth-login-register.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { userDao } from '../da/daos';
-import { Err } from '../error';
-import { pwdCheck } from '../security/password';
-import { getSysContext } from '../user-context';
-import { symbolDic } from '../utils';
-import { AuthFailErr, clearAuth, setAuth } from './auth';
-import { AppRouter, Ktx, routePost } from './koa-utils';
+import { userDao } from '../da/daos.js';
+import { Err } from '../error.js';
+import { pwdCheck } from '../security/password.js';
+import { getSysContext } from '../user-context.js';
+import { symbolDic } from '../utils.js';
+import { AuthFailErr, clearAuth, setAuth } from './auth.js';
+import { AppRouter, Ktx, routePost } from './koa-utils.js';
 
 
 const ERROR = symbolDic(

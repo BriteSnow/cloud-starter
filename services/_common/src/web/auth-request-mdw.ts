@@ -1,12 +1,12 @@
 import { Next } from 'koa';
 import { extname } from 'path';
 import { asNum } from 'utils-min';
-import { userDao } from '../da/daos';
-import { checkToken, parseToken, UserCredForToken } from '../security/token';
-import { getSysContext, newUserContext, UserForContext } from '../user-context';
-import { symbolDic } from '../utils';
-import { AuthFailErr, clearAuth, extractToken, setAuth } from './auth';
-import { Ktx } from './koa-utils';
+import { userDao } from '../da/daos.js';
+import { checkToken, parseToken, UserCredForToken } from '../security/token.js';
+import { getSysContext, newUserContext, UserForContext } from '../user-context.js';
+import { symbolDic } from '../utils.js';
+import { AuthFailErr, clearAuth, extractToken, setAuth } from './auth.js';
+import { Ktx } from './koa-utils.js';
 
 const ERROR = symbolDic(
 	'INVALID_AUTH'
@@ -69,5 +69,4 @@ async function authRequest(ktx: Ktx): Promise<UserForContext> {
 	}
 
 }
-
 

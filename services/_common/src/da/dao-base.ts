@@ -2,12 +2,12 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { Knex } from 'knex';
-import { OpVal, QueryFilter, QueryOptions, StampedEntity, Val } from 'shared/entities';
-import { Monitor } from '../perf';
-import { UserContext } from '../user-context';
-import { nowTimestamp, removeProps } from '../utils';
-import { AccessRequires } from './access';
-import { knexQuery } from './db';
+import { OpVal, QueryFilter, QueryOptions, StampedEntity, Val } from 'shared/entities.js';
+import { Monitor } from '../perf.js';
+import { UserContext } from '../user-context.js';
+import { nowTimestamp, removeProps } from '../utils.js';
+import { AccessRequires } from './access.js';
+import { knexQuery } from './db.js';
 
 export interface CustomQuery {
 	custom?: (q: Knex.QueryBuilder) => void;

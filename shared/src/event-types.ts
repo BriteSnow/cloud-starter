@@ -1,4 +1,4 @@
-import { MediaResolution } from './entities';
+import { MediaResolution } from './entities.js';
 
 /** For all event wks scoped */
 interface WksScopedBase {
@@ -99,4 +99,3 @@ export interface VidScalerJob extends JobMediaBase {
 	res: MediaResolution
 }
 //#endregion ---------- /Job Events ----------
-

@@ -1,5 +1,5 @@
 import { adoptStyleSheets, css, customElement, first, onEvent, pull, trigger } from 'dom-native';
-import { DgDialog } from '../dialog/dg-dialog';
+import { DgDialog } from '../dialog/dg-dialog.js';
 const { assign } = Object;
 
 
@@ -47,5 +47,4 @@ export class DgWksAdd extends DgDialog {
 		first(this, 'd-input')?.focus();
 	}
 }
-
 

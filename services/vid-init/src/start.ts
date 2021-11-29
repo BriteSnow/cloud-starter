@@ -1,10 +1,10 @@
 require('../../_common/src/setup-module-aliases');
 
-import { CORE_STORE_ROOT_DIR, __version__ } from 'common/conf';
-import { mediaDao } from 'common/da/daos';
-import { getAppQueue, getJobQueue } from 'common/queue';
-import { getCoreBucket } from 'common/store';
-import { getSysContext } from 'common/user-context';
+import { CORE_STORE_ROOT_DIR, __version__ } from 'common/conf.js';
+import { mediaDao } from 'common/da/daos.js';
+import { getAppQueue, getJobQueue } from 'common/queue.js';
+import { getCoreBucket } from 'common/store.js';
+import { getSysContext } from 'common/user-context.js';
 import { mkdirs } from 'fs-extra';
 import { lookup } from 'mime-types';
 import { spawn } from 'p-spawn';
@@ -82,5 +82,4 @@ async function start() {
 
 	}
 }
-
 

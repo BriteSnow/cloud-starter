@@ -1,7 +1,7 @@
 
-import { WksAccesses } from './access-types';
-import { StampedEntity } from './entities-base';
-import { JobEventName } from './event-types';
+import { WksAccesses } from './access-types.js';
+import { StampedEntity } from './entities-base.js';
+import { JobEventName } from './event-types.js';
 
 export * from './entities-base';
 

@@ -1,7 +1,7 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/error.ts" />
 // (c) 2021 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { symbolDic } from './utils';
+import { symbolDic } from './utils.js';
 
 export interface ErrRec {
 	svrCode: Symbol,
@@ -75,5 +75,4 @@ export class Err extends Error {
 		return this.#rec;
 	}
 }
-
 

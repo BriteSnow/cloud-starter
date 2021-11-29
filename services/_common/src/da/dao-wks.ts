@@ -1,13 +1,13 @@
-import { assertWksAccess, WksAccess, WKS_ROLES, WKS_ROLES_BY_ACCESS } from 'shared/access-types';
-import { QueryOptions, User, Wks } from 'shared/entities';
-import { Err } from '../error';
-import { Monitor } from '../perf';
-import { UserContext } from '../user-context';
-import { symbolDic } from '../utils';
-import { AccessRequires } from './access';
-import { saveWksRole } from './access-wks';
-import { BaseDao } from './dao-base';
-import { knexQuery } from './db';
+import { assertWksAccess, WksAccess, WKS_ROLES, WKS_ROLES_BY_ACCESS } from 'shared/access-types.js';
+import { QueryOptions, User, Wks } from 'shared/entities.js';
+import { Err } from '../error.js';
+import { Monitor } from '../perf.js';
+import { UserContext } from '../user-context.js';
+import { symbolDic } from '../utils.js';
+import { AccessRequires } from './access.js';
+import { saveWksRole } from './access-wks.js';
+import { BaseDao } from './dao-base.js';
+import { knexQuery } from './db.js';
 
 
 const ERROR = symbolDic(
@@ -125,4 +125,3 @@ export class WksDao extends BaseDao<Wks, number, WksQueryOptions> {
 	}
 	//#endregion ---------- /BaseDao Overrides ---------- 
 }
-

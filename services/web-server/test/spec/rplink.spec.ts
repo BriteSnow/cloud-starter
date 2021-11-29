@@ -1,4 +1,4 @@
-import { initSuite } from '../t-utils';
+import { initSuite } from '../t-utils.js';
 
 describe("dev", function () {
 

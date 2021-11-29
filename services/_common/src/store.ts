@@ -1,7 +1,7 @@
 import { Bucket, getBucket } from 'cloud-bucket';
 import redstream, { RedStream } from 'redstream';
-import { CORE_STORE_BUCKET } from './conf';
-import { getRedisClient } from './queue';
+import { CORE_STORE_BUCKET } from './conf.js';
+import { getRedisClient } from './queue.js';
 
 
 const bucketStreamByBucketName: Map<string, RedStream> = new Map();
@@ -66,5 +66,4 @@ export function getBucketEventStream(bucketName: string, dedicatedClient = false
 
 }
 //#endregion ---------- /Bucket Streams ----------
-
 

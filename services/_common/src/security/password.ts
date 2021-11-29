@@ -6,10 +6,10 @@
 // Note: This is a good idea to have it attached as it is more of a boilerplate code.
 ////
 
-import { Err } from '../error';
-import { symbolDic } from '../utils';
-import { schemes } from './password-schemes';
-import { PwdCheckData, PwdEncryptData } from './password-types';
+import { Err } from '../error.js';
+import { symbolDic } from '../utils.js';
+import { schemes } from './password-schemes.js';
+import { PwdCheckData, PwdEncryptData } from './password-types.js';
 
 const ERROR = symbolDic(
 	'PWD_CHECK_FAIL',

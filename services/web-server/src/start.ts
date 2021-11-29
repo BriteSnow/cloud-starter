@@ -1,11 +1,11 @@
 require('../../_common/src/setup-module-aliases');
 
-import { __version__ } from 'common/conf';
-import { KoaApp } from 'common/web/koa-app';
-import dseGenerics from './web/dse-generics';
-import dseMedia from './web/dse-media';
-import dseWks from './web/dse-wks';
-import routerAuthGoogleOAuth from './web/router-auth-google-oauth';
+import { __version__ } from 'common/conf.js';
+import { KoaApp } from 'common/web/koa-app.js';
+import dseGenerics from './web/dse-generics.js';
+import dseMedia from './web/dse-media.js';
+import dseWks from './web/dse-wks.js';
+import routerAuthGoogleOAuth from './web/router-auth-google-oauth.js';
 
 const PORT = 8080;
 
@@ -31,6 +31,5 @@ async function main() {
 
 	console.log(`--> web-server (${__version__}) - listening at ${PORT}`);
 }
-
 
 

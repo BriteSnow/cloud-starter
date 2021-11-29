@@ -1,9 +1,9 @@
 import IORedis, { Redis } from "ioredis";
 import redstream, { objectDataParser, objectDataSerializer, RedStream } from 'redstream';
-import { StreamEntry, XReadGroupResult } from 'redstream/dist/redstream';
-import { AllEventDic, AppEventDic, JobEventDic } from 'shared/event-types';
-import { KHOST } from './conf';
-import { typify } from './utils';
+import { StreamEntry, XReadGroupResult } from 'redstream/dist/redstream.js';
+import { AllEventDic, AppEventDic, JobEventDic } from 'shared/event-types.js';
+import { KHOST } from './conf.js';
+import { typify } from './utils.js';
 
 export * from 'shared/event-types';
 export * from './event/event-assert';
@@ -176,7 +176,6 @@ function createRedisClient(name: string) {
 	return client;
 }
 //#endregion ---------- /RedisClient Factory / Cache ----------
-
 
 
 

@@ -2,7 +2,7 @@
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
 import { isObject, isString, pruneEmpty } from 'utils-min';
-import { getRouteWksId } from './route';
+import { getRouteWksId } from './route.js';
 
 type WebMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
@@ -144,4 +144,3 @@ function urlEncodeParams(obj: any) {
 	}
 	return encodedString;
 }
-

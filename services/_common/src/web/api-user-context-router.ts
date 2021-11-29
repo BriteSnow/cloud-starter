@@ -1,6 +1,6 @@
-import { userDao } from '../da/daos';
-import { getSysContext } from '../user-context';
-import { AppRouter, assertApiKtx, Ktx, routeGet } from './koa-utils';
+import { userDao } from '../da/daos.js';
+import { getSysContext } from '../user-context.js';
+import { AppRouter, assertApiKtx, Ktx, routeGet } from './koa-utils.js';
 
 /**
  * Note: since we do not know if this request is auth or not, just use AppRouter and then, assert ktx for ApiKtx
