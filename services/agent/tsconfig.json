@@ -31,7 +31,9 @@
 		"baseUrl": "./src/",  // main service code
 		"paths": {
 			"common/*": ["../../_common/src/*"], // backend services common code
-			"shared/*": ["../../../shared/src/*"] // frontend and backend shared code
+			"#common/*": ["../../_common/src/*"], // backend common
+			"shared/*": ["../../../shared/src/*"], // frontend and backend 
+			"#shared/*": ["../../../shared/src/*"] // frontend and backend 
 		},
 
 		// decorators for backend service code

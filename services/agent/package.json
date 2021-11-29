@@ -8,6 +8,10 @@
     "url": "https://no-repo/yet.git"
   },
   "main": "dist/agent/src/index.js",
+  "imports": {
+    "#common/*": "./dist/services/_common/src/*",
+    "#shared/*": "./dist/shared/src/*"
+  },  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/services/agent/src/start",

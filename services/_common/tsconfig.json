@@ -29,7 +29,8 @@
 
 		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
 		"paths": {
-			"shared/*": ["../../../shared/src/*"]
+			"shared/*": ["../../../shared/src/*"],
+			"#shared/*": ["../../../shared/src/*"]
 		},
 
 		"experimentalDecorators": true,

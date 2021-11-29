@@ -1,4 +1,4 @@
-require('../../_common/src/setup-module-aliases');
+// require('../../_common/src/setup-module-aliases');
 
 import { router } from 'cmdrouter';
 import { DB } from 'common/conf.js';
