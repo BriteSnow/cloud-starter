@@ -1,17 +1,15 @@
-require('../../_common/src/setup-module-aliases');
-
-import { CORE_STORE_ROOT_DIR, __version__ } from 'common/conf.js';
-import { getResMp4Name } from 'common/da/dao-media.js';
-import { mediaDao } from 'common/da/daos.js';
-import { getAppQueue, getJobQueue } from 'common/queue.js';
-import { getCoreBucket } from 'common/store.js';
-import { getSysContext } from 'common/user-context.js';
-import { mkdirs } from 'fs-extra';
+import { CORE_STORE_ROOT_DIR, __version__ } from '#common/conf.js';
+import { getResMp4Name } from '#common/da/dao-media.js';
+import { mediaDao } from '#common/da/daos.js';
+import { getAppQueue, getJobQueue } from '#common/queue.js';
+import { getCoreBucket } from '#common/store.js';
+import { getSysContext } from '#common/user-context.js';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
 import { split } from 'utils-min';
 import { v4 as newUuid } from 'uuid';
 import { Worker } from 'worker_threads';
+const { mkdirs } = (await import('fs-extra')).default;
 
 /////////////////////
 // The agent service is primarely designed to run administative task, and therefore does not do anything 
@@ -24,7 +22,7 @@ start();
 async function start() {
 	console.log(`--> web-server (${__version__}) - starting`);
 
-	new Worker(__dirname + '/wkr-bridge-media-mp4.js');
+	new Worker('./dist/services/vid-scaler/src/wkr-bridge-media-mp4.js');
 
 	const mediaScaledMp4Queue = getAppQueue('MediaScaledMp4');
 

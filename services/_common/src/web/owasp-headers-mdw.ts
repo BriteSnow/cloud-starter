@@ -30,7 +30,10 @@ const SEC_1YEAR = 3600 * 24 * 365;
 // other static files
 const SEC_1DAY = 3600 * 24;
 
-const CSP_TXT = `default-src 'self' ${CDN_BASE_URL};`;
+// NOTE: style-src for self must be inline to allow shadow dom style on Safari
+const CSP_TXT =
+	`default-src 'self' ${CDN_BASE_URL}; 
+   style-src 'unsafe-inline' 'self'`;
 
 const CSP_STRING = CSP_TXT.split(';').map(s => s.trim()).join('; ');
 

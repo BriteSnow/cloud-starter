@@ -1,13 +1,13 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/router-auth-google-oauth.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { GOOGLE_OAUTH } from 'common/conf.js';
-import { oauthDao, userDao } from 'common/da/daos.js';
-import { Err } from 'common/error.js';
-import { getSysContext } from 'common/user-context.js';
-import { symbolDic } from 'common/utils.js';
-import { setAuth } from 'common/web/auth.js';
-import { AppRouter, Ktx, routeGet, success } from 'common/web/koa-utils.js';
+import { GOOGLE_OAUTH } from '#common/conf.js';
+import { oauthDao, userDao } from '#common/da/daos.js';
+import { Err } from '#common/error.js';
+import { getSysContext } from '#common/user-context.js';
+import { symbolDic } from '#common/utils.js';
+import { setAuth } from '#common/web/auth.js';
+import { AppRouter, Ktx, routeGet, success } from '#common/web/koa-utils.js';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'googleapis-common';
 

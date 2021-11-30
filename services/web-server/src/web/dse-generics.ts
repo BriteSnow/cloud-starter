@@ -2,9 +2,9 @@
 
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { BaseDao } from 'common/da/dao-base.js';
-import { mediaDao, userDao, wksDao } from 'common/da/daos.js';
-import { ApiKtx, ApiRouter, routeDelete, routeGet, routePatch, routePost } from 'common/web/koa-utils.js';
+import { BaseDao } from '#common/da/dao-base.js';
+import { mediaDao, userDao, wksDao } from '#common/da/daos.js';
+import { ApiKtx, ApiRouter, routeDelete, routeGet, routePatch, routePost } from '#common/web/koa-utils.js';
 
 
 /** 

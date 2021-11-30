@@ -8,6 +8,10 @@
     "url": "https://no-repo/yet.git"
   },
   "main": "dist/vid-init/src/start.js",
+  "imports": {
+    "#common/*": "./dist/services/_common/src/*",
+    "#shared/*": "./dist/shared/src/*"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/services/vid-init/src/start",
@@ -16,16 +20,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "backlib": "^0.3.2",
-    "cloud-bucket": "^0.3.13",
-    "ioredis": "^4.26.0",
-    "knex": "^0.95.4",
+    "backlib": "^0.3.3",
+    "cloud-bucket": "^0.4.0",
+    "ioredis": "^4.28.1",
+    "knex": "^0.95.14",
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "p-spawn": "^0.5.5",
-    "pg": "^8.6.0",
-    "redstream": "^0.1.11",
-    "utils-min": "^0.1.18",
+    "pg": "^8.7.1",
+    "redstream": "^0.2.0",
+    "utils-min": "^0.2.0",
     "uuid": "^8.3.2"
   }
 }

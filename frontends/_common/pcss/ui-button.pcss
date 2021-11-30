@@ -83,14 +83,14 @@ button, a.button{
 	}
 
 	&.high{
-		@mixin elev-1{};
+		box-shadow: var(--elev-1-shadow);
 		&:disabled, &.disabled{
-			@mixin elev-none{};
+			box-shadow: none;
 		}
 	}
 
 	&.outlined{
-		@mixin elev-none{};
+		box-shadow: none;
 		background: none;
 		color: var(--btn-color);
 		border: solid 1px var(--btn-color-outline);

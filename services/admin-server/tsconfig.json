@@ -31,8 +31,8 @@
 		"rootDir": "../../",
 		"baseUrl": "./src/",  // main service code
 		"paths": {
-			"common/*": ["../../_common/src/*"], // backend services common code
-			"shared/*": ["../../../shared/src/*"] // frontend and backend shared code
+			"#common/*": ["../../_common/src/*"], // backend services common code
+			"#shared/*": ["../../../shared/src/*"] // frontend and backend shared code
 		},
 
 		// decorators for backend service code
@@ -49,9 +49,6 @@
 	"include": [
 		"./src/**/*.ts",
 		"./test/**/*.ts", 
-		// Note: shared/ and commont/ts will be compiled as imported by the service .ts code (~ tree shaking)
-		//       However, setup-module-aliases needs to be used (require) in entry file, and therefore explicitly inluded. 
-		"../_common/src/setup-module-aliases.ts"
 	],
 
 	"exclude": [

@@ -1,7 +1,5 @@
-require('../../_common/src/setup-module-aliases');
-
-import { __version__ } from 'common/conf.js';
-import { KoaApp } from 'common/web/koa-app.js';
+import { __version__ } from '#common/conf.js';
+import { KoaApp } from '#common/web/koa-app.js';
 import dseGenerics from './web/dse-generics.js';
 import dseMedia from './web/dse-media.js';
 import dseWks from './web/dse-wks.js';
@@ -31,5 +29,4 @@ async function main() {
 
 	console.log(`--> web-server (${__version__}) - listening at ${PORT}`);
 }
-
 

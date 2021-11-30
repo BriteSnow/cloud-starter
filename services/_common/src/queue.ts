@@ -5,8 +5,8 @@ import { StreamEntry, XReadGroupResult } from 'redstream/dist/redstream.js';
 import { KHOST } from './conf.js';
 import { typify } from './utils.js';
 
-export * from 'shared/event-types';
-export * from './event/event-assert';
+export * from '#shared/event-types.js';
+export * from './event/event-assert.js';
 
 export interface Queue<N extends keyof D, D = AllEventDic> {
 	next(group: string, timeout: number): Promise<StreamEntry<D[N]> | null>;

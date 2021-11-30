@@ -1,6 +1,4 @@
-require('../../_common/src/setup-module-aliases');
-
-import { assertEvent, getAppQueue, getJobQueue, VidScalerJob } from 'common/queue.js';
+import { assertEvent, getAppQueue, getJobQueue, VidScalerJob } from '#common/queue.js';
 
 
 main();

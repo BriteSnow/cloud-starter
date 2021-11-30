@@ -24,17 +24,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/uuid": "^8.3.0",
-    "backlib": "^0.3.2",
+    "@types/uuid": "^8.3.3",
+    "backlib": "^0.3.3",
     "cmdrouter": "^0.3.1",
-    "knex": "^0.95.6",
+    "knex": "^0.95.14",
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "p-spawn": "^0.5.5",
-    "pg": "^8.6.0",
-    "redis": "^3.1.2",
-    "ts-node": "^10.0.0",
+    "pg": "^8.7.1",
+    "redis": "^4.0.0",
+    "ts-node": "^10.4.0",
     "uuid": "^8.3.2",
-    "vdev": "^0.13.3"
+    "vdev": "^0.13.4"
   }
 }

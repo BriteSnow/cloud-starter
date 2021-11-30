@@ -1,9 +1,9 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/web-server/src/web/dse-media.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { mediaDao } from 'common/da/daos.js';
-import { Err } from 'common/error.js';
-import { ApiKtx, ApiRouter, routePost, success } from 'common/web/koa-utils.js';
+import { mediaDao } from '#common/da/daos.js';
+import { Err } from '#common/error.js';
+import { ApiKtx, ApiRouter, routePost, success } from '#common/web/koa-utils.js';
 import { symbolDic } from '../../../_common/src/utils.js';
 
 const ERROR = symbolDic(

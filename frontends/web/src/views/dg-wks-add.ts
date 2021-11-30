@@ -32,7 +32,7 @@ export class DgWksAdd extends DgDialog {
 	init() {
 		// add the content to be slotted
 		this.innerHTML = `
-			<div slot="title">Add Workspace</div>
+			<div slot="title">Add Workspace!!</div>
 
 			<div class="dialog-content">
 				<d-input label="name" name="name"> </d-input>

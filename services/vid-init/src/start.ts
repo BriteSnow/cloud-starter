@@ -1,17 +1,15 @@
-require('../../_common/src/setup-module-aliases');
-
-import { CORE_STORE_ROOT_DIR, __version__ } from 'common/conf.js';
-import { mediaDao } from 'common/da/daos.js';
-import { getAppQueue, getJobQueue } from 'common/queue.js';
-import { getCoreBucket } from 'common/store.js';
-import { getSysContext } from 'common/user-context.js';
-import { mkdirs } from 'fs-extra';
+import { CORE_STORE_ROOT_DIR, __version__ } from '#common/conf.js';
+import { mediaDao } from '#common/da/daos.js';
+import { getAppQueue, getJobQueue } from '#common/queue.js';
+import { getCoreBucket } from '#common/store.js';
+import { getSysContext } from '#common/user-context.js';
 import { lookup } from 'mime-types';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
 import { split } from 'utils-min';
 import { v4 as newUuid } from 'uuid';
 import { Worker } from 'worker_threads';
+const { mkdirs } = (await import('fs-extra')).default;
 
 /////////////////////
 // The vid-init job service is reponsible to inialize the media video to make sure it has everything needed for further service. 
@@ -24,7 +22,7 @@ start();
 async function start() {
 	console.log(`--> web-server (${__version__}) - starting`);
 
-	new Worker(__dirname + '/wkr-bridge-media-new.js');
+	new Worker('./dist/services/vid-init/src/wkr-bridge-media-new.js');
 
 	const mediaMainMp4Queue = getAppQueue('MediaMainMp4');
 
@@ -82,4 +80,3 @@ async function start() {
 
 	}
 }
-

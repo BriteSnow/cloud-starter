@@ -17,6 +17,8 @@ const _compCss = css`
 		margin-left: -12.5rem;
 		margin-top: -10rem;		
 		background: #fff;
+		box-shadow: var(--elev-6-shadow);
+
 		display: grid;
 		grid-template-rows: 3rem 1fr .5rem 2rem;
 		grid-template-columns: 1rem 1fr 2rem;

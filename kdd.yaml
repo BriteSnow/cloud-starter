@@ -86,7 +86,7 @@ versions:
       - frontends/_common/src/common-main.ts
       - services/_common/src/conf.ts
   - val: <.*(?:href|src).*?v=(.*?)(?:"|\&)
-    replace: (<.*(?:href|src).*?v=).*("|&.*)
+    replace: (<.*(?:href|src).*?v=).+?("|\&.*)
     by: ${1}{{__version__}}${2}
     in: 
       - services/web-server/web-folder/index.html

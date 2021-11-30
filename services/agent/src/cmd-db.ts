@@ -1,14 +1,12 @@
-// require('../../_common/src/setup-module-aliases');
-
 import { DB } from '#common/conf.js';
 import { UserCredForLogin, USER_COLUMNS_FOR_LOGIN } from '#common/da/dao-user.js';
 import { closeKnexClient, getKnexClient } from '#common/da/db.js';
 import { pwdEncrypt } from '#common/security/password.js';
 import { router } from 'cmdrouter';
-import * as fs from 'fs-extra-plus';
-import { ensureDir } from 'fs-extra-plus';
+import { glob } from 'fs-extra-plus';
 import { basename, join as joinPath } from 'path';
 import { download, list, pgStatus, pgTest, psqlImport } from 'vdev';
+const { ensureDir } = (await import('fs-extra')).default;
 
 
 const sqlDir = 'sql/';
@@ -35,7 +33,7 @@ async function recreateDb() {
 	// local test: // psql -U postgres -d postgres -f sql/_drop-db.sql
 	await psqlImport(POSTGRES_DB_CRED, [`${sqlDir}/_drop-db.sql`]);
 
-	const allSqlFiles = await fs.glob('*.sql', sqlDir);
+	const allSqlFiles = await glob('*.sql', sqlDir);
 
 	//// create the bb_... database / user
 	// local test: psql -U postgres -d postgres -f sql/00_create-db.sql
@@ -60,7 +58,7 @@ async function recreateDb() {
 async function runDropSqls() {
 	try {
 		// TODO: need to gets the db changelog first, to run only what is missing.
-		const dropFiles = await fs.glob('drop-*.sql', sqlDir);
+		const dropFiles = await glob('drop-*.sql', sqlDir);
 		console.log('dropFiles\n', dropFiles);
 		await psqlImport(APP_DB_CRED, dropFiles);
 	} catch (ex) {

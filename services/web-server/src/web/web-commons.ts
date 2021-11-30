@@ -1,6 +1,6 @@
-import { wksDao } from 'common/da/daos.js';
-import { ApiKtx } from 'common/web/koa-utils.js';
-import { Wks } from 'shared/entities.js';
+import { wksDao } from '#common/da/daos.js';
+import { ApiKtx } from '#common/web/koa-utils.js';
+import { Wks } from '#shared/entities.js';
 import { asNum } from 'utils-min';
 
 /** Get the wksId from reques, and get the Wks object */

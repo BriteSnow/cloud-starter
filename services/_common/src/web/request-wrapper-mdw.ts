@@ -33,7 +33,7 @@ export async function handleRequestWrapperMdw(ktx: Ktx, next: Next) {
 			console.log(`WARNING - PERF ${rec.duration}ms > ${PERF_LOG_THRESHOLD_WEB}ms - ${ktx.path}\n` + JSON.stringify(ktx.state.utx?.perfContext.items, null, '  ') + '\n');
 		}
 
-	} catch (ex) {
+	} catch (ex: any) {
 		let errRec: ErrRec;
 
 		//// extract/build the errRec
@@ -74,6 +74,7 @@ export async function handleRequestWrapperMdw(ktx: Ktx, next: Next) {
 		//// Log all rec info to server
 		let errTxt = `WEB REQUEST ERROR - SVR_CODE: ${symToStr(errRec.svrCode)}`;
 		if (errRec.svrMsg) {
+			console.log('->> ERROR ', ex);
 			errTxt += `\n\t svrMsg: ${errRec.svrMsg}`
 		}
 		if (errRec.usrCode) {

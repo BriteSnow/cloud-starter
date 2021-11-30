@@ -1,14 +1,16 @@
 // <origin src="https://raw.githubusercontent.com/BriteSnow/cloud-starter/master/services/_common/src/da/db.ts" />
 // (c) 2019 BriteSnow, inc - This code is licensed under MIT license (see LICENSE for details)
 
-import { Knex, knex } from 'knex';
-import { types } from 'pg';
+import type { Knex } from 'knex';
+import knex from 'knex';
 import { parse as pgArrayParse } from 'postgres-array';
 import { Pool } from 'tarn';
 import { isEmpty } from 'utils-min';
 import { DB, KHOST } from '../conf.js';
 import { UserContext } from '../user-context.js';
 import { nowTimestamp } from '../utils.js';
+const { types } = (await import('pg')).default;
+
 
 type QueryInterface = Knex.QueryInterface;
 type QueryBuilder = Knex.QueryBuilder;
