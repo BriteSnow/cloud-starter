@@ -4,7 +4,7 @@ import { trigger } from 'dom-native';
 import { webGet } from './web-request.js';
 
 
-window.__version__ = "DROP-003-SNAPSHOT";
+window.__version__ = "DROP-004";
 
 //#region    ---------- Initialize DOM ---------- 
 // load the default @dom-native/ui icon set

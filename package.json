@@ -2,7 +2,7 @@
   "name": "cloud-bigapp",
   "type": "module",
   "version": "0.0.0",
-  "__version__": "DROP-003-SNAPSHOT",
+  "__version__": "DROP-004",
   "description": "Cloud Big App code blueprint. Start to Scale!",
   "main": "start.js",
   "dependencies": {
