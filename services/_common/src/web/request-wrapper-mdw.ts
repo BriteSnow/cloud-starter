@@ -74,7 +74,6 @@ export async function handleRequestWrapperMdw(ktx: Ktx, next: Next) {
 		//// Log all rec info to server
 		let errTxt = `WEB REQUEST ERROR - SVR_CODE: ${symToStr(errRec.svrCode)}`;
 		if (errRec.svrMsg) {
-			console.log('->> ERROR ', ex);
 			errTxt += `\n\t svrMsg: ${errRec.svrMsg}`
 		}
 		if (errRec.usrCode) {

@@ -35,7 +35,7 @@ export class MediaDao extends WksScopedDao<Media, number> {
 	//#region    ---------- Media Specific Methods ---------- 
 	async createWithFile(utx: UserContext, data: Partial<Media> & { file: File }): Promise<number> {
 		// NOTE: Needed to avoid cyclic issues in some cases which makes the MediaDao undefined in export. Investigate if cleaner alternative.
-		const { wksDao } = await import('./daos');
+		const { wksDao } = await import('./daos.js');
 
 		const wksId = utx.wksId;
 

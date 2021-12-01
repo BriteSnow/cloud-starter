@@ -65,7 +65,7 @@ export class VideosView extends BaseViewElement {
 	//#endregion ---------- /Element Events ----------
 
 	//#region    ---------- Data Event ---------- 
-	@onHub('dcoHub', 'Media', 'create,update')
+	@onHub('dcoHub', 'Media', 'create,update,remove')
 	onMediaChange() {
 		this.refresh();
 	}

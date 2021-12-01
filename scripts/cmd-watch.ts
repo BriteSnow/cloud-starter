@@ -60,8 +60,6 @@ async function watch() {
 async function watchService(serviceName: string, debugPort: string) {
 	const serviceDir = `services/${serviceName}`;
 
-	console.log('->> watchService ', 1);
-
 	// kubectl port-forward $(kubectl get pods -l run=cstar-web-server --no-headers=true -o custom-columns=:metadata.name) 9229
 	const podNameArgs = ['get', 'pods', '-l', `run=${IMG_NAME_PREFIX}${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'];
 	const podName = (await execa('kubectl', podNameArgs)).stdout?.trim();

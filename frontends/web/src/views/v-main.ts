@@ -45,14 +45,11 @@ export class MainView extends BaseViewElement {
 
 			position(menu, this.headerAsideEl, { at: 'bottom', align: 'right' });
 
-
 			on(menu, 'pointerup', 'li.do-logoff', async (evt) => {
 				await logoff();
 				window.location.href = '/';
 			});
 		}
-
-
 	}
 
 
@@ -84,10 +81,6 @@ export class MainView extends BaseViewElement {
 				this.mainEl.innerHTML = `<${tagName}></${tagName}>`;
 			}
 		}
-
-
-
-
 
 	}
 
