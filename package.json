@@ -6,8 +6,8 @@
   "description": "Cloud Big App code blueprint. Start to Scale!",
   "main": "start.js",
   "dependencies": {
-    "@dom-native/draggable": "^0.1.1",
-    "@dom-native/ui": "^0.1.7",
+    "@dom-native/draggable": "^0.2.0",
+    "@dom-native/ui": "^0.2.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-multi-entry": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.1.1",
