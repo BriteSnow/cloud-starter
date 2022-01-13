@@ -74,9 +74,10 @@ The development environment has been tested on Mac, but it should work on Window
 
 - Install **Docker** for Mac **with Kubernetes** (Windows system with Docker for Windows with Kubernetes will be supported later)
 - Install [Node.js](https://nodejs.org/) (the latest 16.x release recommended)
-- Install [kdd](https://crates.io/crates/kdd) (simple kubernetes/docker build utility)
+- Install [binst](https://binst.io)
+- `binst install kdd` Install [kdd](https://crates.io/crates/kdd) (simple kubernetes/docker build utility)
+- `binst install naudit` (Optional) for running multi project `npm audit`
 - Run a local docker registry with (for the Kubernetes local dev)
-
 ```sh
 docker run -d -p 5000:5000 --restart=unless-stopped --name registry registry
 ```
