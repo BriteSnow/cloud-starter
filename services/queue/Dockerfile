@@ -1,4 +1,4 @@
-FROM redis:6.0.6-buster
+FROM redis:6.2-bullseye
 
 EXPOSE 6379
 ENTRYPOINT ["docker-entrypoint.sh"]
