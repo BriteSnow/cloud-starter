@@ -1,4 +1,4 @@
-FROM rust:1.53.0-slim-buster
+FROM rust:1.58-slim-bullseye
 
 RUN mkdir /service
 
