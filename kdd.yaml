@@ -4,6 +4,7 @@ vars:
   - from_env: ["USER"]
 overlays: 
   - .prod/kdd-prod.yaml
+  - .custom-dev.yaml
 ---
 system: cstar
 image_tag: "{{__version__}}"
