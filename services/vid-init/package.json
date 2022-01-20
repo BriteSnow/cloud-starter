@@ -20,14 +20,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "backlib": "^0.3.3",
+    "backlib": "^0.4.0",
     "cloud-bucket": "^0.4.0",
-    "ioredis": "^4.28.1",
-    "knex": "^0.95.14",
+    "ioredis": "^4.28.3",
+    "knex": "^1.0.1",
     "moment": "^2.29.1",
     "p-spawn": "^0.5.5",
     "pg": "^8.7.1",
-    "redstream": "^0.2.0",
+    "redstream": "^0.2.1",
     "utils-min": "^0.2.0",
     "uuid": "^8.3.2"
   }

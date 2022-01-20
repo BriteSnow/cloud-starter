@@ -7,12 +7,27 @@ metadata:
     run: cstar-mock-s3 # we label run: ... all the resources that run a particular service (here cstar-mock-s3)
 spec:
   ports:
-  - port: 9000
-    protocol: TCP
-    targetPort: 9000
+    - port: 9000
+      protocol: TCP
+      targetPort: 9000
   selector:
     run: cstar-mock-s3 # this will select from the template.spec.metadata.labels (the pod)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cstar-mock-s3-console-srv
+  namespace: default
+  labels:
+    run: cstar-mock-s3 # we label run: ... all the resources that run a particular service (here cstar-mock-s3)
+spec:
   type: LoadBalancer
+  ports:
+    - port: 9900
+      protocol: TCP
+      targetPort: 9900
+  selector:
+    run: cstar-mock-s3 # this will select from the template.spec.metadata.labels (the pod)    
 ---
 apiVersion: apps/v1
 kind: Deployment

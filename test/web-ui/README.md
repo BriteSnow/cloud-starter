@@ -1,4 +1,5 @@
 
+**NOTE** Not working yet. Package.json scripts and mocha needs to be udpated with new esm executor. 
 
 This is a example of a web UI test using Puppeteer, Mocha, and ts-node.
 
