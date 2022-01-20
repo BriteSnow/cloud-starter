@@ -10,9 +10,6 @@
 		// Now, we have updated package.json to type = "module"
 		"module": "ESNext",
 
-    // to use native class field. 
-		"useDefineForClassFields": true,
-		
 		// This is important to support 3rd party modules
 		"moduleResolution": "node", 
 		
@@ -29,12 +26,14 @@
 
 		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
 		"paths": {
-			"shared/*": ["../../../shared/src/*"],
 			"#shared/*": ["../../../shared/src/*"]
 		},
 
+
 		"experimentalDecorators": true,
-		
+
+		// to use native class field. 
+		"useDefineForClassFields": true,		
 		// Needed to call import default (replaces allowSyntheticDefaultImports)
 		"esModuleInterop": true,
 

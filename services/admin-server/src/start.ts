@@ -1,5 +1,3 @@
-require('../../_common/src/setup-module-aliases');
-
 import { __version__ } from '#common/conf.js';
 import { KoaApp } from '#common/web/koa-app.js';
 

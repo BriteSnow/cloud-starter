@@ -24,7 +24,6 @@
     "cloud-bucket": "^0.4.0",
     "ioredis": "^4.28.1",
     "knex": "^0.95.14",
-    "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "p-spawn": "^0.5.5",
     "pg": "^8.7.1",

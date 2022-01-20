@@ -1,6 +1,3 @@
-require('../../_common/src/setup-module-aliases');
-
-
 /////////////////////
 // The agent service is primarely designed to run administative task, and therefore does not do anything 
 // in the start process. However, as some point, it could listen to redis stream and/or pub/sub to do some

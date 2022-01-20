@@ -1,2 +1,2 @@
---require dist/services/_common/src/setup-module-aliases.js
+# FIXME
 dist/services/web-server/test/test-*.js

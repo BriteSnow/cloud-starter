@@ -1,5 +1,3 @@
-// require('../../_common/src/setup-module-aliases');
-
 import { userDao } from '#common/da/daos.js';
 import { closeKnexClient } from '#common/da/db.js';
 import { PwdEncryptData } from '#common/security/password-types.js';
