@@ -5,9 +5,12 @@ metadata:
 type: Opaque
 data:
   db_password: d2VsY29tZQ==
+  core_store_access_key_secret: miniominio
   pwd_scheme_01_salt: NzRmZWM5MmU5Njg2MjY0ZTM2MzcxODkxNjhlYjNjNTBmZmFh 
   pwd_scheme_02_salt: NzRmZWM5MmU5Njg2MjY0ZTM2MzcxODkxNjhlYjNjNTBmZmFh
   pwd_prlink_salt: NzRmZWM5MmU5Njg2U0RGU0RXZGZlZmFlZWIzYzUwZmZhYQ==
+
+
   # For google OAuth, uncomment values below and set the value (base64 encoded)
   # google_oauth_client_id: __BASE64_ENCODEC_GOOGLE_CLIENT_ID__
   # google_oauth_client_secret: __BASE64_ENCODEC_GOOGLE_CLIENT_SECRET__
@@ -19,16 +22,15 @@ metadata:
 data:
   https_mode: 'false'
 
+  # --  Core store cred * Info
   # Core store credential (when mino)
   core_store_bucket_name: core-store-bucket
   core_store_access_key_id: minio
-  core_store_access_key_secret: miniominio
-  # Core store info
+  # core_store_access_key_secret (in cstar-secret)
   core_store_root_dir: core-store-root/
-
   # for dev only (points to kubernetes minio docker image). Comment when on S3
   core_store_minio_endpoint: http://cstar-mock-s3-srv:9000
-
+  # Core store CDN
   # Note: For dev. In prod, this will be the CDN url that will point to the core bucket backend.
   core_store_cdn_base_url: http://localhost:9000/core-store-bucket/
 
