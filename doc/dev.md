@@ -12,7 +12,7 @@ npm run vdev dbuild
 npm run vdev dbuild web-server
 
 # build more than one
-npm run vdev dbuild web-server,agent
+npm run vdev dbuild web-server,cmd-pod
 ```
 
 ## Install, recreateDb
@@ -21,7 +21,7 @@ npm run vdev dbuild web-server,agent
 # install all kubernetes pods and start them
 npm run vdev kcreate
 
-# install the DB by going throw the agent service
+# install the DB by going throw the cmd-pod service
 npm run recreateDb
 ```
 
@@ -31,7 +31,7 @@ npm run recreateDb
 
 `npm run watch` will rebuild and restart the server and what each service and compile and restart as appropriate: 
 - When `web/ .js, .pcss, .tmpl` the approriate web source will be rebuilt and the app can just be reloaded in the browser. 
-- When `services/agent/sql/*.sql` file changes, the `agent` service will be called to recreate the db. 
+- When `services/cmd-pod/sql/*.sql` file changes, the `cmd-pod` service will be called to recreate the db. 
 - When `services/web-server/**/*.ts` changes, they will be compile and the server will be restart (in debug mode, i.e., with `--inspect`) so that vscode can bind to it if needed. 
 
 ## REPL Test

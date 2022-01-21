@@ -33,23 +33,23 @@ async function watch() {
 	// //#endregion ---------- /services watch ---------- 
 
 
-	// //#region    ---------- agent sql watch ---------- 
+	// //#region    ---------- cmd-pod sql watch ---------- 
 	// const createDbDebounced = debounce(() => {
-	// 	execa('kdd', ['kexec', 'agent', 'npm', 'run', 'recreateDb']);
+	// 	execa('kdd', ['kexec', 'cmd-pod', 'npm', 'run', 'recreateDb']);
 	// }, 500)
 
-	// const sqlWatcher = chokidar.watch('services/agent/sql', { depth: 99, ignoreInitial: true, persistent: true });
+	// const sqlWatcher = chokidar.watch('services/cmd-pod/sql', { depth: 99, ignoreInitial: true, persistent: true });
 
 	// sqlWatcher.on('change', async function (filePath: string) {
-	// 	console.log(`services/agent/sql change: ${filePath}`);
+	// 	console.log(`services/cmd-pod/sql change: ${filePath}`);
 	// 	createDbDebounced();
 	// });
 
 	// sqlWatcher.on('add', async function (filePath: string) {
-	// 	console.log(`services/agent/sql add: ${filePath}`);
+	// 	console.log(`services/cmd-pod/sql add: ${filePath}`);
 	// 	createDbDebounced();
 	// });
-	// //#endregion ---------- /agent sql watch ---------- 
+	// //#endregion ---------- /cmd-pod sql watch ---------- 
 
 	// //#region    ---------- ico watch ---------- 
 	// execa('npm', ['run', 'sketchdev', '--', '-w'], execaOpts);

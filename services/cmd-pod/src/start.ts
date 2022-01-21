@@ -17,7 +17,7 @@ async function listenViaBlocking(client: any) {
 	for (; true;) { // eslint-disable-line (we use for rather than while to be able to use "continue")
 		try {
 			// get the next item from the queue list
-			const result = await client.brpop('agent.todo', 0);
+			const result = await client.brpop('cmd-pod.todo', 0);
 			const str = result[1];
 			if (str) {
 

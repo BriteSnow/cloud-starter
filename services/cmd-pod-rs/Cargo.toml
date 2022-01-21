@@ -1,5 +1,5 @@
 [package]
-name = "agent2"
+name = "cmd-pod-rs"
 version = "0.1.0"
 edition = "2018"
 

@@ -19,7 +19,7 @@ From bottom to top:
     > Note that redis will NOT (and usually, should not) be used as a persistent store service, but just as a pub/sub queue service as well as a cache when/if needed. The caching aspect can be split in its own Redis service later to not impact the performance of the pub/sub service to service communications.
 
 4) **Back-End Services** The first set of services are backend services that do not have any front-end interface. Could be an image processing service, google data importer or exporter, or any logic that requires to be scaled and managed independently than the main front-end services (.e.g., jobs)
-    - **Agent** As a best practice, 'agent' is a 'singleton' service in the Kubernetes application environment to perform all devops/cdci operations.
+    - **cmd-pod** As a best practice, 'cmd-pod' is a 'singleton' service in the Kubernetes application environment to perform all devops/cdci operations.
     - **Service x** All other services can scale horizontally and should have one main job. They are all coordinated via the message bus, with the redis list `_service_name_.queue` (command queue) and will populate the `_service_name_.done` with the job done status.
 
 5) **Front-End Services** are services that interface the system application to external systems that could be end-user UI application such as web or mobile applications or other web services that would access the system via API. 

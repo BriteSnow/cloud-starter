@@ -59,16 +59,16 @@
     "testw": "node --loader ts-node/esm scripts/cmd-test.ts testw",
     "testd": "node --loader ts-node/esm scripts/cmd-test.ts testd",
     "watch": "node --loader ts-node/esm scripts/cmd-watch.ts watch",
-    "recreateDb": "kdd kexec agent npm run recreateDb",
-    "credential": "kdd kexec agent npm run credential",
-    "makeCredential": "kdd kexec agent npm run makeCredential",
-    "createUser": "kdd kexec agent npm run createUser",
-    "setPwd": "kdd kexec agent npm run setPwd",
+    "recreateDb": "kdd kexec cmd-pod npm run recreateDb",
+    "credential": "kdd kexec cmd-pod npm run credential",
+    "makeCredential": "kdd kexec cmd-pod npm run makeCredential",
+    "createUser": "kdd kexec cmd-pod npm run createUser",
+    "setPwd": "kdd kexec cmd-pod npm run setPwd",
     "pupdate": "node --loader ts-node/esm scripts/cmd-others.ts pupdate",
     "sf": "node ./node_modules/source-fetcher/dist/bin-sf.js"
   },
   "engines": {
-    "node": ">=10.15.0"
+    "node": ">=16.13.0"
   },
   "author": "BriteSnow",
   "license": "MIT"

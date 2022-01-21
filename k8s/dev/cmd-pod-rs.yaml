@@ -2,32 +2,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cstar-agent2-dep
+  name: cstar-cmd-pod-rs-dep
   namespace: default
   labels:
-    run: cstar-agent2
+    run: cstar-cmd-pod-rs
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-agent2
+      run: cstar-cmd-pod-rs
   template:
     metadata:
       labels:
-        run: cstar-agent2
+        run: cstar-cmd-pod-rs
     spec:
       # volumes:
-      #   - name: cstar-agent2-src
+      #   - name: cstar-cmd-pod-rs-src
       #     hostPath:
-      #       path: '{{dir_abs}}/services/agent2/src'
+      #       path: '{{dir_abs}}/services/cmd-pod-rs/src'
       #       type: Directory
-      #   - name: cstar-agent2-cargo-toml
+      #   - name: cstar-cmd-pod-rs-cargo-toml
       #     hostPath:
-      #       path: '{{dir_abs}}/services/agent2/Cargo.toml'
+      #       path: '{{dir_abs}}/services/cmd-pod-rs/Cargo.toml'
       #       type: File            
       containers:
-        - image: "localhost:5000/cstar-agent2:{{image_tag}}"
-          name: cstar-agent2-ctn
+        - image: "localhost:5000/cstar-cmd-pod-rs:{{image_tag}}"
+          name: cstar-cmd-pod-rs-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
@@ -36,10 +36,10 @@ spec:
                 name: cstar-secret
           env:
             - name: service_name
-              value: agent2          
+              value: cmd-pod-rs          
           # volumeMounts:
           #   - mountPath: /service/src
-          #     name: cstar-agent2-src
+          #     name: cstar-cmd-pod-rs-src
           #   - mountPath: /service/Cargo.toml
-          #     name: cstar-agent2-cargo-toml
+          #     name: cstar-cmd-pod-rs-cargo-toml
       restartPolicy: Always

@@ -25,7 +25,7 @@ realms:
     context: arn:aws:eks:us-west-2:843615417314:cluster/cstar-cluster
     profile: jc-root
     registry: 843615417314.dkr.ecr.us-west-2.amazonaws.com/
-    default_configurations: ['agent', 'db', 'queue', 'web-server']
+    default_configurations: ['cmd-pod', 'db', 'queue', 'web-server']
     confirm_delete: false
 
   # jc-prod:
@@ -37,13 +37,13 @@ blocks:
   - db
   - queue
   - mock-s3
-  - agent2
+  - cmd-pod-rs
   - _common  
   - name: vid-scaler
     dependencies: _common    
   - name: vid-init
     dependencies: _common  
-  - name: agent
+  - name: cmd-pod
     dependencies: _common
   - name: web 
     dir: frontends/web/

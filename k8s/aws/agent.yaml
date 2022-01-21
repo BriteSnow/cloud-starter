@@ -3,22 +3,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: cstar-agent
-  name: cstar-agent-dep
+    run: cstar-cmd-pod
+  name: cstar-cmd-pod-dep
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-agent
+      run: cstar-cmd-pod
   template:
     metadata:
       labels:
-        run: cstar-agent
+        run: cstar-cmd-pod
     spec:
       containers:
-        - image: '{{registry}}cstar-agent:{{image_tag}}'
-          name: cstar-agent-ctn
+        - image: '{{registry}}cstar-cmd-pod:{{image_tag}}'
+          name: cstar-cmd-pod-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:

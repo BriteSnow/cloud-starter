@@ -2,36 +2,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cstar-agent-dep
+  name: cstar-cmd-pod-dep
   namespace: default
   labels:
-    run: cstar-agent
+    run: cstar-cmd-pod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: cstar-agent
+      run: cstar-cmd-pod
   template:
     metadata:
       labels:
-        run: cstar-agent
+        run: cstar-cmd-pod
     spec:
       volumes:
-        - name: cstar-agent-src
+        - name: cstar-cmd-pod-src
           hostPath:
-            path: '{{dir_abs}}/services/agent/src'
+            path: '{{dir_abs}}/services/cmd-pod/src'
             type: Directory
-        - name: cstar-agent-sql
+        - name: cstar-cmd-pod-sql
           hostPath:
-            path: '{{dir_abs}}/services/agent/sql'
+            path: '{{dir_abs}}/services/cmd-pod/sql'
             type: Directory
-        - name: cstar-agent-dist
+        - name: cstar-cmd-pod-dist
           hostPath:
-            path: '{{dir_abs}}/services/agent/dist'
+            path: '{{dir_abs}}/services/cmd-pod/dist'
             type: Directory            
       containers:
-        - image: "localhost:5000/cstar-agent:{{image_tag}}"
-          name: cstar-agent-ctn
+        - image: "localhost:5000/cstar-cmd-pod:{{image_tag}}"
+          name: cstar-cmd-pod-ctn
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
@@ -40,12 +40,12 @@ spec:
                 name: cstar-secret
           env:
             - name: service_name
-              value: agent          
+              value: cmd-pod          
           volumeMounts:
             - mountPath: /service/src
-              name: cstar-agent-src
+              name: cstar-cmd-pod-src
             - mountPath: /service/sql
-              name: cstar-agent-sql
+              name: cstar-cmd-pod-sql
             - mountPath: /service/dist
-              name: cstar-agent-dist              
+              name: cstar-cmd-pod-dist              
       restartPolicy: Always

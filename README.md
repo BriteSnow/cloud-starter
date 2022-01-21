@@ -44,7 +44,7 @@ The key code structure is as follow:
 
 - **scripts/** files are just the build files for the various "DevOps" operations, such as building, REPL watch, and other custom scripts. 
 
-- **services/** base folder contains all of the backend services of the system as well as common resources. For example, `services/web-server` is the node js web API and application service, and `services/agent` is the agent micro-service that manages some DevOps operations during dev/staging/deployment. 
+- **services/** base folder contains all of the backend services of the system as well as common resources. For example, `services/web-server` is the node js web API and application service, and `services/cmd-pod` is the command pod that is used to execute some DevOps operations from within cluster context. 
 
 - **frontends/** is the base folder that contains all of the various client frontends. There is usually a 1-1 mapping between the back-end server (in the `services/**` folder) with a `frontends/**` html/ts/css source for web applications.  During the build process, each front-end distribution file (e.g., `app-bundle.js`) will be written into the corresponding server. For example, the `frontends/web/**` bundle files, such as `app-bundle.js`), will be copied in the web application folder `services/web-server/web-folder/` directory.
 
@@ -89,7 +89,7 @@ docker run -d -p 5000:5000 --restart=unless-stopped --name registry registry
 - `npm install` (only needed at the root)
 - `kdd dbuild` (this build all of the needed docker images, and push then to the local registry)
 - `kdd kapply` (doing a kubectl for all default configuration k8s files for the current realm). 
-- `npm run recreateDb` (this will call the `agent` microservice to create the db. In prod, the `agent` service is used to make drop sql snapshots, db update and other devops related scripts). 
+- `npm run recreateDb` (this will call the `cmd-pod` microservice to create the db. In prod, the `cmd-pod` service is used to make drop sql snapshots, db update and other devops related scripts). 
 
 Now, you should be able to go to http://localhost:8080/ and login as **admin** / **welcome**
 
