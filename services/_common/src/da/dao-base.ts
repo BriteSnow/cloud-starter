@@ -197,8 +197,9 @@ export class BaseDao<E, I, Q extends QueryOptions<E> = QueryOptions<E>> {
 		data = this.cleanForSave(utx, data, true);
 		data = this.stamp(utx, data, true);
 
-		const r = await query.insert(data).returning(this.idNames);
-		return r[0] as I;
+		// NOTE: By default, thereturning this.idNames is .id
+		const r = await query.insert(data).returning(this.idNames as 'id');
+		return r[0].id as I;
 	}
 
 	/**

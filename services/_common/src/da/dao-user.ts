@@ -108,8 +108,10 @@ export class UserDao extends BaseDao<User, number, QueryOptions<User>>{
 		// first we create the new user
 		const { query } = await knexQuery({ utx, tableName: this.table });
 		// stamp manually since the 'role' is not part of the User type (by design, not needed, need to make sure accesses is used)
+
 		const dataUser = BaseDao.Stamp(utx, { username, role }, true);
-		const userId = (await query.insert(dataUser).returning(this.idNames))[0] as number;
+		// NOTE: By default, thereturning this.idNames is .id
+		const userId = (await query.insert(dataUser).returning(this.idNames as 'id'))[0].id as number;
 
 		// then we set the new password (for create, no need to reset psalt or tsalt)
 		await this.setPwd(utx, { id: userId }, clearPwd, false, false);
