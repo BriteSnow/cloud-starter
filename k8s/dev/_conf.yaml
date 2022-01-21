@@ -5,7 +5,9 @@ metadata:
 type: Opaque
 data:
   db_password: d2VsY29tZQ==
-  core_store_access_key_secret: miniominio
+  
+  core_store_access_key_secret: bWluaW9taW5pbw==
+
   pwd_scheme_01_salt: NzRmZWM5MmU5Njg2MjY0ZTM2MzcxODkxNjhlYjNjNTBmZmFh 
   pwd_scheme_02_salt: NzRmZWM5MmU5Njg2MjY0ZTM2MzcxODkxNjhlYjNjNTBmZmFh
   pwd_prlink_salt: NzRmZWM5MmU5Njg2U0RGU0RXZGZlZmFlZWIzYzUwZmZhYQ==
@@ -22,22 +24,30 @@ metadata:
 data:
   https_mode: 'false'
 
-  # --  Core store cred * Info
+  # -- BUCKET - core store bucket
   # Core store credential (when mino)
   core_store_bucket_name: core-store-bucket
   core_store_access_key_id: minio
   # core_store_access_key_secret (in cstar-secret)
-  core_store_root_dir: core-store-root/
-  # for dev only (points to kubernetes minio docker image). Comment when on S3
-  core_store_minio_endpoint: http://cstar-mock-s3-srv:9000
+  core_store_root_dir: core-store-root/  
+  core_store_minio_endpoint: http://cstar-mock-s3-srv:9000 # for dev
   # Core store CDN
   # Note: For dev. In prod, this will be the CDN url that will point to the core bucket backend.
   core_store_cdn_base_url: http://localhost:9000/core-store-bucket/
 
-  # Database
+  # -- BUCKET - logs bucket (SS3 Cred format)
+  logs_store_bucket_name: logs-bucket
+  logs_store_root_dir: logs/
+  SS3_BUCKET_logs_bucket_KEY_ID: minio
+  SS3_BUCKET_logs_bucket_KEY_SECRET: miniominio
+  SS3_BUCKET_logs_bucket_ENDPOINT: http://mock-s3-srv:9000
+
+
+  # -- DATABASE 
   db_host: cstar-db-srv
   db_database: cstar_db
   db_user: cstar_user
+  # db_password (in cstar-secret)
 
   # Google
   google_oauth_redirect_url: http://localhost:8080/goauth-redirect
