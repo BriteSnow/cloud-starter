@@ -6,20 +6,20 @@ _[home](../README.md)_
 
 ```sh
 # build all of the services / docker images
-npm run vdev dbuild
+kdd dbuild
 
 # build one service
-npm run vdev dbuild web-server
+kdd dbuild web-server
 
 # build more than one
-npm run vdev dbuild web-server,cmd-pod
+kdd dbuild web-server,cmd-pod
 ```
 
 ## Install, recreateDb
 
 ```sh
 # install all kubernetes pods and start them
-npm run vdev kcreate
+kdd kapply
 
 # install the DB by going throw the cmd-pod service
 npm run recreateDb
@@ -37,6 +37,9 @@ npm run recreateDb
 ## REPL Test
 
 ```sh
+# Watch the service
+npm run watch
+
 # Run all of the test for a given service name (web-server)
 npm run test web-server
 
@@ -61,3 +64,37 @@ Look at the `.vscode/launch.json` `Attach to web-server` and starting it via vsc
 
 
 Note: For now, the debugging is for the web-server, and will be added to other services later. 
+
+
+## Useful kubectl commands
+
+Connect to the various service/pods
+
+```sh
+kubectl exec -it $(kubectl get pods -l run=cstar-agent --no-headers=true -o custom-columns=:metadata.name) -- /bin/bash
+
+kubectl exec -it $(kubectl get pods -l run=cstar-web-server --no-headers=true -o custom-columns=:metadata.name) -- /bin/bash
+
+kubectl exec -it $(kubectl get pods -l run=cstar-vid-init --no-headers=true -o custom-columns=:metadata.name) -- /bin/bash
+
+kubectl exec -it $(kubectl get pods -l run=cstar-vid-scaler --no-headers=true -o custom-columns=:metadata.name) -- /bin/bash
+```
+
+Connect to db for psql
+
+```sh
+kubectl exec -it $(kubectl get pods -l run=cstar-db --no-headers=true -o custom-columns=:metadata.name) -- /bin/bash
+
+# and then,
+psql -U postgres
+
+## And in sql
+psql$ \c cstar_db
+```
+
+Connect to mock-s3 (minio)
+
+```sh
+kubectl exec -it $(kubectl get pods -l run=cstar-mock-s3 --no-headers=true -o custom-columns=:metadata.name) -- /bin/bash
+
+```
