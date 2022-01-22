@@ -26,14 +26,14 @@ data:
 
   # -- BUCKET - core store bucket
   # Core store credential (when mino)
-  core_store_bucket_name: core-store-bucket
+  core_store_bucket_name: core-bucket
   core_store_access_key_id: minio
   # core_store_access_key_secret (in cstar-secret)
   core_store_root_dir: core-store-root/  
   core_store_minio_endpoint: http://cstar-mock-s3-srv:9000 # for dev
   # Core store CDN
   # Note: For dev. In prod, this will be the CDN url that will point to the core bucket backend.
-  core_store_cdn_base_url: http://localhost:9000/core-store-bucket/
+  core_store_cdn_base_url: http://localhost:9000/core-bucket/
 
   # -- BUCKET - logs bucket (SS3 Cred format)
   logs_store_bucket_name: logs-bucket

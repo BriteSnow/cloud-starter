@@ -1,8 +1,12 @@
 from minio/minio
 
-# Create the dev buckets
-RUN mkdir /data && \
-    mkdir /data/core-store-bucket && \
-    mkdir /data/logs-bucket
+# Setup the mc command
+RUN curl -O https://dl.min.io/client/mc/release/linux-amd64/mc && \
+    chmod +x mc  && \
+    mv mc /usr/bin/
 
-CMD ["server", "/data", "--console-address", ":9900"]
+COPY entrypoint.sh .
+
+ENTRYPOINT /entrypoint.sh
+
+# CMD ["server", "/data", "--console-address", ":9900"]

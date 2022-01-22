@@ -6,6 +6,7 @@ metadata:
   labels:
     run: cstar-mock-s3 # we label run: ... all the resources that run a particular service (here cstar-mock-s3)
 spec:
+  type: LoadBalancer
   ports:
     - port: 9000
       protocol: TCP
@@ -47,18 +48,18 @@ spec:
         run: cstar-mock-s3
     spec:
       containers:
-      - image: "localhost:5000/cstar-mock-s3:{{image_tag}}"
-        imagePullPolicy: Always
-        name: cstar-mock-s3-ctn
-        env:
-          - name: service_name
-            value: mock-s3        
-          - name: MINIO_ROOT_USER
-            value: 'minio'        
-          - name: MINIO_ROOT_PASSWORD
-            value: 'miniominio' 
-        ports:
-          - containerPort: 9000
-            protocol: TCP
+        - image: "localhost:5000/cstar-mock-s3:{{image_tag}}"
+          imagePullPolicy: Always
+          name: cstar-mock-s3-ctn
+          env:
+            - name: service_name
+              value: mock-s3        
+            - name: MINIO_ROOT_USER
+              value: 'minio'        
+            - name: MINIO_ROOT_PASSWORD
+              value: 'miniominio' 
+          ports:
+            - containerPort: 9000
+              protocol: TCP
       restartPolicy: Always
 
