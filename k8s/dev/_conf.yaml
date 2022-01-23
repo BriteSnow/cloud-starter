@@ -35,12 +35,17 @@ data:
   # Note: For dev. In prod, this will be the CDN url that will point to the core bucket backend.
   core_store_cdn_base_url: http://localhost:9000/core-bucket/
 
-  # -- BUCKET - logs bucket (SS3 Cred format)
+  # -- BUCKET - LOG bucket (SS3 Cred format)
   logs_store_bucket_name: logs-bucket
   logs_store_root_dir: logs
   SS3_BUCKET_logs_bucket_KEY_ID: minio
   SS3_BUCKET_logs_bucket_KEY_SECRET: miniominio
   SS3_BUCKET_logs_bucket_ENDPOINT: http://cstar-mock-s3-srv:9000
+
+  # -- LOG - CONFIG
+  # for dev only 30s, in prod should be around 10 minutes (600)
+  log_max_time: '30'
+  log_max_count: '5000'
 
 
   # -- DATABASE 

@@ -20,8 +20,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "backlib": "^0.4.0",
+    "backlib": "^0.5.0",
     "cloud-bucket": "^0.4.0",
+    "execa": "^6.0.0",
     "fs-aux": "^0.1.0",
     "ioredis": "^4.28.3",
     "knex": "^1.0.1",
