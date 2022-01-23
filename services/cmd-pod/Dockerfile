@@ -8,4 +8,4 @@ COPY package.json ./
 RUN npm install
 COPY . .
 
-CMD ["/service/entry-point.sh"]
+ENTRYPOINT [ "/bin/bash", "-c", "source ~/.bashrc && /service/entrypoint.sh ${@}", "--" ]

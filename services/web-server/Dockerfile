@@ -8,4 +8,5 @@ COPY package.json ./
 RUN npm install
 COPY . .
 
-CMD ["/service/entry-point.sh"]
+# To make sure to have the same environments as as kexec (for ss3 for example)
+ENTRYPOINT [ "/bin/bash", "-c", "source ~/.bashrc && /service/entrypoint.sh ${@}", "--" ]

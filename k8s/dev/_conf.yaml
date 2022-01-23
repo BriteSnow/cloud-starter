@@ -37,10 +37,10 @@ data:
 
   # -- BUCKET - logs bucket (SS3 Cred format)
   logs_store_bucket_name: logs-bucket
-  logs_store_root_dir: logs/
+  logs_store_root_dir: logs
   SS3_BUCKET_logs_bucket_KEY_ID: minio
   SS3_BUCKET_logs_bucket_KEY_SECRET: miniominio
-  SS3_BUCKET_logs_bucket_ENDPOINT: http://mock-s3-srv:9000
+  SS3_BUCKET_logs_bucket_ENDPOINT: http://cstar-mock-s3-srv:9000
 
 
   # -- DATABASE 

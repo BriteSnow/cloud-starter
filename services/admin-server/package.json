@@ -7,7 +7,7 @@
   "imports": {
     "#common/*": "./dist/services/_common/src/*",
     "#shared/*": "./dist/shared/src/*"
-  },  
+  },
   "scripts": {
     "start": "node dist/services/admin-server/src/start",
     "dstart": "node --inspect dist/services/admin-server/src/start",
@@ -27,6 +27,7 @@
     "@types/useragent": "^2.3.1",
     "backlib": "0.4.0",
     "cloud-bucket": "^0.4.0",
+    "fs-aux": "^0.1.0",
     "fs-extra-plus": "^0.6.0",
     "ioredis": "^4.28.3",
     "knex": "^1.0.1",

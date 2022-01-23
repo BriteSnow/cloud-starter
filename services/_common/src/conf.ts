@@ -54,10 +54,15 @@ export const GOOGLE_OAUTH_CLIENT_SECRET = env.google_oauth_client_secret!;
 export const GOOGLE_OAUTH = GOOGLE_OAUTH_CLIENT_ID ? freeze({ client_id: GOOGLE_OAUTH_CLIENT_ID, redirect_url: GOOGLE_OAUTH_REDIRECT_URL, client_secret: GOOGLE_OAUTH_CLIENT_SECRET }) : null;
 
 //// LOG
-export const LOG_DIR = './logs/';
-export const LOG_MAX_COUNT = Number(env.log_max_count!);
-export const LOG_MAX_TIME = Number(env.log_max_time!);
+export const LOG_DIR = '/service/logs';
+export const LOG_MAX_COUNT = (env.log_max_count != null) ? Number(env.log_max_count) : 1000;
+// max_count in seconds (if not defined, 2 minutes)
+export const LOG_MAX_TIME = (env.log_max_time != null) ? Number(env.log_max_time) : 5; // for dev 5s // 60 * 2;
 export const LOG = freeze({ maxCount: LOG_MAX_COUNT, maxTime: LOG_MAX_TIME });
+
+//// LOG bucket
+export const LOGS_STORE_BUCKET_NAME = env.logs_store_bucket_name!;
+export const LOGS_STORE_ROOT_DIR = env.logs_store_root_dir!;
 
 //// OTHERS
 export const PERF_LOG_THRESHOLD_WEB = 1000; // in ms. Threshold when utx.perfContext.items should be logged

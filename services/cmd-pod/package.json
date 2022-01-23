@@ -11,7 +11,7 @@
   "imports": {
     "#common/*": "./dist/services/_common/src/*",
     "#shared/*": "./dist/shared/src/*"
-  },  
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/services/cmd-pod/src/start",
@@ -27,6 +27,7 @@
     "@types/uuid": "^8.3.4",
     "backlib": "^0.4.0",
     "cmdrouter": "^0.3.1",
+    "fs-aux": "^0.1.0",
     "knex": "^1.0.1",
     "moment": "^2.29.1",
     "p-spawn": "^0.5.5",
