@@ -29,7 +29,7 @@ export class BaseAppLog<R> extends BaseLog<R> {
       const prefix = `${SERVICE_NAME}-${logName}`;
       const date = new Date().toISOString().replace(/[T:.]/g, "-").slice(0, -1);
       const suffix = KHOST;
-      return `${prefix}${date}${suffix}.ndjson`;
+      return `${prefix}-${date}-${suffix}.ndjson`;
     };
     // file writer
     const fileWriter = new FileWriter<R>({
