@@ -148,8 +148,7 @@ export function buildWebLogRecord(ktx: ParameterizedContext<KState & Partial<Api
 		os_name,
 		os_version,
 		err_code,
-		err_msg,
-		info
+		err_msg
 	};
 
 	if (ktx.state.utx != null) {
