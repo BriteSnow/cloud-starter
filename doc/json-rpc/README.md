@@ -53,12 +53,12 @@ Here are the normative method verbs (in the examples below, the `jsonrpc` and `i
 
 **Query Methods**
 
-| verb       | meaning                                                   | example                                     |
-|------------|-----------------------------------------------------------|---------------------------------------------|
-| `get`      | Get only one item by PK id                                | `getProject` `{id: 123 }`                   |
-| `list`     | List cases based on some                                  | `listProject` `{"@filters": {title:  123 }` |
-| `first`    | Params like list, return like get (null if nothing found) | `first` `{"@filters": {title:  "title 1" }` |
-| `[custom]` | Domain specific                                           | `lookupProject`                             |
+| verb       | meaning                                                   | example                                    |
+|------------|-----------------------------------------------------------|--------------------------------------------|
+| `get`      | Get only one item by PK id                                | `getProject` `{id: 123 }`                  |
+| `list`     | List cases based on some                                  | `listProject` `{"filters": {title:  123 }` |
+| `first`    | Params like list, return like get (null if nothing found) | `first` `{"filters": {title:  "title 1" }` |
+| `[custom]` | Domain specific                                           | `lookupProject`                            |
 
 Note - `get` params is fixed, and if another way is needed to get an entity, for example, get user by username, another `getUserByUsername` `{username: "..."}` should be implemented.
 
@@ -69,26 +69,42 @@ The `list` and `first` query are structured the following way.
 All data (array or single object) of all query calls are always in `result.data`.
 
 For example, list projects given some filters and specifying what to include.
+
 ```js
 {
     jsonrpc: "2.0",
     method: "listProjects",
     params: {
-        // narrow the targeted entity result set 
-        "#filters": { 
-            name: {"$contains": "safari"}
+        $paginnation: { 
+            ...
         }, 
 
-        // define what to returned for what has been matched by targeted entity
-        "#includes": { 
-            ticket: { // includes object 
-                title: true,
-                timestamp: true, // cid, ctime, mid, mtime
-                labels: true, // default to give only "label.name" in this case. can do {timestamp: true, color: true}
-                "$filters": {
-                    "title": {"$contains": "important"},
+        $orderBy: ["!ctime"],
+
+        // narrow the targeted entity result set 
+        $filters: { 
+            name: {$contains: "safari"}
+        }, 
+
+        // define what to return for what has been matched by targeted entity
+        $includes: { 
+
+            // will include tickets (joined entity), with the following property for each item
+            tickets: { 
+                // cid, ctime, mid, mtime (starts with _ because not a direct property, group of properties)
+                _timestamp: true,
+
+                // default to give only "label.name" in this case. can do {timestamp: true, color: true}
+                labels: true, 
+
+                $orderBy: ["!ctime"],
+                
+                $filters: {
+                    "title": {$contains: "important"},
                 },
-            } 
+            }, 
+
+            owner: {id: false, fullName: true, username: true}
          }, 
     },
     id: null
@@ -98,26 +114,34 @@ For example, list projects given some filters and specifying what to include.
 The json-rpc `.result.data` will look like this
 
 ```js
-[
-    // project entity
-    { 
-        name: "Safari Update Project", 
-        tickets: [
-            {
-                title: "This is an important ticket",
-                cid: ...,
-                ctime: ..., 
-                cid: ...,
-                mtime: ...,
-                labels: [{name: "..."}, {name: "..."}]
-            },
-
-        ]
+{
+    paginnation: {
+        fromPageToken: string
+        nextPageToken: string
     },
-    // project entity
-    { ... }
 
-]
+    data: [
+        // project entity
+        { 
+            name: "Safari Update Project", 
+            tickets: [
+                {
+                    title: "This is an important ticket",
+                    cid: ...,
+                    ctime: ..., 
+                    cid: ...,
+                    mtime: ...,
+                    labels: [{name: "..."}, {name: "..."}]
+                },
+
+            ],
+            owner: {....}
+        },
+        // project entity
+        { ... }
+    ]
+}
+
 ```
 
 ## Muting Call Example
@@ -139,26 +163,81 @@ For example, a **create project** call would look like:
 }
 ```
 
-Now, to create a ticket for this project (let's say that this projectId is `123`)
+For example, a **update project** call would look like: 
 
 ```js
 {
     jsonrpc: "2.0",
+    method: "udpateProject",
+    params: {
+        id: 123,
+        data: {
+            title: "My first project"
+        }
+    },
+    id: null
+}
+```
+
+For example, a **delete project** call would look like: 
+
+```js
+{
+    jsonrpc: "2.0",
+    method: "deleteProject",
+    params: {
+        id: 123
+    },
+    id: null
+}
+```
+
+Now, to create a ticket for this project (let's say that this projectId is `123`)
+
+```ts
+{
+    jsonrpc: "2.0",
     method: "createTicket",
     params: {
-        projectId: 123,
-        data: {
+        sendNotification: true, // just example of top level
+        data: { // TicketCreate
+            projectId: number,
+            title: "My first ticket"
+        }
+    },
+    id: null    
+}
+```
+
+```js
+{
+    jsonrpc: "2.0",
+    method: "updateTicket",
+    params: {
+        id: 1111,
+        data: { // TicketUpdate
             title: "My first project"
         }
     },
     id: null    
 }
-
 ```
 
-> Note 1: Here, the `projectId` is at the root `params` because it is part of the method call, and not of the `.data` to be created, even if it happens that the **query calls** on `Ticket` entity will return `data.projectId`. 
+Example of possible 'schema' for `TicketCreate` or `TicketUpdate` `params.data` types. 
+```ts
+interface TicketCreate {
+    title: string,
+    open: boolean,
+    projectId: number
+}
 
-> Note 2: The goal of this api design is to decouple at the method call the context of the creation (here `.projectId`) from the data to be created (here `.data`), even if it happens that **query calls** will return the same property part of the data. This scheme allows to enforce all **muting calls** `.data` will not contain properties that should not be writable, while accepting necessary context for some **muting calls** as needed (here the `createTicket` needs the `projectId` to do its job)
+interface TicketUpdate {
+    title: string,
+    open: boolean,
+}
+```
+
+
 
 ## Conditional Operators
 
