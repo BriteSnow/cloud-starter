@@ -3,7 +3,7 @@
 TLDR; As simple as REST, domain-centric, future proof, and simpler to type and verify.
 
 - **As simple as REST** - From a http protocol point of view, JSON-RPC is a subset of REST, only POST and only JSON, and while it might be a little unfamiliar at first, the medium/long-term benefits are significant.
-- **Transport Protocol Agnostic** Supports HTTP as simple as REST but JSON-RPC is a transport agnostic is more of a message-based protocol decoupled from the conduit. It can be used with other conduit schemes of data/command exchange, pub/sub, web socket, inter-process, etc.
+- **Transport Protocol Agnostic** Supports HTTP as simple as REST, but JSON-RPC is a transport agnostic message-based protocol decoupled from the conduit. It can be used with other conduit schemes of data/command exchange, pub/sub, web socket, inter-process, etc.
 - **Application Centric** - Do not need to contort HTTP methods and url paths to Application API semantics (e.g. GET v.s. POST v.s. PUT v.s. PATCH, and Path v.s. Params v.s. Body)
 - **Simpler to Type/Verify** - Since everything is JSON Body, simpler to type and verify (e.g., JSON Schema)
 - **Support for batch** - Inherently support batching of queries. 
@@ -62,18 +62,21 @@ Here are the normative method verbs (in the examples below, the `jsonrpc` and `i
 
 Note - `get` params is fixed, and if another way is needed to get an entity, for example, get user by username, another `getUserByUsername` `{username: "..."}` should be implemented.
 
-## Query Calls
+## Query Calls Example
 
-Query calls are structured 
+The `list` and `first` query are structured the following way. 
 
-`listProjects` 
+All data (array or single object) of all query calls are always in `result.data`.
+
+For example, list projects given some filters and specifying what to include.
 ```js
 {
     jsonrpc: "2.0",
+    method: "listProjects",
     params: {
         // narrow the targeted entity result set 
         "#filters": { 
-            title: {"$contains": "safari"}
+            name: {"$contains": "safari"}
         }, 
 
         // define what to returned for what has been matched by targeted entity
@@ -87,18 +90,75 @@ Query calls are structured
                 },
             } 
          }, 
-    }
+    },
+    id: null
 }
 ```
 
+The json-rpc `.result.data` will look like this
+
 ```js
 [
-    {
-        title: "...",
-        labels: [{name: "..."}, {name: "..."}]
-    }
+    // project entity
+    { 
+        name: "Safari Update Project", 
+        tickets: [
+            {
+                title: "This is an important ticket",
+                cid: ...,
+                ctime: ..., 
+                cid: ...,
+                mtime: ...,
+                labels: [{name: "..."}, {name: "..."}]
+            },
+
+        ]
+    },
+    // project entity
+    { ... }
+
 ]
 ```
+
+## Muting Call Example
+
+When calling `create` or `update` muting calls, the convention is that the `params.data` contain the patch entity to be created or updated.
+
+For example, a **create project** call would look like: 
+
+```js
+{
+    jsonrpc: "2.0",
+    method: "createProject",
+    params: {
+        data: {
+            title: "My first project"
+        }
+    },
+    id: null
+}
+```
+
+Now, to create a ticket for this project (let's say that this projectId is `123`)
+
+```js
+{
+    jsonrpc: "2.0",
+    method: "createTicket",
+    params: {
+        projectId: 123,
+        data: {
+            title: "My first project"
+        }
+    },
+    id: null    
+}
+
+```
+
+> Note 1: Here, the `projectId` is at the root `params` because it is part of the method call, and of the `.data` to be created, even if it happens that the **query calls** on `Ticket` entity will return `data.projectId`. 
+
+> Note 2: The goal of this api design is to decouple at the method call the context of the creation (here `.projectId`) from the data to be created (here `.data`), even if it happens that **query calls** will return the same property part of the data. This scheme allows to enforce all **muting calls** `.data` will not contain properties that should not be writable, while accepting necessary context for some **muting calls** as needed (here the `createTicket` needs the `projectId` to do its job)
 
 ## Conditional Operators
 
