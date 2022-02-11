@@ -18,8 +18,8 @@ _To be sent to the service_
     // Optional, should be present and fully specified 99.9% of the time
     params: {...}, 
 
-    // REQUIRED (can be set to null). Can be number, but string is a good normative approach
-    id, "string_recommended", 
+    // REQUIRED (can be set to null). Can be number, but string/uuid us a good normative approach
+    id, "some_client_id_per_request", 
 }
 ```
 
@@ -53,7 +53,7 @@ _Returned by the service_
     }
 
     // REQUIRED (will match the corresponding json-rpc request)
-    id, "string_recommended", 
+    id: "some_client_id_per_request", 
 }
 ```
 

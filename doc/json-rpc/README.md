@@ -16,8 +16,8 @@ The JSON-RPC Normative approach defines a set of conventions on top of JSON-RPC 
 
 At the high level, there are two types of RPC Calls
 
-- **Query Calls** - Those calls do not change the data but only return one or more datasets. There are designed to have advanced filtering and inclusion capabilities. 
-- **Muting Calls** - Those calls focus on changing a particular data, and while it might return the data changed at some granularity, it should not include the same query capability as the first one. 
+- **Query Methods** - Those calls do not change the data but only return one or more datasets. There are designed to have advanced filtering and inclusion capabilities. 
+- **Muting Methods** - Those calls focus on changing a particular data, and while it might return the data changed at some granularity, it should not include the same query capability as the first one. 
 
 
 ## Method Names
@@ -156,7 +156,7 @@ Now, to create a ticket for this project (let's say that this projectId is `123`
 
 ```
 
-> Note 1: Here, the `projectId` is at the root `params` because it is part of the method call, and of the `.data` to be created, even if it happens that the **query calls** on `Ticket` entity will return `data.projectId`. 
+> Note 1: Here, the `projectId` is at the root `params` because it is part of the method call, and not of the `.data` to be created, even if it happens that the **query calls** on `Ticket` entity will return `data.projectId`. 
 
 > Note 2: The goal of this api design is to decouple at the method call the context of the creation (here `.projectId`) from the data to be created (here `.data`), even if it happens that **query calls** will return the same property part of the data. This scheme allows to enforce all **muting calls** `.data` will not contain properties that should not be writable, while accepting necessary context for some **muting calls** as needed (here the `createTicket` needs the `projectId` to do its job)
 
