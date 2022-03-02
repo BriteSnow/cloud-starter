@@ -53,12 +53,12 @@ Here are the normative method verbs (in the examples below, the `jsonrpc` and `i
 
 **Query Methods**
 
-| verb       | meaning                                                   | example                                    |
-|------------|-----------------------------------------------------------|--------------------------------------------|
-| `get`      | Get only one item by PK id                                | `getProject` `{id: 123 }`                  |
-| `list`     | List cases based on some                                  | `listProject` `{"filters": {title:  123 }` |
-| `first`    | Params like list, return like get (null if nothing found) | `first` `{"filters": {title:  "title 1" }` |
-| `[custom]` | Domain specific                                           | `lookupProject`                            |
+| verb       | meaning                                                   | example                                                       |
+|------------|-----------------------------------------------------------|---------------------------------------------------------------|
+| `get`      | Get only one item by PK id                                | `getProject` `{id: 123 }`                                     |
+| `list`     | List cases based on some                                  | `listProject` `{"filters": {title:  {$startsWith = "cool"} }` |
+| `first`    | Params like list, return like get (null if nothing found) | `first` `{"filters": {title:  "title 1" }`                    |
+| `[custom]` | Domain specific                                           | `lookupProject`                                               |
 
 Note - `get` params is fixed, and if another way is needed to get an entity, for example, get user by username, another `getUserByUsername` `{username: "..."}` should be implemented.
 

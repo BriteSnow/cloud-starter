@@ -19,7 +19,7 @@ _To be sent to the service_
     params: {...}, 
 
     // REQUIRED (can be set to null). Can be number, but string/uuid us a good normative approach
-    id, "some_client_id_per_request", 
+    id: "some_client_id_per_request", 
 }
 ```
 
@@ -49,7 +49,7 @@ _Returned by the service_
         message: string,
 
         // (optional) Service/Method dependent extra information
-        data: {...}
+        data: {}
     }
 
     // REQUIRED (will match the corresponding json-rpc request)
