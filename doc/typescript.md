@@ -280,7 +280,7 @@ v = Number(''); // DANGER. === 0;
 ### Array Number Sorting
 
 ```js
-a = [2, 1,3];
+a = [2, 1, 3];
 a.sort(); // OK. [1, 2, 3]
 
 b = [-5, -3];

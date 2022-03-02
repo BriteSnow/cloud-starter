@@ -192,6 +192,22 @@ For example, a **delete project** call would look like:
 }
 ```
 
+A list project with some criterias
+
+```js
+{
+    jsonrpc: "2.0",
+    method: "listProjects",
+    params: {
+        $fitlers: {
+            name: 
+        }
+    },
+    id: null
+}
+
+```
+
 Now, to create a ticket for this project (let's say that this projectId is `123`)
 
 ```ts
@@ -223,6 +239,8 @@ Now, to create a ticket for this project (let's say that this projectId is `123`
 }
 ```
 
+
+
 Example of possible 'schema' for `TicketCreate` or `TicketUpdate` `params.data` types. 
 ```ts
 interface TicketCreate {
@@ -243,22 +261,22 @@ interface TicketUpdate {
 
 Filters and Includes allow to express conditional rules base on a `{property: {operator: value}}` scheme. The following table shows the list of possible operators.
 
-| Operator        | Meaning                                       | Example                                    |
-|-----------------|-----------------------------------------------|--------------------------------------------|
-| `$eq`           | Exact match with one value                    | `{name: {"$eq": "Jon Doe"}}`               |
-| `$notEq`        | Exclude any exact match                       | `{name: {"$notEq": "Jon Doe"}}`            |
-| `$in`           | Exact match with within a list of values (or) | `{name: {"$in": ["Alice", "Jon Doe"]}}`    |
-| `$notIn`        | Exclude any exact withing a list              | `{name: {"$notIn": ["Jon Doe"]}}`          |
-| `$contains`     | For string, does a contains                   | `{name: {"$contains": "Doe"}}`             |
-| `$containsIn`   | For string, does a contains  (or)             | `{name: {"$containsIn": ["Doe", "Ali"]}}`  |
-| `$startsWith`   | For string, does a contains                   | `{name: {"$startsWith": "Jon"}}`           |
-| `$startsWithIn` | For string, does a contains  (or)             | `{name: {"$startsWithIn": ["Jon", "Al"]}}` |
-| `$endsWith`     | For string, does a contains  (or)             | `{name: {"$endsWithIn": "Doe"}}`           |
-| `$endsWithIn`   | For string, does a contains  (or)             | `{name: {"$endsWithIn": ["Doe", "ice"]}}`  |
-| `$lt`           | Lesser Than                                   | `{age: {"$lt": 30}}`                       |
-| `$lte`          | Lesser Than or =                              | `{age: {"$lte": 30}}`                      |
-| `$gt`           | Greater Than                                  | `{age: {"$gt": 30}}`                       |
-| `$gte`          | Greater Than or =                             | `{age: {"$gte": 30}}`                      |
+| Operator        | Meaning                                         | Example                                    |
+|-----------------|-------------------------------------------------|--------------------------------------------|
+| `$eq`           | Exact match with one value                      | `{name: {"$eq": "Jon Doe"}}`               |
+| `$notEq`        | Exclude any exact match                         | `{name: {"$notEq": "Jon Doe"}}`            |
+| `$in`           | Exact match with within a list of values (or)   | `{name: {"$in": ["Alice", "Jon Doe"]}}`    |
+| `$notIn`        | Exclude any exact withing a list                | `{name: {"$notIn": ["Jon Doe"]}}`          |
+| `$contains`     | For string, does a contains                     | `{name: {"$contains": "Doe"}}`             |
+| `$containsIn`   | For string, match if contained in any of items  | `{name: {"$containsIn": ["Doe", "Ali"]}}`  |
+| `$startsWith`   | For string, does a startsWith                   | `{name: {"$startsWith": "Jon"}}`           |
+| `$startsWithIn` | For string, match if startsWith in any of items | `{name: {"$startsWithIn": ["Jon", "Al"]}}` |
+| `$endsWith`     | For string, does and end with                   | `{name: {"$endsWithIn": "Doe"}}`           |
+| `$endsWithIn`   | For string, does a contains  (or)               | `{name: {"$endsWithIn": ["Doe", "ice"]}}`  |
+| `$lt`           | Lesser Than                                     | `{age: {"$lt": 30}}`                       |
+| `$lte`          | Lesser Than or =                                | `{age: {"$lte": 30}}`                      |
+| `$gt`           | Greater Than                                    | `{age: {"$gt": 30}}`                       |
+| `$gte`          | Greater Than or =                               | `{age: {"$gte": 30}}`                      |
 
 The operator sub-parts can be described as below: 
 - `not` is a **prefix** when we want to express the negation of another operator. camelCase follows the `not` prefix. 
