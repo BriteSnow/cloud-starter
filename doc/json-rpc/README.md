@@ -92,7 +92,7 @@ For example, list projects given some filters and specifying what to include.
             // will include tickets (joined entity), with the following property for each item
             tickets: { 
                 // cid, ctime, mid, mtime (starts with _ because not a direct property, group of properties)
-                _timestamp: true,
+                _timestamps: true,
 
                 // default to give only "label.name" in this case. can do {timestamp: true, color: true}
                 labels: true, 
@@ -308,4 +308,8 @@ The following scheme can be followed and extended per application for applicatio
 | 1100-1199 | ACCESS_...           | Access/Privileges Errors                            |
 | 3000-...  | ..._....             | Other Application Errors                            |
 | 5000-...  | METHOD_NAME_....     | By method errors                                    |
+
+## Key data types
+
+- All date/time will be of type string with the format **ISO 8601** `YYYY-MM-DDTHH:mm:ss.sssZ`
 
