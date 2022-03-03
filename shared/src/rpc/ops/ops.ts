@@ -1,5 +1,5 @@
 
-export enum Opts {
+export enum Ops {
   '$eq' = '$eq',
   '$notEq' = '$notEq',
   '$in' = '$in',
@@ -17,12 +17,12 @@ export enum Opts {
 }
 
 
-type Opt = keyof typeof Opts;
+type Op = keyof typeof Ops;
 
 // #region    --- Aliasing
 // All operations keys with their aliases
-type OptsAliases = { [name in Opt]: string[] };
-const OPTS_ALIASES: OptsAliases = {
+type OpsAliases = { [name in Op]: string[] };
+const OPS_ALIASES: OpsAliases = {
   // Exact match with one value 
   '$eq': ['$eq', '$$eq'],
   // Exclude any exact match 
