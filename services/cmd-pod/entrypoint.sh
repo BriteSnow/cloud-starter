@@ -1,6 +1,7 @@
 #!/bin/bash
-npm start
 
-# NOTE cmd-pod usually do not run start script for ever, 
-#      so make sure the pod does not shutdown
+# start the npm as a background
+npm start &
+
+# make this pid 1 run infinitely
 tail -f /dev/null

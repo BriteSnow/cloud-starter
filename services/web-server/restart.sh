@@ -1,12 +1,24 @@
 #!/bin/bash
-echo "Killing npm $(pgrep npm)"
-# probably can use 'pkill npm' as well
+
+# NOTE - we source /root/.profile to make sure it is run when kubectl exec
+source /root/.profile
+
+# NOTE - all output are piped to PID 1 (/proc/1/fd/1) 
+#        to allow docker/kuberentes to use kubectly log ...
+
+## Ending the npm (probably can 'pkill npm')
+echo "Killing npm $(pgrep npm)" >> /proc/1/fd/1
 kill -9 $(pgrep npm)
 sleep .1
-echo "Killing node $(pgrep node)"
+
+## Ending the npm (probably can 'pkill npm')
+echo "Killing node $(pgrep node)" >> /proc/1/fd/1
 kill -9 $(pgrep node)
 sleep .3
-echo "Running npm start.."
-nohup npm run dstart >> ./service.log 2>>./service.log 0</dev/null & 
+
+## Restart server in debug mode
+echo "Running 'npm run dstart'" >> /proc/1/fd/1
+nohup npm run dstart >> /proc/1/fd/1 &
 sleep 2 
-echo "done restart"
+echo "done 'npm run dstart'" >> /proc/1/fd/1
+

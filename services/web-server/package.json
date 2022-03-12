@@ -21,11 +21,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@backlib/koa": "^0.5.0",
+    "@backlib/koa": "^0.5.1-SNAPSHOT.2",
     "@types/koa-static": "^4.0.2",
     "@types/mocha": "^9.1.0",
     "@types/useragent": "^2.3.1",
-    "backlib": "^0.5.0",
+    "backlib": "^0.5.2-SNAPSHOT.9",
     "cloud-bucket": "^0.4.2",
     "execa": "^6.1.0",
     "fs-aux": "^0.1.0",

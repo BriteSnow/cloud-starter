@@ -43,7 +43,7 @@ data:
   SS3_BUCKET_logs_bucket_ENDPOINT: http://cstar-mock-s3-srv:9000
 
   # -- LOG - CONFIG
-  # for dev only 30s, in prod should be around 10 minutes (600)
+  # for dev only 30s, in prod should be around 2 minutes or 10 minutes
   log_max_time: '30'
   log_max_count: '5000'
 

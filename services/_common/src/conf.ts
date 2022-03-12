@@ -53,7 +53,7 @@ export const GOOGLE_OAUTH = (GOOGLE_OAUTH_CLIENT_ID && GOOGLE_OAUTH_REDIRECT_URL
 export const LOG_DIR = '/service/logs';
 export const LOG_MAX_COUNT = envAsNumOr('log_max_count', 5000);
 // max_count in seconds 
-export const LOG_MAX_TIME = envAsNumOr('log_max_time', 60 * 6); // every 6 minutes
+export const LOG_MAX_TIME = envAsNumOr('log_max_time', 6 * 60); // every 6 minutes if not set
 
 //// LOG bucket
 export const LOGS_STORE_BUCKET_NAME = envAsStr('logs_store_bucket_name');

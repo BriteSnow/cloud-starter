@@ -1,5 +1,5 @@
 
-import { ServiceLogRecord, WebLogRecord } from '#shared/log-types.js';
+import { ServiceLogRecord, SERVICE_LOG_RECORD_KEYS, WebLogRecord, WEB_LOG_RECORD_KEYS } from '#shared/log-types.js';
 import { KHOST } from '../conf.js';
 import { nowTimestamp } from '../utils.js';
 import { BaseAppLog, getServiceLogStream, getWebLogStream } from './log-utils.js';
@@ -31,14 +31,14 @@ export async function web_log(rec: Omit<WebLogRecord, 'timestamp' | 'khost'>) {
 class WebLog extends BaseAppLog<WebLogRecord>{
 	constructor() {
 		const logStream = getWebLogStream();
-		super("web_log", logStream);
+		super("web_log", logStream, WEB_LOG_RECORD_KEYS);
 	}
 }
 
 class ServiceLog extends BaseAppLog<ServiceLogRecord>{
 	constructor() {
 		const logStream = getServiceLogStream();
-		super("service_log", logStream);
+		super("service_log", logStream, SERVICE_LOG_RECORD_KEYS);
 	}
 }
 

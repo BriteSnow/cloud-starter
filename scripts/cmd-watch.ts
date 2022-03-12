@@ -80,8 +80,8 @@ async function watchService(serviceName: string, debugPort: string) {
 	const watcher = chokidar.watch(distDir, { depth: 99, ignoreInitial: true, persistent: true });
 
 	const cr = debounce(() => {
-		console.log(`... kexec ${serviceName} -- /service/restart.sh`);
-		execa('kdd', ['kexec', serviceName, '--', '/service/restart.sh']);
+		console.log(`... kexec ${serviceName} -- /bin/bash -c "/service/restart.sh"`);
+		execa('kdd', ['kexec', serviceName, '--', '/bin/bash', '-c', '"/service/restart.sh"']);
 	}, 500)
 
 	watcher.on('change', async function (filePath: string) {

@@ -3,8 +3,8 @@
 # Start the minio server as background
 minio server /data --console-address :9900 & disown
 
-# Cheap way to wait ath the server is started (since we start it as background)
-sleep 3s
+# Cheap way to wait the server is started (since we start it as background)
+sleep 5s
 
 # Create the minio alias pointing to this server
 mc alias set minio http://localhost:9000 minio miniominio --api S3v4
