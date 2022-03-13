@@ -1,0 +1,1 @@
+Cloud Starter API format is based on a normalized JSON-RPC 2.0 based Query Language [JSON-NQL](https://github.com/json-nql/json-nql)
