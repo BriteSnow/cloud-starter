@@ -20,7 +20,7 @@ const { mkdirs } = (await import('fs-extra')).default;
 start();
 
 async function start() {
-	console.log(`--> web-server (${__version__}) - starting`);
+	console.log(`--> vid-scaler (${__version__}) - starting  ->> 444`);
 
 	new Worker('./dist/services/vid-scaler/src/wkr-bridge-media-mp4.js');
 
@@ -31,7 +31,6 @@ async function start() {
 	for (; ;) {
 		const entry = await vidScalerJobQueue.nextJob();
 		let ffmpegResult: any = null;
-
 
 		try {
 			const { wksId, mediaId, res } = entry.data;

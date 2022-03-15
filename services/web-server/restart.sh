@@ -19,6 +19,4 @@ sleep .3
 ## Restart server in debug mode
 echo "Running 'npm run dstart'" >> /proc/1/fd/1
 nohup npm run dstart >> /proc/1/fd/1 &
-sleep 2 
-echo "done 'npm run dstart'" >> /proc/1/fd/1
 

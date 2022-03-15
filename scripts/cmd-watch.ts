@@ -28,8 +28,8 @@ async function watch() {
 	watchService('web-server', '9230');
 	// watchService('admin-server', '9231');
 
-	// watchService('vid-init', '9240');
-	// watchService('vid-scaler', '9241');
+	watchService('vid-init', '9240');
+	watchService('vid-scaler', '9241');
 	// //#endregion ---------- /services watch ---------- 
 
 

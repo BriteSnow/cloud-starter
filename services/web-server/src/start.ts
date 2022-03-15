@@ -37,7 +37,7 @@ async function main() {
 
 	app.start(PORT);
 
-	console.log(`--> web-server (${__version__}) - listening at ${PORT}`);
+	console.log(`--> web-server (${__version__}) - listening at ${PORT} ->> 333`);
 }
 
 
