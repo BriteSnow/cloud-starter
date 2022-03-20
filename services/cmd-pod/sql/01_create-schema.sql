@@ -30,6 +30,7 @@ CREATE TABLE "user" (
   id bigserial PRIMARY KEY,
   uuid uuid NOT NULL UNIQUE DEFAULT gen_random_uuid (),
   username varchar(64) NOT NULL UNIQUE,
+  "fullName" varchar(128) NOT NULL UNIQUE,
 
   -- global roles
   ROLE user_role NOT NULL DEFAULT 'r_user',
@@ -166,7 +167,7 @@ CREATE TABLE "project" (
   id bigserial PRIMARY KEY,
   "orgId" bigint NOT NULL,  
   uuid uuid NOT NULL UNIQUE DEFAULT gen_random_uuid (),
-  name varchar(64),
+  name varchar(64) NOT NULL ,
 
   -- timestamps 
   cid bigint,

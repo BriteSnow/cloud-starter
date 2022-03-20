@@ -113,6 +113,28 @@ let [...new Set([...array1 ,...array2])];
 
 > **Note 2**: While there is an absolute speed difference between `.concat` and push or spread when adding big arrays, it is probably still negligeable compared to the overall applications logic. Therefore, favor readability over micro-optimization. Just for info, here some jsperf [big arrays](https://jsperf.com/big-array-concat-spread-push) v.s. [small arrays](https://jsperf.com/small-array-concat-spread-push)
 
+## Type class as parameters
+
+https://www.typescriptlang.org/docs/handbook/generics.html
+
+factory example 
+```ts
+function create<T>(c: {new(): T; }): T {
+    return new c();
+}
+```
+
+### Create map by id from array
+
+```ts
+const ticketByGhId = new Map(tickets.map((t): [string, Ticket] => [t.ghId!, t]));
+```
+
+### Array of string to object
+
+```ts
+const object = array.reduce((obj, v) => (obj[v] = true, obj), {} as any);
+```
 
 ## Array - to Map
 
@@ -200,6 +222,26 @@ export const PROJECT_ROLES = {
 // "pr_owner" | "pr_admin" | ...
 type ProjectRoleName = keyof typeof PROJECT_ROLES;
 
+```
+
+## enum
+
+```ts
+export const OrgTypeEnum = Object.freeze({
+  personal: "personal",
+  shared: "shared"
+} as const);
+
+export type OrgType = keyof typeof OrgTypeEnum;
+
+/**
+ * table name: 'org'
+ */
+interface OrgRec {
+  id: number,
+  uuid: string,
+  type: OrgType,
+}
 ```
 
 

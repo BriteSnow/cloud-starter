@@ -4,8 +4,8 @@ import { execa } from 'execa';
 import debounce from 'lodash.debounce';
 import * as Path from 'path';
 import { wait } from 'utils-min';
+import { getPodName } from './utils.js';
 
-const IMG_NAME_PREFIX = 'cstar-';
 const NOT_RESTART_IF_PATH_HAS = '/test/';
 
 const { stdout, stderr } = process;
@@ -61,8 +61,8 @@ async function watchService(serviceName: string, debugPort: string) {
 	const serviceDir = `services/${serviceName}`;
 
 	// kubectl port-forward $(kubectl get pods -l run=cstar-web-server --no-headers=true -o custom-columns=:metadata.name) 9229
-	const podNameArgs = ['get', 'pods', '-l', `run=${IMG_NAME_PREFIX}${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'];
-	const podName = (await execa('kubectl', podNameArgs)).stdout?.trim();
+
+	const podName = await getPodName(serviceName);
 
 	// spawn('kubectl', ['port-forward', podName, `${debugPort}:9229`]);
 	execa('kubectl', ['port-forward', podName, `${debugPort}:9229`]);
@@ -70,7 +70,6 @@ async function watchService(serviceName: string, debugPort: string) {
 	// make sure it listen to port
 	await wait(2000);
 
-	// spawn('tsc', ['-w'], { cwd: serviceDir }); // this will create a new restart
 	execa('tsc', ['-w'], { cwd: serviceDir });
 
 	// console.log('waiting for tsc -w');
@@ -82,7 +81,7 @@ async function watchService(serviceName: string, debugPort: string) {
 	const cr = debounce(() => {
 		console.log(`... kexec ${serviceName} -- /bin/bash -c "/service/restart.sh"`);
 		execa('kdd', ['kexec', serviceName, '--', '/bin/bash', '-c', '"/service/restart.sh"']);
-	}, 500)
+	}, 500);
 
 	watcher.on('change', async function (filePath: string) {
 		if (filePath.includes(NOT_RESTART_IF_PATH_HAS)) {

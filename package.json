@@ -39,6 +39,7 @@
     "ts-node": "^10.7.0",
     "tslib": "^2.3.1",
     "typescript": "^4.6.2",
+    "typescript-json-schema": "^0.53.0",
     "utils-min": "^0.2.0",
     "uuid": "^8.3.2"
   },
@@ -55,6 +56,7 @@
   },
   "scripts": {
     "sketchdev": "./node_modules/.bin/sketchdev",
+    "ts-schema": "node --loader ts-node/esm scripts/cmd-ts-schema.ts",
     "test": "node --loader ts-node/esm scripts/cmd-test.ts test",
     "testw": "node --loader ts-node/esm scripts/cmd-test.ts testw",
     "testd": "node --loader ts-node/esm scripts/cmd-test.ts testd",

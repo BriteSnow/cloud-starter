@@ -1,8 +1,11 @@
 import * as chokidar from 'chokidar';
 import { router } from 'cmdrouter';
-import { spawn } from 'p-spawn';
-import { CallReducer } from './utils.js';
+import { execa } from 'execa';
+import debounce from 'lodash.debounce';
+import { getPodName } from './utils.js';
 
+const { stdout, stderr } = process;
+const execaOpts = Object.freeze({ stdout, stderr });
 const servicesDir = 'services';
 
 const debugPortByServiceName: any = {
@@ -18,9 +21,7 @@ async function test(serviceName: string, testGrep: string) {
 		return;
 	}
 	const podName = await getPodName(serviceName);
-	if (podName == null) {
-		throw new Error(`Cannot find podName for ${serviceName}`);
-	}
+
 	await run(false, serviceName, testGrep, podName);
 }
 
@@ -34,7 +35,7 @@ async function testd(serviceName: string, testGrep: string) {
 	// kubectl port-forward $(kubectl get pods -l run=bb-web-server --no-headers=true -o custom-columns=:metadata.name) 9229
 	const podName = await getPodName(serviceName);
 	const port = debugPortByServiceName[serviceName];
-	spawn('kubectl', ['port-forward', podName, `${port}:9229`]); // debug port on the pod is still default 9229
+	execa('kubectl', ['port-forward', podName, `${port}:9229`], execaOpts); // debug port on the pod is still default 9229
 
 	return watchAndRun(true, serviceName, testGrep);
 }
@@ -49,33 +50,30 @@ async function testw(serviceName: string, testGrep: string) {
 	return watchAndRun(false, serviceName, testGrep);
 }
 
+// NOTE - Unfortunately we cannot use the "mocha -w" for watch as it seems to have issue with type: module / esm loader
 async function watchAndRun(debug: boolean, serviceName: string, testGrep: string) {
 	const podName = await getPodName(serviceName);
-	if (podName == null) {
-		throw new Error(`Cannot find podName for ${serviceName}`);
-	}
 
 	const serviceDir = `${servicesDir}/${serviceName}`;
 	const serviceDistDir = `${serviceDir}/dist`;
 
 	// start the building
-	spawn('tsc', ['-w'], { cwd: serviceDir }); // this will create a new restart
+	execa('tsc', ['-w'], { ...execaOpts, cwd: serviceDir }); // this will create a new restart
 
 	// --------- service test watch and run --------- //
 	console.log('watch ' + `${serviceDistDir}/**/*.js`);
 	const watcher = chokidar.watch(`${serviceDistDir}/**/*.js`, { depth: 99, ignoreInitial: true, persistent: true });
 
-	const cr = new CallReducer(async () => {
+	const debounced_run = debounce(() => {
 		return run(debug, serviceName, testGrep, podName);
 	}, 500);
 
 	watcher.on('change', async function (filePath: string) {
-		console.log(`change ${filePath}`);
-		cr.map(filePath);
+		debounced_run();
 	});
 
 	watcher.on('add', async function (filePath: string) {
-		cr.map(filePath);
+		debounced_run();
 	});
 	// --------- /service test watch and run --------- //
 
@@ -86,14 +84,15 @@ async function watchAndRun(debug: boolean, serviceName: string, testGrep: string
 
 // TODO: need to remove the podName, we probably can call the kexec serviceName -- pkill ...
 async function run(debug = false, serviceName: string, testGrep: string, podName: string) {
+
 	// if debug, we make sure we kill any node process with inspect (to make sure the port is not used)
 	if (debug) {
 		const args = ['exec', podName];
 		args.push('--', 'pkill', '-f', 'inspec'); // somehow, if we pass "'inpsec'" it fails (ok, because single word)
-		await spawn('kubectl', args, { ignoreFail: true });
+		await execa('kubectl', args, execaOpts); // TODO - might ignore fail. 
 	}
 
-	const args = ['kdd', 'kexec', serviceName];
+	const args = ['kexec', serviceName];
 	args.push('--', 'npm', 'run');
 
 	if (debug) {
@@ -105,10 +104,6 @@ async function run(debug = false, serviceName: string, testGrep: string, podName
 	if (testGrep) {
 		args.push('--', '-g', testGrep);
 	}
-	spawn('npm', args);
-}
-
-async function getPodName(serviceName: string) {
-	const podName = (await spawn('kubectl', ['get', 'pods', '-l', `run=bb-${serviceName}`, '--no-headers=true', '-o', 'custom-columns=:metadata.name'], { capture: 'stdout' })).stdout?.trim();
-	return podName;
+	console.log('->> run ->>> npm', args.join(" "));
+	execa('kdd', args, execaOpts);
 }

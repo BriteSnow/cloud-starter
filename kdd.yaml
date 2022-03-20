@@ -55,12 +55,18 @@ blocks:
     dependencies: ['_common','admin'] # build dependency for when running dbuild (no effect on build). 
 
 builders: 
+  - name: ts_schema
+    when_file: ./tsconfig.json
+    run: session # "session" | "block" (default) (run once per block when match, or once per session)
+    exec:
+      cwd: base_dir # block_dir (default) | base_dir
+      cmd: npm
+      args: ["run", "ts-schema"] 
   - name: npm_install
     when_file: ./package.json
     exec:
       cmd: npm
-      cmd_type: global # base_dir | block_dir
-      args: ["install", "--color"]
+      args: ["install", "--color"]     
   - name: tsc
     when_file: ./tsconfig.json
     exec:
