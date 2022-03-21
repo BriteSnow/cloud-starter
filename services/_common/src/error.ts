@@ -29,9 +29,6 @@ const EE = errDic(["NO_USER", 'aaa'] as const, ["NO_WKS", 'bbb'] as const);
 
 
 
-
-
-
 export function errDic<T extends readonly (readonly [string, string])[]>(...entries: T) {
 	type Names = T[number][0];
 	return entries.reduce((o, e) => (o[e[0]] = Symbol(e[0]), o), {} as any) as { [name in Names]: Symbol };

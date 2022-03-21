@@ -4,7 +4,7 @@ import * as TJS from "typescript-json-schema";
 const REC_TYPES = ['OrgRec', 'ProjectRec', 'TicketRec', 'UserRec'];
 const REC_DIR = 'services/_common/src/da/records';
 
-const ENT_TYPES = ['Project', 'Ticket'];
+const ENT_TYPES = ['Project', 'Ticket', 'TicketForCreate', 'TicketForPatch'];
 const ENT_DIR = 'shared/src/entities';
 
 const COMMON_TS_SCHEMA_FILE = 'services/_common/src/ts-schema/generated_schemas.ts';
@@ -21,12 +21,12 @@ const entFiles = readdirSync(ENT_DIR)
 
 // optionally pass argument to schema generator
 const settings: TJS.PartialArgs = {
-  required: true,
+  required: true
 };
 
 // optionally pass ts compiler options
 const compilerOptions: TJS.CompilerOptions = {
-  strictNullChecks: true,
+  strictNullChecks: true
 };
 
 run();
@@ -38,7 +38,6 @@ async function run() {
 
   // Generate the shared schemas
   await gen(entFiles, ENT_TYPES, SHARED_TS_SCHEMA_FILE);
-
 
 }
 

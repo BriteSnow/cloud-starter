@@ -314,6 +314,36 @@ const generated_schemas = {
         "uuid"
       ]
     },
+    "TicketForCreate": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "projectId",
+        "title"
+      ]
+    },
+    "TicketForPatch": {
+      "description": "For rpc/dao update. (id will be passed as a parent parameters)",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        }
+      }
+    },
     "OrgType": {
       "enum": [
         "personal",

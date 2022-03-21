@@ -16,6 +16,7 @@
   "dependencies": {
     "@backlib/koa": "^0.5.2",
     "@types/ioredis": "^4.28.7",
+    "ajv": "^8.10.0",
     "backlib": "^0.5.2",
     "cloud-bucket": "^0.4.0",
     "execa": "^6.0.0",

@@ -7,7 +7,7 @@ describe("rplink_", function () {
 
 	it('rplink__simple', async function () {
 
-		console.log('->> TODO need to do test',);
+		console.log('->> TODO need to do test!',);
 
 	});
 });
