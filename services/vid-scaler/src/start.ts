@@ -1,21 +1,28 @@
+/////////////////////
+// The agent service is primarely designed to run administative task, and therefore does not do anything 
+// in the start process. However, as some point, it could listen to redis stream and/or pub/sub to do some
+// administrative task ask well. 
+////
+
 import { CORE_STORE_ROOT_DIR, __version__ } from '#common/conf.js';
 import { getResMp4Name } from '#common/da/dao-media.js';
 import { mediaDao } from '#common/da/daos.js';
 import { getAppQueue, getJobQueue } from '#common/queue.js';
 import { getCoreBucket } from '#common/store.js';
 import { getSysContext } from '#common/user-context.js';
-import { spawn } from 'p-spawn';
+import { execa } from 'execa';
+import { mkdir } from 'fs/promises';
 import * as Path from 'path';
 import { split } from 'utils-min';
 import { v4 as newUuid } from 'uuid';
 import { Worker } from 'worker_threads';
-const { mkdirs } = (await import('fs-extra')).default;
 
-/////////////////////
-// The agent service is primarely designed to run administative task, and therefore does not do anything 
-// in the start process. However, as some point, it could listen to redis stream and/or pub/sub to do some
-// administrative task ask well. 
-////
+
+// for execa
+const { stdout, stderr } = process;
+const execaOpts = Object.freeze({ stdout, stderr });
+
+
 
 start();
 
@@ -51,7 +58,7 @@ async function start() {
 			// if not already done, then, we update it. 
 			if (!(await coreStore.exists(remoteScaledFile))) {
 				const tempDir = `temp/${newUuid()}/`;
-				await mkdirs(tempDir);
+				await mkdir(tempDir, { recursive: true });
 
 				const localOriginalFile = Path.join(tempDir, mediaName);
 				const localScaledFile = Path.join(tempDir, scaledName);
@@ -65,7 +72,7 @@ async function start() {
 				// ffmpeg -i vid-02.mp4 -vcodec libx264 -crf 23 -vf fps=30,scale=-2:480 -y vid-02-480p30.mp4
 				// Note: crf 0-51, 23 being default. 17-18 close to lossless
 				// Note: scale -2, to avoid getting (width cannot divide by 2), see https://stackoverflow.com/a/29582287/686724
-				ffmpegResult = await spawn('ffmpeg', split(`-i ${localOriginalFile}  -vcodec libx264 -crf 23 -vf fps=${fps},scale=-2:${h} -y ${localScaledFile}`, ' '), { capture: ['stdout', 'stderr'], toConsole: false });
+				ffmpegResult = await execa('ffmpeg', split(`-i ${localOriginalFile}  -vcodec libx264 -crf 23 -vf fps=${fps},scale=-2:${h} -y ${localScaledFile}`, ' '));
 
 				await coreStore.upload(localScaledFile, remoteScaledFile);
 

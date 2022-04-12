@@ -3,10 +3,9 @@ import { UserCredForLogin, USER_COLUMNS_FOR_LOGIN } from '#common/da/dao-user.js
 import { closeKnexClient, getKnexClient } from '#common/da/db.js';
 import { pwdEncrypt } from '#common/security/password.js';
 import { router } from 'cmdrouter';
-import { glob } from 'fs-extra-plus';
-import { basename, join as joinPath } from 'path';
-import { download, list, pgStatus, pgTest, psqlImport } from 'vdev';
-const { ensureDir } = (await import('fs-extra')).default;
+import { glob } from 'fs-aux';
+import { basename } from 'path';
+import { pgStatus, pgTest, psqlImport } from './pg-utils.js';
 
 
 const sqlDir = 'sql/';
@@ -64,27 +63,6 @@ async function runDropSqls() {
 	} catch (ex) {
 		console.log('Failed updatedb: ', ex);
 	}
-}
-
-async function loadProdDb() {
-	//// 3) Download the last dev prod sql (will be deintified later)
-	const remoteFiles: any[] = await list({ store: 'dev', path: '**/*.sql' });
-	const lastDbSqlStoragePath = remoteFiles[remoteFiles.length - 1].path;
-
-	const tmpProdSqlDir = '~tmp/sql/';
-	const prodFileName = basename(lastDbSqlStoragePath);
-
-	await ensureDir(tmpProdSqlDir);
-	await download({ store: 'dev', path: lastDbSqlStoragePath }, tmpProdSqlDir);
-
-	//// 4) Import the prod sql
-	// local test: psql -U bb_user -d bb_db -f ~tmp/sql/prod-db.sql
-	await psqlImport(APP_DB_CRED, [joinPath(tmpProdSqlDir, prodFileName)]);
-
-	//// 5) Reset the passwords to welcome (clear)
-	await psqlImport(APP_DB_CRED, [`${sqlDir}/_reset-passwords.sql`]);
-
-
 }
 // --------- /Commands --------- //
 

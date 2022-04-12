@@ -1,21 +1,28 @@
-import { CORE_STORE_ROOT_DIR, __version__ } from '#common/conf.js';
-import { mediaDao } from '#common/da/daos.js';
-import { getAppQueue, getJobQueue } from '#common/queue.js';
-import { getCoreBucket } from '#common/store.js';
-import { getSysContext } from '#common/user-context.js';
-import { lookup } from 'mime-types';
-import { spawn } from 'p-spawn';
-import * as Path from 'path';
-import { split } from 'utils-min';
-import { v4 as newUuid } from 'uuid';
-import { Worker } from 'worker_threads';
-const { mkdirs } = (await import('fs-extra')).default;
-
 /////////////////////
 // The vid-init job service is reponsible to inialize the media video to make sure it has everything needed for further service. 
 // - make sure it has a main .mp4 (if not .mp4, then, transcode and change name)
 // - trigger the data event 
 ////
+
+import { CORE_STORE_ROOT_DIR, __version__ } from '#common/conf.js';
+import { mediaDao } from '#common/da/daos.js';
+import { getAppQueue, getJobQueue } from '#common/queue.js';
+import { getCoreBucket } from '#common/store.js';
+import { getSysContext } from '#common/user-context.js';
+import { execa } from 'execa';
+import { mkdir } from 'fs/promises';
+import { lookup } from 'mime-types';
+import * as Path from 'path';
+import { split } from 'utils-min';
+import { v4 as newUuid } from 'uuid';
+import { Worker } from 'worker_threads';
+
+
+// for execa
+const { stdout, stderr } = process;
+const execaOpts = Object.freeze({ stdout, stderr });
+
+
 
 start();
 
@@ -52,11 +59,11 @@ async function start() {
 				const tempMp4File = Path.join(tempDir, mp4Name);
 
 				if (!(await coreStore.exists(remoteMp4File))) {
-					await mkdirs(tempDir);
+					await mkdir(tempDir, { recursive: true });
 					await coreStore.download(remoteSrcFile, tempSrcFile);
 
 					//ffmpeg -i input.mp4 -vcodec libx264 -crf 20 output.mp4
-					await spawn('ffmpeg', split(`-i ${tempSrcFile}  -vcodec libx264 -crf 20 ${tempMp4File}`, ' '), { toConsole: false });
+					await execa('ffmpeg', split(`-i ${tempSrcFile}  -vcodec libx264 -crf 20 ${tempMp4File}`, ' '));
 					await coreStore.upload(tempMp4File, remoteMp4File);
 				}
 				await mediaDao.update(sysUtx, mediaId, { name: mp4Name });

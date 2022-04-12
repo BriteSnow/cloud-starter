@@ -2,12 +2,15 @@ import chalk from 'chalk';
 import * as child_process from 'child_process';
 import { router } from 'cmdrouter';
 import { execa } from 'execa';
-import { spawn } from 'p-spawn';
 import * as Path from 'path';
 import { prompt } from './utils.js';
 const { readdir, pathExists } = (await import('fs-extra')).default;
 
 const SERVICES_DIR = './services/';
+
+// for execa
+const { stdout, stderr } = process;
+const execaOpts = Object.freeze({ stdout, stderr });
 
 router({ pupdate, dclean, runTest }).route();
 
@@ -55,7 +58,7 @@ async function pupdate() {
 	if (response === 'Y') {
 		for (const dirName of dirNamesToUpdate) {
 			const dir = dirPath(dirName);
-			await spawn('npm', ['update'], { cwd: dir });
+			await execa('npm', ['update'], { ...execaOpts, cwd: dir });
 		}
 	} else {
 		console.log(`Cancelling update (your answered ${response})`, response);
@@ -80,7 +83,7 @@ async function dclean() {
 			imageIds.forEach(async (imageId: any) => {
 				if (imageId) {
 					let args = ['rmi', '-f', imageId];
-					await spawn('docker', args);
+					await execa('docker', args, execaOpts);
 				}
 			});
 		});
@@ -110,8 +113,6 @@ async function dclean() {
 
 
 async function runTest() {
-	const result = await spawn("sh", ['services/test-web/run-test.sh'], {
-		capture: "stdout"
-	});
-	console.log(result.toString());
+	const result = await execa('sh', [''], execaOpts);
+	console.log(result.stdout);
 }

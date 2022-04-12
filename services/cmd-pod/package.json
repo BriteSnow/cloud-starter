@@ -15,7 +15,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/services/cmd-pod/src/start",
-    "gs": "./node_modules/.bin/vdev gs",
     "makeCredential": "node dist/services/cmd-pod/src/cmd-credential makeCredential",
     "createUser": "node dist/services/cmd-pod/src/cmd-credential createUser",
     "setPwd": "node dist/services/cmd-pod/src/cmd-credential setPwd",
@@ -25,17 +24,16 @@
   "license": "ISC",
   "dependencies": {
     "@types/uuid": "^8.3.4",
-    "backlib": "^0.5.0",
+    "backlib": "^0.5.2",
     "cmdrouter": "^0.3.1",
-    "execa": "^6.0.0",
+    "execa": "^6.1.0",
     "fs-aux": "^0.1.0",
-    "knex": "^1.0.1",
-    "moment": "^2.29.1",
-    "p-spawn": "^0.5.5",
-    "pg": "^8.7.1",
-    "redis": "^4.0.2",
-    "ts-node": "^10.4.0",
-    "uuid": "^8.3.2",
-    "vdev": "^0.13.4"
+    "ioredis": "^5.0.4",
+    "knex": "^1.0.5",
+    "moment": "^2.29.2",
+    "pg": "^8.7.3",
+    "redstream": "^0.3.0",
+    "ts-node": "^10.7.0",
+    "uuid": "^8.3.2"
   }
 }
