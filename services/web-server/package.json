@@ -30,7 +30,6 @@
     "cloud-bucket": "^0.4.2",
     "execa": "^6.1.0",
     "fs-aux": "^0.1.0",
-    "fs-extra-plus": "^0.6.0",
     "googleapis": "^100.0.0",
     "knex": "^1.0.5",
     "koa-body": "^4.2.0",

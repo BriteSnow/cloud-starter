@@ -2,9 +2,10 @@ import chalk from 'chalk';
 import * as child_process from 'child_process';
 import { router } from 'cmdrouter';
 import { execa } from 'execa';
+import { pathExists } from 'fs-aux';
+import { readdir } from 'fs/promises';
 import * as Path from 'path';
 import { prompt } from './utils.js';
-const { readdir, pathExists } = (await import('fs-extra')).default;
 
 const SERVICES_DIR = './services/';
 
