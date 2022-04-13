@@ -27,7 +27,7 @@ const execaOpts = Object.freeze({ stdout, stderr });
 start();
 
 async function start() {
-	console.log(`--> web-server (${__version__}) - starting`);
+	console.log(`--> vid-init (${__version__}) - starting`);
 
 	new Worker('./dist/services/vid-init/src/wkr-bridge-media-new.js');
 

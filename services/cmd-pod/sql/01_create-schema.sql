@@ -30,7 +30,7 @@ CREATE TABLE "user" (
   id bigserial PRIMARY KEY,
   uuid uuid NOT NULL UNIQUE DEFAULT gen_random_uuid (),
   username varchar(64) NOT NULL UNIQUE,
-  "fullName" varchar(128) NOT NULL UNIQUE,
+  "fullName" varchar(92),
 
   -- global roles
   ROLE user_role NOT NULL DEFAULT 'r_user',

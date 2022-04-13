@@ -71,7 +71,7 @@ Note: For now, the debugging is for the web-server, and will be added to other s
 Connect to the various service/pods
 
 ```sh
-kubectl exec -it $(kubectl get pods -l run=cstar-agent --no-headers=true -o custom-columns=:metadata.name) -- /bin/bash
+kubectl exec -it $(kubectl get pods -l run=cstar-cmd-pod --no-headers=true -o custom-columns=:metadata.name) -- /bin/bash
 
 kubectl exec -it $(kubectl get pods -l run=cstar-web-server --no-headers=true -o custom-columns=:metadata.name) -- /bin/bash
 
