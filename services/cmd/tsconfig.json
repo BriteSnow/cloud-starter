@@ -1,0 +1,61 @@
+/**
+ *   This is the tsconfig.json for the backend services (not for devops or frontends)
+ */
+{
+	"compilerOptions": {
+		// ES2021 for Node.js 16+
+		"target": "ES2021",
+		// Now, we have updated package.json to type = "module"
+		"module": "ESNext",
+
+		// to use native class field. 
+		"useDefineForClassFields": true,
+		
+		// This is important to support 3rd party modules
+		"moduleResolution": "node",
+
+		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
+		"strict": true, 
+
+		// 99.99% of the code will be .ts, and .js files will just be module glue and does not need to be processed by typescript (keep the glue small)
+		"allowJs": false,
+		"checkJs": false,
+
+		"sourceMap": true,  // for debug
+
+		// This will be the code run by the npm run start
+		"outDir": "./dist",
+
+		// Code mapping
+		"rootDir": "../../",
+		"baseUrl": "./src/",  // main service code
+		"paths": {
+			"common/*": ["../../_common/src/*"], // backend services common code
+			"#common/*": ["../../_common/src/*"], // backend common
+			"shared/*": ["../../../shared/src/*"], // frontend and backend 
+			"#shared/*": ["../../../shared/src/*"] // frontend and backend 
+		},
+
+		// decorators for backend service code
+		"experimentalDecorators": true,
+		
+		// Needed to call import default (replaces allowSyntheticDefaultImports)
+		"esModuleInterop": true,
+
+		// Disallow inconsistently-cased references to the same file.
+		"forceConsistentCasingInFileNames": true  	
+	},
+
+	// Note: common and shared will be pulled as needed
+	"include": [
+		"./src/**/*.ts", // we take all of the server code
+		// trick to make sure the full dist/ structured is created (can be removed if project import some shared libs) 		
+		"../../shared/src/entities.ts" 		
+	],
+
+	// Excluding 
+	"exclude": [
+		"node_modules",
+		".rpt2_cache" // this folder will be created by the rollup-typescript2, so, need to exlude it, can become confusing.
+	]
+}

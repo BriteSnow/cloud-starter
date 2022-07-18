@@ -17,7 +17,8 @@ const DEPLOYMENT_PREFIX = `${SYSTEM}-`;
 const DEPLOYMENT_SUFFIX = `-dep`;
 
 const WATCH_RUN_MODE = 'DEBUG_DEMON';
-// use DEBUG_DEMON_INSPECT if needs node --inpect
+
+// for nodemon --inpect use:
 // const WATCH_RUN_MODE = 'DEBUG_DEMON_INSPECT';
 
 router({ watch }).route();
@@ -107,7 +108,7 @@ async function watchService(serviceName: string, debugPort: string) {
 		// Else, for NORMAL and DEBUG_INSPECT we trigger a deployment redepploy by changing a env variable to a unique value
 		else {
 			// kubectl set env deployment/cstar-web-server-dep KCTL_SET_ENV_TS=1657995576759
-			await execa('', ['set', 'env', `deployment/${dep}`, 'RUN_MODE=DEBUG', `KCTL_SET_ENV_TS=${Date.now()}`], execaOpts);
+			await execa('', ['set', 'env', `deployment/${dep}`, `KCTL_SET_ENV_TS=${Date.now()}`], execaOpts);
 		}
 	}, 500);
 

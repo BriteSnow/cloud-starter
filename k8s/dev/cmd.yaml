@@ -1,0 +1,51 @@
+# Note: here we do not need a k8s service since this service does not have any web/socket API (it connects to redis, but nobody connects to it)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cstar-cmd-dep
+  namespace: default
+  labels:
+    run: cstar-cmd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: cstar-cmd
+  template:
+    metadata:
+      labels:
+        run: cstar-cmd
+    spec:
+      volumes:
+        - name: cstar-cmd-src
+          hostPath:
+            path: '{{dir_abs}}/services/cmd/src'
+            type: Directory
+        - name: cstar-cmd-sql
+          hostPath:
+            path: '{{dir_abs}}/services/cmd/sql'
+            type: Directory
+        - name: cstar-cmd-dist
+          hostPath:
+            path: '{{dir_abs}}/services/cmd/dist'
+            type: Directory            
+      containers:
+        - image: "localhost:5000/cstar-cmd:{{image_tag}}"
+          name: cstar-cmd-ctn
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: cstar-config
+            - secretRef:
+                name: cstar-secret
+          env:
+            - name: service_name
+              value: cmd          
+          volumeMounts:
+            - mountPath: /service/src
+              name: cstar-cmd-src
+            - mountPath: /service/sql
+              name: cstar-cmd-sql
+            - mountPath: /service/dist
+              name: cstar-cmd-dist              
+      restartPolicy: Always
