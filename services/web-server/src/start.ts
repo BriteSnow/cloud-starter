@@ -1,19 +1,17 @@
 import { __version__ } from '#common/conf.js';
 import { KoaApp } from '#common/web/koa-app.js';
 import { execa } from 'execa';
+import { env } from 'process';
 import dseGenerics from './web/dse-generics.js';
 import dseMedia from './web/dse-media.js';
 import dseWks from './web/dse-wks.js';
 import routerAuthGoogleOAuth from './web/router-auth-google-oauth.js';
 
-
 const PORT = 8080;
-
 
 main();
 
 async function main() {
-
 	// -- CHECK - that bash environment are set correctly otherwise fail early. 
 	try {
 		const out = await execa("which", ["ss3"]);
@@ -33,11 +31,22 @@ async function main() {
 		]
 	});
 
+	// Simple inline example for testing
+	app.use(async (ktx, next) => {
+		// Assumption: if we are here, all API handlers took the request, and we just have a page render or static file (with extension)
+		if (ktx.path == '/test') {
+			console.log('->> will return  ', ktx.path);
+			ktx.body = `from '/test' - 0089 - ${env["HOSTNAME"]} - ${Date.now()}`;
+		} else {
+			return next();
+		}
+	});
+
 	await app.setup();
 
 	app.start(PORT);
 
-	console.log(`--> web-server (${__version__}) - listening at ${PORT} ->> 333`);
+	console.log(`--> web-server!!! (${__version__}) - listening at ${PORT} ->> 333`);
 }
 
 

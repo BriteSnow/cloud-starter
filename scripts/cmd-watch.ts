@@ -11,7 +11,17 @@ const NOT_RESTART_IF_PATH_HAS = '/test/';
 const { stdout, stderr } = process;
 const execaOpts = Object.freeze({ stdout, stderr });
 
+// Note - For now duplication of the kdd.yaml system property
+const SYSTEM = 'cstar';
+const DEPLOYMENT_PREFIX = `${SYSTEM}-`;
+const DEPLOYMENT_SUFFIX = `-dep`;
+
+const WATCH_RUN_MODE = 'DEBUG_DEMON';
+// use DEBUG_DEMON_INSPECT if needs node --inpect
+// const WATCH_RUN_MODE = 'DEBUG_DEMON_INSPECT';
+
 router({ watch }).route();
+
 
 
 async function watch() {
@@ -73,14 +83,32 @@ async function watchService(serviceName: string, debugPort: string) {
 	execa('tsc', ['-w'], { cwd: serviceDir });
 
 	// console.log('waiting for tsc -w');
-	await wait(2000);
+	await wait(3000);
+
+	// For now build the deployment name manually from convention
+	// NOTE: kdd will add a "kdd ksetenv servicename environment variable"
+	const dep = `${DEPLOYMENT_PREFIX}${serviceName}${DEPLOYMENT_SUFFIX}`;
+
+	// set the deployment watch run mod
+	console.log(`kubectl set deployment/${dep} to RUN_MODE=${WATCH_RUN_MODE}`)
+	const args = ['set', 'env', `deployment/${dep}`, `RUN_MODE=${WATCH_RUN_MODE}`];
+	await execa('kubectl', args, execaOpts);
 
 	const distDir = Path.join(serviceDir, '/dist/');
 	const watcher = chokidar.watch(distDir, { depth: 99, ignoreInitial: true, persistent: true });
 
-	const cr = debounce(() => {
-		console.log(`... kexec ${serviceName} -- /bin/bash -c "/service/restart.sh"`);
-		execa('kdd', ['kexec', serviceName, '--', '/bin/bash', '-c', '"/service/restart.sh"']);
+
+	const cr = debounce(async () => {
+		// If we have one of the DEBUG_DEMON modes, then, just touch a json file to trigger nodemon to restart
+		if (WATCH_RUN_MODE.startsWith("DEBUG_DEMON")) {
+			// kdd kexec web-server touch /service/nodemon-do-restart.json
+			await execa('kdd', ['kexec', serviceName, 'touch', '/service/nodemon-do-restart.json'], execaOpts)
+		}
+		// Else, for NORMAL and DEBUG_INSPECT we trigger a deployment redepploy by changing a env variable to a unique value
+		else {
+			// kubectl set env deployment/cstar-web-server-dep KCTL_SET_ENV_TS=1657995576759
+			await execa('', ['set', 'env', `deployment/${dep}`, 'RUN_MODE=DEBUG', `KCTL_SET_ENV_TS=${Date.now()}`], execaOpts);
+		}
 	}, 500);
 
 	watcher.on('change', async function (filePath: string) {

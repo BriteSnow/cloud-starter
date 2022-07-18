@@ -34,17 +34,17 @@ realms:
   #   project: jc-prod
 
 blocks: 
+  - _common  
   - db
   - queue
   - mock-s3
-  - cmd-pod-rs
-  - _common  
+  - cmd-rs
+  - name: cmd
+    dependencies: _common
   - name: vid-scaler
     dependencies: _common    
   - name: vid-init
     dependencies: _common  
-  - name: cmd-pod
-    dependencies: _common
   - name: web 
     dir: frontends/web/
   - name: web-server
